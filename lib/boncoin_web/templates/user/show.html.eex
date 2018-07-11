@@ -1,0 +1,63 @@
+<h2>Show User</h2>
+
+<ul>
+
+  <li>
+    <strong>Role:</strong>
+    <%= @user.role %>
+  </li>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @user.name %>
+  </li>
+
+  <li>
+    <strong>Phone number:</strong>
+    <%= @user.phone_number %>
+  </li>
+
+  <li>
+    <strong>Email:</strong>
+    <%= @user.email %>
+  </li>
+
+  <li>
+    <strong>Viber active:</strong>
+    <%= @user.viber_active %>
+  </li>
+
+  <li>
+    <strong>Viber:</strong>
+    <%= @user.viber_id %>
+  </li>
+
+  <li>
+    <strong>Language:</strong>
+    <%= @user.language %>
+  </li>
+
+  <li>
+    <strong>Provider:</strong>
+    <%= @user.provider %>
+  </li>
+
+  <li>
+    <strong>Token:</strong>
+    <%= @user.token %>
+  </li>
+
+  <li>
+    <strong>Token expiration:</strong>
+    <%= @user.token_expiration %>
+  </li>
+
+  <li>
+    <strong>Password:</strong>
+    <%= @user.password %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: user_path(@conn, :edit, @user) %></span>
+<span><%= link "Back", to: user_path(@conn, :index) %></span>

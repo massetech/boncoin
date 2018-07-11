@@ -1,0 +1,33 @@
+<h2>Show Division</h2>
+
+<ul>
+
+  <li>
+    <strong>Title en:</strong>
+    <%= @division.title_en %>
+  </li>
+
+  <li>
+    <strong>Title bi:</strong>
+    <%= @division.title_bi %>
+  </li>
+
+  <li>
+    <strong>Active:</strong>
+    <%= @division.active %>
+  </li>
+
+  <li>
+    <strong>Latitute:</strong>
+    <%= @division.latitute %>
+  </li>
+
+  <li>
+    <strong>Longitude:</strong>
+    <%= @division.longitude %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: division_path(@conn, :edit, @division) %></span>
+<span><%= link "Back", to: division_path(@conn, :index) %></span>

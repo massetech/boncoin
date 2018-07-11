@@ -1,0 +1,18 @@
+.container-fluid.bg-dark
+  .row.no-gutters.align-items-center
+    .col-6.offset-3
+      %span.text-white
+        = "© PawChaungKaung #{DateTime.utc_now.year}"
+    .col-3
+      %span.text-white
+        - if @conn.assigns[:current_user] do
+          = "to do"
+          -# = "#{@conn.assigns.current_user.email} - #{Application.spec(:everlearn, :vsn)}-#{Gettext.get_locale(EverlearnWeb.Gettext)}"
+        - else
+          = "#{Application.spec(:everlearn, :vsn)}"
+
+-# - if @conn.assigns[:current_user] do
+-#   %h3= "Admin is logged in"
+-#   %li= link "Log out", to: auth_path(@conn, :delete), method: :delete
+-# - else
+-#   %li= link "Log in (Gmail)", to: auth_path(@conn, :request, "google"), class: "waves-effect waves-light btn"

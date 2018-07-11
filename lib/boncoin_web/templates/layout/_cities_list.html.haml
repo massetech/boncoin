@@ -1,0 +1,18 @@
+.dropdown.my-2
+  %button.btn.btn-block.btn-outline-dark.dropdown-toggle{type: "button", data-toggle: "dropdown", aria-haspopup: "true", aria-expanded: "false"}
+    %i.fa.fa-map-marker.btn-icon
+    %span= "Select your city"
+  %ul.dropdown-menu.multi-level{role: "menu", aria-labelledby; "dropdownMenu"}
+    %li= link "All Myanmar", to: public_offers_path(@conn, :public_index, search: %{division: nil, township: nil}), class: "dropdown-item"
+    %li.divider
+    - for division <- @conn.assigns.divisions do
+      %li.dropdown-submenu
+        %a.dropdown-item{tabindex: "-1", href: "#"}
+          = division.title_en
+        %ul.dropdown-menu
+          %li= link "All #{division.title_en}", to: public_offers_path(@conn, :public_index, search: %{division: "#{division.id}", township: nil}), class: "dropdown-item"
+          %li.divider
+          - for township <- division.townships do
+            %li= link "#{township.title_en}", to: public_offers_path(@conn, :public_index, search: %{division: "#{division.id}", township: "#{township.id}"}), class: "dropdown-item"
+            %li.divider
+      %li.divider

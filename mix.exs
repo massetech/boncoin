@@ -40,7 +40,14 @@ defmodule Boncoin.Mixfile do
       {:phoenix_html, "~> 2.10"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
-      {:cowboy, "~> 1.0"}
+      {:cowboy, "~> 1.0"},
+      {:ueberauth_google, "~> 0.7"},
+      {:guardian, "~> 1.0-beta"},
+      {:timex, "~> 3.1"},
+      {:poison, "~> 3.1"},
+      {:cors_plug, "~> 1.5", only: :dev},
+      {:distillery, "~> 1.5", runtime: false},
+      {:phoenix_haml, "~> 0.2"}
     ]
   end
 

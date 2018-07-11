@@ -1,0 +1,33 @@
+<h2>Show Township</h2>
+
+<ul>
+
+  <li>
+    <strong>Title en:</strong>
+    <%= @township.title_en %>
+  </li>
+
+  <li>
+    <strong>Title bi:</strong>
+    <%= @township.title_bi %>
+  </li>
+
+  <li>
+    <strong>Active:</strong>
+    <%= @township.active %>
+  </li>
+
+  <li>
+    <strong>Latitute:</strong>
+    <%= @township.latitute %>
+  </li>
+
+  <li>
+    <strong>Longitude:</strong>
+    <%= @township.longitude %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: township_path(@conn, :edit, @township) %></span>
+<span><%= link "Back", to: township_path(@conn, :index) %></span>

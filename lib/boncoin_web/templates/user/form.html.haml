@@ -1,0 +1,77 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :role, class: "control-label" %>
+    <%= text_input f, :role, class: "form-control" %>
+    <%= error_tag f, :role %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :name, class: "control-label" %>
+    <%= text_input f, :name, class: "form-control" %>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :phone_number, class: "control-label" %>
+    <%= text_input f, :phone_number, class: "form-control" %>
+    <%= error_tag f, :phone_number %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :email, class: "control-label" %>
+    <%= text_input f, :email, class: "form-control" %>
+    <%= error_tag f, :email %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :viber_active, class: "control-label" %>
+    <%= checkbox f, :viber_active, class: "checkbox" %>
+    <%= error_tag f, :viber_active %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :viber_id, class: "control-label" %>
+    <%= text_input f, :viber_id, class: "form-control" %>
+    <%= error_tag f, :viber_id %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :language, class: "control-label" %>
+    <%= text_input f, :language, class: "form-control" %>
+    <%= error_tag f, :language %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :provider, class: "control-label" %>
+    <%= text_input f, :provider, class: "form-control" %>
+    <%= error_tag f, :provider %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :token, class: "control-label" %>
+    <%= text_input f, :token, class: "form-control" %>
+    <%= error_tag f, :token %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :token_expiration, class: "control-label" %>
+    <%= datetime_select f, :token_expiration, class: "form-control" %>
+    <%= error_tag f, :token_expiration %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :password, class: "control-label" %>
+    <%= text_input f, :password, class: "form-control" %>
+    <%= error_tag f, :password %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

@@ -1,0 +1,40 @@
+- form_for @changeset, @action, fn f ->
+  - if @changeset.action do
+    .alert.alert-danger
+      %p= "Oops, something went wrong! Please check the errors below."
+
+  %h5= "What are you selling ?"
+  .row
+    .col-12
+      .form-group
+        %select.selectpicker
+          - for division <- @conn.assigns.divisions do
+            %optgroup{label: "#{division.title_en}"}
+              - for township <- division.townships do
+                %option= "#{division.title_en}-#{township.title_en}"
+    .col-12
+      .form-group
+        =# label f, :title, class: "control-label"
+        = text_input f, :title, class: "form-control", autocomplete: "nope", placeholder: "Offer title"
+        = error_tag f, :title
+    .col-12
+      .form-group
+        =# label f, :price, class: "control-label"
+        = text_input f, :price, class: "form-control", autocomplete: "nope", placeholder: "Offer price in Kyats"
+        = error_tag f, :price
+    .col-12
+      .form-group
+        =# label f, :description, class: "control-label"
+        = textarea f, :description, class: "form-control", rows: "10", autocomplete: "nope", placeholder: "Describe your announce by giving interesting details (size, dimensions, condition, scratches, date of buy, ...)"
+        = error_tag f, :description
+  .row
+    .col-12
+      .form-group.form-check
+        =# label f, :conditions, class: "form-check-label"
+        = checkbox f, :conditions, class: "form-check-input"
+        = error_tag f, :conditions
+
+  .row
+    .col-12
+      .form-group
+        = submit "Submit", class: "btn btn-primary"

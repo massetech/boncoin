@@ -1,0 +1,13 @@
+.row
+  .col-12
+    %h5.text-dark= "Yangon - Myo Thet"
+    %h6.text-dark= "20393 announces"
+    %p.text-dark= "Please check before buying"
+.row
+  .col-12
+    - link to: root_path(@conn, :welcome), class: "btn btn-secondary text-white" do
+      %i.fa.fa-bullhorn.btn-icon{}
+      %span= "Create a new offer"
+.row
+  .col-xs-12
+    =# render BoncoinWeb.LayoutView, "_cities_list.html", assigns

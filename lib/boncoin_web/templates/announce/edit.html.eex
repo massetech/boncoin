@@ -1,0 +1,5 @@
+<h2>Edit Announce</h2>
+
+<%= render "form.html", Map.put(assigns, :action, announce_path(@conn, :update, @announce)) %>
+
+<span><%= link "Back", to: announce_path(@conn, :index) %></span>

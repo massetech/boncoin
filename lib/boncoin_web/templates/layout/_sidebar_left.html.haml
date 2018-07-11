@@ -1,0 +1,64 @@
+-# %ul.side-nav{id: "slidebar_left"}
+-#
+-#   -# Logo
+-#   %li.sidenav-header.white.box-inline
+-#     = render EverlearnWeb.SharedView, "_logo.html", assigns
+-#     .divider
+-#   %li
+-#     .divider
+-#
+-#   -# Search packs button
+-#   - if @conn.assigns[:current_user] do
+-#     %li.white
+-#       - link to: pack_path(@conn, :public_search), class: "waves-effect" do
+-#         %i.material-icons= "search"
+-#         ="Search packs"
+-#     %li
+-#       .divider
+-#
+-#   -# My packs button
+-#   - if @conn.assigns[:current_user] do
+-#     %li.white
+-#       - link to: pack_path(@conn, :public_index), class: "waves-effect" do
+-#         %i.material-icons= "shop"
+-#         ="My packs"
+-#     %li
+-#       .divider
+-#
+-#     -# Learn button
+-#   - if @conn.assigns[:current_user] do
+-#     %li.white
+-#       - link to: main_path(@conn, :public_player), target: "_blank", class: "waves-effect" do
+-#         %i.material-icons= "play_circle_outline"
+-#         ="Learn !"
+-#     %li
+-#       .divider
+-#
+-#   -# Choose language button
+-#   %li.white
+-#     %ul.collapsible.collapsible-accordion
+-#       %li
+-#         %a.collapsible-header.waves-effect{href: "#"}
+-#           %i.material-icons= "language"
+-#           ="Language"
+-#           %i.material-icons.right{style: "margin-right:0;"}="arrow_drop_down"
+-#         .collapsible-body
+-#           %ul
+-#             -# %li= switch_locale_path(@conn, :en, "English")
+-#             -# %li= switch_locale_path(@conn, :fr, "French")
+-#             -# %li= switch_locale_path(@conn, :mm, "Myanmar")
+-#   %li
+-#     .divider
+-#
+-#   -# Log in / out button
+-#   %li.white
+-#     - if @conn.assigns[:current_user] do
+-#       - link to: auth_path(@conn, :delete), method: :delete do
+-#         %i.material-icons= "account_circle"
+-#         = "Log out"
+-#     - else
+-#       - link to: auth_path(@conn, :request, "google") do
+-#         %i.material-icons= "account_circle"
+-#         = "Log in"
+-#   %li
+-#     .divider

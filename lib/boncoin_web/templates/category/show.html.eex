@@ -1,0 +1,23 @@
+<h2>Show Category</h2>
+
+<ul>
+
+  <li>
+    <strong>Title en:</strong>
+    <%= @category.title_en %>
+  </li>
+
+  <li>
+    <strong>Title bi:</strong>
+    <%= @category.title_bi %>
+  </li>
+
+  <li>
+    <strong>Active:</strong>
+    <%= @category.active %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: category_path(@conn, :edit, @category) %></span>
+<span><%= link "Back", to: category_path(@conn, :index) %></span>

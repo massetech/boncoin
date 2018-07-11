@@ -37,7 +37,8 @@ config :boncoin, BoncoinWeb.Endpoint,
       ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
       ~r{priv/gettext/.*(po)$},
       ~r{lib/boncoin_web/views/.*(ex)$},
-      ~r{lib/boncoin_web/templates/.*(eex)$}
+      ~r{lib/boncoin_web/templates/.*(eex)$},
+      ~r{web/templates/.*(eex|haml)$}
     ]
   ]
 
@@ -56,3 +57,6 @@ config :boncoin, Boncoin.Repo,
   database: "boncoin_dev",
   hostname: "localhost",
   pool_size: 10
+# 
+# config :boncoin, Boncoin.Auth.Guardian,
+#   secret_key: System.get_env("GUARDIAN_SECRET")

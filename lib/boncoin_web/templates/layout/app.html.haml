@@ -1,0 +1,26 @@
+!!! 5
+%html(lang="en")
+  %head
+    %meta(charset="utf-8")
+    %meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    %meta(name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no")
+    %meta(name="description" content="")
+    %meta(name="author" content="PawChaunKaun")
+    %title= "PawChaunKaun"
+    %link(rel="stylesheet" href='#{static_path(@conn, "/css/app.css")}')
+    -# %link(rel="stylesheet" href='https://fonts.googleapis.com/icon?family=Material+Icons')
+
+  %body.bg-light
+    .container-fluid.px-0
+      .row.no-gutters.align-items-center
+        .col-lg-2.d-none.d-lg-block.text-center.full-height.add.add-left.bg-success
+        .col-xs-12.col-lg-8.text-center.full-height.d-flex.flex.flex-column
+          %header.header
+            = render "header.html", assigns
+          %main.container-fluid.flex-grow{role: "main"}
+            = render @view_module, @view_template, assigns
+          %footer.footer
+            = render "footer.html", assigns
+        .col-lg-2.d-none.d-lg-block.text-center.full-height.add.add-left.bg-success
+
+    %script(src='#{static_path(@conn, "/js/app.js")}')

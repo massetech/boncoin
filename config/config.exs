@@ -14,20 +14,28 @@ config :boncoin, Boncoin.Gettext,
   default_locale: "en",
   locales: ~w(en bi)
 
-# config :everlearn, Everlearn.Auth.Guardian,
-#   issuer: "Everlearn.#{Mix.env}",
-#   ttl: {30, :days},
-#   verify_issuer: true
+config :boncoin, Boncoin.Auth.Guardian,
+  secret_key: System.get_env("GUARDIAN_SECRET"),
+  issuer: "Boncoin.#{Mix.env}",
+  ttl: {30, :days},
+  verify_issuer: true
 
-# config :ueberauth, Ueberauth,
-#   providers: [
-#     google: {Ueberauth.Strategy.Google, [default_scope: "profile email https://www.googleapis.com/auth/plus.login"]}
-#   ]
+config :ueberauth, Ueberauth,
+  providers: [
+    google: {Ueberauth.Strategy.Google, [default_scope: "profile email https://www.googleapis.com/auth/plus.login"]}
+  ]
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+  client_id: System.get_env("GOOGLE_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
+
+# Configure the Haml engine
+  config :phoenix, :template_engines,
+    haml: PhoenixHaml.Engine
 
 # Configures the endpoint
 config :boncoin, BoncoinWeb.Endpoint,
   url: [host: "localhost"],
-  # secret_key_base: "DsxGTu0oUzBYL0WesR04jz8x/BndI2Aqqrs+bsgPIO7vBuMcoX6e8gV50iEQa3L5",
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
   render_errors: [view: BoncoinWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Boncoin.PubSub, adapter: Phoenix.PubSub.PG2]
 

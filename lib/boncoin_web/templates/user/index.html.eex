@@ -1,0 +1,46 @@
+<h2>Listing Users</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Role</th>
+      <th>Nickname</th>
+      <th>Phone number</th>
+      <th>Email</th>
+      <th>Viber active</th>
+      <th>Viber</th>
+      <th>Language</th>
+      <th>Provider</th>
+      <th>Token</th>
+      <th>Token expiration</th>
+      <th>Password</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for user <- @users do %>
+    <tr>
+      <td><%= user.role %></td>
+      <td><%= user.nickname %></td>
+      <td><%= user.phone_number %></td>
+      <td><%= user.email %></td>
+      <td><%= user.viber_active %></td>
+      <td><%= user.viber_id %></td>
+      <td><%= user.language %></td>
+      <td><%= user.provider %></td>
+      <td><%= user.token %></td>
+      <td><%= user.token_expiration %></td>
+      <td><%= user.member_psw %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: user_path(@conn, :show, user), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: user_path(@conn, :edit, user), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New User", to: user_path(@conn, :new) %></span>

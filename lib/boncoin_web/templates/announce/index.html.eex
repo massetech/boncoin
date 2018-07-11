@@ -1,0 +1,48 @@
+<h2>Listing Announces</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Conditions</th>
+      <th>Latitute</th>
+      <th>Longitude</th>
+      <th>Status</th>
+      <th>Validity date</th>
+      <th>Price</th>
+      <th>Description</th>
+      <th>Photo1</th>
+      <th>Photo2</th>
+      <th>Photo3</th>
+      <th>Language</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for announce <- @announces do %>
+    <tr>
+      <td><%= announce.title %></td>
+      <td><%= announce.conditions %></td>
+      <td><%= announce.latitute %></td>
+      <td><%= announce.longitude %></td>
+      <td><%= announce.status %></td>
+      <td><%= announce.validity_date %></td>
+      <td><%= announce.price %></td>
+      <td><%= announce.description %></td>
+      <td><%= announce.photo1 %></td>
+      <td><%= announce.photo2 %></td>
+      <td><%= announce.photo3 %></td>
+      <td><%= announce.language %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: announce_path(@conn, :show, announce), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: announce_path(@conn, :edit, announce), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: announce_path(@conn, :delete, announce), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Announce", to: announce_path(@conn, :new) %></span>

@@ -1,0 +1,8 @@
+%h2= "Create your offer"
+
+%p= "Please note that your are acting on your own and that the website can’t hold any responsability on the transaction you may have with people who contact you. Your announce will be validated by our team and can be refused if we decide to."
+
+%p= "For more details please read our terms and conditions."
+
+
+= render "form.html", Map.put(assigns, :action, announce_path(@conn, :create))

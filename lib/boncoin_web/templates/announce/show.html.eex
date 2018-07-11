@@ -1,0 +1,68 @@
+<h2>Show Announce</h2>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @announce.title %>
+  </li>
+
+  <li>
+    <strong>Conditions:</strong>
+    <%= @announce.conditions %>
+  </li>
+
+  <li>
+    <strong>Latitute:</strong>
+    <%= @announce.latitute %>
+  </li>
+
+  <li>
+    <strong>Longitude:</strong>
+    <%= @announce.longitude %>
+  </li>
+
+  <li>
+    <strong>Status:</strong>
+    <%= @announce.status %>
+  </li>
+
+  <li>
+    <strong>Validity date:</strong>
+    <%= @announce.validity_date %>
+  </li>
+
+  <li>
+    <strong>Price:</strong>
+    <%= @announce.price %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @announce.description %>
+  </li>
+
+  <li>
+    <strong>Photo1:</strong>
+    <%= @announce.photo1 %>
+  </li>
+
+  <li>
+    <strong>Photo2:</strong>
+    <%= @announce.photo2 %>
+  </li>
+
+  <li>
+    <strong>Photo3:</strong>
+    <%= @announce.photo3 %>
+  </li>
+
+  <li>
+    <strong>Language:</strong>
+    <%= @announce.language %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: announce_path(@conn, :edit, @announce) %></span>
+<span><%= link "Back", to: announce_path(@conn, :index) %></span>
