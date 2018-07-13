@@ -7,10 +7,60 @@
    flex: 1;
 }
 
+.add {height: 100vh;z-index: -1;position: fixed;top:0;}
+.add-left {left: 0;}
+.add-right {right: 0;}
+
 .add {background-color: green;}
-i.btn-icon {margin: 0 10px;}
+i.btn-icon {margin: 0 20px;}
 
 #searchBar{z-index: 1000;}
+
+.slim {
+  border-radius: 1rem;
+  border-style: dashed;
+  border-width: medium;
+}
+.slim-btn {
+    filter: invert(100%);
+}
+
+.custo-form-selector{
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+}
+.field-success {
+  font-weight: bold;
+  @extend .text-success;
+}
+
+.btn-viber{
+  background: white;
+  border: 3px solid $viber-color;
+  border-radius: 5px;
+  font-family: Helvetica-Bold;
+  font-size: 20px;
+  color: $viber-color;
+  text-align: center;
+  img {width: 40px;height: 40px;//margin: 0 1em;
+  }
+}
+.btn-viber:hover{
+  background: $viber-color;
+  color: white;
+}
+
+
+// .field-failure {
+//   font-weight: bold;
+//   @extend .text-danger;
+// }
+
+// .slim-file-hopper {
+//     background-image: url('../images/photo_field.png') !important;
+//     background-repeat: no-repeat!important;
+//     background-size: 100%!important;
+// }
 
 /* ------------------------------ TYPOGRAPHY  ------------------------------ */
 a:hover {cursor: pointer;text-decoration: none;}

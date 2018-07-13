@@ -1,7 +1,7 @@
 defmodule Boncoin.Members.User do
   use Ecto.Schema
   import Ecto.Changeset
-
+  alias Boncoin.Contents.{Announce}
 
   schema "users" do
     field :uid, :string
@@ -16,6 +16,7 @@ defmodule Boncoin.Members.User do
     field :token_expiration, :utc_datetime
     field :viber_active, :boolean, default: false
     field :viber_id, :string
+    has_many :announces, Announce, on_delete: :delete_all
     timestamps()
   end
 

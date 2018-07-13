@@ -3,6 +3,16 @@ defmodule Boncoin.Contents do
   alias Boncoin.{Repo, Members}
   alias Boncoin.Contents.{Family, Category, Township, Division, Announce}
 
+  # -------------------------------- FAMILY ----------------------------------------
+  # QUERIES ------------------------------------------------------------------
+  defp filter_familys_active(query \\ Family) do
+    from f in query,
+      where: f.active == true,
+      select: struct(f, [:id, :title_en, :title_bi, :icon])
+  end
+
+  # METHODS ------------------------------------------------------------------
+
   @doc """
   Returns the list of familys.
 
@@ -14,6 +24,18 @@ defmodule Boncoin.Contents do
   """
   def list_familys do
     Repo.all(Family)
+  end
+
+  @doc """
+  Returns the list of active families and their active categories.
+  """
+
+  def list_familys_active do
+    query = filter_categorys_active()
+    Family
+      |> filter_familys_active()
+      |> Repo.all()
+      |> Repo.preload([categorys: query])
   end
 
   @doc """
@@ -96,6 +118,16 @@ defmodule Boncoin.Contents do
   def change_family(%Family{} = family) do
     Family.changeset(family, %{})
   end
+
+  # -------------------------------- CATERGORY ----------------------------------------
+  # QUERIES ------------------------------------------------------------------
+  defp filter_categorys_active(query \\ Category) do
+    from c in query,
+      where: c.active == true,
+      select: struct(c, [:id, :title_en, :title_bi, :icon])
+  end
+
+  # METHODS ------------------------------------------------------------------
 
   @doc """
   Returns the list of categorys.
@@ -193,7 +225,7 @@ defmodule Boncoin.Contents do
 
   # -------------------------------- TOWNSHIP ----------------------------------------
   # QUERIES ------------------------------------------------------------------
-  def filter_townships_active(query \\ Township) do
+  defp filter_townships_active(query \\ Township) do
     from t in query,
       where: t.active == true,
       select: struct(t, [:id, :title_en, :title_bi])
@@ -297,7 +329,7 @@ defmodule Boncoin.Contents do
 
   # -------------------------------- DIVISION ----------------------------------------
   # QUERIES ------------------------------------------------------------------
-  def filter_divisions_active(query \\ Division) do
+  defp filter_divisions_active(query \\ Division) do
     from d in query,
       where: d.active == true,
       select: [:id, :title_en, :title_bi]
@@ -320,15 +352,9 @@ defmodule Boncoin.Contents do
 
   @doc """
   Returns the list of active divisions and their active townships.
-
-  ## Examples
-
-      iex> list_townships()
-      [%Township{}, ...]
-
   """
 
-  def list_active_divisions do
+  def list_divisions_active do
     query = filter_townships_active()
     Division
       |> filter_divisions_active()

@@ -6,7 +6,8 @@ defmodule Boncoin.Plug.LoadSelects do
 
   def call(conn, _opts) do
     conn
-      |> assign(:divisions, Contents.list_active_divisions())
+      |> assign(:divisions, Contents.list_divisions_active())
+      |> assign(:familys, Contents.list_familys_active())
   end
 
 end

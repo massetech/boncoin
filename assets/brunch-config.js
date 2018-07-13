@@ -22,7 +22,12 @@ exports.config = {
   // Phoenix paths configuration
   paths: {
     // Dependencies and current project directories to watch
-    watched: ["static", "css", "js", "vendor", "scss", "fonts"],
+    watched: [
+      "static", "css", "js", "vendor", "scss", "fonts",
+      // "node_modules/bootstrap-select/dist/js/bootstrap-select.min.js",
+      // "node_modules/bootstrap-select/dist/js/bootstrap-select.bundle.js",
+      // "node_modules/bootstrap-select/dist/css/bootstrap-select.min.css"
+    ],
     // Where to compile files to
     public: "../priv/static"
   },

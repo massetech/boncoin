@@ -20,6 +20,7 @@ defmodule BoncoinWeb.AnnounceController do
   end
 
   def create(conn, %{"announce" => announce_params}) do
+    IO.inspect(announce_params)
     case Contents.create_announce(announce_params) do
       {:ok, announce} ->
         conn

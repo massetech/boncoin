@@ -11,16 +11,16 @@
     -# %link(rel="stylesheet" href='https://fonts.googleapis.com/icon?family=Material+Icons')
 
   %body.bg-light
+    .add.add-left.col-lg-2.d-none.d-lg-block
+    .add.add-right.col-lg-2.d-none.d-lg-block
     .container-fluid.px-0
       .row.no-gutters.align-items-center
-        .col-lg-2.d-none.d-lg-block.text-center.full-height.add.add-left.bg-success
-        .col-xs-12.col-lg-8.text-center.full-height.d-flex.flex.flex-column
+        .col-xs-12.col-lg-8.offset-lg-2.text-center.full-height.d-flex.flex.flex-column
           %header.header
             = render "header.html", assigns
           %main.container-fluid.flex-grow{role: "main"}
             = render @view_module, @view_template, assigns
           %footer.footer
             = render "footer.html", assigns
-        .col-lg-2.d-none.d-lg-block.text-center.full-height.add.add-left.bg-success
 
     %script(src='#{static_path(@conn, "/js/app.js")}')
