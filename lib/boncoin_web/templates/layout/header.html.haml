@@ -1,5 +1,5 @@
-.container-fluid
-  .row.align-items-center.bg-primary
+.container-fluid.m-0.p-0
+  .row.nav-row.align-items-center.bg-primary.m-0.p-0
     .col.col-xs-2.text-left
       %a.text-white{href: "#"}
         %i.fa.fa-bars
@@ -8,6 +8,6 @@
     .col.col-xs-2.text-right
       %a.text-white{href: "#", data-toggle: "collapse" data-target="#searchBar"}
         %i.fa.fa-search
-  .row.collapse.position-absolute.bg-primary{id: "searchBar", style: "width:100%;"}
-    .col.col-xs-12.col-sm-10.offset-sm-1.col-lg-8.offset-lg-2.align-middle{style: "height:4em;"}
+  .row.nav-row.collapse.position-absolute.bg-primary.m-0.p-0{id: "searchBar"}
+    .col.col-xs-12.col-sm-10.offset-sm-1.col-lg-8.offset-lg-2.align-middle
       = render "_search_form.html", assigns

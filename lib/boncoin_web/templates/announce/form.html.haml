@@ -1,146 +1,152 @@
-- form_for @changeset, @action, fn f ->
+- form_for @changeset, @action, [{:multipart, true}], fn f ->
   = hidden_input f, :currency, value: "Kyats"
+  = hidden_input f, :user_id, value: ""
   - if @changeset.action do
     .alert.alert-danger
       %p= "Oops, something went wrong! Please check the errors below."
 
-  %hr
-  %h5.mb-4.text-left= "What are your details ?"
+  .row
+    .col-xs-12.col-sm-6
+      -# %hr
+      %h5.text-left= gettext "What are your details ?"
 
-  .row.justify-content-center.justify-content-lg-start
-    .col-12
-      .form-group.text-left.m-0
-        .input-group
-          %span.input-group-prepend
-            .input-group-text.bg-transparent
-              %i.fa.fa-phone
-          = text_input f, :phone_number, class: "form-control", autocomplete: "nope", placeholder: "Phone number"
-        %small.form-text.text-muted= "Myanmar mobile phone number (09000000000)"
-        = error_tag f, :phone_number
-
-  .row.justify-content-center
-    -# .collapse.collapsible_form
-    .col.col-xs-12.col-sm-8
-      - link to: "https://viber.me/<pawchaungkaung_en>", class: "btn btn-block btn-viber my-4", target: "_blank" do
-        .row.no-gutters.align-items-center
-          .col-10
-            %span{style: "white-space: normal;"}= "Link this number to a Viber account"
-          .col-2
-            = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon", id: "viber_icon_full"
-
-  .row.justify-content-center.justify-content-lg-start
-    .col-12
-      .form-group.text-left
-        .input-group
-          %span.input-group-prepend
-            .input-group-text.bg-transparent
-              %i.fa.fa-user
-          = text_input f, :nickname, class: "form-control", autocomplete: "nope", placeholder: "Name or nickname"
-        = error_tag f, :nickname
-
-    .col-12
-      .form-group.text-left
-        .input-group
-          %span.input-group-prepend
-            .input-group-text.bg-transparent
-              %i.fa.fa-envelope
-          = text_input f, :email, class: "form-control", type: "email", autocomplete: "nope", placeholder: "Email (optional)"
-        = error_tag f, :email
-
-    .col-12
-      .form-group
-        .form-group.text-left
+      .row.text-left.my-4
+        .col-9.pr-0
           .input-group
             %span.input-group-prepend
               .input-group-text.bg-transparent
-                %i.fa.fa-unlock-alt
-            = text_input f, :password, class: "form-control", type: "password", autocomplete: "nope", placeholder: "Password (for registered users )"
-        = error_tag f, :password
+                %i.fa.fa-phone
+            = text_input f, :phone_number, class: "form-control", autocomplete: "nope", placeholder: gettext("Phone number")
+          %small.form-text.text-muted= gettext "Myanmar mobile phone number (09000000000)"
+          = error_tag f, :phone_number
+        .col-3
+          %button.btn.btn-primary{id: "btn_check_number", drab-click: "read_user_details", data-item-id: "dedela frite"}= "OK"
 
-  %hr
-  %h5.mb-4.collapse.collapsible_form.text-left= "What are you selling ?"
+      .row.text-left.my-4.collapse.collapsible_form
+        .col-12
+          .form-group{id: "field-viber"}
+            .input-group
+              %span.input-group-prepend
+                .input-group-text.bg-transparent
+                  = img_tag static_path(@conn, "/images/viber_icon.png"), class: "img-icon"
+              %input.form-control.disabled.bg-white{type: "text", id: "disabledTextInput", placeholder: gettext("Your number is linked to viber"), readonly}
+            %small.form-text.text-muted= gettext "You will receive notifications"
 
-  .row.justify-content-center.justify-content-lg-start.collapse.collapsible_form
-    .col-xs-12.col-sm-8.col-lg-4.offset-lg-4
-      .form-group
-        %select.form-control.selectpicker{data-style: "btn-outline-dark", title: "Select item location", data-size: "8", id: "announce_location", name: "announce[location]"}
-          - for division <- @conn.assigns.divisions do
-            %optgroup{label: "#{division.title_en}", data-icon: "fa fa-map-marker"}
-              - for township <- division.townships do
-                %option{value: "#{township.id}"}= "#{division.title_en}- #{township.title_en}"
+          - link to: "https://viber.me/<pawchaungkaung_en>", id: "btn-viber", class: "btn btn-block", target: "_blank" do
+            .row.no-gutters.align-items-center
+              .col-10
+                %span{style: "white-space: normal;"}= gettext "Link this number to a Viber account"
+              .col-2
+                = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
 
-    .col-xs-12.col-sm-8.col-lg-4.offset-lg-4
-      .form-group
-        %select.form-control.selectpicker{data-style: "btn-outline-dark", title: "Select a category", data-size: "8", id: "announce_category", name: "announce[category]"}
-          - for family <- @conn.assigns.familys do
-            %optgroup{label: "#{family.title_en}", data-icon: "fa fa-#{family.icon}"}
-              - for category <- family.categorys do
-                %option{value: "#{category.id}", data-icon: "fa fa-#{category.icon}"}= "#{category.title_en}"
+      .row.text-left.my-4.collapse.collapsible_form
+        .col-12
+          .form-group
+            .input-group
+              %span.input-group-prepend
+                .input-group-text.bg-transparent
+                  %i.fa.fa-user
+              = text_input f, :nickname, class: "form-control", autocomplete: "nope", placeholder: gettext("Name or nickname")
+            = error_tag f, :nickname
 
-    .col-12
-      .form-group
-        .form-group.text-left
-          .input-group
-            %span.input-group-prepend
-              .input-group-text.bg-transparent
-                %i.fa.fa-font
-            = text_input f, :title, class: "form-control", autocomplete: "nope", placeholder: "Title"
-        = error_tag f, :title
+        .col-12
+          .form-group.text-left
+            .input-group
+              %span.input-group-prepend
+                .input-group-text.bg-transparent
+                  %i.fa.fa-envelope
+              = text_input f, :email, class: "form-control", type: "email", autocomplete: "nope", placeholder: gettext("Email (optional)")
+            = error_tag f, :email
 
-    .col-12
-      .form-group
-        .input-group
-          .input-group-prepend
-            .input-group-text.bg-transparent
-              %i.fa.fa-thumbs-up
-          = text_input f, :price, class: "form-control", autocomplete: "nope", placeholder: "Price"
-          .input-group-append
-            %span.input-group-text
-              =".00"
-            .input-group-text{id: "choosen_currency_text"}
-              = "Kyats"
-            %button.btn.dropdown-toggle.custo-form-selector{data-toggle: "dropdown", aria-haspopup: "true", aria-expanded: "false"}
-            .dropdown-menu
-              .dropdown-item.ddown_change_currency= "Kyats"
-              .dropdown-item.ddown_change_currency= "Lacks"
-              .dropdown-item.ddown_change_currency= "USD"
-        = error_tag f, :price
+        .col-12
+          .form-group{id: "field-password"}
+            .form-group.text-left
+              .input-group
+                %span.input-group-prepend
+                  .input-group-text.bg-transparent
+                    %i.fa.fa-unlock-alt
+                = text_input f, :password, class: "form-control", type: "password", autocomplete: "nope", placeholder: gettext("Password")
+            = error_tag f, :password
 
-    .col-12
-      .form-group
-        .input-group
-          %span.input-group-prepend
-            .input-group-text.bg-transparent
-              %i.fa.fa-edit
-          = textarea f, :description, class: "form-control", rows: "10", autocomplete: "nope", placeholder: "Description (size, dimensions, condition, scratches, date of buy, ...)"
-        = error_tag f, :description
+    .col-xs-12.col-sm-6
+      -# %hr
+      %h5.text-left.collapse.collapsible_form= gettext "What are you selling ?"
+
+      .row.collapse.mt-4.collapsible_form
+        .col-12
+          .form-group
+            %select.form-control.selectpicker{data-style: "btn-outline-dark", title: gettext("Select item location"), data-size: "8", id: "announce_township", name: "announce[township_id]"}
+              - for division <- @conn.assigns.select_menus.divisions do
+                %optgroup{label: "#{division.title_en}", data-icon: "fa fa-map-marker"}
+                  - for township <- division.townships do
+                    %option{value: "#{township.id}"}= "#{division.title_en}- #{township.title_en}"
+        .col-12
+          .form-group
+            %select.form-control.selectpicker{data-style: "btn-outline-dark", title: gettext("Select a category"), data-size: "8", id: "announce_category", name: "announce[category_id]"}
+              - for family <- @conn.assigns.select_menus.familys do
+                %optgroup{label: "#{family.title_en}", data-icon: "fa fa-#{family.icon}"}
+                  - for category <- family.categorys do
+                    %option{value: "#{category.id}", data-icon: "fa fa-#{category.icon}"}= "#{category.title_en}"
+        .col-12
+          .form-group
+            .form-group.text-left
+              .input-group
+                %span.input-group-prepend
+                  .input-group-text.bg-transparent
+                    %i.fa.fa-font
+                = text_input f, :title, class: "form-control", autocomplete: "nope", placeholder: gettext("Title")
+            = error_tag f, :title
+        .col-12
+          .form-group
+            .input-group
+              .input-group-prepend
+                .input-group-text.bg-transparent
+                  %i.fa.fa-thumbs-up
+              = text_input f, :price, class: "form-control", autocomplete: "nope", placeholder: gettext("Price")
+              .input-group-append
+                %span.input-group-text
+                  =".00"
+                .input-group-text{id: "choosen_currency_text"}
+                  = gettext("Kyats")
+                %button.btn.dropdown-toggle.custo-form-selector{data-toggle: "dropdown", aria-haspopup: "true", aria-expanded: "false"}
+                .dropdown-menu
+                  .dropdown-item.ddown_change_currency= "Kyats"
+                  .dropdown-item.ddown_change_currency= "Lacks"
+                  .dropdown-item.ddown_change_currency= "USD"
+            = error_tag f, :price
+        .col-12
+          .form-group
+            .input-group
+              %span.input-group-prepend
+                .input-group-text.bg-transparent
+                  %i.fa.fa-edit
+              = textarea f, :description, class: "form-control", rows: "10", autocomplete: "nope", placeholder: gettext("Description (size, dimensions, condition, scratches, date of buy, ...)")
+            = error_tag f, :description
 
   .row.collapse.collapsible_form
     .col-12
-      %p.text-left= "Please select 1, 2, or 3 photos to show the object and its condition (good or used)."
+      %p.text-left= gettext "Please select 1, 2, or 3 photos to show the object and its condition (good or used)."
       -# %h3= "thanks to https://pqina.nl/slim/#docs"
     .col-12
       .row
         .col-4
           %fieldset.form-group
-            -# = "test"
-            %input.form-control.slim{id: "picture_1", name: "announce[photo1]", type: "file", data-ratio: "1:1", data-size: "320,320", data-min-size: "150,150", data-instant-edit: "true", data-label: "Photo 1"}
+            %input.form-control.slim{id: "image_file_1", name: "announce[image_file_1]", type: "file", data-post="output", data-force-type: "jpg", data-ratio: "1:1", data-size: "600,600", data-min-size: "300,300", data-instant-edit: "true"}
         .col-4
           %fieldset.form-group
-            -# = "test"
-            %input.form-control.slim{id: "picture_2", name: "announce[photo2]", type: "file", data-ratio: "1:1", data-size: "320,320", data-min-size: "150,150", data-instant-edit: "true", data-label: "Photo 2"}
+            %input.form-control.slim{id: "image_file_2", name: "announce[image_file_2]", type: "file", data-post="output", data-force-type: "jpg", data-ratio: "1:1", data-size: "600,600", data-min-size: "300,300", data-instant-edit: "true"}
         .col-4
           %fieldset.form-group
-            -# = "test"
-            %input.form-control.slim{id: "picture_3", name: "announce[photo3]", type: "file", data-ratio: "1:1", data-size: "320,320", data-min-size: "150,150", data-instant-edit: "true", data-label: "Photo 3"}
+            %input.form-control.slim{id: "image_file_3", name: "announce[image_file_3]", type: "file", data-post="output", data-force-type: "jpg", data-ratio: "1:1", data-size: "600,600", data-min-size: "300,300", data-instant-edit: "true"}
 
 
-    .col-12
+    .col-12.my-2
       .form-group.form-check
-        =# label f, :conditions, class: "form-check-label"
-        = checkbox f, :conditions, class: "form-check-input"
+        %label.form-check-label
+          = checkbox f, :conditions, class: "form-check-input", type: "radio"
+          = gettext "I understand and agree to conditions"
         = error_tag f, :conditions
   .row.collapse.collapsible_form
     .col-12
       .form-group
-        = submit "Submit", class: "btn btn-primary"
+        = submit gettext "Submit this offer", class: "btn btn-primary btn-lg"

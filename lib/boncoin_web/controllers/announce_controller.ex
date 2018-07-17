@@ -1,6 +1,6 @@
 defmodule BoncoinWeb.AnnounceController do
   use BoncoinWeb, :controller
-
+  use Drab.Controller, commanders: [BoncoinWeb.AnnounceCommander]
   alias Boncoin.Contents
   alias Boncoin.Contents.Announce
 
@@ -15,17 +15,17 @@ defmodule BoncoinWeb.AnnounceController do
   end
 
   def new(conn, _params) do
+    IO.inspect(conn)
     changeset = Contents.change_announce(%Announce{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"announce" => announce_params}) do
-    IO.inspect(announce_params)
     case Contents.create_announce(announce_params) do
       {:ok, announce} ->
         conn
         |> put_flash(:info, "Announce created successfully.")
-        |> redirect(to: announce_path(conn, :show, announce))
+        |> redirect(to: public_offers_path(conn, :public_index, search: %{township_id: "#{announce.township_id}"}))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end

@@ -5,9 +5,12 @@ defmodule Boncoin.Plug.LoadSelects do
   def init(_opts), do: nil
 
   def call(conn, _opts) do
+    select_menus = %{
+      divisions: Contents.list_divisions_active(),
+      familys: Contents.list_familys_active()
+    }
     conn
-      |> assign(:divisions, Contents.list_divisions_active())
-      |> assign(:familys, Contents.list_familys_active())
+      |> assign(:select_menus, select_menus)
   end
 
 end

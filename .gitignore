@@ -2,6 +2,7 @@
 /_build
 /db
 /deps
+/secrets
 /*.ez
 *.ez*
 *.log*

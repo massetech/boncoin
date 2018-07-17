@@ -12,7 +12,7 @@ config :boncoin,
 
 config :boncoin, Boncoin.Gettext,
   default_locale: "en",
-  locales: ~w(en bi)
+  locales: ~w(en my)
 
 config :boncoin, Boncoin.Auth.Guardian,
   secret_key: System.get_env("GUARDIAN_SECRET"),
@@ -29,8 +29,22 @@ config :ueberauth, Ueberauth.Strategy.Google.OAuth,
   client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
 
 # Configure the Haml engine
-  config :phoenix, :template_engines,
-    haml: PhoenixHaml.Engine
+config :phoenix, :template_engines,
+  haml: PhoenixHaml.Engine,
+  drab: Drab.Live.Engine
+
+# Configure Drab
+config :drab, BoncoinWeb.Endpoint,
+  otp_app: :boncoin
+
+# Configure ARC image uploader to Google cloud
+config :arc,
+  storage: Arc.Storage.GCS,
+  bucket: "pawchaungkaung_dev"
+  # bucket: System.get_env("GOOGLE_CLOUD_BUCKET")
+
+config :goth,
+  json: "secrets/google_cloud_keyfile.json" |> Path.expand |> File.read!
 
 # Configures the endpoint
 config :boncoin, BoncoinWeb.Endpoint,

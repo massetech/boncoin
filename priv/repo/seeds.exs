@@ -10,7 +10,7 @@ Repo.delete_all(Township)
 Repo.delete_all(Announce)
 Repo.delete_all(User)
 
-Repo.insert! %User{email: "bitocreator@gmail.com", role: "SUPER"}
+Repo.insert! %User{email: "bitocreator@gmail.com", role: "SUPER", phone_number: "09000000000", member_psw: "fouesnant", viber_active: true, nickname: "Thibaut"}
 
 Repo.insert! %Division{title_en: "Yangon", title_bi: "ရန်ကုံန်", active: true}
 Repo.insert! %Division{title_en: "Dawei", title_bi: "ဒာဝေး", active: true}
@@ -32,3 +32,5 @@ for family <- Repo.all(Family) do
     Repo.insert! %Category{family_id: family.id, title_en: "Category #{i}", title_bi: "ပျစ်စစ် #{i}", active: true, icon: "home"}
   end
 end
+
+# Repo.insert! %Announce{user_id: 1, category_id: 1, township_id: 1, title: "nothing", price: 1.0, description: "thats all I know", currency: "USD"}

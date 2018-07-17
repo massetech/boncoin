@@ -20,7 +20,7 @@ defmodule Boncoin.Mixfile do
   def application do
     [
       mod: {Boncoin.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :timex]
     ]
   end
 
@@ -47,7 +47,12 @@ defmodule Boncoin.Mixfile do
       {:poison, "~> 3.1"},
       {:cors_plug, "~> 1.5", only: :dev},
       {:distillery, "~> 1.5", runtime: false},
-      {:phoenix_haml, "~> 0.2"}
+      {:phoenix_haml, "~> 0.2"},
+      {:drab, "~> 0.9.0"},
+      {:arc, "~> 0.10.0"},
+      # {:arc_ecto, "~> 0.10.0"},
+      {:arc_ecto, git: "https://github.com/massetech/arc_ecto.git"},
+      {:arc_gcs, "~> 0.0.8"}
     ]
   end
 

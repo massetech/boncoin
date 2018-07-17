@@ -14,9 +14,6 @@ defmodule Boncoin.Repo.Migrations.CreateAnnounces do
       add :price, :float
       add :currency, :string
       add :description, :text
-      add :photo1, :string
-      add :photo2, :string
-      add :photo3, :string
       add :language, :string
       add :nb_view, :integer
       add :nb_clic, :integer

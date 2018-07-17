@@ -1,19 +1,18 @@
 .row
   .col-12
-    %h6.text-dark= "Find something in more than 190 274 annouces"
-.row.justify-content-center.justify-content-lg-start
-  .col-xs-12.col-sm-8.col-lg-4.offset-lg-4
-    - link to: announce_path(@conn, :new), class: "btn btn-secondary text-white my-2 btn-block" do
+    %h6.font-weight-bold.text-dark
+      = gettext "Find something in more than "
+      %span.text-primary= @nb_announces
+      = gettext " offers"
+.row.justify-content-center.my-4
+  .col-xs-12.col-sm-6
+    - link to: announce_path(@conn, :new), class: "btn btn-lg btn-secondary text-white mb-4 btn-block" do
       %i.fa.fa-bullhorn.btn-icon{}
-      %span= "Create a new offer"
-
-  .col-xs-12.col-sm-8.col-lg-4.offset-lg-4
+      %span= gettext "Propose to sell something"
     = render BoncoinWeb.LayoutView, "_cities_list.html", assigns
 
-.row
-  .col-12
+.row.justify-content-center
+  .col-xs-12.col-sm-8
     = img_tag(static_path(@conn, "/images/video_explain.png"))
-
-.row
-  .col-12
-    %h6.text-dark= "On this website, you can post and read free announces without any commission. Find everything you want in Myanmar, just be carefull to check what you are buying."
+  .col-xs-12.col-sm-8.my-4
+    %h6.text-dark= gettext "On this website, you can post and read free announces without any commission. Find everything you want in Myanmar, just be carefull to check what you are buying."

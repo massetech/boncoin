@@ -24,4 +24,5 @@ defmodule Boncoin.Contents.Township do
     |> validate_required(@required_fields)
     |> assoc_constraint(:division)
   end
+
 end

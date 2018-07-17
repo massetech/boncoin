@@ -24,9 +24,8 @@ exports.config = {
     // Dependencies and current project directories to watch
     watched: [
       "static", "css", "js", "vendor", "scss", "fonts",
-      // "node_modules/bootstrap-select/dist/js/bootstrap-select.min.js",
-      // "node_modules/bootstrap-select/dist/js/bootstrap-select.bundle.js",
-      // "node_modules/bootstrap-select/dist/css/bootstrap-select.min.css"
+      "node_modules/jquery-touchswipe/jquery.touchSwipe.min.js",
+      "node_modules/ekko-lightbox/dist/ekko-lightbox.min.js"
     ],
     // Where to compile files to
     public: "../priv/static"
@@ -43,7 +42,8 @@ exports.config = {
       options: {
         includePaths: [
           "node_modules/bootstrap/scss",
-          "node_modules/font-awesome/scss"
+          "node_modules/font-awesome/scss",
+          "node_modules/ekko-lightbox/dist"
         ], // tell sass-brunch where to look for files to @import
         precision: 8 // minimum precision required by bootstrap
       }
@@ -68,6 +68,8 @@ exports.config = {
       jQuery: 'jquery',
       Tether: 'tether',
       Popper: 'popper.js',
+      touchswipe: "jquery-touchswipe",
+      ekkoLightbox: "ekko-lightbox",
       bootstrap: 'bootstrap' // require Bootstrap JavaScript globally too
     }
   }

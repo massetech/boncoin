@@ -1,7 +1,7 @@
 defmodule Boncoin.Contents do
   import Ecto.Query, warn: false
   alias Boncoin.{Repo, Members}
-  alias Boncoin.Contents.{Family, Category, Township, Division, Announce}
+  alias Boncoin.Contents.{Family, Category, Township, Division, Announce, Image}
 
   # -------------------------------- FAMILY ----------------------------------------
   # QUERIES ------------------------------------------------------------------
@@ -29,6 +29,12 @@ defmodule Boncoin.Contents do
   @doc """
   Returns the list of active families and their active categories.
   """
+
+  # def get_family_of_category(category_id) do
+  #   Family
+  #     |> fil
+  #     |> Repo.one()
+  # end
 
   def list_familys_active do
     query = filter_categorys_active()
@@ -450,26 +456,59 @@ defmodule Boncoin.Contents do
       where: a.status == "ONLINE",
       order_by: [asc: :priority, desc: :parution_date, desc: :nb_clic]
   end
+  defp count_announces_online(query \\ Announce) do
+    from a in query,
+      where: a.status == "ONLINE",
+      select: count("*")
+  end
+
+  # defp filter_announce_public_data(query \\ Announce) do
+  #   from a in query, abs(number)
+  #     select: [:id, :price]
+  #     # select: map(a, [:id, :price])
+  #     # select: struct(a, [:id, :price])
+  #     # select: %Announce{id: a.id, price: a.price}
+  # end
 
   defp filter_announces_by_location(query \\ Announce, division_id, township_id) do
-    no_query = from a in query,
-      join: t in assoc(a, :township), where: t.active == true,
-      join: d in assoc(t, :division), where: d.active == true
-    div_query = from a in query,
-      join: t in assoc(a, :township), where: t.active == true,
-      join: d in assoc(t, :division), where: d.active == true and d.id == ^division_id
-    tws_query = from a in query,
-      join: t in assoc(a, :township), where: t.active == true and t.id == ^township_id,
-      join: d in assoc(t, :division), where: d.active == true and t.id == ^division_id
     case division_id do
-      "" -> no_query
+      nil ->
+        from a in query,
+          join: t in assoc(a, :township), where: t.active == true,
+          join: d in assoc(t, :division), where: d.active == true
       _ ->
         case township_id do
-          "" -> div_query
-          _ -> tws_query
+          nil ->
+            from a in query,
+              join: t in assoc(a, :township), where: t.active == true,
+              join: d in assoc(t, :division), where: d.active == true and d.id == ^division_id
+          _ ->
+            from a in query,
+              join: t in assoc(a, :township), where: t.active == true and t.id == ^township_id,
+              join: d in assoc(t, :division), where: d.active == true and t.id == ^division_id
         end
     end
   end
+
+  # defp filter_announces_by_kind(query \\ Announce, family_id, category_id) do
+  #   no_query = from a in query,
+  #     join: t in assoc(a, :category), where: t.active == true,
+  #     join: d in assoc(t, :family), where: d.active == true
+  #   fam_query = from a in query,
+  #     join: t in assoc(a, :category), where: t.active == true,
+  #     join: d in assoc(t, :family), where: d.active == true and d.id == ^family_id
+  #   cat_query = from a in query,
+  #     join: t in assoc(a, :category), where: t.active == true and t.id == ^category_id,
+  #     join: d in assoc(t, :family), where: d.active == true and t.id == ^family_id
+  #   case family_id do
+  #     "" -> no_query
+  #     _ ->
+  #       case category_id do
+  #         "" -> fam_query
+  #         _ -> cat_query
+  #       end
+  #   end
+  # end
 
   # METHODS ------------------------------------------------------------------
 
@@ -490,15 +529,37 @@ defmodule Boncoin.Contents do
   Returns the list of public announces for query.
   """
 
-  def list_announces_public(%{"division" => division_id, "township" => township_id} =  search_params) do
-    # division_id = search_params["division"] || nil
-    # township_id = search_params["township"] || nil
-    # IO.inspect(division_id)
-    # IO.inspect(township_id)
-    Announce
+  def list_announces_public(%{category_id: category_id, division_id: division_id, family_id: family_id, township_id: township_id} = params) do
+    user_query = Members.filter_user_public_data()
+    # image_query = filter_image_public_data()
+    announces = Announce
       |> filter_announces_online()
       |> filter_announces_by_location(division_id, township_id)
+      # |> filter_announces_by_kind(family_id, category_id)
+      # |> filter_announce_public_data()
       |> Repo.all()
+      |> Repo.preload([:images, user: user_query, township: [:division]])
+    nb_announces = Kernel.length(announces)
+    place = case division_id do
+      nil ->
+        %{title_bi: "ပောပဒနိ", title_en: "All Myanmar"}
+      id ->
+        division = get_division!(division_id)
+        case township_id do
+          nil ->
+            %{title_bi: "ဒသဉ #{division.title_bi}", title_en: "#{String.upcase(division.title_en)}"}
+          id ->
+            township = get_township!(township_id)
+            %{title_bi: "#{division.title_bi} - #{township.title_bi}", title_en: "#{String.upcase(division.title_en)} - #{township.title_en}"}
+        end
+    end
+    {announces, nb_announces, place}
+  end
+
+  def count_announces_public() do
+    Announce
+      |> count_announces_online()
+      |> Repo.one()
   end
 
   @doc """
@@ -529,10 +590,31 @@ defmodule Boncoin.Contents do
       {:error, %Ecto.Changeset{}}
 
   """
+
   def create_announce(attrs \\ %{}) do
-    %Announce{}
-    |> Announce.changeset(attrs)
-    |> Repo.insert()
+    params = attrs
+      |> Map.merge(calc_announce_validity_date())
+      |> Map.merge(%{"status" => "ONLINE"})
+    new_announce = %Announce{}
+      |> Announce.changeset(params)
+      |> Repo.insert()
+    case new_announce do
+      {:ok, announce} ->
+        # Test on the 3 photo fields of the form
+        for i <- ["image_file_1", "image_file_2", "image_file_3"] do
+          unless attrs[i] == "" do
+            create_announce_image(announce.id, attrs[i])
+          end
+        end
+        {:ok, announce}
+      error -> error
+    end
+  end
+
+  defp calc_announce_validity_date() do
+    parution_date = Timex.now()
+    validity_date = Timex.shift(parution_date, days: 3)
+    %{"parution_date" => parution_date, "validity_date" => validity_date}
   end
 
   @doc """
@@ -580,5 +662,129 @@ defmodule Boncoin.Contents do
   """
   def change_announce(%Announce{} = announce) do
     Announce.changeset(announce, %{})
+  end
+
+  # -------------------------------- IMAGE ----------------------------------------
+  # QUERIES ------------------------------------------------------------------
+  # def filter_image_public_data(query \\ Image) do
+  #   from i in Image,
+  #     select: %{file: i.file}
+  # end
+
+  # METHODS ------------------------------------------------------------------
+
+  @doc """
+  Returns the list of images.
+
+  ## Examples
+
+      iex> list_images()
+      [%Image{}, ...]
+
+  """
+  def list_images do
+    Repo.all(Image)
+  end
+
+  @doc """
+  Gets a single image.
+
+  Raises `Ecto.NoResultsError` if the Image does not exist.
+
+  ## Examples
+
+      iex> get_image!(123)
+      %Image{}
+
+      iex> get_image!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_image!(id), do: Repo.get!(Image, id)
+
+  @doc """
+  Creates a image.
+  Can receive binary datas from the form :
+      announce_id: announce.id,
+      file: %{
+        content_type: img_params["output"]["type"],
+        filename: img_params["output"]["name"],
+        binary: Base.decode64!(clean_up_picture_file (img_params))
+      }
+
+  ## Examples
+
+      iex> create_image(%{field: value})
+      {:ok, %Image{}}
+
+      iex> create_image(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_announce_image(announce_id, file) do
+    image_params = %{announce_id: announce_id, file: file}
+    %Image{}
+      |> Image.changeset(image_params)
+      |> Repo.insert()
+  end
+
+  def create_image(attrs \\ %{}) do
+    %Image{}
+      |> Image.changeset(attrs)
+      |> Repo.insert()
+  end
+
+  @doc """
+  Updates a image.
+
+  ## Examples
+
+      iex> update_image(image, %{field: new_value})
+      {:ok, %Image{}}
+
+      iex> update_image(image, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  # def update_image(%Image{} = image, attrs) do
+  #   image
+  #   |> Image.changeset(attrs)
+  #   |> Repo.update()
+  # end
+
+  @doc """
+  Deletes a Image.
+
+  ## Examples
+
+      iex> delete_image(image)
+      {:ok, %Image{}}
+
+      iex> delete_image(image)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_image(%Image{} = image) do
+    case Repo.delete(image) do
+      {:ok, image} ->
+        # Since the above deletion doesn't really need to happen synchronously, you can delete it asynchronously to speed up the request/response.
+        # spawn(fn -> ImageFile.delete({image.file, image}) end)
+        Boncoin.AnnounceImage.delete({image.file, image})
+        {:ok, image}
+      error -> error
+    end
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking image changes.
+
+  ## Examples
+
+      iex> change_image(image)
+      %Ecto.Changeset{source: %Image{}}
+
+  """
+  def change_image(%Image{} = image) do
+    Image.changeset(image, %{})
   end
 end

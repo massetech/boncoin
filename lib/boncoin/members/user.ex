@@ -29,10 +29,11 @@ defmodule Boncoin.Members.User do
     |> cast(attrs, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
     |> unique_constraint(:email, message: "Email is already taken")
-    |> validate_format(:email, ~r/@/, message: "This is not an email")
-    |> validate_format(:phone_number, ~r/@/, message: "This is not a Myanmar phone number")
+    |> unique_constraint(:phone_number, message: "Phone number is already taken")
+    # |> validate_format(:email, ~r/@/, message: "This is not an email")
+    # |> validate_format(:phone_number, ~r/@/, message: "This is not a Myanmar phone number")
     |> validate_inclusion(:provider, ["google"])
-    |> validate_inclusion(:role, ["MEMBER", "ADMIN", "SUPER"])
+    |> validate_inclusion(:role, ["GUEST", "MEMBER", "ADMIN", "SUPER"])
   end
 
   def role_select_btn() do

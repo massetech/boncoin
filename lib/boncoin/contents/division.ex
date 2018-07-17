@@ -23,4 +23,5 @@ defmodule Boncoin.Contents.Division do
     |> cast(attrs, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
   end
+
 end

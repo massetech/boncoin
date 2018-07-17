@@ -40,6 +40,18 @@ defmodule Boncoin.Members do
     from u in User,
       where: u.email == ^email and u.role in ["SUPER", "ADMIN"]
   end
+
+  defp filter_user_by_phone_number(query \\ User, phone_number) do
+    from u in User,
+      where: u.phone_number == ^phone_number
+  end
+
+  def filter_user_public_data(query \\ User) do
+    from u in User,
+      # select: map(u, [:nickname, :email, :phone_number])
+      select: %{nickname: u.nickname, email: u.email, phone_number: u.phone_number, viber_active: u.viber_active, role: u.role}
+  end
+
   # METHODS ------------------------------------------------------------------
 
   @doc """
@@ -80,6 +92,27 @@ defmodule Boncoin.Members do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
+
+  @doc """
+  Reads the data known for a phone number.
+  """
+
+  defp get_user_by_phone_number(phone_number) do
+    User
+    |> filter_user_by_phone_number(phone_number)
+    |> Repo.one()
+  end
+
+  def get_user_or_create_by_phone_number(phone_number) do
+    case get_user_by_phone_number(phone_number) do
+      nil ->
+        case create_user(%{phone_number: phone_number}) do
+          {:ok, user} -> user
+          _ -> nil
+        end
+      user -> user
+    end
+  end
 
   @doc """
   Creates a user.

@@ -10,6 +10,7 @@ defmodule BoncoinWeb.Router do
     plug :put_secure_browser_headers
     plug Boncoin.Plug.LoadSelects
     plug Boncoin.Plug.Locale
+    plug Boncoin.Plug.SearchParams
   end
 
   pipeline :auth do
@@ -43,6 +44,8 @@ defmodule BoncoinWeb.Router do
     get "/", MainController, :welcome, as: :root
     get "/offers", MainController, :public_index, as: :public_offers
     resources "/announces", AnnounceController, except: [:index]
+    resources "/images", ImageController, except: [:edit, :update]
+    resources "/announces", AnnounceController, only: [:index]
   end
 
   scope "/admin", BoncoinWeb do
@@ -52,7 +55,8 @@ defmodule BoncoinWeb.Router do
     resources "/categorys", CategoryController
     resources "/divisions", DivisionController
     resources "/townships", TownshipController
-    resources "/announces", AnnounceController, only: [:index]
+    # resources "/announces", AnnounceController, only: [:index]
+    # resources "/images", ImageController, except: [:edit, :update]
   end
 
   scope "/auth", BoncoinWeb do

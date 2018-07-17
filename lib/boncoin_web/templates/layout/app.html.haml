@@ -18,9 +18,10 @@
         .col-xs-12.col-lg-8.offset-lg-2.text-center.full-height.d-flex.flex.flex-column
           %header.header
             = render "header.html", assigns
-          %main.container-fluid.flex-grow{role: "main"}
+          %main.container-fluid.flex-grow.my-4{role: "main"}
             = render @view_module, @view_template, assigns
           %footer.footer
             = render "footer.html", assigns
 
     %script(src='#{static_path(@conn, "/js/app.js")}')
+    = Drab.Client.run(@conn)

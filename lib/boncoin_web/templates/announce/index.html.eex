@@ -30,9 +30,9 @@
       <td><%= announce.validity_date %></td>
       <td><%= announce.price %></td>
       <td><%= announce.description %></td>
-      <td><%= announce.photo1 %></td>
-      <td><%= announce.photo2 %></td>
-      <td><%= announce.photo3 %></td>
+      <td><%= "announce.photo1" %></td>
+      <td><%= "announce.photo2" %></td>
+      <td><%= "announce.photo3" %></td>
       <td><%= announce.language %></td>
 
       <td class="text-right">

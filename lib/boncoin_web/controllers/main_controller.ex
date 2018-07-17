@@ -3,17 +3,16 @@ defmodule BoncoinWeb.MainController do
   alias Boncoin.{Contents, Members}
 
   def welcome(conn, _params) do
+    nb_announces = Contents.count_announces_public()
     conn
-      |> render(BoncoinWeb.PublicView, "welcome.html")
+      |> render(BoncoinWeb.PublicView, "welcome.html", nb_announces: nb_announces)
   end
 
-  def public_index(conn, %{"search" => search_params} = params) do
-    # IO.puts("searched public index")
-    # IO.inspect(params)
-    # IO.inspect(search_params)
+  def public_index(conn, _params) do
+    {announces, nb_announces, place} = Contents.list_announces_public(conn.assigns.search_params)
+    |> IO.inspect()
     conn
-      |> assign(:announces, Contents.list_announces_public(search_params))
-      |> render(BoncoinWeb.PublicView, "announces_index.html")
+      |> render(BoncoinWeb.PublicView, "announces_index.html", announces: announces, nb_announces: nb_announces, place: place)
   end
 
 end

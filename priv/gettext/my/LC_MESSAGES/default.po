@@ -1,0 +1,154 @@
+## `msgid`s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove `msgid`s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use `mix gettext.extract --merge` or `mix gettext.merge`
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: my\n"
+"Plural-Forms: nplurals=1\n"
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/announces_index.html.haml:6
+#: lib/boncoin_web/templates/public/welcome.html.haml:6
+msgid " offers"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/layout/_cities_list.html.haml:15
+msgid "All %{division_title}"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/layout/_cities_list.html.haml:7
+msgid "All Myanmar"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:177
+msgid "Description (size, dimensions, condition, scratches, date of buy, ...)"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:76
+msgid "Email (optional)"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/welcome.html.haml:4
+msgid "Find something in more than "
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/announces_index.html.haml:96
+msgid "Get number"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:212
+msgid "I understand and agree to conditions"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:156
+msgid "Kyats"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:45
+msgid "Link this number to a Viber account"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:22
+msgid "Myanmar mobile phone number (09000000000)"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:63
+msgid "Name or nickname"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/welcome.html.haml:24
+msgid "On this website, you can post and read free announces without any commission. Find everything you want in Myanmar, just be carefull to check what you are buying."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:90
+msgid "Password"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:20
+msgid "Phone number"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/announces_index.html.haml:8
+msgid "Please check before buying anything"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:187
+msgid "Please select 1, 2, or 3 photos to show the object and its condition (good or used)."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:150
+msgid "Price"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/welcome.html.haml:14
+msgid "Propose to sell something"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/layout/_cities_list.html.haml:4
+msgid "Search in your area"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/announces_index.html.haml:74
+msgid "Sold by"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:221
+msgid "Submit this offer"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:136
+msgid "Title"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:99
+msgid "What are you selling ?"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:11
+msgid "What are your details ?"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:40
+msgid "You will receive notifications"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/views/announce_view.ex:22
+msgid "today, %{hour}:%{minute} %{label}"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/views/announce_view.ex:25
+#: lib/boncoin_web/views/announce_view.ex:29
+msgid "yesterday, %{hour}:%{minute} %{label}"
+msgstr ""
