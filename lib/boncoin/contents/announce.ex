@@ -3,6 +3,7 @@ defmodule Boncoin.Contents.Announce do
   import Ecto.Changeset
   alias Boncoin.Contents.{Category, Township, Image}
   alias Boncoin.Members.{User}
+  alias Boncoin.CustomModules
 
   schema "announces" do
     field :conditions, :boolean, default: false
@@ -20,6 +21,7 @@ defmodule Boncoin.Contents.Announce do
     field :nb_alert, :integer, default: 0
     field :validity_date, :utc_datetime
     field :parution_date, :utc_datetime
+    field :zawgyi, :boolean, default: false
     belongs_to :user, User
     belongs_to :category, Category
     belongs_to :township, Township
@@ -28,12 +30,14 @@ defmodule Boncoin.Contents.Announce do
   end
 
   @required_fields ~w(user_id category_id township_id title price description currency)a
-  @optional_fields ~w(status latitute longitude conditions nb_view nb_clic nb_alert validity_date parution_date priority)a
+  @optional_fields ~w(status latitute longitude conditions nb_view nb_clic nb_alert validity_date parution_date priority zawgyi)a
 
   @doc false
   def changeset(announce, attrs) do
+    params = attrs
+      |> CustomModules.convert_fields_to_burmese_uni([:title, :description])
     announce
-    |> cast(attrs, @required_fields ++ @optional_fields)
+    |> cast(params, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
     |> assoc_constraint(:user)
     |> assoc_constraint(:category)
@@ -45,4 +49,5 @@ defmodule Boncoin.Contents.Announce do
   def status_select_btn() do
     [pending: "PENDING", accepted: "ONLINE", refused: "REFUSED", outdated: "OUTDATED"]
   end
+
 end

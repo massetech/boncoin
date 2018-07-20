@@ -1,6 +1,7 @@
 - form_for @changeset, @action, [{:multipart, true}], fn f ->
   = hidden_input f, :currency, value: "Kyats"
   = hidden_input f, :user_id, value: ""
+  = hidden_input f, :zawgyi, value: false
   - if @changeset.action do
     .alert.alert-danger
       %p= "Oops, something went wrong! Please check the errors below."

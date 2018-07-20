@@ -52,7 +52,8 @@ defmodule Boncoin.Mixfile do
       {:arc, "~> 0.10.0"},
       # {:arc_ecto, "~> 0.10.0"},
       {:arc_ecto, git: "https://github.com/massetech/arc_ecto.git"},
-      {:arc_gcs, "~> 0.0.8"}
+      {:arc_gcs, "~> 0.0.8"},
+      {:rabbitElixir, "~> 1.0.0"}
     ]
   end
 

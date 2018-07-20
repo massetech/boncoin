@@ -139,6 +139,7 @@ export default class MainView {
       $('#announce_currency').val(this.innerHTML)
     })
 
+    // Get the title and check if it looks like Zawgyi
     $('#announce_email').on('change', function() {
       var email = $(this).val()
       if (validateEmail(email) == false) {
@@ -146,6 +147,18 @@ export default class MainView {
         $(this).val('').focus()
       }
     })
+
+    $('#announce_title').on('change', function() {
+      var title = $(this).val()
+      if (knayi.fontDetect(title) == "zawgyi") {
+        console.log("zawgyi detected")
+        $('#announce_zawgyi').val('true')
+      } else {
+        console.log("unicode detected")
+        $('#announce_zawgyi').val('false')
+      }
+    })
+
     $('#announce_price').on('change', function() {
       var price = $(this).val()
       var rounded_price = Math.round(price)

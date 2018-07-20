@@ -2,6 +2,7 @@ defmodule Boncoin.Members.User do
   use Ecto.Schema
   import Ecto.Changeset
   alias Boncoin.Contents.{Announce}
+  alias Boncoin.CustomModules
 
   schema "users" do
     field :uid, :string
@@ -25,8 +26,10 @@ defmodule Boncoin.Members.User do
 
   @doc false
   def changeset(user, attrs) do
+    params = attrs
+      |> CustomModules.convert_fields_to_burmese_uni([:email, :nickname])
     user
-    |> cast(attrs, @required_fields ++ @optional_fields)
+    |> cast(params, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
     |> unique_constraint(:email, message: "Email is already taken")
     |> unique_constraint(:phone_number, message: "Phone number is already taken")

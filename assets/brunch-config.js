@@ -25,7 +25,8 @@ exports.config = {
     watched: [
       "static", "css", "js", "vendor", "scss", "fonts",
       "node_modules/jquery-touchswipe/jquery.touchSwipe.min.js",
-      "node_modules/ekko-lightbox/dist/ekko-lightbox.min.js"
+      "node_modules/ekko-lightbox/dist/ekko-lightbox.min.js",
+      "node_modules/knayi-myscript/dist/knayi-myscript.min.js"
     ],
     // Where to compile files to
     public: "../priv/static"
@@ -70,6 +71,7 @@ exports.config = {
       Popper: 'popper.js',
       touchswipe: "jquery-touchswipe",
       ekkoLightbox: "ekko-lightbox",
+      knayi: "knayi-myscript",
       bootstrap: 'bootstrap' // require Bootstrap JavaScript globally too
     }
   }

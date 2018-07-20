@@ -21,6 +21,7 @@ defmodule Boncoin.Repo.Migrations.CreateAnnounces do
       add :user_id, references(:users, on_delete: :nothing)
       add :township_id, references(:townships, on_delete: :nothing)
       add :category_id, references(:categorys, on_delete: :nothing)
+      add :zawgyi, :boolean, default: false, null: false
       timestamps()
     end
     create index(:announces, [:user_id])
