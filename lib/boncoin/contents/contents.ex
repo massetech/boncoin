@@ -472,13 +472,13 @@ defmodule Boncoin.Contents do
 
   defp filter_announces_by_location(query \\ Announce, division_id, township_id) do
     case division_id do
-      nil ->
+      "" ->
         from a in query,
           join: t in assoc(a, :township), where: t.active == true,
           join: d in assoc(t, :division), where: d.active == true
       _ ->
         case township_id do
-          nil ->
+          "" ->
             from a in query,
               join: t in assoc(a, :township), where: t.active == true,
               join: d in assoc(t, :division), where: d.active == true and d.id == ^division_id
@@ -529,7 +529,7 @@ defmodule Boncoin.Contents do
   Returns the list of public announces for query.
   """
 
-  def list_announces_public(%{category_id: category_id, division_id: division_id, family_id: family_id, township_id: township_id} = params) do
+  def list_announces_public(%{"category_id" => category_id, "division_id" => division_id, "family_id" => family_id, "township_id" => township_id} = params) do
     user_query = Members.filter_user_public_data()
     # image_query = filter_image_public_data()
     announces = Announce
@@ -541,12 +541,12 @@ defmodule Boncoin.Contents do
       |> Repo.preload([:images, user: user_query, township: [:division]])
     nb_announces = Kernel.length(announces)
     place = case division_id do
-      nil ->
+      "" ->
         %{title_bi: "ပောပဒနိ", title_en: "All Myanmar"}
       id ->
         division = get_division!(division_id)
         case township_id do
-          nil ->
+          "" ->
             %{title_bi: "ဒသဉ #{division.title_bi}", title_en: "#{String.upcase(division.title_en)}"}
           id ->
             township = get_township!(township_id)

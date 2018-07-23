@@ -7,7 +7,7 @@ defmodule Boncoin.Contents.Category do
     field :active, :boolean, default: false
     field :title_bi, :string
     field :title_en, :string
-    field :icon, :string
+    field :icon, :string, default: "whmcs"
     belongs_to :family, Family
     has_many :announces, Announce, on_delete: :delete_all
     timestamps()

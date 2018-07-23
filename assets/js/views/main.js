@@ -15,8 +15,7 @@ export default class MainView {
   }
 }
 
-
-// ------------- GLOBAL METHODS  -----------------------------------------------------------------
+/* ------------- GLOBAL METHODS  --------------------------------------------------- */
   global.validateMyanmarMobileNumber = (str) => {
       return /^([09]{1})([0-9]{10})$/.test(str)
   }
@@ -61,15 +60,67 @@ export default class MainView {
     $('html,body').animate({scrollTop: aTag.offset().top},'slow');
   }
 
-  // $.wait = (ms) => {
-  //   var defer = $.Deferred();
-  //   setTimeout(function() { defer.resolve(); }, ms);
-  //   return defer;
-  // };
-
-// ------------- Initialization  -----------------------------------------------------------------
+/* ------------- DOCUMENT LOAD  --------------------------------------------------- */
 
   let init_custom_actions = () => {
+
+    // HEADER
+    // Trigger search row in the header
+    $('.family-selector').on('click', function () {
+      var family_id = $(this).attr('data-target')
+      $(".category-selector").not(`#searchFamily_${family_id}`).addClass('d-none')
+      $(".triangle").not(`#triangle_${family_id}`).addClass('d-none')
+      $(`#searchFamily_${family_id}`).toggleClass("d-none")
+      $(`#triangle_${family_id}`).toggleClass("d-none")
+    })
+    // Close the search row when something else is clicked
+    $('#main').on('click', function () {
+      $("#searchBar").collapse('hide')
+      $(".category-selector").addClass('d-none')
+      $(".triangle").addClass('d-none')
+    })
+    // Reinit the searchbar when it is collapsed
+    $('#searchBar').on('hidden.bs.collapse', function (e) {
+      $(".category-selector").addClass('d-none')
+      $(".triangle").addClass('d-none')
+    })
+
+    // SLIDEBAR
+    // Set up CustomScroller - http://manos.malihu.gr/jquery-custom-content-scroller/
+    $("#sidebar").mCustomScrollbar({
+      theme: "minimal"
+    });
+    // Opens the slidebar
+    $('#sidebarCollapse').on('click', function () {
+        $('.collapse-level1').collapse('hide')
+        $('.collapse-level2').collapse('hide')
+        $("#searchBar").collapse('hide')
+        $(".category-selector").addClass('d-none')
+        $('#navbarDismiss').show()
+        $('#sidebar').addClass('active')
+        $('.overlay').addClass('active')
+        $('.collapse.in').toggleClass('in')
+        $('a[aria-expanded=true]').attr('aria-expanded', 'false')
+    })
+    // Close the sidebar
+    $('#navbarDismiss, .overlay').on('click', function () {
+        $('#sidebar').removeClass('active')
+        $('.overlay').removeClass('active')
+        $('#navbarDismiss').hide()
+        $('.collapse-slide').collapse('hide')
+        $('#searchBar').collapse('hide')
+    })
+    // Manage slidebar collapses
+    $('.collapse-level1').on('show.bs.collapse', function (e) {
+      $('.collapse-level1').collapse('hide')
+      $('.collapse-level2').collapse('hide')
+    })
+    $('.collapse-level2').on('show.bs.collapse', function (e) {
+      e.stopPropagation()
+      $('.collapse-level2').collapse('hide')
+    })
+
+
     // Set up the lightbox - http://ashleydw.github.io/lightbox/#no-wrapping
     $(document).on('click', '[data-toggle="lightbox"]', function(event) {
         event.preventDefault();
@@ -169,6 +220,8 @@ export default class MainView {
     })
   }
 
+
+/* ------------- OLD RESSOURCES  --------------------------------------------------- */
 
 // let init_navigation = () => {
 //   $('select').material_select()

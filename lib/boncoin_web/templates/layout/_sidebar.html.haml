@@ -1,0 +1,94 @@
+%div{id: "navbarDismiss"}
+  %i.fas.fa-times-circle.text-white
+%nav.bg-white{id: "sidebar"}
+  .sidebar-header.bg-primary.text-white
+    %h3= "PawChaungKaung"
+  %div{id: "mainMenu"}
+    %ul.list-unstyled.components
+      - link to: announce_path(@conn, :new), class: "" do
+        %li.slide-menu.text-dark.border-bottom.border-dark
+          %i.fa.fa-bullhorn
+          %span= gettext "Sell something"
+      - link to: "#", class: "" do
+        %li.slide-menu.text-dark.border-bottom.border-dark
+          %i.fa.fa-balance-scale
+          %span= gettext "Conditions"
+
+      -# Main parent
+      %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#menuDivision", data-parent: "#mainMenu", data-toggle: "collapse", aria-expanded: "false"}
+        %i.fa.fa-map-marker-alt
+        %span= gettext "Change location"
+      -# Main child
+      %ul.collapse.list-unstyled.collapse-level1{id: "menuDivision"}
+        - link to: public_offers_path(@conn, :public_index, search: %{division_id: "", township_id: ""}, old_search: @conn.assigns.search_params), class: "" do
+          %li.slide-menu.text-dark.border-bottom.border-dark
+            %i.fa.fa-
+            %span= gettext "All Myanmar"
+        - for division <- @conn.assigns.select_menus.divisions do
+          -# Nested parent
+          %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#subMenuDivision_#{division.id}", data-parent="#subMenuDivision_#{division.id}", data-toggle: "collapse", aria-expanded: "false"}
+            %i.fa.fa-
+            %span= division.title_en
+          -# Nested child
+          %ul.collapse.list-unstyled.collapse-level2{id: "subMenuDivision_#{division.id}"}
+            - link to: public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: ""}, old_search: @conn.assigns.search_params) do
+              %li.slide-menu.text-dark.border-bottom.border-dark
+                %i.fa.fa-
+                %span= gettext("All %{division_title}", division_title: division.title_en)
+            - for township <- division.townships do
+              - link to: public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: "#{township.id}"}, old_search: @conn.assigns.search_params) do
+                %li.slide-menu.text-dark.border-bottom.border-dark
+                  %i.fa.fa-
+                  %span= township.title_en
+
+      %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#languageSubmenu", data-toggle: "collapse", aria-expanded: "false"}
+        %i.fa.fa-exclamation-circle
+        %span= gettext "Change language"
+      %ul.collapse.list-unstyled.collapse-level1{id: "languageSubmenu"}
+        %li.slide-menu.text-dark.border-bottom.border-dark
+          = img_tag static_path(@conn, "/images/flags/1x1/#{"en"}.svg"), class: "flag"
+          = BoncoinWeb.LayoutView.switch_locale_path(@conn, :en, "English")
+        %li.slide-menu.text-dark.border-bottom.border-dark
+          = img_tag static_path(@conn, "/images/flags/1x1/#{"my"}.svg"), class: "flag"
+          = BoncoinWeb.LayoutView.switch_locale_path(@conn, :my, "Myanmar (Unicode)")
+        %li.slide-menu.text-dark.border-bottom.border-dark
+          = img_tag static_path(@conn, "/images/flags/1x1/#{"my"}.svg"), class: "flag"
+          = BoncoinWeb.LayoutView.switch_locale_path(@conn, :zg, "Myanmar (Zawgyi)")
+
+      %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#aboutSubmenu", data-toggle: "collapse", aria-expanded: "false"}
+        %i.fa.fa-question-circle
+        %span= gettext "About us"
+      %ul.collapse.list-unstyled.collapse-level1{id: "aboutSubmenu"}
+        - link to: "#", class: "" do
+          %li.slide-menu.text-dark.border-bottom.border-dark
+            %i.fa.fa-building
+            %span= gettext "The company"
+        - link to: "#", class: "" do
+          %li.slide-menu.text-dark.border-bottom.border-dark
+            %i.fa.fa-handshake
+            %span= gettext "Work with us"
+        - link to: "#", class: "" do
+          %li.slide-menu.text-dark.border-bottom.border-dark
+            %i.fa.fa-user-tie
+            %span= gettext "Join us"
+
+      %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#technicalSubmenu", data-toggle: "collapse", aria-expanded: "false"}
+        %i.fa.fa-wrench
+        %span= gettext "Technical"
+      %ul.collapse.list-unstyled.collapse-level1{id: "technicalSubmenu"}
+        - if @conn.assigns[:current_user] do
+          - link to: auth_path(@conn, :delete), method: :delete, class: "" do
+            %li.slide-menu.text-dark.border-bottom.border-dark
+              %i.fa.fa-sign-out-alt
+              %span= gettext "Log out"
+          %li.slide-menu.text-dark.border-bottom.border-dark
+            %i.fa.fa-user-cog
+            %span= "#{@conn.assigns.current_user.email}"
+          %li.slide-menu.text-dark.border-bottom.border-dark
+            %i.fa.fa-github
+            %span= "#{Application.spec(:boncoin, :vsn)}"
+        - else
+          - link to: auth_path(@conn, :request, "google"), class: "" do
+            %li.slide-menu.text-dark.border-bottom.border-dark
+              %i.fa.fa-user
+              %span= gettext "Log in"

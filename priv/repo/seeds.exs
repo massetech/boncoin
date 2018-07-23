@@ -16,10 +16,12 @@ Repo.insert! %Division{title_en: "Yangon", title_bi: "ရန်ကုံန်",
 Repo.insert! %Division{title_en: "Dawei", title_bi: "ဒာဝေး", active: true}
 Repo.insert! %Division{title_en: "Mandaley", title_bi: "မန်တာလေး", active: true}
 
-Repo.insert! %Family{title_en: "Property", title_bi: "ရန်ကုံန်", active: true, icon: "bicycle"}
-Repo.insert! %Family{title_en: "Vehicule", title_bi: "ရန်ကုံန်", active: true, icon: "bicycle"}
-Repo.insert! %Family{title_en: "Technology", title_bi: "ရန်ကုံန်", active: true, icon: "bicycle"}
-Repo.insert! %Family{title_en: "House", title_bi: "ရန်ကုံန်", active: true, icon: "bicycle"}
+Repo.insert! %Family{title_en: "Technology", title_bi: "ရန်ကုံန်", active: true, icon: "mobile-alt"}
+Repo.insert! %Family{title_en: "Vehicule", title_bi: "ရန်ကုံန်", active: true, icon: "car"}
+Repo.insert! %Family{title_en: "Household", title_bi: "ရန်ကုံန်", active: true, icon: "home"}
+Repo.insert! %Family{title_en: "Culture", title_bi: "ရန်ကုံန်", active: true, icon: "music"}
+Repo.insert! %Family{title_en: "Professional", title_bi: "ရန်ကုံန်", active: true, icon: "briefcase"}
+
 
 for division <- Repo.all(Division) do
   for i <- 1..3 do

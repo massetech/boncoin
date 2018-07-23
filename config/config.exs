@@ -12,7 +12,7 @@ config :boncoin,
 
 config :boncoin, Boncoin.Gettext,
   default_locale: "en",
-  locales: ~w(en my)
+  locales: ~w(en my zg)
 
 config :boncoin, Boncoin.Auth.Guardian,
   secret_key: System.get_env("GUARDIAN_SECRET"),

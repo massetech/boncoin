@@ -6,6 +6,7 @@
     "watch": "brunch watch --stdin"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.1.1",
     "bootstrap": "^4.1.1",
     "bootstrap-select": "^1.13.1",
     "copycat-brunch": "^1.1.0",

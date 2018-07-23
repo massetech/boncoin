@@ -26,7 +26,9 @@ exports.config = {
       "static", "css", "js", "vendor", "scss", "fonts",
       "node_modules/jquery-touchswipe/jquery.touchSwipe.min.js",
       "node_modules/ekko-lightbox/dist/ekko-lightbox.min.js",
-      "node_modules/knayi-myscript/dist/knayi-myscript.min.js"
+      "node_modules/knayi-myscript/dist/knayi-myscript.min.js",
+      // "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+      // "node_modules/@fortawesome/fontawesome-free/js/all.min.js"
     ],
     // Where to compile files to
     public: "../priv/static"
@@ -43,14 +45,16 @@ exports.config = {
       options: {
         includePaths: [
           "node_modules/bootstrap/scss",
-          "node_modules/font-awesome/scss",
+          // "node_modules/font-awesome/scss",
+          "node_modules/@fortawesome/fontawesome-free/scss",
           "node_modules/ekko-lightbox/dist"
         ], // tell sass-brunch where to look for files to @import
         precision: 8 // minimum precision required by bootstrap
       }
     },
     copycat: {
-      "fonts": ["static/fonts", "node_modules/font-awesome/fonts"],
+      // "fonts": ["static/fonts", "node_modules/font-awesome/fonts"],
+      "fonts": ["static/fonts", "node_modules/@fortawesome/fontawesome-free/webfonts"], // copy node_modules/font-awesome/fonts/* to priv/static/fonts/
       verbose: false, //shows each file that is copied to the destination directory
       onlyChanged: true //only copy a file if it's modified time has changed (only effective when using brunch watch)
     }

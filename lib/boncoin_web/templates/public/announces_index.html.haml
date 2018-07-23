@@ -3,7 +3,11 @@
     %h6.font-weight-bold.text-dark= @place.title_en
     %h6.font-weight-bold.text-dark
       %span.text-primary= @nb_announces
-      = gettext " offers"
+      - if @conn.assigns.family_icon == "" do
+        = gettext " offers"
+      - else
+        = gettext " offers for "
+        %i.fa{class: "fa-#{@conn.assigns.family_icon}"}
     %p.text-dark.font-italic= gettext "Please check before buying anything"
 
 .row
