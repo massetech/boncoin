@@ -8,8 +8,8 @@
 ## to merge POT files into PO files.
 msgid ""
 msgstr ""
-"Language: my\n"
-"Plural-Forms: nplurals=1\n"
+"Language: mr\n"
+"Plural-Forms: nplurals=2\n"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/announces_index.html.haml:7

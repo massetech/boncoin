@@ -42,18 +42,21 @@
                   %span= township.title_en
 
       %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#languageSubmenu", data-toggle: "collapse", aria-expanded: "false"}
-        %i.fa.fa-exclamation-circle
+        = img_tag static_path(@conn, "/images/flags/1x1/#{@conn.assigns.flag}.svg"), class: "flag"
         %span= gettext "Change language"
       %ul.collapse.list-unstyled.collapse-level1{id: "languageSubmenu"}
-        %li.slide-menu.text-dark.border-bottom.border-dark
-          = img_tag static_path(@conn, "/images/flags/1x1/#{"en"}.svg"), class: "flag"
-          = BoncoinWeb.LayoutView.switch_locale_path(@conn, :en, "English")
-        %li.slide-menu.text-dark.border-bottom.border-dark
-          = img_tag static_path(@conn, "/images/flags/1x1/#{"my"}.svg"), class: "flag"
-          = BoncoinWeb.LayoutView.switch_locale_path(@conn, :my, "Myanmar (Unicode)")
-        %li.slide-menu.text-dark.border-bottom.border-dark
-          = img_tag static_path(@conn, "/images/flags/1x1/#{"my"}.svg"), class: "flag"
-          = BoncoinWeb.LayoutView.switch_locale_path(@conn, :zg, "Myanmar (Zawgyi)")
+        %a{href: "?locale=en"}
+          %li.slide-menu.text-dark.border-bottom.border-dark
+            = img_tag static_path(@conn, "/images/flags/1x1/#{"en"}.svg"), class: "flag"
+            = gettext "English"
+        %a{href: "?locale=my"}
+          %li.slide-menu.text-dark.border-bottom.border-dark
+            = img_tag static_path(@conn, "/images/flags/1x1/#{"my"}.svg"), class: "flag"
+            = gettext "Myanmar (Unicode)"
+        %a{href: "?locale=mr"}
+          %li.slide-menu.text-dark.border-bottom.border-dark
+            = img_tag static_path(@conn, "/images/flags/1x1/#{"my"}.svg"), class: "flag"
+            = gettext "Myanmar (Zawgyi)"
 
       %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#aboutSubmenu", data-toggle: "collapse", aria-expanded: "false"}
         %i.fa.fa-question-circle

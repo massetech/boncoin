@@ -12,14 +12,28 @@ defmodule Boncoin.Plug.Locale do
     case locale_from_params(conn) || locale_from_cookies(conn) || locale_from_header(conn) do
       nil -> conn
       locale ->
-        Gettext.put_locale(BoncoinWeb.Gettext, locale)
-        conn = conn |> persist_locale(locale)
+        Gettext.put_locale(locale)
+        Gettext.get_locale() |> IO.inspect()
+        # conn = conn |> persist_locale(locale)
+        # conn
         conn
+          |> persist_locale(locale)
+          |> assign(:flag, select_flag(locale))
     end
   end
 
-  # Fallback to default locale if locale given is not supported
-  def call(conn, _opts), do: conn
+  defp select_flag(locale) do
+    # IO.insspect(locale)
+    case locale do
+      "en" -> "en"
+      "my" -> "my"
+      "mr" -> "my"
+      _ -> ""
+    end
+  end
+
+  # # Fallback to default locale if locale given is not supported
+  # def call(conn, _opts), do: conn
 
   defp persist_locale(conn, new_locale) do
     if conn.cookies["locale"] != new_locale do
