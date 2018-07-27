@@ -8,11 +8,11 @@
     - for division <- @conn.assigns.select_menus.divisions do
       %li.dropdown-submenu
         %a.dropdown-item.submenu-item-hover{tabindex: "-1", href: "#"}
-          = division.title_en
+          = LayoutView.convert_zawgyi(division, "title")
         %ul.dropdown-menu
-          %li= link gettext("All %{division_title}", division_title: division.title_en), to: public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: ""}, old_search: @conn.assigns.search_params), class: "dropdown-item"
+          %li= link gettext("All %{division_title}", division_title: LayoutView.convert_zawgyi(division, "title")), to: public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: ""}, old_search: @conn.assigns.search_params), class: "dropdown-item"
           %li.divider
           - for township <- division.townships do
-            %li= link "#{township.title_en}", to: public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: "#{township.id}"}, old_search: @conn.assigns.search_params), class: "dropdown-item"
+            %li= link "#{LayoutView.convert_zawgyi(township, "title")}", to: public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: "#{township.id}"}, old_search: @conn.assigns.search_params), class: "dropdown-item"
             %li.divider
       %li.divider

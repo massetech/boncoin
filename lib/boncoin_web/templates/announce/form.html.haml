@@ -1,6 +1,7 @@
 - form_for @changeset, @action, [{:multipart, true}], fn f ->
   = hidden_input f, :currency, value: "Kyats"
   = hidden_input f, :user_id, value: ""
+  = hidden_input f, :language, value: Gettext.get_locale()
   = hidden_input f, :zawgyi, value: false
   - if @changeset.action do
     .alert.alert-danger
@@ -90,16 +91,16 @@
           .form-group
             %select.form-control.selectpicker{data-style: "btn-outline-dark", title: gettext("Select item location"), data-size: "8", id: "announce_township", name: "announce[township_id]"}
               - for division <- @conn.assigns.select_menus.divisions do
-                %optgroup{label: "#{division.title_en}", data-icon: "fa fa-map-marker"}
+                %optgroup{label: "#{LayoutView.convert_zawgyi(division, "title")}", data-icon: "fa fa-map-marker"}
                   - for township <- division.townships do
-                    %option{value: "#{township.id}"}= "#{division.title_en}- #{township.title_en}"
+                    %option{value: "#{township.id}"}= "#{LayoutView.convert_zawgyi(division, "title")}- #{LayoutView.convert_zawgyi(township, "title")}"
         .col-12
           .form-group
             %select.form-control.selectpicker{data-style: "btn-outline-dark", title: gettext("Select a category"), data-size: "8", id: "announce_category", name: "announce[category_id]"}
               - for family <- @conn.assigns.select_menus.familys do
-                %optgroup{label: "#{family.title_en}", data-icon: "fa fa-#{family.icon}"}
+                %optgroup{label: "#{LayoutView.convert_zawgyi(family, "title")}", data-icon: "fa fa-#{family.icon}"}
                   - for category <- family.categorys do
-                    %option{value: "#{category.id}", data-icon: "fa fa-#{category.icon}"}= "#{category.title_en}"
+                    %option{value: "#{category.id}", data-icon: "fa fa-#{category.icon}"}= "#{LayoutView.convert_zawgyi(category, "title")}"
         .col-12
           .form-group
             .form-group.text-left

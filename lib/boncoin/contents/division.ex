@@ -7,14 +7,14 @@ defmodule Boncoin.Contents.Division do
     field :active, :boolean, default: false
     field :latitute, :string
     field :longitude, :string
-    field :title_bi, :string
+    field :title_my, :string
     field :title_en, :string
     has_many :townships, Township, on_delete: :delete_all
     has_many :announces, through: [:townships, :announces]
     timestamps()
   end
 
-  @required_fields ~w(title_en title_bi)a
+  @required_fields ~w(title_en title_my)a
   @optional_fields ~w(active latitute longitude)a
 
   @doc false

@@ -1,5 +1,6 @@
 defmodule BoncoinWeb.AnnounceView do
   use BoncoinWeb, :view
+  alias BoncoinWeb.LayoutView
 
   def image_url(image, type) do
     Boncoin.AnnounceImage.url({image.file, image}, type)

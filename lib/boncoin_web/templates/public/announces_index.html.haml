@@ -1,6 +1,6 @@
 .row
   .col-12
-    %h6.font-weight-bold.text-dark= @place.title_en
+    %h6.font-weight-bold.text-dark= LayoutView.convert_zawgyi(@place, "title")
     %h6.font-weight-bold.text-dark
       %span.text-primary= @nb_announces
       - if @conn.assigns.family_icon == "" do
@@ -21,11 +21,11 @@
                 = img_tag BoncoinWeb.AnnounceView.image_url(List.first(announce.images), :original), class: "img-small"
               .col-6.p-0
                 .title
-                  %h6.font-weight-bold.text-dark.m-0= announce.title
+                  %h6.font-weight-bold.text-dark.m-0= LayoutView.convert_zawgyi(announce.title)
                   %h6.text-primary.m-0= BoncoinWeb.AnnounceView.show_price(announce.price, announce.currency)
                 .details
-                  %p.text-dark.m-0= announce.township.division.title_en
-                  %p.text-dark.m-0= announce.township.title_en
+                  %p.text-dark.m-0= LayoutView.convert_zawgyi(announce.township.division, "title")
+                  %p.text-dark.m-0= LayoutView.convert_zawgyi(announce.township, "title")
                   %p.text-dark.m-0{style: "font-size:0.75em;"}= BoncoinWeb.AnnounceView.show_date(announce.parution_date, "en")
 
     .col-12.my-3.d-none.big-announce{id: "big_announce_#{announce.id}", name: "big_announce_#{announce.id}"}

@@ -28,18 +28,18 @@
           -# Nested parent
           %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#subMenuDivision_#{division.id}", data-parent="#subMenuDivision_#{division.id}", data-toggle: "collapse", aria-expanded: "false"}
             %i.fa.fa-
-            %span= division.title_en
+            %span= LayoutView.convert_zawgyi(division, "title")
           -# Nested child
           %ul.collapse.list-unstyled.collapse-level2{id: "subMenuDivision_#{division.id}"}
             - link to: public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: ""}, old_search: @conn.assigns.search_params) do
               %li.slide-menu.text-dark.border-bottom.border-dark
                 %i.fa.fa-
-                %span= gettext("All %{division_title}", division_title: division.title_en)
+                %span= gettext("All %{division_title}", division_title: LayoutView.convert_zawgyi(division, "title"))
             - for township <- division.townships do
               - link to: public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: "#{township.id}"}, old_search: @conn.assigns.search_params) do
                 %li.slide-menu.text-dark.border-bottom.border-dark
                   %i.fa.fa-
-                  %span= township.title_en
+                  %span= LayoutView.convert_zawgyi(township, "title")
 
       %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#languageSubmenu", data-toggle: "collapse", aria-expanded: "false"}
         = img_tag static_path(@conn, "/images/flags/1x1/#{@conn.assigns.flag}.svg"), class: "flag"

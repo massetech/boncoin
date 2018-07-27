@@ -8,7 +8,7 @@ defmodule Boncoin.Contents do
   defp filter_familys_active(query \\ Family) do
     from f in query,
       where: f.active == true,
-      select: struct(f, [:id, :title_en, :title_bi, :icon])
+      select: struct(f, [:id, :title_en, :title_my, :icon])
   end
 
   # METHODS ------------------------------------------------------------------
@@ -130,7 +130,7 @@ defmodule Boncoin.Contents do
   defp filter_categorys_active(query \\ Category) do
     from c in query,
       where: c.active == true,
-      select: struct(c, [:id, :title_en, :title_bi, :icon])
+      select: struct(c, [:id, :title_en, :title_my, :icon])
   end
 
   # METHODS ------------------------------------------------------------------
@@ -234,7 +234,7 @@ defmodule Boncoin.Contents do
   defp filter_townships_active(query \\ Township) do
     from t in query,
       where: t.active == true,
-      select: struct(t, [:id, :title_en, :title_bi])
+      select: struct(t, [:id, :title_en, :title_my])
   end
 
   # METHODS ------------------------------------------------------------------
@@ -338,7 +338,7 @@ defmodule Boncoin.Contents do
   defp filter_divisions_active(query \\ Division) do
     from d in query,
       where: d.active == true,
-      select: [:id, :title_en, :title_bi]
+      select: [:id, :title_en, :title_my]
   end
 
   # METHODS ------------------------------------------------------------------
@@ -490,25 +490,25 @@ defmodule Boncoin.Contents do
     end
   end
 
-  # defp filter_announces_by_kind(query \\ Announce, family_id, category_id) do
-  #   no_query = from a in query,
-  #     join: t in assoc(a, :category), where: t.active == true,
-  #     join: d in assoc(t, :family), where: d.active == true
-  #   fam_query = from a in query,
-  #     join: t in assoc(a, :category), where: t.active == true,
-  #     join: d in assoc(t, :family), where: d.active == true and d.id == ^family_id
-  #   cat_query = from a in query,
-  #     join: t in assoc(a, :category), where: t.active == true and t.id == ^category_id,
-  #     join: d in assoc(t, :family), where: d.active == true and t.id == ^family_id
-  #   case family_id do
-  #     "" -> no_query
-  #     _ ->
-  #       case category_id do
-  #         "" -> fam_query
-  #         _ -> cat_query
-  #       end
-  #   end
-  # end
+  defp filter_announces_by_kind(query \\ Announce, family_id, category_id) do
+    case family_id do
+      "" ->
+        from a in query,
+          join: t in assoc(a, :category), where: t.active == true,
+          join: d in assoc(t, :family), where: d.active == true
+      _ ->
+        case category_id do
+          "" ->
+            from a in query,
+              join: t in assoc(a, :category), where: t.active == true,
+              join: d in assoc(t, :family), where: d.active == true and d.id == ^family_id
+          _ ->
+            from a in query,
+              join: t in assoc(a, :category), where: t.active == true and t.id == ^category_id,
+              join: d in assoc(t, :family), where: d.active == true and t.id == ^family_id
+        end
+    end
+  end
 
   # METHODS ------------------------------------------------------------------
 
@@ -531,26 +531,25 @@ defmodule Boncoin.Contents do
 
   def list_announces_public(%{"category_id" => category_id, "division_id" => division_id, "family_id" => family_id, "township_id" => township_id} = params) do
     user_query = Members.filter_user_public_data()
-    # image_query = filter_image_public_data()
     announces = Announce
       |> filter_announces_online()
       |> filter_announces_by_location(division_id, township_id)
-      # |> filter_announces_by_kind(family_id, category_id)
+      |> filter_announces_by_kind(family_id, category_id)
       # |> filter_announce_public_data()
       |> Repo.all()
       |> Repo.preload([:images, user: user_query, township: [:division]])
     nb_announces = Kernel.length(announces)
     place = case division_id do
       "" ->
-        %{title_bi: "ပောပဒနိ", title_en: "All Myanmar"}
+        %{title_my: "ပောပဒနိ", title_en: "All Myanmar"}
       id ->
         division = get_division!(division_id)
         case township_id do
           "" ->
-            %{title_bi: "ဒသဉ #{division.title_bi}", title_en: "#{String.upcase(division.title_en)}"}
+            %{title_my: "ဒသဉ #{division.title_my}", title_en: "#{String.upcase(division.title_en)}"}
           id ->
             township = get_township!(township_id)
-            %{title_bi: "#{division.title_bi} - #{township.title_bi}", title_en: "#{String.upcase(division.title_en)} - #{township.title_en}"}
+            %{title_my: "#{division.title_my} - #{township.title_my}", title_en: "#{String.upcase(division.title_en)} - #{township.title_en}"}
         end
     end
     {announces, nb_announces, place}
@@ -593,8 +592,9 @@ defmodule Boncoin.Contents do
 
   def create_announce(attrs \\ %{}) do
     params = attrs
-      |> Map.merge(calc_announce_validity_date())
-      |> Map.merge(%{"status" => "ONLINE"})
+      |> Map.merge(%{"status" => "PENDING"})
+      |> Map.merge(%{"title" => Rabbit.zg2uni(attrs["title"]), "description" => Rabbit.zg2uni(attrs["description"])})
+      # |> IO.inspect(limit: :infinity, printable_limit: :infinity)
     new_announce = %Announce{}
       |> Announce.changeset(params)
       |> Repo.insert()
@@ -634,6 +634,8 @@ defmodule Boncoin.Contents do
     |> Announce.changeset(attrs)
     |> Repo.update()
   end
+
+  # |> Map.merge(calc_announce_validity_date()) # Use this for test on offers directly on line
 
   @doc """
   Deletes a Announce.

@@ -4,7 +4,7 @@ defmodule Boncoin.Repo.Migrations.CreateTownships do
   def change do
     create table(:townships) do
       add :title_en, :string
-      add :title_bi, :string
+      add :title_my, :string
       add :active, :boolean, default: false, null: false
       add :latitute, :string
       add :longitude, :string

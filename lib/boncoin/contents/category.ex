@@ -5,7 +5,7 @@ defmodule Boncoin.Contents.Category do
 
   schema "categorys" do
     field :active, :boolean, default: false
-    field :title_bi, :string
+    field :title_my, :string
     field :title_en, :string
     field :icon, :string, default: "whmcs"
     belongs_to :family, Family
@@ -13,7 +13,7 @@ defmodule Boncoin.Contents.Category do
     timestamps()
   end
 
-  @required_fields ~w(title_bi title_en family_id icon)a
+  @required_fields ~w(title_my title_en family_id icon)a
   @optional_fields ~w(active)a
 
   @doc false
