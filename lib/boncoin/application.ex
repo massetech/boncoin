@@ -14,6 +14,7 @@ defmodule Boncoin.Application do
       supervisor(BoncoinWeb.Endpoint, []),
       # Start your own worker by calling: Boncoin.Worker.start_link(arg1, arg2, arg3)
       # worker(Boncoin.Worker, [arg1, arg2, arg3]),
+      # worker(Boncoin.Robot, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

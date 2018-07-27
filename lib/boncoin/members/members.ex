@@ -41,9 +41,23 @@ defmodule Boncoin.Members do
       where: u.email == ^email and u.role in ["SUPER", "ADMIN"]
   end
 
+  defp filter_user_by_viber_id(query \\ User, viber_id) do
+    from u in User,
+      where: u.viber_id == ^viber_id
+  end
+
   defp filter_user_by_phone_number(query \\ User, phone_number) do
     from u in User,
       where: u.phone_number == ^phone_number
+  end
+
+  defp search_other_user_for_phone_number(query \\ User, phone_number) do
+    from u in User,
+      where: u.phone_number == ^phone_number,
+      left_join: a in assoc(u, :announces),
+      on: a.status in ["PENDING", "ONLINE"],
+      group_by: u.id,
+      select: %{id: u.id, viber_active: u.viber_active, nb_announces: count(a.id)}
   end
 
   def filter_user_public_data(query \\ User) do
@@ -97,9 +111,21 @@ defmodule Boncoin.Members do
   Reads the data known for a phone number.
   """
 
-  defp get_user_by_phone_number(phone_number) do
+  def get_user_by_phone_number(phone_number) do
     User
-    |> filter_user_by_phone_number(phone_number)
+      |> filter_user_by_phone_number(phone_number)
+      |> Repo.one()
+  end
+
+  def get_other_user_by_phone_number(phone_number)do
+    Uers
+      |> search_other_user_for_phone_number(phone_number)
+      |> Repo.one()
+  end
+
+  def get_user_by_viber_id(viber_id) do
+    User
+    |> filter_user_by_viber_id(viber_id)
     |> Repo.one()
   end
 
@@ -148,6 +174,29 @@ defmodule Boncoin.Members do
     user
     |> User.changeset(attrs)
     |> Repo.update()
+  end
+
+  def link_viber_id_to_phone_number(viber_id, phone_number, user_name, language) do
+    params = %{phone_number: phone_number, viber_id: viber_id, nickname: user_name, language: language}
+    case get_user_by_phone_number(phone_number) do
+      nil -> create_user(params) # This phone number is not yet known
+      user -> # This phone number is known
+        cond do
+          user.viber_active == false -> # This phone number is not yet linked to viber
+            update_user(user, params)
+          user.viber_active == true && user.phone_number == params.phone_number -> # This phone number is linked to this viber and has to be changed
+            # Delete
+        end
+        case user.viber_active do # This number is already used
+          true -> params = %{viber_id: viber_id, language: language, nickname: user_name}
+          # This number was not yet connected to viber
+          false -> params = %{viber_id: viber_id, language: language, viber_active: true, nickname: user_name}
+        end
+        case update_user(user, params) do
+          {:ok, _} -> {:updated, params}
+          [:error, _] -> {:error, params}
+        end
+    end
   end
 
   @doc """

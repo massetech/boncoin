@@ -16,3 +16,6 @@
     = img_tag(static_path(@conn, "/images/video_explain.png"))
   .col-xs-12.col-sm-8.my-4
     %h6.text-dark= gettext "On this website, you can post and read free announces without any commission. Find everything you want in Myanmar, just be carefull to check what you are buying."
+
+= link "connect Viber", to: viber_path(@conn, :connect)
+= link "disconnect Viber", to: viber_path(@conn, :disconnect)

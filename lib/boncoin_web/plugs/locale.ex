@@ -13,9 +13,7 @@ defmodule Boncoin.Plug.Locale do
       nil -> conn
       locale ->
         Gettext.put_locale(locale)
-        Gettext.get_locale() |> IO.inspect()
-        # conn = conn |> persist_locale(locale)
-        # conn
+        Gettext.get_locale()
         conn
           |> persist_locale(locale)
           |> assign(:flag, select_flag(locale))
@@ -23,7 +21,6 @@ defmodule Boncoin.Plug.Locale do
   end
 
   defp select_flag(locale) do
-    # IO.insspect(locale)
     case locale do
       "en" -> "en"
       "my" -> "my"

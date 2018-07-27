@@ -2,16 +2,14 @@ defmodule Boncoin.Mixfile do
   use Mix.Project
 
   def project do
-    [
-      app: :boncoin,
+    [ app: :boncoin,
       version: "0.0.1",
       elixir: "~> 1.4",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       start_permanent: Mix.env == :prod,
       aliases: aliases(),
-      deps: deps()
-    ]
+      deps: deps()]
   end
 
   # Configuration for the OTP application.
@@ -20,7 +18,7 @@ defmodule Boncoin.Mixfile do
   def application do
     [
       mod: {Boncoin.Application, []},
-      extra_applications: [:logger, :runtime_tools, :timex]
+      extra_applications: [:logger, :runtime_tools, :timex, :httpotion]
     ]
   end
 
@@ -50,10 +48,10 @@ defmodule Boncoin.Mixfile do
       {:phoenix_haml, "~> 0.2"},
       {:drab, "~> 0.9.0"},
       {:arc, "~> 0.10.0"},
-      # {:arc_ecto, "~> 0.10.0"},
       {:arc_ecto, git: "https://github.com/massetech/arc_ecto.git"},
       {:arc_gcs, "~> 0.0.8"},
-      {:rabbitElixir, "~> 1.0.0"}
+      {:rabbitElixir, "~> 1.0.0"},
+      {:httpotion, "~> 3.1.0"}
     ]
   end
 

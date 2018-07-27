@@ -3,6 +3,7 @@ defmodule BoncoinWeb.Router do
   require Ueberauth
 
   pipeline :browser do
+    # plug Boncoin.Plug.CheckInput
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
@@ -28,24 +29,23 @@ defmodule BoncoinWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug Boncoin.Viber.CurrentUser
+    # plug Boncoin.Plug.CheckInput
     # plug Boncoin.Auth.Pipeline
     # plug Boncoin.Auth.CurrentUser
     # plug Guardian.Plug.EnsureAuthenticated, claims: %{"typ" => "user-access"}
   end
 
   # ---------------  SCOPES ----------------------------------
-  scope "/api/v1", BoncoinWeb do
+  scope "/api", BoncoinWeb do
     pipe_through :api
-    # post "/", DataController, :update_user_data
+    post "/viber", ViberController, :callback
   end
 
   scope "/", BoncoinWeb do
     pipe_through [:browser, :auth]
     get "/", MainController, :welcome, as: :root
     get "/offers", MainController, :public_index, as: :public_offers
-    resources "/announces", AnnounceController, except: [:index]
-    resources "/images", ImageController, except: [:edit, :update]
-    resources "/announces", AnnounceController, only: [:index]
   end
 
   scope "/admin", BoncoinWeb do
@@ -55,8 +55,16 @@ defmodule BoncoinWeb.Router do
     resources "/categorys", CategoryController
     resources "/divisions", DivisionController
     resources "/townships", TownshipController
-    # resources "/announces", AnnounceController, only: [:index]
-    # resources "/images", ImageController, except: [:edit, :update]
+    resources "/announces", AnnounceController
+    resources "/images", ImageController, except: [:edit, :update]
+    resources "/announces", AnnounceController, only: [:index]
+  end
+
+  scope "/viber", BoncoinWeb do
+    pipe_through :browser
+    get "/connect", ViberController, :connect
+    get "/disconnect", ViberController, :disconnect
+    # post "/callback", ViberController, :callback
   end
 
   scope "/auth", BoncoinWeb do
