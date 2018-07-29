@@ -3,6 +3,8 @@ defmodule BoncoinWeb.ViberController do
   alias Boncoin.{ViberApi, Members}
   alias Boncoin.CustomModules.BotMessages
 
+# ---------------------------- CONNECTION -------------------------------------
+
   # Connect to Webhook
   def connect(conn, _params) do
     IO.puts("Connect to Viber Webhook asked")
@@ -25,6 +27,8 @@ defmodule BoncoinWeb.ViberController do
       |> redirect(to: root_path(conn, :welcome))
   end
 
+  # ---------------------------- CALLBACKS -------------------------------------
+
   # Answer to Viber to confirm the Webhook connection
   def callback(conn, %{"event" => "webhook", "timestamp" => timestamp, } = params) do
     IO.puts("Webhook confirmed at #{timestamp}")
@@ -40,20 +44,20 @@ defmodule BoncoinWeb.ViberController do
       nil -> BotMessages.treat_msg("welcome")
       user -> BotMessages.treat_msg("welcome_back", user)
     end
-    sender = get_sender()
+    sender = build_sender()
     conn
       |> put_status(:ok)
       |> render("send_message.json", sender: sender, message: message, tracking_data: tracking_data)
   end
 
   # Receive a message from the user with tracking_data
-  def callback(conn, %{"event" => "message", "timestamp" => timestamp, "sender" => %{"id" => viber_id, "name" => user_name}, "message" => %{"type" => "text", "text" => user_msg}} = params) do
+  def callback(conn, %{"event" => "message", "timestamp" => timestamp, "sender" => %{"id" => viber_id, "name" => viber_name}, "message" => %{"type" => "text", "text" => user_msg}} = params) do
     IO.puts("User #{viber_id} spoke at #{timestamp}")
 
-    # Preparing datas depending on msg scope
+    # Prepare datas depending on msg scope
     tracking_data = params["message"]["tracking_data"] || nil
-    user = conn.assigns.current_user
-    if user != nil, do: language = user.language, else: language = nil
+    db_user = conn.assigns.current_user
+    if db_user != nil, do: language = db_user.language, else: language = nil
     cond do
       tracking_data == "language" && Enum.member?(["1", "2", "3"], String.slice(user_msg,0,1)) ->
         language = case String.slice(user_msg,0,1) do
@@ -61,97 +65,25 @@ defmodule BoncoinWeb.ViberController do
           "2" -> "mm"
           "3" -> "en"
         end
-      # tracking_data == "language" -> language = nil
       Enum.member?(["link_phone_mr", "link_phone_mm", "link_phone_en"], tracking_data) == true ->
         language = String.replace(tracking_data, "link_phone_", "")
         tracking_data = "link_phone"
       true ->
         # Fallback for language asking if we still dont know the user (user lost)
-        case user do
+        case db_user do
           nil -> tracking_data = "language"
           _ -> tracking_data
         end
     end
-    # Inspect msg params
-    IO.puts("Bot params")
-    %{tracking_data: tracking_data, user: user, language: language, user_msg: user_msg} |> IO.inspect()
 
-    # Bot reaction algorythm
-    IO.puts("Bot reaction algorythm")
-    {tracking_data, message} = cond do
-      # We are waiting for a language answer
-      tracking_data == "language" ->
-        IO.puts("Asking user for his language")
-        cond do
-          user != nil -> BotMessages.treat_msg("nothing_to_say", user) # Nothing to do
-          true -> # We were waiting the user language
-            case language do
-              nil -> {tracking_data, message} = BotMessages.treat_msg("welcome") # User didn't give his language, ask again
-              language -> {tracking_data, message} = BotMessages.treat_msg("ask_phone", language) # User gave his language
-            end
-        end
+    # Call bot algorythm
+    bot_datas = %{tracking_data: tracking_data, user: %{db_user: db_user, language: language, viber_id: viber_id, viber_name: viber_name, user_msg: user_msg}, announce: %{}}
+    {tracking_data, message} = call_bot_algorythm(bot_datas)
 
-      # We are waiting for a phone answer
-      tracking_data == "link_phone" ->
-        cond do
-          user != nil -> BotMessages.treat_msg("nothing_to_say", user) # Nothing to do
-          true -> # We were waiting the phone number
-            case String.match?(user_msg, ~r/^([09]{1})([0-9]{10})$/) do
-              false -> BotMessages.treat_msg("repeat_phone", language) # There is no phone number in the message : ask again for it
-              true -> # There is a phone number in the message
-                IO.puts("New Viber user creating")
-                phone_number = user_msg
-                other_user = Members.get_other_user_by_phone_number(phone_number)
-                case other_user do
-                  nil -> # The phone number is not used yet : create the user with this phone number
-                    case Members.create_user(%{phone_number: phone_number, viber_active: true, viber_id: viber_id, nickname: user_name, language: language}) do
-                      {:ok, user} -> {tracking_data, message} = BotMessages.treat_msg("new_user_created", user)
-                      _ -> {tracking_data, message} = BotMessages.treat_msg("technical problem", language)
-                    end
-                  other_user -> manage_phone_number_conflicts(nil, other_user, phone_number, viber_id, user_name, language, "link_phone") # The phone number is already used : check the rights
-                end
-            end
-        end
+    # Send the answer to viber API
+    send_viber_message(viber_id, tracking_data, message)
 
-      # We are waiting for a NEW phone number
-      tracking_data == "update_phone" ->
-        case String.match?(user_msg, ~r/^([09]{1})([0-9]{10})$/) do
-          false -> BotMessages.treat_msg("wrong_phone_number", user) # There is no phone number in the message : cancel the update
-          true -> # There is a phone number in the message
-            IO.puts("Phone number updating from Viber")
-            phone_number = user_msg
-            other_user = Members.get_other_user_by_phone_number(phone_number)
-            cond do
-              user.phone_number == user_msg -> BotMessages.treat_msg("same_phone_number", user) # Same phone number then user old one
-              other_user == nil -> # The phone number is not used yet : update the user phone number
-                case Members.update_user(user, %{phone_number: phone_number, nickname: user_name, language: language}) do
-                  {:ok, user} -> {tracking_data, message} = BotMessages.treat_msg("new_phone_updated", user)
-                  _ -> {tracking_data, message} = BotMessages.treat_msg("technical problem", language)
-                end
-              true -> manage_phone_number_conflicts(user, other_user, phone_number, nil, nil, nil, "udate_phone") # The phone number is already used : check the rights
-            end
-        end
-
-      # We are waiting nothing (fallback)
-      true ->
-        IO.puts("Nothing to say to Viber")
-        cond do
-          user == nil -> BotMessages.treat_msg("repeat_phone", language) # The user is not recognized : return to phone demand
-          user_msg == "CHANGE" -> BotMessages.treat_msg("propose_phone_update", user) # The user wants to change his phone
-          true -> {tracking_data, message} = BotMessages.treat_msg("nothing_to_say", user) # Nothing to say
-        end
-
-    end
-
-    # Send datas to viber API
-    data = %{
-      sender: get_sender(),
-      receiver: viber_id,
-      type: "text",
-      tracking_data: tracking_data,
-      text: message
-    }
-    ViberApi.post("send_message", data)
+    # Confirm to Viber the msg was received
     conn
       |> put_status(:ok)
       |> render("confirm_answer.json", status: "ok")
@@ -173,11 +105,112 @@ defmodule BoncoinWeb.ViberController do
       |> render("confirm_answer.json", status: "ok")
   end
 
-  defp get_sender() do
+  # ---------------------------- FUNCTIONS -------------------------------------
+  # Send datas to viber API
+  def send_viber_message(viber_id, tracking_data, message) do
+    data = %{
+      sender: build_sender(),
+      receiver: viber_id,
+      type: "text",
+      tracking_data: tracking_data,
+      text: message
+    }
+    ViberApi.post("send_message", data)
+  end
+
+  # Viber msg signature
+  def build_sender() do
     %{name: "PawChaungKaung", avatar: ""}
   end
 
-  defp manage_phone_number_conflicts(user, other_user, phone_number, viber_id, user_name, language, tracking_data) do
+  # Build link for the user
+  def build_announce_view_link(announce) do
+    "https://pawchaungkaung.asia/offers?search[township_id]=#{announce.township_id}&search[category_id]=#{announce.category_id}"
+  end
+
+
+  # Bot reaction algorythm
+  def call_bot_algorythm(%{tracking_data: tracking_data, user: %{db_user: db_user, language: language, viber_id: viber_id, viber_name: viber_name, user_msg: user_msg}, announce: announce} = bot_params) do
+    IO.puts("Bot params")
+    bot_params |> IO.inspect()
+
+    cond do
+    # We are waiting for a language answer
+    tracking_data == "language" ->
+      IO.puts("Asking user for his language")
+      cond do
+        db_user != nil -> BotMessages.treat_msg("nothing_to_say", db_user) # Nothing to do
+        true -> # We were waiting the user language
+          case language do
+            nil -> {tracking_data, message} = BotMessages.treat_msg("welcome") # User didn't give his language, ask again
+            language -> {tracking_data, message} = BotMessages.treat_msg("ask_phone", language) # User gave his language
+          end
+      end
+
+    # We are waiting for a phone answer
+    tracking_data == "link_phone" ->
+      cond do
+        db_user != nil -> BotMessages.treat_msg("nothing_to_say", db_user) # Nothing to do
+        true -> # We were waiting the phone number
+          case String.match?(user_msg, ~r/^([09]{1})([0-9]{10})$/) do
+            false -> BotMessages.treat_msg("repeat_phone", language) # There is no phone number in the message : ask again for it
+            true -> # There is a phone number in the message
+              IO.puts("New Viber user creating")
+              phone_number = user_msg
+              other_user = Members.get_other_user_by_phone_number(phone_number)
+              case other_user do
+                nil -> # The phone number is not used yet : create the user with this phone number
+                  case Members.create_user(%{phone_number: phone_number, viber_active: true, viber_id: viber_id, nickname: viber_name, language: language}) do
+                    {:ok, new_user} -> {tracking_data, message} = BotMessages.treat_msg("new_user_created", new_user)
+                    _ -> {tracking_data, message} = BotMessages.treat_msg("technical problem", language)
+                  end
+                other_user -> manage_phone_number_conflicts(nil, other_user, phone_number, viber_id, viber_name, language, "link_phone") # The phone number is already used : check the rights
+              end
+          end
+      end
+
+    # We are waiting for a NEW phone number
+    tracking_data == "update_phone" ->
+      case String.match?(user_msg, ~r/^([09]{1})([0-9]{10})$/) do
+        false -> BotMessages.treat_msg("wrong_phone_number", db_user) # There is no phone number in the message : cancel the update
+        true -> # There is a phone number in the message
+          IO.puts("Phone number updating from Viber")
+          phone_number = user_msg
+          other_user = Members.get_other_user_by_phone_number(phone_number)
+          cond do
+            db_user.phone_number == user_msg -> BotMessages.treat_msg("same_phone_number", db_user) # Same phone number then user old one
+            other_user == nil -> # The phone number is not used yet : update the user phone number
+              case Members.update_user(db_user, %{phone_number: phone_number, nickname: viber_name, language: language}) do
+                {:ok, db_user} -> {tracking_data, message} = BotMessages.treat_msg("new_phone_updated", db_user)
+                _ -> {tracking_data, message} = BotMessages.treat_msg("technical problem", language)
+              end
+            true -> manage_phone_number_conflicts(db_user, other_user, phone_number, nil, nil, nil, "udate_phone") # The phone number is already used : check the rights
+          end
+      end
+
+    # This is an automatic message
+    tracking_data == "offer_treated" ->
+      cond do
+        announce.status == "ONLINE" && announce.cause == "moved"
+          -> BotMessages.treat_msg("announce_moved", db_user, announce, build_announce_view_link(announce))
+        announce.status == "ONLINE" && announce.cause == "accepted"
+          -> BotMessages.treat_msg("announce_accepted", db_user, announce, build_announce_view_link(announce))
+        announce.status == "REFUSED"
+          -> BotMessages.treat_msg("announce_refused", db_user, announce)
+      end
+
+    # We are waiting nothing (fallback)
+    true ->
+      IO.puts("Nothing to say to Viber")
+      cond do
+        db_user == nil -> BotMessages.treat_msg("repeat_phone", language) # The user is not recognized : return to phone demand
+        user_msg == "CHANGE" -> BotMessages.treat_msg("propose_phone_update", db_user) # The user wants to change his phone
+        true -> {tracking_data, message} = BotMessages.treat_msg("nothing_to_say", db_user) # Nothing to say
+      end
+    end
+  end
+
+  def manage_phone_number_conflicts(user, other_user, phone_number, viber_id, user_name, language, tracking_data) do
     # This loop can be used with or without user
     cond do
       other_user. viber_active == true -> BotMessages.treat_msg("viber_conflict_contact_us", language, user_name) # 2 Vibers for the same account : contact us
@@ -204,14 +237,5 @@ defmodule BoncoinWeb.ViberController do
         end
     end
   end
-
-  # defp get_msg(params) do
-  #   case params do
-  #     "welcome" ->
-  #       "Welcome to PawChaungKaung ! Please send us your connection code or your phone number...\n****\nောသဟယ်\n****\nစစ္ကုိင္းတုိင္း ေဒသႀကီးတြင္"
-  #     _ -> "pb"
-  #   end
-  # end
-
 
 end

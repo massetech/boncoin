@@ -33,9 +33,9 @@ defmodule Boncoin.AnnounceImage do
   # end
 
   # Override the storage directory:
-  # def storage_dir(version, {file, scope}) do
-  #   "uploads/user/avatars/#{scope.id}"
-  # end
+  def storage_dir(version, {file, scope}) do
+    "offers/#{Timex.now().year()}#{Timex.now().month()}"
+  end
 
   # https://elixirforum.com/t/how-can-i-use-unique-filename-generator-function-with-arc-ecto/4476/4
   def filename(version, {file, scope}) do

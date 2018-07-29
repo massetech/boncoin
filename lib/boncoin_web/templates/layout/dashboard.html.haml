@@ -1,0 +1,81 @@
+%nav{aria-label: "breadcrumb"}
+  %ol.breadcrumb
+    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
+
+.row
+  .col-xs-12.col-sm-6.my-4
+    .card
+      .card-header
+        %h5.card-title.text-left= "Users"
+      .card-body
+        .row
+          .col-xs-12.col-sm-6
+            %h5= "Sellers"
+            %li= "nb users"
+            %li= "nb viber"
+            %li= "language"
+          .col-xs-12.col-sm-6
+            %h5= "Visitors"
+            %li= "time on the site"
+            %li= "device"
+            %li= "nb clic"
+            %li= "language"
+      .card-footer
+        = link "All users", to: user_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "New admin", to: user_path(@conn, :new), class: "btn btn-info btn-small"
+
+  .col-xs-12.col-sm-6.my-4
+    .card
+      .card-header
+        %h5.card-title.text-left= "Offers"
+      .card-body
+        .row
+          .col-xs-12.col-sm-6
+            %li= "nb pending"
+            %li= "nb online"
+            %li= "nb outdated"
+            %li= "nb alert"
+            %li= "language"
+          .col-xs-12.col-sm-6
+            %li= "nb clic / day"
+            %li= "device"
+      .card-footer
+        = link "All offers", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Purge offers", to: announce_path(@conn, :index), class: "btn btn-danger btn-small"
+
+  .col-xs-12.col-sm-6.my-4
+    .card
+      .card-header
+        %h5.card-title.text-left= "Technical"
+      .card-body
+        .row
+          .col-xs-12.col-sm-6
+            %li= "viber status"
+            %li= "nb viber msg / day"
+            = link "connect Viber", to: viber_path(@conn, :connect)
+            = link "disconnect Viber", to: viber_path(@conn, :disconnect)
+          .col-xs-12.col-sm-6
+            %li= "nb picture in db"
+            %li= "nb offers in db"
+      .card-footer
+        = link "Switch viber", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Download logs", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Download db", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
+
+  .col-xs-12.col-sm-6.my-4
+    .card
+      .card-header
+        %h5.card-title.text-left= "Parameters"
+      .card-body
+        .row
+          -# .col-xs-12.col-sm-6
+          -#   %li= "viber status"
+          -#   %li= "nb viber msg / day"
+          -# .col-xs-12.col-sm-6
+          -#   %li= "nb picture in db"
+          -#   %li= "nb offers in db"
+      .card-footer
+        = link "Divisions", to: division_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Townships", to: township_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Families", to: family_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Categories", to: category_path(@conn, :index), class: "btn btn-info btn-small"

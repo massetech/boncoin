@@ -1,0 +1,48 @@
+%nav{aria-label: "breadcrumb"}
+  %ol.breadcrumb
+    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
+    %li.breadcrumb-item.active{aria-current: "page"}= "Offers"
+
+.table-responsive
+  %table.table.table-hover
+    %caption= "Offers"
+    %thead
+      %tr
+        %th= "ID"
+        %th= "User phone"
+        %th= "User name"
+        %th= "Viber"
+        %th= "Language"
+        %th= "Township"
+        %th= "Category"
+        %th= "Title"
+        %th= "Price"
+        %th= "Currency"
+        %th= "Status"
+        %th= "Nb view, clic, alert"
+        %th= "Creation"
+        %th= "Parution"
+        %th= "Validity"
+        %th= "Action"
+    %tbody
+      - for offer <- @announces do
+        %tr
+          %td= offer.id
+          %td= offer.user.phone_number
+          %td= offer.user.nickname
+          %td= LayoutView.icon_active(offer.user.viber_active)
+          %td= img_tag static_path(@conn, "/images/flags/1x1/#{offer.language}.svg"), class: "flag-small"
+          %td= offer.township.title_en
+          %td
+            %i.fa{class: "fa-#{offer.category.icon}"}
+          %td= offer.title
+          %td= offer.price
+          %td= offer.currency
+          %td
+            - link to: announce_path(@conn, :show, offer), target: "_blank" do
+              = btn_status(offer.status)
+          %td= "#{offer.nb_view}, #{offer.nb_clic}, #{offer.nb_alert}"
+          %td= "#{offer.inserted_at.year}/#{offer.inserted_at.day}/#{offer.inserted_at.hour}-#{offer.inserted_at.month}:#{offer.inserted_at.minute}"
+          %td= LayoutView.format_datehour(offer.parution_date)
+          %td= LayoutView.format_date(offer.validity_date)
+          %td= link "Delete", to: announce_path(@conn, :delete, offer), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

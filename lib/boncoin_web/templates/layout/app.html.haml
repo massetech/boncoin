@@ -13,17 +13,28 @@
 
   %body.bg-light.side-bar-wrapper
     = render "_sidebar.html", assigns
-    .add.add-left.col-lg-2.d-none.d-lg-block
-    .add.add-right.col-lg-2.d-none.d-lg-block
-    .content.container-fluid.px-0
-      .row.no-gutters.align-items-center
-        .col-xs-12.col-lg-8.offset-lg-2.text-center.full-height.d-flex.flex.flex-column
-          %header.header
-            = render "header.html", assigns
-          %main.container-fluid.flex-grow.my-4{role: "main", id: "main"}
-            = render @view_module, @view_template, assigns
-          %footer.footer
-            = render "footer.html", assigns
+    - if @conn.request_path =~ "/admin/" == false do
+      .add.add-left.col-lg-2.d-none.d-lg-block
+      .add.add-right.col-lg-2.d-none.d-lg-block
+      .content.container-fluid.px-0
+        .row.no-gutters.align-items-center
+          .col-xs-12.col-lg-8.offset-lg-2.text-center.full-height.d-flex.flex.flex-column
+            %header.header
+              = render "header.html", assigns
+            %main.container-fluid.flex-grow.my-4{role: "main", id: "main"}
+              = render @view_module, @view_template, assigns
+            %footer.footer
+              = render "footer.html", assigns
+    - else
+      .content.container-fluid.px-0
+        .row.no-gutters.align-items-center
+          .col-12.text-center.full-height.d-flex.flex.flex-column
+            %header.header
+              = render "header.html", assigns
+            %main.container-fluid.flex-grow.my-4{role: "main", id: "main"}
+              = render @view_module, @view_template, assigns
+            %footer.footer
+              = render "footer.html", assigns
     .overlay
 
     %script(src='#{static_path(@conn, "/js/app.js")}')

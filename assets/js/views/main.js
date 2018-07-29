@@ -120,6 +120,15 @@ export default class MainView {
       $('.collapse-level2').collapse('hide')
     })
 
+    // Manage conditions collapses
+    $('#conditions').on('show.bs.collapse', function (e) {
+      $('.collapse').collapse('hide')
+    })
+
+    // Manage about collapses
+    $('#about').on('show.bs.collapse', function (e) {
+      $('.collapse').collapse('hide')
+    })
 
     // Set up the lightbox - http://ashleydw.github.io/lightbox/#no-wrapping
     $(document).on('click', '[data-toggle="lightbox"]', function(event) {

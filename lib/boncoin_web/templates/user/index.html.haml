@@ -1,0 +1,34 @@
+%nav{aria-label: "breadcrumb"}
+  %ol.breadcrumb
+    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
+    %li.breadcrumb-item.active{aria-current: "page"}= "Users"
+
+.table-responsive
+  %table.table.table-hover
+    %caption= "Users"
+    %thead
+      %tr
+        %th= "ID"
+        %th= "role"
+        %th= "Phone number"
+        %th= "Nickname"
+        %th= "Email"
+        %th= "Language"
+        %th= "Password"
+        %th= "Viber ID"
+        %th= "Nb offers"
+        %th= "Actions"
+    %tbody
+      - for user <- @users do
+        %tr
+          %td= user.id
+          %td= user.role
+          %td= user.phone_number
+          %td= user.nickname
+          %td= user.email
+          %td= img_tag static_path(@conn, "/images/flags/1x1/#{user.language}.svg"), class: "flag-small"
+          %td= user.member_psw
+          %td= user.viber_id
+          %td= Kernel.length(user.announces)
+          %td
+            = link "Delete", to: user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

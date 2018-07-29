@@ -46,7 +46,7 @@
           -#     -# %input.form-control.disabled.bg-white{type: "text", id: "disabledTextInput", placeholder: gettext("dde"), readonly}
           -#   %small.form-text.text-muted= gettext "You will receive notifications"
 
-          - link to: "https://viber.me/<pawchaungkaung_en>", id: "btn-viber", class: "btn btn-block", target: "_blank" do
+          - link to: main_path(@conn, :viber), id: "btn-viber", class: "btn btn-block", target: "_blank" do
             .row.no-gutters.align-items-center
               .col-2
                 = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"

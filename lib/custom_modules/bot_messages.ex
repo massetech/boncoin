@@ -1,5 +1,6 @@
 defmodule Boncoin.CustomModules.BotMessages do
   alias Boncoin.Members
+  alias BoncoinWeb.LayoutView
 
   def treat_msg("welcome") do {"language", welcome_msg()} end
   def treat_msg("welcome_back", user) do {"language", welcome_back_msg(user.language, user.nickname)} end
@@ -14,6 +15,9 @@ defmodule Boncoin.CustomModules.BotMessages do
   def treat_msg("viber_conflict_contact_us", language, name) do {"link_phone_#{language}", announce_viber_account_conflict(language, name)} end
   def treat_msg("wait_for_no_more_offers", language, name, nb_offers) do {"link_phone_#{language}", announce_wait_for_no_more_active_offers(language, name, nb_offers)} end
   def treat_msg("technical problem", language) do {"link_phone_#{language}", announce_technical_error(language)} end
+  def treat_msg("announce_accepted", user, announce, link) do {nil, tell_offer_online(user.language, user.nickname, announce.title, LayoutView.format_date(announce.validity_date), link)} end
+  def treat_msg("announce_moved", user, announce, link) do {nil, tell_offer_moved(user.language, user.nickname, announce.title, LayoutView.format_date(announce.validity_date), link)} end
+  def treat_msg("announce_refused", user, announce) do {nil, tell_offer_refused(user.language, user.nickname, announce.title, announce.cause)} end
 
   # --------- MESSAGES TO USER -------------------------------------------------------------------
 
@@ -98,6 +102,25 @@ defmodule Boncoin.CustomModules.BotMessages do
       _ -> "(#{language})Sorry #{nickname}, this phone number has #{nb_offers} offers. You can wait for them to be expired or contact us."
     end
   end
+
+  defp tell_offer_online(language, nickname, title, validity_date, link) do
+    case language do
+      _ -> "(#{language})Hi #{nickname}, your offer #{title} is now published !\n\nIt will be online for 1 month until #{validity_date}.\nYour offer is on this page #{link}"
+    end
+  end
+
+  defp tell_offer_moved(language, nickname, title, validity_date, link) do
+    case language do
+      _ -> "(#{language})Hi #{nickname}, your offer #{title} has been moved to another category and is now published !\n\nIt will be online for 1 month until #{validity_date}.\nYour offer is on this page #{link}"
+    end
+  end
+
+  defp tell_offer_refused(language, nickname, title, cause) do
+    case language do
+      _ -> "(#{language})Hi #{nickname}, we are sorry your offer #{title} was refused because #{cause}. You can create a new one on https://pawchaungkaung.com"
+    end
+  end
+
 
   defp say_something_neutral(language) do
     case Enum.random([1, 2, 3, 4, 5]) do

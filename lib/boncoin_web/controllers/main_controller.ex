@@ -15,4 +15,24 @@ defmodule BoncoinWeb.MainController do
       |> render(BoncoinWeb.PublicView, "announces_index.html", announces: announces, nb_announces: nb_announces, place: place)
   end
 
+  def conditions(conn, _params) do
+    conn
+      |> render(BoncoinWeb.PublicView, "conditions.html")
+  end
+
+  def about(conn, _params) do
+    conn
+      |> render(BoncoinWeb.PublicView, "about.html")
+  end
+
+  def viber(conn, _params) do
+    conn
+      |> render(BoncoinWeb.PublicView, "viber.html")
+  end
+
+  def dashboard(conn, _params) do
+    conn
+      |> render(BoncoinWeb.LayoutView, "dashboard.html")
+  end
+
 end

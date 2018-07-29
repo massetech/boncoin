@@ -1,0 +1,184 @@
+.row.conditions
+  .col-12
+    %h4.font-weight-bold.text-info= gettext "Our terms of use"
+    %h5.text-primary.my-4= gettext "Your access to PawChaungKaung implies your fully agreement to these terms of use."
+    .d-flex.align-items-center
+      %i.fa.fa-exclamation-circle.mr-3.text-primary
+      %p.m-0.text-left= gettext "introduction to terms of use"
+    .d-flex.align-items-center.my-4
+      %i.fa.fa-award.mr-3.text-primary
+      %p.m-0.text-left= gettext "introduction to trademark"
+
+.accordion{id: "conditions"}
+
+  .card.text-left
+    %a{data-toggle: "collapse", data-target: "#object", aria-expanded: "true", aria-controls: "object"}
+      .card-header
+        .d-flex.align-items-center
+          %i.fa.fa-desktop.mr-3.text-info
+          %h6.card-title.mb-0= gettext "Object of PawChaungKaung"
+    %div.collapse{id: "object", aria-labelledby: "object", data-parent: "#accordion"}
+      .card-body
+        .d-flex.align-items-center
+          %i.fa.fa-question-circle.mr-3.text-info
+          %p.m-0= gettext "introduce the website"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-user-circle.mr-3.text-info
+          %p.m-0= gettext "introduce who are the customers"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-steam.mr-3.text-info
+          %p.m-0= gettext "introduce the process"
+
+  .card.text-left
+    %a{data-toggle: "collapse", data-target: "#submission", aria-expanded: "true", aria-controls: "submission"}
+      .card-header
+        .d-flex.align-items-center
+          %i.fa.fa-edit.mr-3.text-info
+          %h6.card-title.mb-0= gettext "Submit an offer"
+    %div.collapse{id: "submission", aria-labelledby: "submission", data-parent: "#accordion"}
+      .card-body
+        .d-flex.align-items-center
+          %i.fa.fa-exclamation-circle.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "Please note"
+            %p.m-0= gettext "introduce add submission rule"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-question.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "How to decide to sell something ?"
+            %p.m-0= gettext "criteria to sell something"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-align-left.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "How to describe your offer ?"
+            %p.m-0= gettext "explaining how to describe your offer"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-camera.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "Which photographs to use ?"
+            %p= gettext "explaining how to use photographs"
+
+  .card.text-left
+    %a{data-toggle: "collapse", data-target: "#prohibited", aria-expanded: "true", aria-controls: "prohibited"}
+      .card-header
+        .d-flex.align-items-center
+          %i.fa.fa-ban.mr-3.text-info
+          %h6.card-title.mb-0= gettext "Prohibited items"
+    %div.collapse{id: "prohibited", aria-labelledby: "prohibited", data-parent: "#accordion"}
+      .card-body
+        .d-flex.align-items-center
+          %i.fa.fa-exclamation-triangle.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "Please note"
+            %p.m-0= gettext "introduce prohibition list"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-user-secret.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "Private or protected contents"
+            %p.m-0= gettext "detail on private"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-smoking-ban.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "Alcohol, cigarettes and drugs"
+            %p.m-0= gettext "detail on drugs"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-bomb.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "Arms and explosives"
+            %p.m-0= gettext "detail on arms"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-child.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "Humans and animals"
+            %p.m-0= gettext "detail on humans"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-tablets.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "Medicine and chemicals"
+            %p.m-0= gettext "detail on medicines"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-surprise.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "Sexual and shocking contents"
+            %p.m-0= gettext "detail on shocking"
+
+  .card.text-left
+    %a{data-toggle: "collapse", data-target: "#terms", aria-expanded: "true", aria-controls: "terms"}
+      .card-header
+        .d-flex.align-items-center
+          %i.fa.fa-handshake.mr-3.text-info
+          %h6.card-title.mb-0= gettext "The contract between us"
+    %div.collapse{id: "terms", aria-labelledby: "terms", data-parent: "#accordion"}
+      .card-body
+        .d-flex.align-items-center
+          %i.fa.fa-desktop.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "What is PawChaungKaung responsability ?"
+            %p.m-0= gettext "explaining site responsability"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-user-tie.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "What are sellers responsibilities ?"
+            %p.m-0= gettext "explaining seller responsibilities"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-user-tie.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "What are sellers rights ?"
+            %p.m-0= gettext "explaining seller rights"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-users.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "What are buyers responsibilities ?"
+            %p.m-0= gettext "explaining buyers responsibilities"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-users.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "What are buyers rights ?"
+            %p.m-0= gettext "explaining buyers rights"
+
+  .card.text-left
+    %a{data-toggle: "collapse", data-target: "#privacy", aria-expanded: "true", aria-controls: "privacy"}
+      .card-header
+        .d-flex.align-items-center
+          %i.fa.fa-user-secret.mr-3.text-info
+          %h6.card-title.mb-0= gettext "Your privacy"
+    %div.collapse{id: "privacy", aria-labelledby: "privacy", data-parent: "#accordion"}
+      .card-body
+        .d-flex.align-items-center
+          %i.fa.fa-database.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "What informations do we collect ?"
+            %p= gettext "explaining informations collected"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-user-cog.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "How do we use them ?"
+            %p= gettext "explaining informations using"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-user-shield.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "How do we protect them ?"
+            %p= gettext "explaining privacy protection"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-cookie.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "What about cookies ?"
+            %p= gettext "explaining cookies"

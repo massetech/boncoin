@@ -9,6 +9,8 @@ defmodule Boncoin.Repo.Migrations.CreateAnnounces do
       add :latitute, :string
       add :longitude, :string
       add :status, :string
+      add :cause, :string
+      add :treated_by_id, references(:users, on_delete: :nothing)
       add :validity_date, :utc_datetime
       add :parution_date, :utc_datetime
       add :price, :float
@@ -25,6 +27,7 @@ defmodule Boncoin.Repo.Migrations.CreateAnnounces do
       timestamps()
     end
     create index(:announces, [:user_id])
+    create index(:announces, [:treated_by_id])
     create index(:announces, [:township_id])
     create index(:announces, [:category_id])
   end

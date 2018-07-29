@@ -40,8 +40,8 @@ config :drab, BoncoinWeb.Endpoint,
 # Configure ARC image uploader to Google cloud
 config :arc,
   storage: Arc.Storage.GCS,
-  bucket: "pawchaungkaung_dev"
-  # bucket: System.get_env("GOOGLE_CLOUD_BUCKET")
+  bucket: System.get_env("GOOGLE_CLOUD_BUCKET")
+
 
 config :goth,
   json: "secrets/google_cloud_keyfile.json" |> Path.expand |> File.read!

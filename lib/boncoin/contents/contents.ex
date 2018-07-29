@@ -2,6 +2,7 @@ defmodule Boncoin.Contents do
   import Ecto.Query, warn: false
   alias Boncoin.{Repo, Members}
   alias Boncoin.Contents.{Family, Category, Township, Division, Announce, Image}
+  alias BoncoinWeb.ViberController
 
   # -------------------------------- FAMILY ----------------------------------------
   # QUERIES ------------------------------------------------------------------
@@ -456,6 +457,12 @@ defmodule Boncoin.Contents do
       where: a.status == "ONLINE",
       order_by: [asc: :priority, desc: :parution_date, desc: :nb_clic]
   end
+
+  defp list_admin_announces(query \\ Announce) do
+    from a in query,
+      order_by: [asc: :inserted_at, desc: :parution_date, desc: :nb_clic]
+  end
+
   defp count_announces_online(query \\ Announce) do
     from a in query,
       where: a.status == "ONLINE",
@@ -512,22 +519,12 @@ defmodule Boncoin.Contents do
 
   # METHODS ------------------------------------------------------------------
 
-  @doc """
-  Returns the list of announces.
-
-  ## Examples
-
-      iex> list_announces()
-      [%Announce{}, ...]
-
-  """
   def list_announces do
-    Repo.all(Announce)
+    Announce
+    |> list_admin_announces()
+    |> Repo.all()
+    |> Repo.preload([:user, :township, :category])
   end
-
-  @doc """
-  Returns the list of public announces for query.
-  """
 
   def list_announces_public(%{"category_id" => category_id, "division_id" => division_id, "family_id" => family_id, "township_id" => township_id} = params) do
     user_query = Members.filter_user_public_data()
@@ -561,34 +558,10 @@ defmodule Boncoin.Contents do
       |> Repo.one()
   end
 
-  @doc """
-  Gets a single announce.
-
-  Raises `Ecto.NoResultsError` if the Announce does not exist.
-
-  ## Examples
-
-      iex> get_announce!(123)
-      %Announce{}
-
-      iex> get_announce!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_announce!(id), do: Repo.get!(Announce, id)
-
-  @doc """
-  Creates a announce.
-
-  ## Examples
-
-      iex> create_announce(%{field: value})
-      {:ok, %Announce{}}
-
-      iex> create_announce(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
+  def get_announce!(id) do
+    Repo.get!(Announce, id)
+    |> Repo.preload([:user, :images, township: [:division], category: [:family]])
+  end
 
   def create_announce(attrs \\ %{}) do
     params = attrs
@@ -611,57 +584,59 @@ defmodule Boncoin.Contents do
     end
   end
 
-  defp calc_announce_validity_date() do
-    parution_date = Timex.now()
-    validity_date = Timex.shift(parution_date, days: 3)
-    %{"parution_date" => parution_date, "validity_date" => validity_date}
+  def validate_announce(admin_user, %{"announce_id" => announce_id, "validate" => validate, "cause" => cause, "category_id" => category_id}) do
+    announce = get_announce!(announce_id)
+    user = Members.get_user!(announce.user_id)
+    status = case validate do
+      "true" -> "ONLINE"
+      "false" -> "REFUSED"
+    end
+    if category_id == nil, do: category_id = announce.category_id, else: category_id
+    dates = calc_announce_validity_date()
+    # Build the params
+    params = %{treated_by_id: admin_user.id, status: status, cause: cause, category_id: category_id, parution_date: dates.parution_date, validity_date: dates.validity_date}
+    # Update the announce
+    case update_announce(announce, params) do
+      {:ok, announce} ->
+        # Build bot params
+        if user.viber_active == true do
+          # Build response msg with the bot
+          {tracking_data, message} = %{tracking_data: "offer_treated", user: %{db_user: user, language: user.language, viber_id: user.viber_id, viber_name: user.nickname, user_msg: ""}, announce: announce}
+            |> ViberController.call_bot_algorythm()
+          # Send the message to viber API
+          ViberController.send_viber_message(user.viber_id, tracking_data, message)
+        end
+        {:ok, announce}
+      {:error, msg} -> {:error, msg}
+    end
   end
 
-  @doc """
-  Updates a announce.
+  defp calc_announce_validity_date() do
+    parution_date = Timex.now()
+    validity_date = Timex.shift(parution_date, days: 30)
+    %{parution_date: parution_date, validity_date: validity_date}
+  end
 
-  ## Examples
-
-      iex> update_announce(announce, %{field: new_value})
-      {:ok, %Announce{}}
-
-      iex> update_announce(announce, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
   def update_announce(%Announce{} = announce, attrs) do
     announce
     |> Announce.changeset(attrs)
     |> Repo.update()
   end
 
-  # |> Map.merge(calc_announce_validity_date()) # Use this for test on offers directly on line
-
-  @doc """
-  Deletes a Announce.
-
-  ## Examples
-
-      iex> delete_announce(announce)
-      {:ok, %Announce{}}
-
-      iex> delete_announce(announce)
-      {:error, %Ecto.Changeset{}}
-
-  """
   def delete_announce(%Announce{} = announce) do
+    # Remove the link to the images ; see https://github.com/stavro/arc_ecto/issues/40
+    images = announce.images
+    for image <- images do
+      image
+        |> Image.changeset(%{file: nil})
+        |> Repo.update!()
+      # Since the above deletion doesn't really need to happen synchronously, you can delete it asynchronously to speed up the request/response.
+      spawn(fn -> Boncoin.AnnounceImage.delete({image.file, image}) end)
+    end
+    # Delete the announce will delete the images (belongs_to)
     Repo.delete(announce)
   end
 
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking announce changes.
-
-  ## Examples
-
-      iex> change_announce(announce)
-      %Ecto.Changeset{source: %Announce{}}
-
-  """
   def change_announce(%Announce{} = announce) do
     Announce.changeset(announce, %{})
   end
@@ -767,14 +742,7 @@ defmodule Boncoin.Contents do
 
   """
   def delete_image(%Image{} = image) do
-    case Repo.delete(image) do
-      {:ok, image} ->
-        # Since the above deletion doesn't really need to happen synchronously, you can delete it asynchronously to speed up the request/response.
-        # spawn(fn -> ImageFile.delete({image.file, image}) end)
-        Boncoin.AnnounceImage.delete({image.file, image})
-        {:ok, image}
-      error -> error
-    end
+    Repo.delete(image)
   end
 
   @doc """

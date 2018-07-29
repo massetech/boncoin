@@ -6,6 +6,15 @@ defmodule BoncoinWeb.AnnounceView do
     Boncoin.AnnounceImage.url({image.file, image}, type)
   end
 
+  def btn_status(status) do
+    case status do
+      "PENDING" -> "<div class='btn btn-primary btn-sm'>PENDING</div>" |> raw
+      "ONLINE" -> "<div class='btn btn-success btn-sm'>ONLINE</div>" |> raw
+      "REFUSED" -> "<div class='btn btn-danger btn-sm'>REFUSED</div>" |> raw
+      "OUTDATED" -> "<div class='btn btn-warning btn-sm'>OUTDATED</div>" |> raw
+    end
+  end
+
   def show_date(datetime, language) do
     day = datetime.day
     month = datetime.month

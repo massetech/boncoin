@@ -89,6 +89,7 @@ defmodule Boncoin.Members do
   """
   def list_users do
     Repo.all(User)
+    |> Repo.preload(:announces)
   end
 
   @doc """

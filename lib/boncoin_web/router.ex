@@ -3,7 +3,6 @@ defmodule BoncoinWeb.Router do
   require Ueberauth
 
   pipeline :browser do
-    # plug Boncoin.Plug.CheckInput
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
@@ -46,25 +45,29 @@ defmodule BoncoinWeb.Router do
     pipe_through [:browser, :auth]
     get "/", MainController, :welcome, as: :root
     get "/offers", MainController, :public_index, as: :public_offers
+    get "/conditions", MainController, :conditions
+    get "/about", MainController, :about
+    get "/viber", MainController, :viber
+    resources "/announces", AnnounceController, only: [:new, :create]
   end
 
   scope "/admin", BoncoinWeb do
     pipe_through [:browser, :auth, :login_required]
+    get "/dashboard", MainController, :dashboard
     resources "/users", UserController
     resources "/familys", FamilyController
     resources "/categorys", CategoryController
     resources "/divisions", DivisionController
     resources "/townships", TownshipController
-    resources "/announces", AnnounceController
     resources "/images", ImageController, except: [:edit, :update]
-    resources "/announces", AnnounceController, only: [:index]
+    resources "/announces", AnnounceController, except: [:new, :create]
+    get "/treat_announce", AnnounceController, :treat_announce
   end
 
   scope "/viber", BoncoinWeb do
     pipe_through :browser
     get "/connect", ViberController, :connect
     get "/disconnect", ViberController, :disconnect
-    # post "/callback", ViberController, :callback
   end
 
   scope "/auth", BoncoinWeb do

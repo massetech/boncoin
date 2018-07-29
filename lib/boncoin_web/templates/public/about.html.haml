@@ -1,0 +1,49 @@
+.row.conditions
+  .col-12
+    %h4.font-weight-bold.text-info= gettext "About PawChaungKaung"
+    %h5.text-primary.my-4= gettext "Please let us know if you have any question on our activity."
+    -# .d-flex.align-items-center.my-4
+    -#   %i.fa.fa-envelope.mr-3.text-primary
+    -#   %p.m-0.text-left= gettext "contact@pawchaungkaung.com"
+
+.accordion{id: "about"}
+
+  .card.text-left
+    %a{data-toggle: "collapse", data-target: "#compagny", aria-expanded: "true", aria-controls: "compagny"}
+      .card-header
+        .d-flex.align-items-center
+          %i.fa.fa-desktop.mr-3.text-info
+          %h6.card-title.mb-0= gettext "The brand PawChaungKaung"
+    %div.collapse{id: "compagny", aria-labelledby: "compagny", data-parent: "#accordion"}
+      .card-body
+        .d-flex.align-items-center
+          %i.fa.fa-building.mr-3.text-info
+          %p.m-0= gettext "introduce the compagny"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-envelope.mr-3.text-info
+          %p.m-0= gettext "contact@pawchaungkaung.com (we wont answer to messages related to offers.)"
+
+  .card.text-left
+    %a{data-toggle: "collapse", data-target: "#work_with_us", aria-expanded: "true", aria-controls: "work_with_us"}
+      .card-header
+        .d-flex.align-items-center
+          %i.fa.fa-handshake.mr-3.text-info
+          %h6.card-title.mb-0= gettext "Work with us"
+    %div.collapse{id: "work_with_us", aria-labelledby: "work_with_us", data-parent: "#accordion"}
+      .card-body
+        .d-flex.align-items-center
+          %i.fa.fa-audio-description.mr-3.text-info
+          %p.m-0= gettext "introduce the work with us"
+
+  .card.text-left
+    %a{data-toggle: "collapse", data-target: "#join_us", aria-expanded: "true", aria-controls: "join_us"}
+      .card-header
+        .d-flex.align-items-center
+          %i.fa.fa-user-tie.mr-3.text-info
+          %h6.card-title.mb-0= gettext "Join us"
+    %div.collapse{id: "join_us", aria-labelledby: "join_us", data-parent: "#accordion"}
+      .card-body
+        .d-flex.align-items-center
+          %i.fa.fa-comments.mr-3.text-info
+          %p.m-0= gettext "introduce the join us"

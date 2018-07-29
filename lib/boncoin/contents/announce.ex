@@ -15,6 +15,8 @@ defmodule Boncoin.Contents.Announce do
     field :price, :float
     field :currency, :string, default: "Kyats"
     field :status, :string, default: "PENDING"
+    field :cause, :string
+    belongs_to :treated_by, User
     field :title, :string
     field :nb_view, :integer, default: 0
     field :nb_clic, :integer, default: 0
@@ -30,7 +32,7 @@ defmodule Boncoin.Contents.Announce do
   end
 
   @required_fields ~w(user_id category_id township_id title price description currency)a
-  @optional_fields ~w(status latitute longitude conditions nb_view nb_clic nb_alert validity_date parution_date priority zawgyi)a
+  @optional_fields ~w(status cause language latitute longitude conditions nb_view nb_clic nb_alert validity_date parution_date priority zawgyi treated_by_id)a
 
   @doc false
   def changeset(announce, attrs) do
@@ -48,6 +50,16 @@ defmodule Boncoin.Contents.Announce do
 
   def status_select_btn() do
     [pending: "PENDING", accepted: "ONLINE", refused: "REFUSED", outdated: "OUTDATED"]
+  end
+
+  def refusal_causes() do
+    [
+      %{label: "not_allowed", title: "Content not allowed"},
+      %{label: "not_clear", title: "Description not clear"},
+      %{label: "bad_photos", title: "Photos not good"},
+      %{label: "not_interesting", title: "Offer not interesting"},
+      %{label: "shocking", title: "Message can shock people"}
+    ]
   end
 
 end
