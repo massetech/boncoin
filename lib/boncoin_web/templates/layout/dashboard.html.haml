@@ -3,7 +3,8 @@
     %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
 
 .row
-  .col-xs-12.col-sm-6.my-4
+  /------------- USERS -------------------------
+  .col-xs-12.col-lg-6.my-4
     .card
       .card-header
         %h5.card-title.text-left= "Users"
@@ -24,7 +25,8 @@
         = link "All users", to: user_path(@conn, :index), class: "btn btn-info btn-small"
         = link "New admin", to: user_path(@conn, :new), class: "btn btn-info btn-small"
 
-  .col-xs-12.col-sm-6.my-4
+  /------------- OFFERS -------------------------
+  .col-xs-12.col-lg-6.my-4
     .card
       .card-header
         %h5.card-title.text-left= "Offers"
@@ -43,7 +45,21 @@
         = link "All offers", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
         = link "Purge offers", to: announce_path(@conn, :index), class: "btn btn-danger btn-small"
 
-  .col-xs-12.col-sm-6.my-4
+  /------------- ADDS -------------------------
+  .col-xs-12.col-lg-6.my-4
+    .card
+      .card-header
+        %h5.card-title.text-left= "Adds"
+      .card-body
+        .row
+          .col-xs-12.col-sm-6
+          .col-xs-12.col-sm-6
+      .card-footer
+        = link "All offers", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Purge offers", to: announce_path(@conn, :index), class: "btn btn-danger btn-small"
+
+  /------------- TECHNICAL -------------------------
+  .col-xs-12.col-lg-6.my-4
     .card
       .card-header
         %h5.card-title.text-left= "Technical"
@@ -62,18 +78,13 @@
         = link "Download logs", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
         = link "Download db", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
 
-  .col-xs-12.col-sm-6.my-4
+  /------------- PARAMETERS -------------------------
+  .col-xs-12.col-lg-6.my-4
     .card
       .card-header
         %h5.card-title.text-left= "Parameters"
       .card-body
         .row
-          -# .col-xs-12.col-sm-6
-          -#   %li= "viber status"
-          -#   %li= "nb viber msg / day"
-          -# .col-xs-12.col-sm-6
-          -#   %li= "nb picture in db"
-          -#   %li= "nb offers in db"
       .card-footer
         = link "Divisions", to: division_path(@conn, :index), class: "btn btn-info btn-small"
         = link "Townships", to: township_path(@conn, :index), class: "btn btn-info btn-small"

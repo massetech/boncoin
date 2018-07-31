@@ -35,8 +35,8 @@ export default class MainView {
     $('#announce_price').val('')
     $('#announce_user_id').val('')
   }
-  global.validate_phone_number_pop_field = (user_id, nickname, email, password, viber) => {
-    // Good phone number is processed to the form and user is known
+  global.validate_phone_number_pop_field = (user_id, nickname, email, password, viber, nb_announces) => {
+    // Good phone number is processed to the form and user has been found in database
     console.log("Good phone number : form processed with pop")
     $('#announce_phone_number').addClass("field-success")
     $('.collapsible_form').collapse('show')
@@ -48,10 +48,20 @@ export default class MainView {
     if (viber == "true") {
       $('#field-viber').show()
       $('#btn-viber').hide()
+      if (nb_announces > 0) {
+        $('#btn_unlink_number').attr('disabled','disabled')
+      }
+      else {
+        $('#btn_unlink_number').removeAttr('disabled')
+      }
     } else {
       $('#field-viber').hide()
       $('#btn-viber').show()
     }
+  }
+  global.remove_viber_btn_after_unlink = () => {
+    $('#field-viber').hide()
+    $('#btn-viber').show()
   }
 
   global.scrollToAnchor = (aid) => {

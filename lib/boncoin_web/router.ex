@@ -11,6 +11,7 @@ defmodule BoncoinWeb.Router do
     plug Boncoin.Plug.LoadSelects
     plug Boncoin.Plug.Locale
     plug Boncoin.Plug.SearchParams
+    plug Boncoin.Plug.LoadAdds
   end
 
   pipeline :auth do

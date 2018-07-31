@@ -36,7 +36,7 @@
       .card-header
         .d-flex.align-items-center
           %i.fa.fa-edit.mr-3.text-info
-          %h6.card-title.mb-0= gettext "Submit an offer"
+          %h6.card-title.mb-0= gettext "Manage an offer"
     %div.collapse{id: "submission", aria-labelledby: "submission", data-parent: "#accordion"}
       .card-body
         .d-flex.align-items-center
@@ -52,6 +52,12 @@
             %p.m-0= gettext "criteria to sell something"
         %hr
         .d-flex.align-items-center
+          = img_tag static_path(@conn, "/images/viber_icon.png"), class: "icon mr-3"
+          .flex-column
+            %h6.title= gettext "What is the Viber link ?"
+            %p.m-0= gettext "explain viber process"
+        %hr
+        .d-flex.align-items-center
           %i.fa.fa-align-left.mr-3.text-info
           .flex-column
             %h6.title= gettext "How to describe your offer ?"
@@ -62,6 +68,12 @@
           .flex-column
             %h6.title= gettext "Which photographs to use ?"
             %p= gettext "explaining how to use photographs"
+        %hr
+        .d-flex.align-items-center
+          %i.fa.fa-trash-alt.mr-3.text-info
+          .flex-column
+            %h6.title= gettext "How to remove an offer ?"
+            %p= gettext "explaining removing offer"
 
   .card.text-left
     %a{data-toggle: "collapse", data-target: "#prohibited", aria-expanded: "true", aria-controls: "prohibited"}
@@ -168,13 +180,13 @@
         .d-flex.align-items-center
           %i.fa.fa-user-cog.mr-3.text-info
           .flex-column
-            %h6.title= gettext "How do we use them ?"
+            %h6.title= gettext "How do we use these datas ?"
             %p= gettext "explaining informations using"
         %hr
         .d-flex.align-items-center
           %i.fa.fa-user-shield.mr-3.text-info
           .flex-column
-            %h6.title= gettext "How do we protect them ?"
+            %h6.title= gettext "How do we protect your datas ?"
             %p= gettext "explaining privacy protection"
         %hr
         .d-flex.align-items-center

@@ -3,13 +3,9 @@
   = hidden_input f, :user_id, value: ""
   = hidden_input f, :language, value: Gettext.get_locale()
   = hidden_input f, :zawgyi, value: false
-  - if @changeset.action do
-    .alert.alert-danger
-      %p= "Oops, something went wrong! Please check the errors below."
 
   .row
     .col-xs-12.col-sm-6
-      -# %hr
       %h5.text-left= gettext "1. What are your details ?"
 
       .row.text-left.my-4
@@ -29,29 +25,19 @@
           .row.no-gutters{id: "field-viber"}
             .col-9.pr-0.d-flex.align-items-center
               = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
-              %p.m-0.ml-2= gettext "This number is linked to Viber"
+              %p.m-0.ml-2= gettext "This number is linked to Viber" 
             .col-3.text-right.d-flex.align-items-center.justify-content-end
-              %button.btn.btn-info.btn-sm.d-flex.align-items-center{id: "btn_unlink_number", drab-click: "remove_viber", data-item-id: ""}
-                -# - link to: "#", id: "btn-unlink_viber", class: "btn btn-info btn-sm d-flex align-items-center text-right" do
+              %button.btn.btn-info.btn-sm.d-flex.align-items-center{id: "btn_unlink_number", drab-click: "remove_viber_link"}
                 = gettext("unlink")
                 %i.fa.fa-unlink.ml-1
-              -# .input-group
-              -#   %p.small.form-text.text-muted= gettext "You will receive notifications"
-          -# .form-group{id: "field-viber"}
-          -#   .input-group
-          -#     %span.input-group-prepend
-          -#       .input-group-text.bg-transparent
-          -#         = img_tag static_path(@conn, "/images/viber_icon.png"), class: "img-icon"
-          -#     %span{style: "white-space: normal;"}= gettext "This number is linked to Viber"
-          -#     -# %input.form-control.disabled.bg-white{type: "text", id: "disabledTextInput", placeholder: gettext("dde"), readonly}
-          -#   %small.form-text.text-muted= gettext "You will receive notifications"
 
           - link to: main_path(@conn, :viber), id: "btn-viber", class: "btn btn-block", target: "_blank" do
             .row.no-gutters.align-items-center
               .col-2
                 = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
               .col-10
-                %span{style: "white-space: normal;"}= gettext "Link this number to Viber"
+                %span= gettext "Link this number to Viber"
+                %p.m-0= gettext "to receive notifications"
 
       .row.text-left.my-4.collapse.collapsible_form
         .col-12

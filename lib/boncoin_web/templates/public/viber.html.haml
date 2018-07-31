@@ -1,11 +1,11 @@
 .row
   .col-12.my-2
     = img_tag static_path(@conn, "/images/viber_icon.png"), class: "icon_viber"
-  .col-12
+  .col-xs-12.col-sm-8.offset-sm-2.my-2
     %h4.font-weight-bold.text-centre.viber-text
-      = gettext "Please connect to PawChaungKaung on viber to receive notifications !"
-    %p.font-weight-bold.text-centre.viber-text
-      = gettext "You can scan this QR code on your viber application..."
+      = gettext "Connect with PawChaungKaung on viber to get notifications !"
+    %p.font-weight-bold.text-centre.viber-text.my-4
+      = gettext "You can scan this QR code on your viber application. This is possible only when you don't have any active offer."
 
 .row
   .col-xs-12.col-sm-4.offset-sm-4.my-4

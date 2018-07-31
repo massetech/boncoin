@@ -116,6 +116,7 @@ defmodule Boncoin.Members do
     User
       |> filter_user_by_phone_number(phone_number)
       |> Repo.one()
+      |> Repo.preload(:announces)
   end
 
   def get_other_user_by_phone_number(phone_number)do
@@ -175,6 +176,10 @@ defmodule Boncoin.Members do
     user
     |> User.changeset(attrs)
     |> Repo.update()
+  end
+
+  def remove_viber_id(user) do
+    update_user(user, %{viber_id: nil, viber_active: false})
   end
 
   def link_viber_id_to_phone_number(viber_id, phone_number, user_name, language) do

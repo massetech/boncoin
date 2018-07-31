@@ -18,6 +18,7 @@ defmodule Boncoin.CustomModules.BotMessages do
   def treat_msg("announce_accepted", user, announce, link) do {nil, tell_offer_online(user.language, user.nickname, announce.title, LayoutView.format_date(announce.validity_date), link)} end
   def treat_msg("announce_moved", user, announce, link) do {nil, tell_offer_moved(user.language, user.nickname, announce.title, LayoutView.format_date(announce.validity_date), link)} end
   def treat_msg("announce_refused", user, announce) do {nil, tell_offer_refused(user.language, user.nickname, announce.title, announce.cause)} end
+  def treat_msg("quit_viber", db_user) do {nil, tell_viber_quitted(db_user.language, db_user.nickname)} end
 
   # --------- MESSAGES TO USER -------------------------------------------------------------------
 
@@ -75,7 +76,7 @@ defmodule Boncoin.CustomModules.BotMessages do
 
   defp confirm_new_phone_number_updated(language, nickname) do
     case language do
-      _ -> "(#{language})Perfect #{nickname}, your viber account is connected to this new phone number now and your announces were moved."
+      _ -> "(#{language})Perfect #{nickname}, your viber account is now connected to this phone number."
     end
   end
 
@@ -118,6 +119,12 @@ defmodule Boncoin.CustomModules.BotMessages do
   defp tell_offer_refused(language, nickname, title, cause) do
     case language do
       _ -> "(#{language})Hi #{nickname}, we are sorry your offer #{title} was refused because #{cause}. You can create a new one on https://pawchaungkaung.com"
+    end
+  end
+
+  defp tell_viber_quitted(language, nickname) do
+    case language do
+      _ -> "(#{language})Hi #{nickname}, we confirm we unlinked your Viber account. You can renew it at any time. Bye !\nSee you soon on https://pawchaungkaung.com"
     end
   end
 

@@ -1,0 +1,35 @@
+%nav{aria-label: "breadcrumb"}
+  %ol.breadcrumb
+    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
+    %li.breadcrumb-item.active{aria-current: "page"}= "Familys"
+
+.table-responsive
+  %table.table.table-hover
+    %caption= "Familys"
+    %thead
+      %tr
+        %th= "ID"
+        %th= "Title EN"
+        %th= "Title MY"
+        %th= "Icon"
+        %th= "Active"
+        %th= "Nb sellers"
+        %th= "Nb visitors / day"
+        %th= "Nb offers"
+        %th= "Actions"
+    %tbody
+      - for family <- @familys do
+        %tr
+          %td= family.id
+          %td= family.title_en
+          %td= family.title_my
+          %td
+            %p.fa{class: "fa-#{family.icon}"}
+          %td= LayoutView.icon_active(family.active)
+          %td= "sellers"
+          %td= "visitors"
+          %td= "offers"
+          %td
+            = link "New Family", to: family_path(@conn, :new), class: "btn btn-outline-info btn-sm"
+            = link "Edit", to: family_path(@conn, :edit, family), class: "btn btn-outline-primary btn-sm"
+            = link "Delete", to: family_path(@conn, :delete, family), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

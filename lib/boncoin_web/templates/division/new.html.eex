@@ -1,5 +1,3 @@
-<h2>New Division</h2>
+
 
 <%= render "form.html", Map.put(assigns, :action, division_path(@conn, :create)) %>
-
-<span><%= link "Back", to: division_path(@conn, :index) %></span>

@@ -1,0 +1,50 @@
+%nav{aria-label: "breadcrumb"}
+  %ol.breadcrumb
+    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
+    %li.breadcrumb-item= link "Townships", to: township_path(@conn, :index)
+    %li.breadcrumb-item.active{aria-current: "page"}= "New township"
+
+- form_for @changeset, @action, fn f ->
+  - if @changeset.action do
+    .alert.alert-danger
+      %p= "Oops, something went wrong! Please check the errors below."
+
+  .row
+    .col-xs-12.col-sm-6.offset-sm-3
+      .card
+        .card-body
+          .form-group
+            .input-group
+              .input-group-prepend
+                = label f, :division_id, class: "input-group-text"
+              %select.custom-select{id: "township_division_id"}
+                - for division <- @conn.assigns.select_menus.divisions do
+                  %option{value: "#{division.id}"}= division.title_en
+
+          .form-group
+            .input-group
+              = text_input f, :title_en, class: "form-control", autocomplete: "nope", placeholder: gettext("title EN")
+            = error_tag f, :title_en
+
+          .form-group
+            .input-group
+              = text_input f, :title_my, class: "form-control", placeholder: gettext("title MY")
+            = error_tag f, :title_my
+
+          .form-group
+            .input-group
+              = text_input f, :latitude, class: "form-control", autocomplete: "nope", placeholder: gettext("latitude")
+            = error_tag f, :latitude
+
+          .form-group
+            .input-group
+              = text_input f, :longitude, class: "form-control", placeholder: gettext("longitude")
+            = error_tag f, :longitude
+
+          .form-group
+            %span.switch.switch-sm
+              = checkbox f, :active, class: "switch", id: "active"
+              = label f, :active, class: "control-label", for: "active"
+
+          .form-group
+            = submit "Submit", class: "btn btn-primary"

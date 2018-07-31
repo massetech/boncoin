@@ -14,11 +14,13 @@
   %body.bg-light.side-bar-wrapper
     = render "_sidebar.html", assigns
     - if @conn.request_path =~ "/admin/" == false do
-      .add.add-left.col-lg-2.d-none.d-lg-block
-      .add.add-right.col-lg-2.d-none.d-lg-block
+      .add.add-full.col-12.d-none.d-lg-block.p-0
+        = img_tag(static_path(@conn, "/images/backgrounds/myanmar_#{@conn.assigns.background_id}.jpg"))
+      .add.add-left.col-lg-2.d-none.p-0
+      .add.add-right.col-lg-2.d-none.p-0
       .content.container-fluid.px-0
         .row.no-gutters.align-items-center
-          .col-xs-12.col-lg-8.offset-lg-2.text-center.full-height.d-flex.flex.flex-column
+          .main-wrapper.col-xs-12.col-lg-8.offset-lg-2.text-center.full-height.d-flex.flex.flex-column
             %header.header
               = render "header.html", assigns
             %main.container-fluid.flex-grow.my-4{role: "main", id: "main"}

@@ -1,0 +1,36 @@
+%nav{aria-label: "breadcrumb"}
+  %ol.breadcrumb
+    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
+    %li.breadcrumb-item.active{aria-current: "page"}= "Divisions"
+
+.table-responsive
+  %table.table.table-hover
+    %caption= "Divisions"
+    %thead
+      %tr
+        %th= "ID"
+        %th= "Title EN"
+        %th= "Title MY"
+        %th= "Active"
+        %th= "Latitude"
+        %th= "Longitude"
+        %th= "Nb sellers"
+        %th= "Nb visitors / day"
+        %th= "Nb offers"
+        %th= "Actions"
+    %tbody
+      - for division <- @divisions do
+        %tr
+          %td= division.id
+          %td= division.title_en
+          %td= division.title_my
+          %td= LayoutView.icon_active(division.active)
+          %td= division.latitute
+          %td= division.longitude
+          %td= "sellers"
+          %td= "visitors"
+          %td= "offers"
+          %td
+            = link "New Division", to: division_path(@conn, :new), class: "btn btn-outline-info btn-sm"
+            = link "Edit", to: division_path(@conn, :edit, division), class: "btn btn-outline-primary btn-sm"
+            = link "Delete", to: division_path(@conn, :delete, division), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

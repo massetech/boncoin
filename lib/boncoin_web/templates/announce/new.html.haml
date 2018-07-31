@@ -1,7 +1,10 @@
 .card.mb-4.info
   .card-body.text-left
-    %p= "Please note that your are acting on your own and that the website can’t hold any responsability on the transaction you may have with people who contact you. Your announce will be validated by our team and can be refused if we decide to."
-    %p.m-0= "For more details please read our terms and conditions."
+    %p= gettext "Please note that your are acting on your own and that the website can’t hold any responsability on the transaction you may have with people who contact you. Your announce will be validated by our team and can be refused if we decide so."
+    %p.m-0
+      = gettext "For more details please read our"
+      - link to: main_path(@conn, :conditions), target: "_blank" do
+        %span.text-primary.font-weight-bold= gettext "terms and conditions."
 
 
 = render "form.html", Map.put(assigns, :action, announce_path(@conn, :create))

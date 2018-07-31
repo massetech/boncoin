@@ -1,12 +1,12 @@
 /* ------------------------------ LAYOUT  ------------------------------ */
+.main-wrapper{background-color: white;}
 .full-height {min-height: 100vh;}
 .flex-grow {flex: 1;}
-img {width: 100%;border-radius: 10px;}
+img {width: 100%;}
 /* ------------------------------ TYPOGRAPHY  ------------------------------ */
 a:hover, button:hover, i:hover {cursor: pointer;text-decoration: none;box-shadow: none;}
 a {color: inherit;}
 .viber-text{font-family: Helvetica-Bold;color: $viber-color;}
-// p {word-break: break-all;}
 // @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 /* ------------------------------ LOGO  ------------------------------ */
 span.logo {
@@ -27,6 +27,11 @@ i {font-size: 20px!important;}
 /* ------------------------------ CONDITIONS  ------------------------------ */
 #conditions, .conditions{
   i {font-size: 30px!important;}
+  img.icon {width: 30px !important;}
+}
+/* ------------------------------ ADDS @ BACKGROUNDS  ------------------------------ */
+.add{
+  img {font-size: 30px!important;}
 }
 /* ------------------------------ SEARCHBAR  ------------------------------ */
 #searchBar{
@@ -120,9 +125,10 @@ div > i, .btn > i:not(.btn-icon) {
     z-index: 99999;
 }
 /* ------------------------------ ADDS  ------------------------------ */
-.add {height: 100vh;z-index: -1;position: fixed;top:0;background-color: green;}
-.add-left {left: 0;}
-.add-right {right: 0;}
+.add {height: 100vh;position: fixed;top:0;}
+.add-full {width: 100vw;z-index: -2;}
+.add-left {left: 0;z-index: -1;}
+.add-right {right: 0;z-index: -1;}
 /* ------------------------------ CUSTO BOOSTRAP  ------------------------------ */
 .custo-form-selector{
   background-color: #e9ecef;
@@ -207,10 +213,8 @@ a[data-toggle="collapse"] {
   background: white;
   border: 3px solid $viber-color;
   border-radius: 5px;
-  font-family: Helvetica-Bold;
-  font-size: 20px;
   color: $viber-color;
-  text-align: center;
+  span{font-family: Helvetica-Bold;white-space: normal;font-size: 20px;}
   img {width: 40px;height: 40px;//margin: 0 1em;
   }
 }

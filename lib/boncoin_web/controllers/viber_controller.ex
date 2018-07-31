@@ -199,6 +199,9 @@ defmodule BoncoinWeb.ViberController do
           -> BotMessages.treat_msg("announce_refused", db_user, announce)
       end
 
+    # User is quitting Viber
+    tracking_data == "viber_removed" -> BotMessages.treat_msg("quit_viber", db_user)
+
     # We are waiting nothing (fallback)
     true ->
       IO.puts("Nothing to say to Viber")
@@ -214,18 +217,14 @@ defmodule BoncoinWeb.ViberController do
     # This loop can be used with or without user
     cond do
       other_user. viber_active == true -> BotMessages.treat_msg("viber_conflict_contact_us", language, user_name) # 2 Vibers for the same account : contact us
-      other_user.nb_active_announce > 0 -> BotMessages.treat_msg("wait_for_no_more_offers", language, user_name, other_user.nb_active_announce) # The new phone number has active offers : wait until there is no more
-      other_user.nb_active_announce == 0 && tracking_data == "link_phone" -> # The phone is not linked to viber and has no announce yet : use it to create new user
-        # New user creation
-        case Members.delete_user(other_user) do
-          {:ok, _} ->
-            case Members.create_user(%{phone: phone_number, viber_active: true, viber_id: viber_id, nickname: user_name, language: language}) do
-              {:created, user} -> {tracking_data, message} = BotMessages.treat_msg("new_phone_updated", user)
-              _ -> {tracking_data, message} = BotMessages.treat_msg("technical problem", language)
-            end
+      other_user.nb_announces > 0 -> BotMessages.treat_msg("wait_for_no_more_offers", language, user_name, other_user.nb_announces) # The new phone number has active offers : wait until there is no more
+      other_user.nb_announces == 0 && tracking_data == "link_phone" -> # The phone is not linked to viber and has no announce yet : use it to create new user
+        other_user = Members.get_user!(other_user.id)
+        case Members.update_user(other_user, %{viber_active: true, viber_id: viber_id, nickname: user_name, language: language}) do
+          {:ok, user} -> {tracking_data, message} = BotMessages.treat_msg("new_phone_updated", user)
           _ -> {tracking_data, message} = BotMessages.treat_msg("technical problem", language)
         end
-      other_user.nb_active_announce == 0 && tracking_data == "udate_phone" -> # The new phone is not linked to viber and has no announce yet : update the user phone number
+      other_user.nb_announces == 0 && tracking_data == "udate_phone" -> # The new phone is not linked to viber and has no announce yet : update the user phone number
         # Known user phone update
         case Members.delete_user(other_user) do
           {:ok, _} ->

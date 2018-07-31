@@ -126,7 +126,7 @@ defmodule Boncoin.Contents do
     Family.changeset(family, %{})
   end
 
-  # -------------------------------- CATERGORY ----------------------------------------
+  # -------------------------------- CATEGORY ----------------------------------------
   # QUERIES ------------------------------------------------------------------
   defp filter_categorys_active(query \\ Category) do
     from c in query,
@@ -147,6 +147,7 @@ defmodule Boncoin.Contents do
   """
   def list_categorys do
     Repo.all(Category)
+    |> Repo.preload([:family])
   end
 
   @doc """
@@ -251,6 +252,7 @@ defmodule Boncoin.Contents do
   """
   def list_townships do
     Repo.all(Township)
+    |> Repo.preload([:division])
   end
 
   @doc """
@@ -267,7 +269,9 @@ defmodule Boncoin.Contents do
       ** (Ecto.NoResultsError)
 
   """
-  def get_township!(id), do: Repo.get!(Township, id)
+  def get_township!(id) do
+    Repo.get!(Township, id)
+  end
 
   @doc """
   Creates a township.

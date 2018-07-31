@@ -1,0 +1,38 @@
+%nav{aria-label: "breadcrumb"}
+  %ol.breadcrumb
+    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
+    %li.breadcrumb-item.active{aria-current: "page"}= "Townships"
+
+.table-responsive
+  %table.table.table-hover
+    %caption= "Townships"
+    %thead
+      %tr
+        %th= "ID"
+        %th= "Township"
+        %th= "Title EN"
+        %th= "Title MY"
+        %th= "Active"
+        %th= "Latitude"
+        %th= "Longitude"
+        %th= "Nb sellers"
+        %th= "Nb visitors / day"
+        %th= "Nb offers"
+        %th= "Actions"
+    %tbody
+      - for township <- @townships do
+        %tr
+          %td= township.id
+          %td= township.division.title_en
+          %td= township.title_en
+          %td= township.title_my
+          %td= LayoutView.icon_active(township.active)
+          %td= township.latitute
+          %td= township.longitude
+          %td= "sellers"
+          %td= "visitors"
+          %td= "offers"
+          %td
+            = link "New Township", to: township_path(@conn, :new), class: "btn btn-outline-info btn-sm"
+            = link "Edit", to: township_path(@conn, :edit, township), class: "btn btn-outline-primary btn-sm"
+            = link "Delete", to: township_path(@conn, :delete, township), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

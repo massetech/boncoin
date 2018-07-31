@@ -1,5 +1,2 @@
-<h2>New Township</h2>
 
 <%= render "form.html", Map.put(assigns, :action, township_path(@conn, :create)) %>
-
-<span><%= link "Back", to: township_path(@conn, :index) %></span>
