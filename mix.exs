@@ -51,8 +51,7 @@ defmodule Boncoin.Mixfile do
       {:arc_ecto, git: "https://github.com/massetech/arc_ecto.git"},
       {:arc_gcs, "~> 0.0.8"},
       {:rabbitElixir, "~> 1.0.0"},
-      {:httpotion, "~> 3.1.0"}
-    ]
+      {:httpotion, "~> 3.1.0"}    ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
