@@ -25,10 +25,9 @@ exports.config = {
     watched: [
       "static", "css", "js", "vendor", "scss", "fonts",
       "node_modules/jquery-touchswipe/jquery.touchSwipe.min.js",
-      "node_modules/ekko-lightbox/dist/ekko-lightbox.min.js",
-      "node_modules/knayi-myscript/dist/knayi-myscript.min.js",
-      // "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-      // "node_modules/@fortawesome/fontawesome-free/js/all.min.js"
+      "node_modules/ekko-lightbox/dist/ekko-lightbox.min.js"
+      // "node_modules/myanmar_tools/index.js",
+      // "node_modules/knayi-myscript/dist/knayi-myscript.min.js"
     ],
     // Where to compile files to
     public: "../priv/static"
@@ -75,7 +74,7 @@ exports.config = {
       Popper: 'popper.js',
       touchswipe: "jquery-touchswipe",
       ekkoLightbox: "ekko-lightbox",
-      knayi: "knayi-myscript",
+      // knayi: "knayi-myscript", // ce truc ne compile pas avec Brunch !
       bootstrap: 'bootstrap' // require Bootstrap JavaScript globally too
     }
   }

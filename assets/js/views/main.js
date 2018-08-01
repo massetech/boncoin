@@ -1,3 +1,5 @@
+// import knayi from 'knayi-myscript'
+
 export default class MainView {
   mount() {
     // This will be executed when the document loads...
@@ -6,6 +8,8 @@ export default class MainView {
       // Assign global variable to support functions
       var global = (1,eval)('this')
       init_custom_actions()
+      // console.log(knayi.fontDetect('မဂၤလာပါ'))
+
     });
   }
 
@@ -218,16 +222,17 @@ export default class MainView {
       }
     })
 
-    $('#announce_title').on('change', function() {
-      var title = $(this).val()
-      if (knayi.fontDetect(title) == "zawgyi") {
-        console.log("zawgyi detected")
-        $('#announce_zawgyi').val('true')
-      } else {
-        console.log("unicode detected")
-        $('#announce_zawgyi').val('false')
-      }
-    })
+    // Blocked by the not building library
+    // $('#announce_title').on('change', function() {
+    //   var title = $(this).val()
+    //   if (knayi.fontDetect(title) == "zawgyi") {
+    //     console.log("zawgyi detected")
+    //     $('#announce_zawgyi').val('true')
+    //   } else {
+    //     console.log("unicode detected")
+    //     $('#announce_zawgyi').val('false')
+    //   }
+    // })
 
     $('#announce_price').on('change', function() {
       var price = $(this).val()

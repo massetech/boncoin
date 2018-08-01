@@ -1,8 +1,6 @@
 import "phoenix_html";
 // import socket from "./socket"
 import loadView from './views/loader';
-// import knayi from 'knayi-myscript'
-// import "swipe";
 
 function handleDOMContentLoaded() {
   const viewName = document.getElementsByTagName('body')[0].dataset.jsViewName;
