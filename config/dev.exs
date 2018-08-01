@@ -20,15 +20,17 @@ config :boncoin, Boncoin.Repo,
   pool_size: 10
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  client_id: System.get_env("GOOGLE_CLIENT_ID"),
-  client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
+  client_id: System.get_env("GOOGLE_AUTH_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_AUTH_CLIENT_SECRET2")
 
 config :boncoin, Boncoin.Auth.Guardian,
   secret_key: System.get_env("GUARDIAN_SECRET")
 
 config :arc,
   bucket: System.get_env("GOOGLE_CLOUD_BUCKET")
-
+config :goth, json: System.get_env("GCP_CREDENTIALS")
+# config :goth,
+#   json: "secrets/google_cloud_keyfile.json" |> Path.expand |> File.read!
 
 # Watch static and templates for browser reloading.
 config :boncoin, BoncoinWeb.Endpoint,

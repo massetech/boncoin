@@ -30,10 +30,6 @@ config :drab, BoncoinWeb.Endpoint,
 config :arc,
   storage: Arc.Storage.GCS
 
-
-config :goth,
-  json: "secrets/google_cloud_keyfile.json" |> Path.expand |> File.read!
-
 # Configures the endpoint
 config :boncoin, BoncoinWeb.Endpoint,
   render_errors: [view: BoncoinWeb.ErrorView, accepts: ~w(html json)],
