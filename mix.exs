@@ -17,7 +17,7 @@ defmodule Boncoin.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Boncoin.Application, []}
+      mod: {Boncoin.Application, []},
       extra_applications: [:logger, :runtime_tools, :timex, :httpotion, :exjsx, :parse_trans]
     ]
   end
