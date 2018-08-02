@@ -28,7 +28,9 @@ config :boncoin, Boncoin.Auth.Guardian,
 
 config :arc,
   bucket: System.get_env("GOOGLE_CLOUD_BUCKET")
-config :goth, json: {:system, "GCP_CREDENTIALS"}
+config :goth, config_module: GothConfigModuleDev
+
+# config :goth, json: {:system, "GCP_CREDENTIALS"}
 # config :goth,
 #   json: "secrets/google_cloud_keyfile.json" |> Path.expand |> File.read!
 
