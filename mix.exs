@@ -3,8 +3,8 @@ defmodule Boncoin.Mixfile do
 
   def project do
     [ app: :boncoin,
-      version: "0.0.1",
-      elixir: "~> 1.4",
+      version: "1.0.0",
+      elixir: "~> 1.6.4",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       start_permanent: Mix.env == :prod,
@@ -17,8 +17,8 @@ defmodule Boncoin.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Boncoin.Application, []},
-      extra_applications: [:logger, :runtime_tools, :timex, :httpotion]
+      mod: {Boncoin.Application, []}
+      # extra_applications: [:logger, :runtime_tools, :timex, :httpotion]
     ]
   end
 
@@ -44,14 +44,16 @@ defmodule Boncoin.Mixfile do
       {:timex, "~> 3.1"},
       {:poison, "~> 3.1"},
       {:cors_plug, "~> 1.5", only: :dev},
-      {:distillery, "~> 1.5", runtime: false},
+      # {:distillery, "~> 1.5", runtime: false},
       {:phoenix_haml, "~> 0.2"},
       {:drab, "~> 0.9.0"},
       {:arc, "~> 0.10.0"},
       {:arc_ecto, git: "https://github.com/massetech/arc_ecto.git"},
       {:arc_gcs, "~> 0.0.8"},
       {:rabbitElixir, "~> 1.0.0"},
-      {:httpotion, "~> 3.1.0"}    ]
+      {:httpotion, "~> 3.1.0"},
+      {:distillery, "~> 2.0.0-rc.4"}
+    ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
