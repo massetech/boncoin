@@ -25,7 +25,7 @@ config :boncoin, Boncoin.Auth.Guardian,
 config :arc,
   bucket: "${GOOGLE_CLOUD_BUCKET}"
 # config :goth, json: "${GCP_CREDENTIALS}"
-config :goth, json: {:system, "${GCP_CREDENTIALS}"}
+config :goth, json: {:system, '${GCP_CREDENTIALS}'}
 
 # Do not print debug messages in production
 config :logger, level: :info
