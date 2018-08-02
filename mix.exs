@@ -18,7 +18,7 @@ defmodule Boncoin.Mixfile do
   def application do
     [
       mod: {Boncoin.Application, []}
-      # extra_applications: [:logger, :runtime_tools, :timex, :httpotion]
+      extra_applications: [:logger, :runtime_tools, :timex, :httpotion, :exjsx, :parse_trans]
     ]
   end
 
