@@ -4,8 +4,11 @@ config :boncoin, BoncoinWeb.Endpoint,
   load_from_system_env: true,
   server: true, # Without this line, your app will not start the web server!
   secret_key_base: "${SECRET_KEY_BASE}",
-  url: [host: "${MY_HOSTNAME}", port: "${PORT}"],
-  check_origin: ["//*.gigalixirapp.com", "//*.pawchaungkaung.com", "//*.pawchaungkaung.asia"],
+  http: [port: "${PORT}"],
+  check_origin: false,
+  root: ".",
+  # url: [host: "${MY_HOSTNAME}", port: "${PORT}"],
+  # check_origin: ["//*.gigalixirapp.com", "//*.pawchaungkaung.com", "//*.pawchaungkaung.asia"],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 config :boncoin, Boncoin.Repo,
