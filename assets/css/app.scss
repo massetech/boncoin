@@ -1,11 +1,14 @@
-@import "toogle_switch";
 @import "variables";
-@import 'fontawesome';
-@import "solid";
-@import "regular";
-@import "v4-shims";
-@import "brands";
-
-@import "bootstrap";
+@import "toogle_switch";
+@import "~bootstrap/dist/css/bootstrap"; // tilde for the path to assets
+@import "~ekko-lightbox/dist/ekko-lightbox";
 @import "design";
-@import "ekko-lightbox";
+
+
+// @import "~@fortawesome/fontawesome-free/scss/fontawesome";
+// @import "~@fortawesome/fontawesome-free/scss/solid";
+// @import "~@fortawesome/fontawesome-free/scss/regular";
+// @import "~@fortawesome/fontawesome-free/scss/v4-shims";
+// @import "~@fortawesome/fontawesome-free/scss/brands";
+// @import "../vendor/bootstrap-select-1.13.0-beta/css/bootstrap-select.min";
+// @import "../vendor/slim/css/slim.min";

@@ -5,7 +5,7 @@
 img {width: 100%;}
 /* ------------------------------ TYPOGRAPHY  ------------------------------ */
 a:hover, button:hover, i:hover {cursor: pointer;text-decoration: none;box-shadow: none;}
-a {color: inherit;}
+// a {color: inherit;}
 .viber-text{font-family: Helvetica-Bold;color: $viber-color;}
 // @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 /* ------------------------------ LOGO  ------------------------------ */
@@ -196,7 +196,8 @@ a[data-toggle="collapse"] {
 .slim {
   border-radius: 1rem;
   border-style: dashed;
-  border-width: medium;
+  border-width: small;
+  height: 100%;
 }
 .slim-btn {
     filter: invert(100%);

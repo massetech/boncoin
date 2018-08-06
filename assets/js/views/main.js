@@ -1,14 +1,14 @@
-// import knayi from 'knayi-myscript'
+import knayi from 'knayi-myscript'
 
 export default class MainView {
   mount() {
     // This will be executed when the document loads...
     console.log('MainView mounted')
+    console.log(knayi.fontDetect('မဂၤလာပါ'))
     $(document).ready(function() {
       // Assign global variable to support functions
       var global = (1,eval)('this')
       init_custom_actions()
-      // console.log(knayi.fontDetect('မဂၤလာပါ'))
 
     });
   }
@@ -101,9 +101,9 @@ export default class MainView {
 
     // SLIDEBAR
     // Set up CustomScroller - http://manos.malihu.gr/jquery-custom-content-scroller/
-    $("#sidebar").mCustomScrollbar({
-      theme: "minimal"
-    });
+    // $("#sidebar").mCustomScrollbar({
+    //   theme: "minimal"
+    // });
     // Opens the slidebar
     $('#sidebarCollapse').on('click', function () {
         $('.collapse-level1').collapse('hide')

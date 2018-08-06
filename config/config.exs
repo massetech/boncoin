@@ -24,7 +24,8 @@ config :phoenix, :template_engines,
 
 # Configure Drab
 config :drab, BoncoinWeb.Endpoint,
-  otp_app: :boncoin
+  otp_app: :boncoin,
+  js_socket_constructor: "window.__socket" # Fix for Webpack
 
 # Configure ARC image uploader to Google cloud
 config :arc,
