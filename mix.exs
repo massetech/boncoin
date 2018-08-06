@@ -15,10 +15,11 @@ defmodule Boncoin.Mixfile do
   # Configuration for the OTP application.
   #
   # Type `mix help compile.app` for more information.
+  # :exjsx, :parse_trans
   def application do
     [
       mod: {Boncoin.Application, []},
-      extra_applications: [:logger, :runtime_tools, :timex, :httpotion] #, :httpotion, :exjsx, :parse_trans
+      extra_applications: [:logger, :runtime_tools, :timex, :httpotion]
     ]
   end
 
