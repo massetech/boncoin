@@ -135,7 +135,7 @@ export default class MainView {
     })
 
     // Manage conditions collapses
-    $('#conditions').on('show.bs.collapse', function (e) {
+    $('.collapse').on('show.bs.collapse', function (e) {
       $('.collapse').collapse('hide')
     })
 

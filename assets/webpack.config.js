@@ -28,26 +28,13 @@ var plugins = [
   // new webpack.ProvidePlugin({Tether: 'tether', Popper: 'popper.js'})
 ]
 
-// var optimization = {
-//   splitChunks: {
-//     cacheGroups: {
-//       styles: {
-//         name: 'styles',
-//         test: /\.css$/,
-//         chunks: 'all',
-//         enforce: true
-//       }
-//     }
-//   }
-// }
-
 if (production == true) {
-  plugins.push(
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {warnings: false},
-      output: {comments: false}
-    })
-  );
+  // plugins.push(
+  //   new webpack.optimize.UglifyJsPlugin({
+  //     compress: {warnings: false},
+  //     output: {comments: false}
+  //   })
+  // );
 } else {
   plugins.push(
     new webpack.EvalSourceMapDevToolPlugin()
@@ -70,8 +57,6 @@ var common = {
       },
       {
         test: /\.scss$/,
-        // use: ExtractTextPlugin.extract({
-          // fallback: 'style-loader',
           use: [
             MiniCssExtractPlugin.loader,
             {loader: 'css-loader'},
@@ -84,12 +69,8 @@ var common = {
                 }
               }
             },
-            {loader: 'sass-loader', options: {
-              // data: 'import "../css/variables.scss";'
-              }
-            }
+            {loader: 'sass-loader'}
           ]
-        // })
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -97,20 +78,12 @@ var common = {
       },
       {
         test: /\.(ttf|otf|eot|svg|woff2?)$/,
-        loader: "file-loader?name=/fonts/[name].[ext]",
-        // use: [{
-        //     loader: 'file-loader',
-        //     options: {
-        //         name: '[name].[ext]',
-        //         // outputPath: '/fonts'
-        //         outputPath: __dirname + "/../priv/static/fonts"
-        //     }
-        // }]
+        loader: "file-loader?name=/fonts/[name].[ext]"
       }
     ]
   },
   plugins: plugins,
-  // optimization: optimization
+  optimization: {minimize: true}
 };
 
 module.exports = [
@@ -122,7 +95,6 @@ module.exports = [
     output: {
       path: __dirname + "/../priv/static",
       filename: "js/app.js"
-      // publicPath: '/'
     },
     resolve: {
       modules: [

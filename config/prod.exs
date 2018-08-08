@@ -19,8 +19,8 @@ config :boncoin, Boncoin.Repo,
   pool_size: 1 # Free tier db only allows 1 connection
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  client_id: "${GOOGLE_CLIENT_ID}",
-  client_secret: "${GOOGLE_CLIENT_SECRET}"
+  client_id: "${GOOGLE_AUTH_CLIENT_ID}",
+  client_secret: "${GOOGLE_AUTH_CLIENT_SECRET}"
 
 config :boncoin, Boncoin.Auth.Guardian,
   secret_key: "${GUARDIAN_SECRET}"
