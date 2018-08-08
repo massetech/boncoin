@@ -25,7 +25,7 @@ config :boncoin, Boncoin.Repo,
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
   client_id: System.get_env("GOOGLE_AUTH_CLIENT_ID"),
-  client_secret: System.get_env("GOOGLE_AUTH_CLIENT_SECRET2")
+  client_secret: System.get_env("GOOGLE_AUTH_CLIENT_SECRET")
 
 config :boncoin, Boncoin.Auth.Guardian,
   secret_key: System.get_env("GUARDIAN_SECRET")

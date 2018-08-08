@@ -7,6 +7,7 @@
 *.ez*
 *.log*
 *.env*
+*.yaml*
 
 # Generated on crash by the VM
 erl_crash.dump

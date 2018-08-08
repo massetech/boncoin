@@ -89,7 +89,7 @@
             %span= "#{@conn.assigns.current_user.email}"
           - link to: main_path(@conn, :dashboard) do
             %li.slide-menu.text-dark.border-bottom.border-dark
-              %i.fa.fa-github
+              %i.fa.fa-code-branch
               %span= "#{Application.spec(:boncoin, :vsn)}"
         - else
           - link to: auth_path(@conn, :request, "google"), class: "" do
