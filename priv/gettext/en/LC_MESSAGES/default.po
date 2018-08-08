@@ -445,8 +445,8 @@ msgstr "These terms of use may be updated "
 #, elixir-format
 #: lib/boncoin_web/templates/public/welcome.html.haml:21
 msgid "Presenting website"
-msgstr "On this website, you can post and read free announces without any commission. "
-"Find everything you want in Myanmar."
+msgstr "On this website, you can sell and find second hand products without any commission. "
+"Find everything you want in Myanmar for cheaper price !"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:168

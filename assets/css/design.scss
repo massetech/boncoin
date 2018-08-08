@@ -6,13 +6,13 @@ img {width: 100%;}
 /* ------------------------------ TYPOGRAPHY  ------------------------------ */
 a:hover, button:hover, i:hover {cursor: pointer;text-decoration: none;box-shadow: none;}
 // a {color: inherit;}
-.viber-text{font-family: Helvetica-Bold;color: $viber-color;}
-// @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+.viber-text{font-family: "Helvetica-Bold"; color: $viber-color;}
+/* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 /* ------------------------------ LOGO  ------------------------------ */
 span.logo {
   display: flex; align-items: center; justify-content: center;
-  i {font-size: 25px !important;margin-right: 15px;}
-  font-size: 25px !important; font-weight: bold
+  i {font-size: 30px !important;margin-right: 15px;}
+  font-size: 30px !important; font-weight: bold
 }
 img.icon_viber{width: 50px;}
 /* ------------------------------ NAVBAR  ------------------------------ */
@@ -74,9 +74,10 @@ div > i, .btn > i:not(.btn-icon) {
   box-shadow: none;
   cursor: pointer;
   @extend .text-white;
-  @extend .bg-secondary;
+  // @extend .bg-secondary;
+  background-color: $secondary;
   a, span {@extend .text-white;}
-  a:hover {@extend .text-white;}
+  // a:hover {@extend .text-white;}
 }
 #sidebar .sidebar-header {
   height: 6em;
@@ -192,11 +193,11 @@ a[data-toggle="collapse"] {
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
 }
-/* ------------------------------ CUSTO SLIM (PHOTOS UPLOADER)  ------------------------------ */
+/* ------------------------------ CUSTO SLIM (PHOTO UPLOADER)  ------------------------------ */
 .slim {
   border-radius: 1rem;
   border-style: dashed;
-  border-width: small;
+  border-width: large;
   height: 100%;
 }
 .slim-btn {
@@ -208,7 +209,7 @@ a[data-toggle="collapse"] {
   font-size: 1em;
   p{color: $viber-color;}
   text-align: left;
-  img {width: 40px;height: 40px;}//margin: 0 1em;}
+  img {width: 40px;height: 40px;}
 }
 #btn-viber{
   background: white;
@@ -216,7 +217,7 @@ a[data-toggle="collapse"] {
   border-radius: 5px;
   color: $viber-color;
   span{font-family: Helvetica-Bold;white-space: normal;font-size: 20px;}
-  img {width: 40px;height: 40px;//margin: 0 1em;
+  img {width: 40px;height: 40px;
   }
 }
 #btn-viber:hover{

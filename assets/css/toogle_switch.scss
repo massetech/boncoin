@@ -7,7 +7,7 @@
 */
 
 //
-// IMPORTANT: These Sass variables are defined in Bootstrap's variables.scss. You should import that file first, then remove these.
+// IMPORTANT: These Sass variables are defined in Bootstraps variables.scss. You should import that file first, then remove these.
 //
 $font-size-base: 1rem;
 $font-size-lg: ($font-size-base * 1.25);
@@ -20,9 +20,9 @@ $custom-control-indicator-bg: #dee2e6;
 $custom-control-indicator-disabled-bg: #e9ecef;
 $custom-control-description-disabled-color: #868e96;
 $white: white;
-$theme-colors: (
-  'primary': #08d
-);
+// $theme-colors: (
+//   "primary": #08d
+// );
 
 //
 // These variables can be used to customize the switch component.
@@ -32,13 +32,13 @@ $switch-height-sm: calc(#{$input-height-sm} * .8) !default;
 $switch-height-lg: calc(#{$input-height-lg} * .8) !default;
 $switch-border-radius: $switch-height !default;
 $switch-bg: $custom-control-indicator-bg !default;
-$switch-checked-bg: map-get($theme-colors, 'primary') !default;
+$switch-checked-bg: map-get($theme-colors, "primary") !default;
 $switch-disabled-bg: $custom-control-indicator-disabled-bg !default;
 $switch-disabled-color: $custom-control-description-disabled-color !default;
 $switch-thumb-bg: $white !default;
 $switch-thumb-border-radius: 50% !default;
 $switch-thumb-padding: 2px !default;
-$switch-focus-box-shadow: 0 0 0 $input-btn-focus-width rgba(map-get($theme-colors, 'primary'), .25);
+$switch-focus-box-shadow: 0 0 0 $input-btn-focus-width rgba(map-get($theme-colors, "primary"), .25);
 $switch-transition: .2s all !default;
 
 .switch {
@@ -72,7 +72,7 @@ $switch-transition: .2s all !default;
 
     + label::before,
     + label::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;

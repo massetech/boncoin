@@ -1,1 +1,0 @@
-meaning_of_life = 42;

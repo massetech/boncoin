@@ -1,14 +1,14 @@
-@import "variables";
-@import "toogle_switch";
-@import "~bootstrap/dist/css/bootstrap"; // tilde for the path to assets
+@import "variables.scss";
+@import "toogle_switch.scss";
+@import "~bootstrap/scss/bootstrap.scss"; // tilde for the path to npm assets
 @import "~ekko-lightbox/dist/ekko-lightbox";
-@import "design";
+@import "design.scss";
 
+$fa-font-path : "~@fortawesome/fontawesome-free/webfonts";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/brands";
 
-// @import "~@fortawesome/fontawesome-free/scss/fontawesome";
-// @import "~@fortawesome/fontawesome-free/scss/solid";
-// @import "~@fortawesome/fontawesome-free/scss/regular";
-// @import "~@fortawesome/fontawesome-free/scss/v4-shims";
-// @import "~@fortawesome/fontawesome-free/scss/brands";
-// @import "../vendor/bootstrap-select-1.13.0-beta/css/bootstrap-select.min";
-// @import "../vendor/slim/css/slim.min";
+@import "../vendor/bootstrap-select-1.13.0-beta/css/bootstrap-select.min";
+@import "../vendor/slim/css/slim.min";
