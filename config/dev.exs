@@ -9,8 +9,6 @@ config :boncoin, BoncoinWeb.Endpoint,
   check_origin: false,
 
   watchers: [yarn: ["run", "watch", cd: Path.expand("../assets", __DIR__)]]
-  # watchers: [node: ["node_modules/webpack/bin/webpack.js", "--mode", "development", "--watch-stdin",
-  #   cd: Path.expand("../assets", __DIR__)]]
   # watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
   #                   cd: Path.expand("../assets", __DIR__)]]
 
@@ -32,10 +30,9 @@ config :boncoin, Boncoin.Auth.Guardian,
 
 config :arc,
   bucket: System.get_env("GOOGLE_CLOUD_BUCKET")
-# config :goth, json: "GCP_CREDENTIALS"
-config :goth, json: {:system, "GCP_CREDENTIALS"}
-# config :goth,
-#   json: "secrets/google_cloud_keyfile.json" |> Path.expand |> File.read!
+
+config :goth, json: "secrets/google_service.json" |> Path.expand |> File.read!
+# config :goth, json: {:system, "GCP_CREDENTIALS"}
 
 # Watch static and templates for browser reloading.
 config :boncoin, BoncoinWeb.Endpoint,
