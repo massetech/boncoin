@@ -3,12 +3,8 @@ import MainView from '../main'
 export default class View extends MainView {
   mount() {
     super.mount()
-    console.log('MainView mounted')
-    // init_player_data()
-    // init_slidebar_functions()
-    // init_action_btns()
-    // init_progress_bar()
-    // play_new_card()
+    console.log("Private view mounted")
+    init_functions()
   }
 
   unmount() {
@@ -17,27 +13,55 @@ export default class View extends MainView {
   }
 }
 
-// ------------- Initialization  -----------------------------------------------------------------
-// let init_player_data = () => {
-//   var data = JSON.parse(window.Gon.assets().json_data)
-//   window.everlearn = []
-//   window.everlearn.token = data.token
-//   window.everlearn.api_url = window.Gon.assets().api_url
-//   window.everlearn.nb_change = 0
-//   window.everlearn.updating = false
-//   window.everlearn.content = data.content
-//   window.everlearn.learning_mode = "question_or_answer"
-//   window.everlearn.classroom_index = 0 // Must be adapted when several classrooms
-//   window.everlearn.classroom_id = data.content.classrooms[0].id
-//   if (data.content.options.last_learning_mb_id == null) {
-//     window.everlearn.membership_id = data.content.classrooms[0].memberships[0].id
-//     // window.everlearn.membership_index = 0
-//   } else {
-//     window.everlearn.membership_id = data.content.options.last_learning_mb_id
+// ------------- INIT  -----------------------------------------------------------------
+let init_functions = () => {
+  // Ping Viber to check the bot connection
+    // $("#btn_test_viber").on('click', function() {
+    //   event.stopPropagation()
+    //   event.preventDefault()
+
+    })
+
+
+}
+
+// ------------- METHODS  -----------------------------------------------------------------
+
+// let call_everlearn_api = () => {
+//   var settings = {
+//     "async": true,
+//     "crossDomain": true,
+//     "url": window.everlearn.api_url,
+//     "method": "POST",
+//     "headers": {
+//       "Content-Type": "application/json",
+//       "Authorization": 'Bearer ' + window.everlearn.token,
+//       "Cache-Control": "no-cache",
+//     },
+//     "processData": false,
+//     "data": JSON.stringify(window.everlearn.content)
 //   }
-//   //data.content.classrooms[0].memberships[0].id
-//   update_membership_and_classroom(window.everlearn.classroom_id, window.everlearn.membership_id)
+//
+//   $.ajax(settings).done(function (response) {
+//     console.log("API called");
+//     window.everlearn.updating = true
+//     if (response.api_answer_data != undefined){
+//       update_user_data(response.api_answer_data)
+//       window.everlearn.updating = false
+//     }
+//   }).fail(function(data){
+//     window.everlearn.updating = false
+//     $("i.pb").removeClass("hide")
+//     $("i.ok, i.nok").addClass("hide")
+//     console.log(data)
+//   });
 // }
+
+// ------------- OLD STUFF  -----------------------------------------------------------------
+
+
+
+
 //
 // let update_user_data = (new_data) => {
 //   window.everlearn.nb_change = 0
@@ -337,32 +361,4 @@ export default class View extends MainView {
 //   $(`#mbs_menu_${membership.id}`).removeClass("hide")
 // }
 //
-// let call_everlearn_api = () => {
-//   var settings = {
-//     "async": true,
-//     "crossDomain": true,
-//     "url": window.everlearn.api_url,
-//     "method": "POST",
-//     "headers": {
-//       "Content-Type": "application/json",
-//       "Authorization": 'Bearer ' + window.everlearn.token,
-//       "Cache-Control": "no-cache",
-//     },
-//     "processData": false,
-//     "data": JSON.stringify(window.everlearn.content)
-//   }
 //
-//   $.ajax(settings).done(function (response) {
-//     console.log("API called");
-//     window.everlearn.updating = true
-//     if (response.api_answer_data != undefined){
-//       update_user_data(response.api_answer_data)
-//       window.everlearn.updating = false
-//     }
-//   }).fail(function(data){
-//     window.everlearn.updating = false
-//     $("i.pb").removeClass("hide")
-//     $("i.ok, i.nok").addClass("hide")
-//     console.log(data)
-//   });
-// }

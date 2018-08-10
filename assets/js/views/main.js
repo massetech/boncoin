@@ -4,7 +4,7 @@ export default class MainView {
   mount() {
     // This will be executed when the document loads...
     console.log('MainView mounted')
-    console.log(knayi.fontDetect('မဂၤလာပါ'))
+    // console.log(knayi.fontDetect('မဂၤလာပါ'))
     $(document).ready(function() {
       // Assign global variable to support functions
       var global = (1,eval)('this')
@@ -30,39 +30,7 @@ export default class MainView {
   global.validatePrice = (str) => {
       return /^([1-9]{1})([0-9]{1,9})?$/.test(str)
   }
-  global.reset_announce_form_field = () => {
-    // Triggered if a wrong phone number is processed to the form
-    console.log("wrong phone number : form reseted")
-    $('.collapsible_form').collapse('hide')
-    $('#announce_phone_number').val('').focus().removeClass("field-success")
-    $('#announce_email').val('')
-    $('#announce_price').val('')
-    $('#announce_user_id').val('')
-  }
-  global.validate_phone_number_pop_field = (user_id, nickname, email, password, viber, nb_announces) => {
-    // Good phone number is processed to the form and user has been found in database
-    console.log("Good phone number : form processed with pop")
-    $('#announce_phone_number').addClass("field-success")
-    $('.collapsible_form').collapse('show')
-    $('#announce_user_id').val(user_id)
-    $('#announce_nickname').val(nickname).focus()
-    $('#announce_email').val(email)
-    if (password == "") {$('#field-password').hide()}
-    else {$('#field-password').show()}
-    if (viber == "true") {
-      $('#field-viber').show()
-      $('#btn-viber').hide()
-      if (nb_announces > 0) {
-        $('#btn_unlink_number').attr('disabled','disabled')
-      }
-      else {
-        $('#btn_unlink_number').removeAttr('disabled')
-      }
-    } else {
-      $('#field-viber').hide()
-      $('#btn-viber').show()
-    }
-  }
+
   global.remove_viber_btn_after_unlink = () => {
     $('#field-viber').hide()
     $('#btn-viber').show()
@@ -188,6 +156,14 @@ export default class MainView {
       scrollToAnchor(`small_announce_${announce_id}`)
     })
 
+    // Click on number OK
+    $('#btn_check_number').on('click', function (e) {
+      event.preventDefault();
+      event.stopPropagation()
+      var phone_number = $("#announce_phone_number").val()
+      call_phone_api(phone_number, "submit_phone")
+    })
+
     // Boostrap 4 caroussel 1st elements active selection
     $('.carousel-inner').each(function(){
       $(this).children(":first").addClass('active');
@@ -223,16 +199,16 @@ export default class MainView {
     })
 
     // Blocked by the not building library
-    // $('#announce_title').on('change', function() {
-    //   var title = $(this).val()
-    //   if (knayi.fontDetect(title) == "zawgyi") {
-    //     console.log("zawgyi detected")
-    //     $('#announce_zawgyi').val('true')
-    //   } else {
-    //     console.log("unicode detected")
-    //     $('#announce_zawgyi').val('false')
-    //   }
-    // })
+    $('#announce_title').on('change', function() {
+      var title = $(this).val()
+      if (knayi.fontDetect(title) == "zawgyi") {
+        console.log("zawgyi detected")
+        $('#announce_zawgyi').val('true')
+      } else {
+        console.log("unicode detected")
+        $('#announce_zawgyi').val('false')
+      }
+    })
 
     $('#announce_price').on('change', function() {
       var price = $(this).val()
@@ -244,158 +220,68 @@ export default class MainView {
     })
   }
 
+  /* ------------- OFFERS FORM  --------------------------------------------------- */
 
-/* ------------- OLD RESSOURCES  --------------------------------------------------- */
+  // Empty form when the phone_number is not accepted
+  let reset_announce_form_field = () => {
+    // console.log("wrong phone number : form reseted")
+    $('.collapsible_form').collapse('hide')
+    $('#announce_phone_number').val('').focus().removeClass("field-success").addClass("field-danger")
+    $('#announce_user_id').val('')
+    $('#announce_nickname').val('')
+    $('#announce_email').val('')
+  }
+  // Populate form when the phone_number is accepted
+  let validate_phone_number_pop_field = (user_id, nickname, email, viber, nb_announces) => {
+    // console.log("Good phone number : form processed with pop")
+    $('#announce_phone_number').removeClass("field-danger").addClass("field-success")
+    $('#announce_user_id').val(user_id)
+    $('#announce_nickname').val(nickname).focus()
+    $('#announce_email').val(email)
+    // if (password == "") {$('#field-password').hide()}
+    // else {$('#field-password').show()}
+    if (viber == "true") {
+      $('#field-viber').show()
+      $('#btn-viber').hide()
+      if (nb_announces > 0) {
+        $('#btn_unlink_number').attr('disabled','disabled')
+      }
+      else {
+        $('#btn_unlink_number').removeAttr('disabled')
+      }
+    } else {
+      $('#field-viber').hide()
+      $('#btn-viber').show()
+    }
+    $('.collapsible_form').collapse('show')
+  }
 
-// let init_navigation = () => {
-//   $('select').material_select()
-//   $('.empty_fields').click(function(){
-//     $('#search_form').clear().submit()
-//   })
-// }
-//
-// let init_slidebars = () => {
-//   $('#btn_slidebar_left').sideNav({
-//       menuWidth: 300, // Default is 300
-//       edge: 'left', // Choose the horizontal origin
-//       closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
-//       draggable: true // Choose whether you can drag to open on touch screens
-//     }
-//   )
-//   $('#btn_slidebar_right').sideNav({
-//       menuWidth: 300, // Default is 300
-//       edge: 'right', // Choose the horizontal origin
-//       closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
-//       draggable: true // Choose whether you can drag to open on touch screens
-//     }
-//   )
-//   console.log("Sidebars mounted")
-// }
-// let destroy_slidebars= () => {
-//   $('#btn_slidebar_left').sideNav('destroy')
-//   $('#btn_slidebar_right').sideNav('destroy')
-//   console.log("Sidebars destroyed")
-// }
-//
-// let init_toast= () => {
-//   $(document).on('click', '#toast-container .toast', function() {
-//     $(this).fadeOut(function(){
-//       // hide the toast bu dont remove it since Materialize will do it later
-//       // See in fhash function
-//     })
-//   })
-// }
-//
-// let init_dropdown = () => {
-//   $(".dropdown-button").dropdown(
-//     { hover: true }
-//   );
-// }
-//
-// let init_flash = () => {
-//   $('.flash_msg').hide()
-//   $('.flash_msg').on('touchstart click', function() {
-//     $(this).fadeOut( "slow", function() {
-//       // console.log("clicked")
-//     });
-//   });
-//   setTimeout(function(){
-//     $('.flash_msg').fadeIn(1000)
-//     console.log("Flash fired In");
-//   }, 1000);
-//   setTimeout(function(){
-//     $('.flash_msg').fadeOut(800)
-//     //console.log("Flash fired Out");
-//   }, 5000)
-//   // console.log("Flash fired");
-// }
-//
-// let init_mobile_chrome_vh_fix = () => {
-//   var vhFix = new VHChromeFix([
-//     {
-//       selector: '.player',
-//       vh: 100
-//     },
-//     {
-//       selector: '.Foxes',
-//       vh: 50
-//     }
-//   ]);
-// }
-
-
-// global.choose_random = (list) => {
-//   return list[Math.floor(Math.random()*list.length)]
-// }
-//
-// // Clear search fields
-// jQuery.fn.clear = function(){
-//     var $form = $(this)
-//     $form.find('input:text, input:password, input:file, textarea').val('')
-//     $form.find('select option:selected').removeAttr('selected')
-//     $form.find('input:checkbox, input:radio').removeAttr('checked')
-//     return this
-// };
-//
-// global.update_progress_bar = (bar_id, cards_list) => {
-//   var total = cards_list.length
-//   var level1_share = cards_list.filter(card => card.status == 1).length / total * 100
-//   var level2_share = cards_list.filter(card => card.status == 2).length / total * 100
-//   var level3_share = cards_list.filter(card => card.status == 3).length / total * 100
-//   var level0_share = 100 - level1_share - level2_share - level3_share
-//   // console.log(total)
-//   // console.log([level0_share, level1_share, level2_share, level3_share])
-//   // console.log("level0_share : " + level0_share + ", level1_share : " + level1_share + ", level2_share : " + level2_share)
-//   // console.log(bar_id)
-//   $(`#${bar_id}`).find('.level0').css('width', level0_share + '%')
-//   $(`#${bar_id}`).find('.level1').css('width', level1_share + '%')
-//   $(`#${bar_id}`).find('.level2').css('width', level2_share + '%')
-//   $(`#${bar_id}`).find('.level3').css('width', level3_share + '%')
-//   // The bar is ordered : next div is the previous level...
-//   // `#${bar_id} > .progress-item`
-//   $(`#${bar_id} > .progress-item`).each(function(){
-//     if ($(this).next(".progress-item").width() > 0) {
-//       $(this).removeClass("right_corner")
-//     } else {
-//       $(this).addClass("right_corner")
-//     }
-//     if ($(this).prev(".progress-item").width() > 0) {
-//       $(this).removeClass("left_corner")
-//     } else {
-//       $(this).addClass("left_corner")
-//     }
-//   });
-// }
-//
-
-// $('.btn_get_number').on('click', function() {
-//   console.log(this.id)
-//   this.addClass("d-none")
-// })
-// $('.link_big_announce').on('click', function() {
-//   // this.
-// })
-
-// $('#announce_phone_number').on('change', function() {
-//   var number = $(this).val()
-//   if (validateMyanmarMobileNumber(number) == false) {
-//     console.log("wrong phone number")
-//     $(this).val('').focus().removeClass("field-success")
-//     $('.collapsible_form').collapse('hide')
-//   } else {
-//     $(this).addClass("field-success")
-//     $('.collapsible_form').collapse('show')
-//   }
-// })
-//
-// $('#btn_check_number').on('click', function() {
-//   var number = $('#announce_phone_number').val()
-//   if (validateMyanmarMobileNumber(number) == false) {
-//     console.log("wrong phone number")
-//     $('#announce_phone_number').val('').focus().removeClass("field-success")
-//     $('.collapsible_form').collapse('hide')
-//   } else {
-//     $('#announce_phone_number').addClass("field-success")
-//     $('.collapsible_form').collapse('show')
-//   }
-// })
+  let call_phone_api = (phone_number, method) => {
+    var token = $('#config').attr('data-phone')
+    fetch("/api/phone", {
+      headers: {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "Authorization": 'Bearer ' + token,
+      },
+      method: "POST",
+      body: JSON.stringify({phone_number: phone_number, method: method})
+    })
+    .then(function(response) {
+      if (response.status !== 200) {
+        console.log('There was on API problem. Status Code: ' + response.status);
+        return;
+      }
+      // Examine the text in the response
+      response.json().then(function(data) {
+        if ('data' in data) {
+          validate_phone_number_pop_field(data.user_id, data.nickname, data.email, data.viber, data.nb_announces)
+        } else {
+          reset_announce_form_field()
+        }
+      });
+    })
+    .catch(function(err) {
+      console.log('Fetch Error :-S', err);
+    })
+  }

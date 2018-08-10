@@ -12,6 +12,7 @@ defmodule BoncoinWeb.Router do
     plug Boncoin.Plug.Locale
     plug Boncoin.Plug.SearchParams
     plug Boncoin.Plug.LoadAdds
+    plug Boncoin.Plug.ApiToken
   end
 
   pipeline :auth do
@@ -23,23 +24,31 @@ defmodule BoncoinWeb.Router do
     plug Guardian.Plug.EnsureAuthenticated, claims: %{"typ" => "user-access"}
   end
 
-  # pipeline :admin_required do
-  #   plug Boncoin.Plugs.RequireAdmin
-  # end
+  pipeline :admin_required do
+    plug Boncoin.Plugs.RequireAdmin
+  end
 
-  pipeline :api do
+  pipeline :api_viber do
     plug :accepts, ["json"]
     plug Boncoin.Viber.CurrentUser
-    # plug Boncoin.Plug.CheckInput
-    # plug Boncoin.Auth.Pipeline
-    # plug Boncoin.Auth.CurrentUser
+  end
+
+  pipeline :api_internal do
+    plug :accepts, ["json"]
+    plug Boncoin.Auth.Pipeline
+    plug Boncoin.Plug.CheckInput
     # plug Guardian.Plug.EnsureAuthenticated, claims: %{"typ" => "user-access"}
   end
 
   # ---------------  SCOPES ----------------------------------
   scope "/api", BoncoinWeb do
-    pipe_through :api
+    pipe_through :api_viber
     post "/viber", ViberController, :callback
+  end
+
+  scope "/api", BoncoinWeb do
+    pipe_through :api_internal
+    post "/phone", UserController, :check_phone
   end
 
   scope "/", BoncoinWeb do
@@ -53,7 +62,7 @@ defmodule BoncoinWeb.Router do
   end
 
   scope "/admin", BoncoinWeb do
-    pipe_through [:browser, :auth, :login_required]
+    pipe_through [:browser, :auth, :login_required, :admin_required]
     get "/dashboard", MainController, :dashboard
     resources "/users", UserController
     resources "/familys", FamilyController

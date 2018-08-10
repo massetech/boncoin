@@ -16,7 +16,7 @@ defmodule BoncoinWeb.ViberController do
     }
     ViberApi.post("set_webhook", params)
     conn
-      |> redirect(to: root_path(conn, :welcome))
+      |> redirect(to: main_path(conn, :dashboard))
   end
 
   # Disconnect of Webhook
@@ -24,7 +24,7 @@ defmodule BoncoinWeb.ViberController do
     IO.puts("Disconnect from Viber Webhook")
     ViberApi.post("set_webhook", %{url: ""})
     conn
-      |> redirect(to: root_path(conn, :welcome))
+      |> redirect(to: main_path(conn, :dashboard))
   end
 
   # ---------------------------- CALLBACKS -------------------------------------
@@ -106,6 +106,7 @@ defmodule BoncoinWeb.ViberController do
   end
 
   # ---------------------------- FUNCTIONS -------------------------------------
+
   # Send datas to viber API
   def send_viber_message(viber_id, tracking_data, message) do
     data = %{

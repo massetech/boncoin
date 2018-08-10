@@ -1,6 +1,8 @@
 defmodule BoncoinWeb.LayoutView do
   use BoncoinWeb, :view
   alias BoncoinWeb.LayoutView
+  import PhoenixGon.View
+  alias Boncoin.Members
 
   # def switch_locale_path(conn, locale, language) do
   #   # "<a href=\"#{page_path(conn, :index, locale: :en)}\">#{language}</a>" |> raw
@@ -8,6 +10,10 @@ defmodule BoncoinWeb.LayoutView do
   #   # "<a href=\"#{page_path(conn, :index, locale: :en)}\">#{language}</a>" |> raw
   #   "<a href=\"?locale=#{locale}\">#{language}</a>" |> raw
   # end
+
+  def check_admin(user) do
+    if Members.admin_user?(user), do: true, else: false
+  end
 
   def icon_active(status) do
     case status do
@@ -60,6 +66,36 @@ defmodule BoncoinWeb.LayoutView do
         Map.fetch!(map, String.to_atom("#{key}_my"))
         |> Rabbit.uni2zg()
     end
+  end
+
+  @doc """
+  Generates name for the JavaScript view we want to use
+  in this combination of view/template.
+  """
+  def js_view_name(conn, view_template) do
+    [view_name(conn), template_name(view_template)]
+      |> Enum.reverse
+      |> List.insert_at(0, "view")
+      |> Enum.map(&String.capitalize/1)
+      |> Enum.reverse
+      |> Enum.join("")
+  end
+
+  # Takes the resource name of the view module and removes the
+  # the ending *_view* string.
+  defp view_name(conn) do
+    conn
+      |> view_module
+      |> Phoenix.Naming.resource_name
+      |> String.replace("_view", "")
+  end
+
+  # Removes the extion from the template and reutrns
+  # just the name.
+  defp template_name(template) when is_binary(template) do
+    template
+      |> String.split(".")
+      |> Enum.at(0)
   end
 
 end

@@ -1,8 +1,9 @@
 import MainView    from './main';
-// import PublicPlayerView from './public/player';
+// import PublicDashboardView from './public/dashboard';
+
 
 const views = {
-  // PublicPlayerView
+  // PublicDashboardView
 };
 
 export default function loadView(viewName) {

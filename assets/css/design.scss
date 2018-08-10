@@ -14,7 +14,7 @@ span.logo {
   i {font-size: 30px !important;margin-right: 15px;}
   font-size: 30px !important; font-weight: bold
 }
-img.icon_viber{width: 50px;}
+img.icon_viber{width: 50px;height: 50px;}
 /* ------------------------------ NAVBAR  ------------------------------ */
 .nav-row{height: 3em;}
 th, td {font-size: 12px; vertical-align: middle !important; padding: 0.5rem 0 !important;}
@@ -24,6 +24,12 @@ caption {caption-side: top;}
 .card.admin {max-width: 1024px;}
 img.flag-small {border-radius: 100px;width: 20px;}
 i {font-size: 20px!important;}
+.card-footer{position: relative;}
+.viber-box{
+  position: absolute;bottom: 0;height: 100%;
+  .icon_viber{width: 30px;height: 30px;}
+  .round{width: 25px;height: 25px;border-radius: 100px;}
+}
 /* ------------------------------ CONDITIONS  ------------------------------ */
 #conditions, .conditions{
   i {font-size: 30px!important;}
@@ -138,6 +144,10 @@ div > i, .btn > i:not(.btn-icon) {
 .field-success {
   font-weight: bold;
   @extend .text-success;
+}
+.field-danger {
+  font-weight: bold;
+  @extend .text-danger;
 }
 // move the triangle, that usually sits next to the text, to the right part of the sidebar
 a[data-toggle="collapse"] {

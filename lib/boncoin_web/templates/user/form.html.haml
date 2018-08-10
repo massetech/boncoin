@@ -3,14 +3,14 @@
   = hidden_input f, :language, value: "en"
 
   .row
-    .col-xs-12.col-sm-6
-      .form-group
-        .input-group
-          = text_input f, :email, class: "form-control", type: "email", autocomplete: "nope", placeholder: gettext("Email (Gmail)")
-        = error_tag f, :email
-      .form-group
-        .input-group
-          = text_input f, :phone_number, class: "form-control", autocomplete: "nope", placeholder: gettext("Phone number")
-        = error_tag f, :phone
-      .form-group
-        = submit gettext("Create admin user"), class: "btn btn-success"
+    .col-xs-12.col-sm-6.offset-sm-3
+      .card
+        .card-body
+          .form-group
+            .input-group
+              = text_input f, :email, class: "form-control", type: "email", autocomplete: "nope", placeholder: gettext("Email (Gmail)")
+          .form-group
+            .input-group
+              = text_input f, :phone_number, class: "form-control", autocomplete: "nope", placeholder: gettext("Phone number")
+          .form-group
+            = submit gettext("Create admin user"), class: "btn btn-primary"

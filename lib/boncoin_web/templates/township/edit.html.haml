@@ -1,0 +1,6 @@
+%nav{aria-label: "breadcrumb"}
+  %ol.breadcrumb
+    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
+    %li.breadcrumb-item= link "Townships", to: township_path(@conn, :index)
+    %li.breadcrumb-item.active{aria-current: "page"}= "Edit township"
+= render "form.html", Map.put(assigns, :action, township_path(@conn, :update, @township))

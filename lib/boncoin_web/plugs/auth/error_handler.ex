@@ -8,7 +8,7 @@ defmodule Boncoin.Auth.ErrorHandler do
       "json" ->
         conn
           |> put_status(401)
-          |> render(EverlearnWeb.ErrorView, "401.json")
+          |> render(BoncoinWeb.ErrorView, "401.json")
       "html" ->
         conn
           |> put_flash(:error, "You must be logged in to access that part.")

@@ -1,2 +1,0 @@
-
-<%= render "form.html", Map.put(assigns, :action, division_path(@conn, :update, @division)) %>

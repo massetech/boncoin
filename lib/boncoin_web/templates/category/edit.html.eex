@@ -1,3 +1,0 @@
-
-
-<%= render "form.html", Map.put(assigns, :action, category_path(@conn, :update, @category)) %>

@@ -1,0 +1,6 @@
+%nav{aria-label: "breadcrumb"}
+  %ol.breadcrumb
+    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
+    %li.breadcrumb-item= link "Divisions", to: division_path(@conn, :index)
+    %li.breadcrumb-item.active{aria-current: "page"}= "Edit division"
+= render "form.html", Map.put(assigns, :action, division_path(@conn, :update, @division))

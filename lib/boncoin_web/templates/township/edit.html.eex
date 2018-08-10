@@ -1,2 +1,0 @@
-
-<%= render "form.html", Map.put(assigns, :action, township_path(@conn, :update, @township)) %>

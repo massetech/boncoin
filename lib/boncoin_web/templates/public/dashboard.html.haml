@@ -66,15 +66,26 @@
       .card-body
         .row
           .col-xs-12.col-sm-6
-            %li= "viber status"
+
+
+
             %li= "nb viber msg / day"
-            = link "connect Viber", to: viber_path(@conn, :connect)
-            = link "disconnect Viber", to: viber_path(@conn, :disconnect)
+
+
           .col-xs-12.col-sm-6
             %li= "nb picture in db"
             %li= "nb offers in db"
       .card-footer
-        = link "Switch viber", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
+        .viber-box.d-flex.justify-content-start.align-items-center
+          = img_tag static_path(@conn, "/images/viber_icon.png"), class: "icon_viber"
+          - if @conn.assigns.viber_status == "online" do
+            .round.bg-success
+          - else
+            .round.bg-danger
+        - if @conn.assigns.viber_status == "online" do
+          = link "disconnect Viber", to: viber_path(@conn, :disconnect), class: "btn btn-danger btn-small"
+        - else
+          = link "connect Viber", to: viber_path(@conn, :connect), class: "btn btn-success btn-small"
         = link "Download logs", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
         = link "Download db", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
 

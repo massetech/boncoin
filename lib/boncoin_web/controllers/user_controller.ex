@@ -1,12 +1,22 @@
 defmodule BoncoinWeb.UserController do
   use BoncoinWeb, :controller
-
   alias Boncoin.Members
   alias Boncoin.Members.User
 
   def index(conn, _params) do
     users = Members.list_users()
     render(conn, "index.html", users: users)
+  end
+
+  def check_phone(conn, %{"method" => method, "phone_number" => phone_number}) do
+    answer = Members.read_phone_details(phone_number)
+    case answer do
+      {:ok, user} ->
+        data = %{user_id: user.id, user_nickname: user.nickname, email: user.email, viber_active: user.viber_active, nb_announces: Kernel.length(user.announces)}
+        render(conn, "phone_ok.json", data: data)
+      {:error, msg} -> render(conn, "phone_nok.json", msg: msg)
+    end
+
   end
 
   def new(conn, _params) do
@@ -19,7 +29,7 @@ defmodule BoncoinWeb.UserController do
       {:ok, user} ->
         conn
         |> put_flash(:info, "User created successfully.")
-        |> redirect(to: user_path(conn, :show, user))
+        |> redirect(to: user_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end

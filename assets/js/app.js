@@ -15,6 +15,7 @@ window.__socket = require("phoenix").Socket;    // Fix for webpack with drab
 
 function handleDOMContentLoaded() {
   const viewName = document.getElementsByTagName('body')[0].dataset.jsViewName;
+  // console.log(viewName)
   const ViewClass = loadView(viewName);
   const view = new ViewClass();
   view.mount();

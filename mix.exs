@@ -3,7 +3,7 @@ defmodule Boncoin.Mixfile do
 
   def project do
     [ app: :boncoin,
-      version: "1.0.0",
+      version: "1.1.0",
       elixir: "~> 1.6.4",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
@@ -52,7 +52,8 @@ defmodule Boncoin.Mixfile do
       {:arc_gcs, "~> 0.0.8"},
       {:rabbitElixir, "~> 1.0.0"},
       {:httpotion, "~> 3.1.0"},
-      {:distillery, "~> 2.0.0-rc.4"}
+      {:distillery, "~> 2.0.0-rc.4"},
+      {:phoenix_gon, "~> 0.4.0"}
     ]
   end
 

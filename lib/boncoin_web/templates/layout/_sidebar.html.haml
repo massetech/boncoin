@@ -79,7 +79,7 @@
         %i.fa.fa-wrench
         %span= gettext "Technical"
       %ul.collapse.list-unstyled.collapse-level1{id: "technicalSubmenu"}
-        - if @conn.assigns[:current_user] do
+        - if LayoutView.check_admin(@conn.assigns[:current_user]) do
           - link to: auth_path(@conn, :delete), method: :delete, class: "" do
             %li.slide-menu.text-dark.border-bottom.border-dark
               %i.fa.fa-sign-out-alt

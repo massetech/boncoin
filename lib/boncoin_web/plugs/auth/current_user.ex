@@ -4,6 +4,7 @@ defmodule Boncoin.Auth.CurrentUser do
 
   alias Boncoin.Repo
   alias Boncoin.Members.User
+  alias Boncoin.Members
 
   def init(opts), do: opts
   def call(conn, _opts) do
@@ -11,7 +12,7 @@ defmodule Boncoin.Auth.CurrentUser do
       ressource = Guardian.Plug.current_resource(conn) ->
         assign(conn, :current_user, Repo.get(User, ressource.id))
       true ->
-        assign(conn, :current_user, nil)
+        assign(conn, :current_user, Members.get_guest_user())
     end
 
   end

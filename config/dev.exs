@@ -31,8 +31,8 @@ config :boncoin, Boncoin.Auth.Guardian,
 config :arc,
   bucket: System.get_env("GOOGLE_CLOUD_BUCKET")
 
-# config :goth, json: "secrets/google_service.json" |> Path.expand |> File.read!
-config :goth, json: {:system, "GCP_CREDENTIALS"}
+config :goth, json: "secrets/google_service.json" |> Path.expand |> File.read!
+# config :goth, json: {:system, "GCP_CREDENTIALS"}
 
 # Watch static and templates for browser reloading.
 config :boncoin, BoncoinWeb.Endpoint,

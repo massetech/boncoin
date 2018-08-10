@@ -36,6 +36,11 @@ defmodule Boncoin.Members do
 
   # -------------------------------- USER ----------------------------------------
   # QUERIES ------------------------------------------------------------------
+  defp search_guest_user(query \\ User) do
+    from u in User,
+      where: u.role == "GUEST"
+  end
+
   defp filter_admin_users_by_email(query \\ User, email) do
     from u in User,
       where: u.email == ^email and u.role in ["SUPER", "ADMIN"]
@@ -92,6 +97,29 @@ defmodule Boncoin.Members do
     |> Repo.preload(:announces)
   end
 
+  def read_phone_details(phone_number) do
+    cond do
+      String.match?(phone_number, ~r/^([09]{1})([0-9]{10})$/) -> # The number is a Myanmar mobile number
+        get_user_or_create_by_phone_number(phone_number)
+      true -> # The number is a NOT a Myanmar mobile number
+        {:error, "wrong Myanmar phone number"}
+    end
+  end
+
+  def get_guest_user() do
+    User
+    |> search_guest_user()
+    |> Repo.one()
+  end
+
+  def admin_user? (user) do
+    if Enum.member?(["ADMIN", "SUPER"], user.role) do
+      true
+    else
+      false
+    end
+  end
+
   @doc """
   Gets a single user.
 
@@ -133,12 +161,8 @@ defmodule Boncoin.Members do
 
   def get_user_or_create_by_phone_number(phone_number) do
     case get_user_by_phone_number(phone_number) do
-      nil ->
-        case create_user(%{phone_number: phone_number}) do
-          {:ok, user} -> user
-          _ -> nil
-        end
-      user -> user
+      nil -> create_user(%{phone_number: phone_number})
+      user -> {:ok, user}
     end
   end
 
