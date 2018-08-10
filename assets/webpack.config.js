@@ -1,15 +1,9 @@
-// var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 var merge = require("webpack-merge");
 var webpack = require("webpack");
-
-// var env = process.env.NODE_ENV || "development";
 var production = process.env.NODE_ENV == 'production'
-
 var node_modules_dir = "node_modules"
-
 var plugins = [
-  // new ExtractTextPlugin("css/app.css"),
   new MiniCssExtractPlugin({filename: "css/app.css"}),
   new webpack.ProvidePlugin({
     $: "jquery",  jQuery: "jquery", "window.jQuery": "jquery",
@@ -25,7 +19,6 @@ var plugins = [
     Tooltip: "exports-loader?Tooltip!bootstrap/js/dist/tooltip",
     Util: 'exports-loader?Util!bootstrap/js/dist/util'
   })
-  // new webpack.ProvidePlugin({Tether: 'tether', Popper: 'popper.js'})
 ]
 
 if (production == true) {
