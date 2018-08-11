@@ -8,9 +8,9 @@ defmodule Boncoin.CustomModules do
 
   def convert_fields_to_burmese_uni(params, keys_list) do
     params
-      |> IO.inspect()
+      # |> IO.inspect()
       |> Enum.into(%{}, fn {k, v} -> convert_field_to_burmese(k, v, keys_list) end)
-      |> IO.inspect()
+      # |> IO.inspect()
   end
 
   defp convert_field_to_burmese(key, value, keys_list) do

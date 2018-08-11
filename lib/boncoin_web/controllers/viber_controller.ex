@@ -126,14 +126,16 @@ defmodule BoncoinWeb.ViberController do
 
   # Build link for the user
   def build_announce_view_link(announce) do
-    "https://pawchaungkaung.asia/offers?search[township_id]=#{announce.township_id}&search[category_id]=#{announce.category_id}"
+    "/offers/link?#{announce.safe_link}"
+    # "/offers?search[township_id]=#{announce.township_id}&search[category_id]=#{announce.category_id}"
   end
 
 
   # Bot reaction algorythm
   def call_bot_algorythm(%{tracking_data: tracking_data, user: %{db_user: db_user, language: language, viber_id: viber_id, viber_name: viber_name, user_msg: user_msg}, announce: announce} = bot_params) do
     IO.puts("Bot params")
-    bot_params |> IO.inspect()
+    bot_params
+    # |> IO.inspect()
 
     cond do
     # We are waiting for a language answer

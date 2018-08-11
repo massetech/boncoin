@@ -5,7 +5,6 @@ defmodule BoncoinWeb.MainController do
   def welcome(conn, _params) do
     nb_announces = Contents.count_announces_public()
     conn
-      |> IO.inspect()
       |> render(BoncoinWeb.PublicView, "welcome.html", nb_announces: nb_announces)
   end
 
@@ -44,7 +43,7 @@ defmodule BoncoinWeb.MainController do
     end
     conn
       |> assign(:viber_status, viber_status)
-      |> IO.inspect()
+      # |> IO.inspect()
       |> render(BoncoinWeb.PublicView, "dashboard.html")
   end
 

@@ -34,6 +34,10 @@ config :arc,
 config :goth, json: "secrets/google_service.json" |> Path.expand |> File.read!
 # config :goth, json: {:system, "GCP_CREDENTIALS"}
 
+config :cipher, keyphrase: "testiekeyphraseforcipher",
+  ivphrase: "testieivphraseforcipher",
+  magic_token: "magictoken"
+
 # Watch static and templates for browser reloading.
 config :boncoin, BoncoinWeb.Endpoint,
   live_reload: [

@@ -5,9 +5,10 @@ defmodule Boncoin.Members do
   """
 
   import Ecto.Query, warn: false
-  alias Boncoin.Repo
+  alias Boncoin.{Repo}
   alias Boncoin.Members.User
   alias Ueberauth.Auth
+  alias BoncoinWeb.ViberController
 
   # -------------------------------- UEBERAUTH ----------------------------------------
   # QUERIES ------------------------------------------------------------------
@@ -120,6 +121,22 @@ defmodule Boncoin.Members do
     end
   end
 
+  def unlink_viber(phone_number) do
+    user = get_user_by_phone_number(phone_number)
+    case user do
+      nil -> {:error, "No user found for this phone number"}
+      user ->
+        case remove_viber_id(user) do
+          {:ok, _user} ->
+            {tracking_data, message} = %{tracking_data: "viber_removed", user: %{db_user: user, language: user.language, viber_id: user.viber_id, viber_name: user.nickname, user_msg: ""}, announce: nil}
+              |> ViberController.call_bot_algorythm()
+            ViberController.send_viber_message(user.viber_id, tracking_data, message)
+            {:ok, user}
+          {:error, msg} -> {:error, msg}
+        end
+    end
+  end
+
   @doc """
   Gets a single user.
 
@@ -161,7 +178,7 @@ defmodule Boncoin.Members do
 
   def get_user_or_create_by_phone_number(phone_number) do
     case get_user_by_phone_number(phone_number) do
-      nil -> create_user(%{phone_number: phone_number})
+      nil -> create_user(%{phone_number: phone_number, role: "MEMBER"})
       user -> {:ok, user}
     end
   end

@@ -1,6 +1,8 @@
 defmodule Boncoin.CustomModules.BotMessages do
   alias Boncoin.Members
   alias BoncoinWeb.LayoutView
+  @website_url "https://www.pawchaungkaung.com"
+  @website_url_form "https://www.pawchaungkaung.com/announces/new"
 
   def treat_msg("welcome") do {"language", welcome_msg()} end
   def treat_msg("welcome_back", user) do {"language", welcome_back_msg(user.language, user.nickname)} end
@@ -34,7 +36,7 @@ defmodule Boncoin.CustomModules.BotMessages do
 
   defp nothing_to_say_msg(language, nickname) do
     case language do
-      _ -> "(#{language})Hi #{nickname} !\n #{say_something_neutral(language)}\n Please visit us on https://pawchaungkaung.com"
+      _ -> "(#{language})Hi #{nickname} !\n #{say_something_neutral(language)}\n Please visit us on #{@website_url}"
     end
   end
 
@@ -52,7 +54,7 @@ defmodule Boncoin.CustomModules.BotMessages do
 
   defp inform_wrong_phone_number(language, nickname) do
     case language do
-      _ -> "(#{language})Sorry #{nickname}, this is not a good phone number. To try again please type CHANGE"
+      _ -> "(#{language})Sorry #{nickname}, this is not a good phone number. To try again please type CHANGE."
     end
   end
 
@@ -64,7 +66,7 @@ defmodule Boncoin.CustomModules.BotMessages do
 
   defp confirm_user_created(language, nickname) do
     case language do
-      _ -> "(#{language})Cool #{nickname}! Your phone number and viber account are now linked."
+      _ -> "(#{language})Cool #{nickname}! Your phone number and viber account are now linked.\n Please visit us on #{@website_url}"
     end
   end
 
@@ -76,13 +78,13 @@ defmodule Boncoin.CustomModules.BotMessages do
 
   defp confirm_new_phone_number_updated(language, nickname) do
     case language do
-      _ -> "(#{language})Perfect #{nickname}, your viber account is now connected to this phone number."
+      _ -> "(#{language})Perfect #{nickname}, your viber account is now connected to this phone number.\n Please visit us on #{@website_url}"
     end
   end
 
   defp announce_phone_used(language) do
     case language do
-      _ -> "(#{language})Sorry but this phone number is allready linked to another viber. Please unlink it on https://pawchaungkaung.com or contact us."
+      _ -> "(#{language})Sorry but this phone number is allready linked to another viber account. Please unlink it on #{@website_url_form} or contact us."
     end
   end
 
@@ -106,25 +108,25 @@ defmodule Boncoin.CustomModules.BotMessages do
 
   defp tell_offer_online(language, nickname, title, validity_date, link) do
     case language do
-      _ -> "(#{language})Hi #{nickname}, your offer #{title} is now published !\n\nIt will be online for 1 month until #{validity_date}.\nYour offer is on this page #{link}"
+      _ -> "(#{language})Hi #{nickname}, your offer #{title} is now published !\nIt will be online for 1 month until #{validity_date}.\nYou can manage your offer on #{@website_url}#{link}"
     end
   end
 
   defp tell_offer_moved(language, nickname, title, validity_date, link) do
     case language do
-      _ -> "(#{language})Hi #{nickname}, your offer #{title} has been moved to another category and is now published !\n\nIt will be online for 1 month until #{validity_date}.\nYour offer is on this page #{link}"
+      _ -> "(#{language})Hi #{nickname}, your offer #{title} has been moved to another category and is now published !\nIt will be online for 1 month until #{validity_date}.\nYou can manage your offer on #{@website_url}#{link}"
     end
   end
 
   defp tell_offer_refused(language, nickname, title, cause) do
     case language do
-      _ -> "(#{language})Hi #{nickname}, we are sorry your offer #{title} was refused because #{cause}. You can create a new one on https://pawchaungkaung.com"
+      _ -> "(#{language})Hi #{nickname}, we are sorry your offer #{title} was refused because #{cause}. Please create a new one on #{@website_url_form}"
     end
   end
 
   defp tell_viber_quitted(language, nickname) do
     case language do
-      _ -> "(#{language})Hi #{nickname}, we confirm we unlinked your Viber account. You can renew it at any time. Bye !\nSee you soon on https://pawchaungkaung.com"
+      _ -> "(#{language})Hi #{nickname}, your Viber account has been unlinked. You can renew it at any time.\nSee you soon on #{@website_url}"
     end
   end
 

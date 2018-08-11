@@ -36,7 +36,7 @@ defmodule BoncoinWeb.Router do
   pipeline :api_internal do
     plug :accepts, ["json"]
     plug Boncoin.Auth.Pipeline
-    plug Boncoin.Plug.CheckInput
+    # plug Boncoin.Plug.CheckInput
     # plug Guardian.Plug.EnsureAuthenticated, claims: %{"typ" => "user-access"}
   end
 
@@ -54,11 +54,13 @@ defmodule BoncoinWeb.Router do
   scope "/", BoncoinWeb do
     pipe_through [:browser, :auth]
     get "/", MainController, :welcome, as: :root
-    get "/offers", MainController, :public_index, as: :public_offers
     get "/conditions", MainController, :conditions
     get "/about", MainController, :about
     get "/viber", MainController, :viber
-    resources "/announces", AnnounceController, only: [:new, :create]
+    get "/offers", MainController, :public_index, as: :public_offers
+    resources "/offers", AnnounceController, only: [:new, :create]
+    get "/offers/:link", AnnounceController, :edit
+    get "/close", AnnounceController, :close
   end
 
   scope "/admin", BoncoinWeb do
@@ -71,7 +73,7 @@ defmodule BoncoinWeb.Router do
     resources "/townships", TownshipController
     resources "/images", ImageController, except: [:edit, :update]
     resources "/announces", AnnounceController, except: [:new, :create]
-    get "/treat_announce", AnnounceController, :treat_announce
+    get "/treat", AnnounceController, :treat
   end
 
   scope "/viber", BoncoinWeb do

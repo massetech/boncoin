@@ -31,11 +31,6 @@ export default class MainView {
       return /^([1-9]{1})([0-9]{1,9})?$/.test(str)
   }
 
-  global.remove_viber_btn_after_unlink = () => {
-    $('#field-viber').hide()
-    $('#btn-viber').show()
-  }
-
   global.scrollToAnchor = (aid) => {
     // var aTag = $("a[name='"+ aid +"']");
     var aTag = $("[name='"+ aid +"']");
@@ -45,6 +40,11 @@ export default class MainView {
 /* ------------- DOCUMENT LOAD  --------------------------------------------------- */
 
   let init_custom_actions = () => {
+
+    // Remove flashes after click
+    $('.alert').on('click', function () {
+      $(this).alert('close')
+    })
 
     // HEADER
     // Trigger search row in the header
@@ -156,12 +156,20 @@ export default class MainView {
       scrollToAnchor(`small_announce_${announce_id}`)
     })
 
-    // Click on number OK
+    // Click on number OK or press enter
     $('#btn_check_number').on('click', function (e) {
       event.preventDefault();
       event.stopPropagation()
       var phone_number = $("#announce_phone_number").val()
-      call_phone_api(phone_number, "submit_phone")
+      call_phone_api(phone_number, "get_phone_details")
+    })
+
+    // Click on unlink viber number
+    $('#btn_unlink_number').on('click', function (e) {
+      event.preventDefault();
+      event.stopPropagation()
+      var phone_number = $("#announce_phone_number").val()
+      call_phone_api(phone_number, "unlink_viber")
     })
 
     // Boostrap 4 caroussel 1st elements active selection
@@ -184,7 +192,7 @@ export default class MainView {
 
     // Currency selector
     $('.ddown_change_currency').on('click', function() {
-      console.log(this.innerHTML)
+      // console.log(this.innerHTML)
       $('#choosen_currency_text')[0].innerHTML = this.innerHTML
       $('#announce_currency').val(this.innerHTML)
     })
@@ -240,7 +248,7 @@ export default class MainView {
     $('#announce_email').val(email)
     // if (password == "") {$('#field-password').hide()}
     // else {$('#field-password').show()}
-    if (viber == "true") {
+    if (viber == true) {
       $('#field-viber').show()
       $('#btn-viber').hide()
       if (nb_announces > 0) {
@@ -256,7 +264,8 @@ export default class MainView {
     $('.collapsible_form').collapse('show')
   }
 
-  let call_phone_api = (phone_number, method) => {
+  // Call internal API to check phone number
+  let call_phone_api = (phone_number, scope) => {
     var token = $('#config').attr('data-phone')
     fetch("/api/phone", {
       headers: {
@@ -265,7 +274,7 @@ export default class MainView {
         "Authorization": 'Bearer ' + token,
       },
       method: "POST",
-      body: JSON.stringify({phone_number: phone_number, method: method})
+      body: JSON.stringify({phone_number: phone_number, scope: scope})
     })
     .then(function(response) {
       if (response.status !== 200) {
@@ -273,9 +282,18 @@ export default class MainView {
         return;
       }
       // Examine the text in the response
-      response.json().then(function(data) {
-        if ('data' in data) {
-          validate_phone_number_pop_field(data.user_id, data.nickname, data.email, data.viber, data.nb_announces)
+      response.json().then(function(response) {
+        if ('data' in response) {
+          var data = response.data
+          if (data.scope == "get_phone_details") {
+            console.log("received phone details")
+            validate_phone_number_pop_field(data.user_id, data.user_nickname, data.email, data.viber_active, data.nb_announces)
+          } else if (data.scope == "unlink_viber"){
+            console.log("phone number unlinked with Viber")
+            remove_viber_btn_after_unlink()
+          } else {
+            console.log("API response not understood")
+          }
         } else {
           reset_announce_form_field()
         }
@@ -284,4 +302,10 @@ export default class MainView {
     .catch(function(err) {
       console.log('Fetch Error :-S', err);
     })
+  }
+
+  // Call internal API to unlink Viber
+  let remove_viber_btn_after_unlink = () => {
+    $('#field-viber').hide()
+    $('#btn-viber').show()
   }

@@ -12,7 +12,7 @@ defmodule Boncoin.Members.User do
     field :member_psw, :string
     field :phone_number, :string
     field :provider, :string
-    field :role, :string, default: "GUEST"
+    field :role, :string, default: "MEMBER"
     field :token, :string
     field :token_expiration, :utc_datetime
     field :viber_active, :boolean, default: false

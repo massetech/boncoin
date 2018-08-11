@@ -12,6 +12,7 @@ defmodule BoncoinWeb.AnnounceView do
       "ONLINE" -> "<div class='btn btn-success btn-sm'>ONLINE</div>" |> raw
       "REFUSED" -> "<div class='btn btn-danger btn-sm'>REFUSED</div>" |> raw
       "OUTDATED" -> "<div class='btn btn-warning btn-sm'>OUTDATED</div>" |> raw
+      "CLOSED" -> "<div class='btn btn-info btn-sm'>CLOSED</div>" |> raw
     end
   end
 

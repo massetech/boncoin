@@ -36,4 +36,5 @@ for family <- Repo.all(Family) do
   end
 end
 
-# Repo.insert! %Announce{user_id: 1, category_id: 1, township_id: 1, title: "nothing", price: 1.0, description: "thats all I know", currency: "USD"}
+announce_params = %{"user_id" => 2, "language" => "en", "category_id" => 1, "township_id" => 1, "title" => "my bike", "price" => 10.0, "description" => "its a nice bike dude", "currency" => "USD"}
+|> Boncoin.Contents.create_announce()

@@ -31,6 +31,10 @@ config :arc,
 config :goth, json: "secrets/google_service.json" |> Path.expand |> File.read!
 # config :goth, json: {:system, "GCP_CREDENTIALS"}
 
+config :cipher, keyphrase: "${CIPHER_KEY_PHRASE}",
+  ivphrase: "${CIPHER_IVPHRASE}",
+  magic_token: "${CIPHER_MAGIC_TOKEN}"
+
 # Do not print debug messages in production
 config :logger, level: :info
 

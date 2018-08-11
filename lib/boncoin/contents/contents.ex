@@ -570,6 +570,7 @@ defmodule Boncoin.Contents do
   def create_announce(attrs \\ %{}) do
     params = attrs
       |> Map.merge(%{"status" => "PENDING"})
+      # Convert Zawgyi to Unicode for database
       |> Map.merge(%{"title" => Rabbit.zg2uni(attrs["title"]), "description" => Rabbit.zg2uni(attrs["description"])})
       # |> IO.inspect(limit: :infinity, printable_limit: :infinity)
     new_announce = %Announce{}
@@ -577,15 +578,20 @@ defmodule Boncoin.Contents do
       |> Repo.insert()
     case new_announce do
       {:ok, announce} ->
-        # Test on the 3 photo fields of the form
+        # Loop on the 3 photo fields of the form
         for i <- ["image_file_1", "image_file_2", "image_file_3"] do
-          unless attrs[i] == "" do
+          unless attrs[i] == nil do
             create_announce_image(announce.id, attrs[i])
           end
         end
-        {:ok, announce}
+        # Encrypt announce ID and generate a safe_link
+        update_announce(announce, %{"safe_link" => build_safe_link(announce.id)})
       error -> error
     end
+  end
+
+  defp build_safe_link(announce_id) do
+    Cipher.encrypt(Kernel.inspect(announce_id))
   end
 
   def validate_announce(admin_user, %{"announce_id" => announce_id, "validate" => validate, "cause" => cause, "category_id" => category_id}) do

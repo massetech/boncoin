@@ -53,7 +53,7 @@ defmodule Boncoin.Mixfile do
       {:rabbitElixir, "~> 1.0.0"},
       {:httpotion, "~> 3.1.0"},
       {:distillery, "~> 2.0.0-rc.4"},
-      {:phoenix_gon, "~> 0.4.0"}
+      {:cipher, ">= 1.4.0"}
     ]
   end
 

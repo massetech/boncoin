@@ -1,45 +1,27 @@
 .row
   .col.d-flex.justify-content-center
     .card.admin.my-3
-      .card-header
-        .row
-          .col-xs-12.col-sm-6.flex-column.text-left
-            -# .d-flex.align-items-center
-            %h6.mr-3= "Offer #{@announce.id}"
-            = btn_status(@announce.status)
-
-          .col-xs-12.col-sm-6.flex-column.align-items-center.text-right
-            %p.m-0.p-0= @announce.user.nickname
-            %p.m-0.p-0= "#{@announce.township.title_en}, #{@announce.township.division.title_en}"
-            %p.m-0.p-0= "#{@announce.category.title_en}, #{@announce.category.family.title_en}"
-            -# = @announce.user.viber_active
-            -# = LayoutView.icon_active(@announce.user.viber_active)
-      .card-body
-        %h6.card-title= @announce.title
-        %p.m-0.p-0= LayoutView.show_inline_price(@announce.price, @announce.currency)
-        %p.my-3.text-left= @announce.description
-        .row.pictures
-          - for image <- @announce.images do
-            .col-xs-12.col-sm-4
-              = img_tag BoncoinWeb.AnnounceView.image_url(image, :original)
+      = render "_show_details.html", assigns
       .card-footer
         .row
-          .col-xs-12.col-sm-3
-            - link to: announce_path(@conn, :treat_announce, announce_id: "#{@announce.id}", validate: true, cause: "accepted", category_id: "#{@announce.category_id}") do
-              .btn.btn-success.btn-lg.btn-block.my-2
-                = "Accept"
-          .col-xs-12.col-sm-3
-            - link to: "#" do
-              .btn.btn-info.btn-lg.btn-block.dropdown-toggle.my-2{data-toggle: "collapse", href: "#moveMenu"}
-                = "Move"
-          .col-xs-12.col-sm-3
-            - link to: root_path(@conn, :welcome) do
-              .btn.btn-warning.btn-lg.btn-block.my-2
-                = "Alerts"
-          .col-xs-12.col-sm-3
-            - link to: "#" do
-              .btn.btn-danger.btn-lg.btn-block.dropdown-toggle.my-2{data-toggle: "collapse", href: "#refuseMenu"}
-                = "Refuse"
+          - if @announce.status in ["PENDING"] do
+            .col-xs-12.col-sm-3
+              - link to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: true, cause: "accepted", category_id: "#{@announce.category_id}") do
+                .btn.btn-success.btn-lg.btn-block.my-2
+                  = "Accept"
+          - if @announce.status in ["PENDING", "ONLINE"]  do
+            .col-xs-12.col-sm-3
+              - link to: "#" do
+                .btn.btn-info.btn-lg.btn-block.dropdown-toggle.my-2{data-toggle: "collapse", href: "#moveMenu"}
+                  = "Move"
+            .col-xs-12.col-sm-3
+              - link to: root_path(@conn, :welcome) do
+                .btn.btn-warning.btn-lg.btn-block.my-2
+                  = "Alerts"
+            .col-xs-12.col-sm-3
+              - link to: "#" do
+                .btn.btn-danger.btn-lg.btn-block.dropdown-toggle.my-2{data-toggle: "collapse", href: "#refuseMenu"}
+                  = "Refuse"
 
 .row.collapse{id: "moveMenu"}
   .col.d-flex.justify-content-center
@@ -50,7 +32,7 @@
             .col-xs-12.col-sm-4.flex-column.justify-content-center
               %h6.card-title= family.title_en
               - for category <- family.categorys do
-                = link "Move to #{category.title_en}", to: announce_path(@conn, :treat_announce, announce_id: "#{@announce.id}", validate: true, cause: "moved", category_id: "#{category.id}"), class: "btn btn-outline-info m-2"
+                = link "Move to #{category.title_en}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: true, cause: "moved", category_id: "#{category.id}"), class: "btn btn-outline-info m-2"
               %hr
 
 .row.collapse{id: "refuseMenu"}
@@ -60,4 +42,4 @@
         .row
           - for cause <- @refusal_causes do
             .col-xs-12.col-sm-4.flex-column.justify-content-center
-              = link "#{cause.title}", to: announce_path(@conn, :treat_announce, announce_id: "#{@announce.id}", validate: false, cause: "#{cause.label}", category_id: "#{@announce.category_id}"), class: "btn btn-outline-danger m-2"
+              = link "#{cause.title}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: false, cause: "#{cause.label}", category_id: "#{@announce.category_id}"), class: "btn btn-outline-danger m-2"

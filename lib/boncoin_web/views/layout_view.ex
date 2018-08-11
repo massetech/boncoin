@@ -1,7 +1,7 @@
 defmodule BoncoinWeb.LayoutView do
   use BoncoinWeb, :view
   alias BoncoinWeb.LayoutView
-  import PhoenixGon.View
+  # import PhoenixGon.View
   alias Boncoin.Members
 
   # def switch_locale_path(conn, locale, language) do
