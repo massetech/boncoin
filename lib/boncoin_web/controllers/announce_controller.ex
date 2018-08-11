@@ -25,7 +25,7 @@ defmodule BoncoinWeb.AnnounceController do
     end
   end
 
-  def treat_announce(conn, params) do
+  def treat(conn, params) do
     admin_user = Members.get_user!(conn.assigns.current_user.id)
     case Contents.validate_announce(admin_user, params) do
       {:ok, announce} ->
