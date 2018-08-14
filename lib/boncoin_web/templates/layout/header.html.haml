@@ -9,23 +9,12 @@
     .col.col-xs-1.text-right.p-0
       %button.btn.bg-primary.text-white{type: "button", data-toggle: "collapse", data-target: "#searchBar", aria-expanded: "false"}
         %i.fa.fa-search
+
+
   .row.collapse.bg-primary.m-0.p-0{id: "searchBar"}
-    .col
-      .row.search-row
-        .col-xs-12.col-sm-10.offset-sm-1.col-lg-8.offset-lg-2.align-middle
-          = render "_search_form.html", assigns
-      .row.search-row
-        .col.d-flex.justify-content-center.my-3.p-0
-          - for family <- @conn.assigns.select_menus.familys do
-            %button.bg-white.text-dark.family-selector{data-target: "#{family.id}"}
-              %i.fa{class: "fa-#{family.icon}"}
-              .triangle.d-none{id: "triangle_#{family.id}"}
-      - for family <- @conn.assigns.select_menus.familys do
-        .row.search-row.d-none.bg-white.category-selector.border-bottom.border-dark{id: "searchFamily_#{family.id}"}
-          .col-12.mt-3.mb-2.text-left
-            - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: ""}, old_search: @conn.assigns.search_params), class: "btn btn-outline-primary btn-sm" do
-              %span.font-weight-bold= gettext("All %{title}", title: LayoutView.convert_zawgyi(family, "title"))
-          - for category <- family.categorys do
-            .col-xs-3.col-sm-3.col-lg-2.mt-2.mb-3.text-left
-              - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: "#{category.id}"}, old_search: @conn.assigns.search_params), class: "btn btn-outline-primary btn-sm" do
-                %span.font-weight-bold= LayoutView.convert_zawgyi(category, "title")
+    -# Search field
+    .col-xs-12.col-sm-10.offset-sm-1.col-lg-8.offset-lg-2.align-middle
+      = render "_search_text_form.html", assigns
+    -# Family buttons
+    .col-xs-12.my-3.w-100
+      = render "_search_btn_form.html", assigns

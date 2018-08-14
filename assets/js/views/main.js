@@ -41,33 +41,18 @@ export default class MainView {
 
   let init_custom_actions = () => {
 
+    /* ------------- BOOSTRAP CUSTO  --------------------------------------------------- */
+    // Correct behaviour on the multiselect items
+    $('.submenu-item-hover').on('click', function(event) {
+      $(this).mouseenter()
+      event.stopPropagation()
+    })
+
+    /* ------------- GENERAL DISPLAY --------------------------------------------------- */
     // Remove flashes after click
     $('.alert').on('click', function () {
       $(this).alert('close')
     })
-
-    // HEADER
-    // Trigger search row in the header
-    $('.family-selector').on('click', function () {
-      var family_id = $(this).attr('data-target')
-      $(".category-selector").not(`#searchFamily_${family_id}`).addClass('d-none')
-      $(".triangle").not(`#triangle_${family_id}`).addClass('d-none')
-      $(`#searchFamily_${family_id}`).toggleClass("d-none")
-      $(`#triangle_${family_id}`).toggleClass("d-none")
-    })
-    // Close the search row when something else is clicked
-    $('#main').on('click', function () {
-      $("#searchBar").collapse('hide')
-      $(".category-selector").addClass('d-none')
-      $(".triangle").addClass('d-none')
-    })
-    // Reinit the searchbar when it is collapsed
-    $('#searchBar').on('hidden.bs.collapse', function (e) {
-      $(".category-selector").addClass('d-none')
-      $(".triangle").addClass('d-none')
-    })
-
-    // SLIDEBAR
     // Set up CustomScroller - http://manos.malihu.gr/jquery-custom-content-scroller/
     // $("#sidebar").mCustomScrollbar({
     //   theme: "minimal"
@@ -102,43 +87,29 @@ export default class MainView {
       $('.collapse-level2').collapse('hide')
     })
 
-    // Manage conditions collapses
-    $('.collapse').on('show.bs.collapse', function (e) {
-      $('.collapse').collapse('hide')
+    /* ------------- HEADER SEARCHES --------------------------------------------------- */
+    // Trigger search row in the header
+    $('.family-selector').on('click', function () {
+      var family_id = $(this).attr('data-target')
+      $(".category-selector").not(`#searchFamily_${family_id}`).addClass('d-none')
+      $(".triangle").not(`#triangle_${family_id}`).addClass('d-none')
+      $(`#searchFamily_${family_id}`).toggleClass("d-none")
+      $(`#triangle_${family_id}`).toggleClass("d-none")
+    })
+    // Close the search row when something else is clicked
+    $('#main').on('click', function () {
+      $("#searchBar").collapse('hide')
+      $(".category-selector").addClass('d-none')
+      $(".triangle").addClass('d-none')
+    })
+    // Reinit the searchbar when it is collapsed
+    $('#searchBar').on('hidden.bs.collapse', function (e) {
+      $(".category-selector").addClass('d-none')
+      $(".triangle").addClass('d-none')
     })
 
-    // Manage about collapses
-    $('#about').on('show.bs.collapse', function (e) {
-      $('.collapse').collapse('hide')
-    })
-
-    // Set up the lightbox - http://ashleydw.github.io/lightbox/#no-wrapping
-    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-        event.preventDefault();
-        $(this).ekkoLightbox();
-    });
-
-    // Correct behaviour on the multiselect items
-    $('.submenu-item-hover').on('click', function(event) {
-      $(this).mouseenter()
-      event.stopPropagation()
-    })
-
-    // Click on the see number
-    $('.btn-show-number').on('click', function() {
-      var announce_id = $(this).attr('data-announce-id')
-      var phone_number = $(this).attr('data-phone-number')
-      $(this).addClass('d-none')
-      $(`#number_${announce_id}`).removeClass('d-none')
-
-      var $temp = $("<input>")
-      $("body").append($temp)
-      $temp.val(phone_number).select()
-      document.execCommand("copy")
-      $temp.remove()
-    })
-
-    // Click on a small announce
+    /* ------------- OFFERS DISPLAY  --------------------------------------------------- */
+    // Display big announce on small announce click
     $('.btn-small-announce').on('click', function() {
       $(".small-announce").removeClass('d-none')
       $(".big-announce").addClass('d-none')
@@ -147,32 +118,35 @@ export default class MainView {
       $(`#big_announce_${announce_id}`).removeClass('d-none')
       scrollToAnchor(`big_announce_${announce_id}`)
     })
-
-    // Click on a big announce
-    $('.btn-big-announce').on('click', function() {
+    // Close big announce on close btn click
+    $('.btn-close').on('click', function() {
+      var announce_id = $(this).attr('data-announce-id')
+      $(`#big_announce_${announce_id}`).addClass('d-none')
+      $(`#small_announce_${announce_id}`).removeClass('d-none')
+      scrollToAnchor(`small_announce_${announce_id}`)
+    })
+    // Closes the offer display on close btn click
+    $('.btn-close').on('click', function() {
       var announce_id = $(this).attr('data-announce-id')
       $(`#small_announce_${announce_id}`).removeClass('d-none')
       $(`#big_announce_${announce_id}`).addClass('d-none')
       scrollToAnchor(`small_announce_${announce_id}`)
     })
-
-    // Click on number OK or press enter
-    $('#btn_check_number').on('click', function (e) {
-      event.preventDefault();
-      event.stopPropagation()
-      var phone_number = $("#announce_phone_number").val()
-      call_phone_api(phone_number, "get_phone_details")
+    // Show the sellor's number
+    $('.btn-show-number').on('click', function() {
+      var announce_id = $(this).attr('data-announce-id')
+      var phone_number = $(this).attr('data-phone-number')
+      $(this).addClass('d-none')
+      $(`.alert_${announce_id}`).addClass('d-none')
+      $(`#number_${announce_id}`).removeClass('d-none')
+      // Copy phone number to clipboard
+      var $temp = $("<input>")
+      $("body").append($temp)
+      $temp.val(phone_number).select()
+      document.execCommand("copy")
+      $temp.remove()
     })
-
-    // Click on unlink viber number
-    $('#btn_unlink_number').on('click', function (e) {
-      event.preventDefault();
-      event.stopPropagation()
-      var phone_number = $("#announce_phone_number").val()
-      call_phone_api(phone_number, "unlink_viber")
-    })
-
-    // Boostrap 4 caroussel 1st elements active selection
+    // Boostrap 4 caroussel select active and swipe
     $('.carousel-inner').each(function(){
       $(this).children(":first").addClass('active');
     })
@@ -190,14 +164,33 @@ export default class MainView {
       threshold:75
     })
 
+    /* ------------- OFFERS FORM  --------------------------------------------------- */
+    // Set up the lightbox - http://ashleydw.github.io/lightbox/#no-wrapping
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    });
+    // Click on number OK or press enter
+    $('#btn_check_number').on('click', function (e) {
+      event.preventDefault();
+      event.stopPropagation()
+      var phone_number = $("#announce_phone_number").val()
+      call_phone_api(phone_number, "get_phone_details")
+    })
+    // Click on unlink viber number
+    $('#btn_unlink_number').on('click', function (e) {
+      event.preventDefault();
+      event.stopPropagation()
+      var phone_number = $("#announce_phone_number").val()
+      call_phone_api(phone_number, "unlink_viber")
+    })
     // Currency selector
     $('.ddown_change_currency').on('click', function() {
       // console.log(this.innerHTML)
       $('#choosen_currency_text')[0].innerHTML = this.innerHTML
       $('#announce_currency').val(this.innerHTML)
     })
-
-    // Get the title and check if it looks like Zawgyi
+    // Checks the email field
     $('#announce_email').on('change', function() {
       var email = $(this).val()
       if (validateEmail(email) == false) {
@@ -205,8 +198,7 @@ export default class MainView {
         $(this).val('').focus()
       }
     })
-
-    // Blocked by the not building library
+    // Get the title and check if it looks like Zawgyi
     $('#announce_title').on('change', function() {
       var title = $(this).val()
       if (knayi.fontDetect(title) == "zawgyi") {
@@ -217,7 +209,7 @@ export default class MainView {
         $('#announce_zawgyi').val('false')
       }
     })
-
+    // Makes sure to get rounded prices only
     $('#announce_price').on('change', function() {
       var price = $(this).val()
       var rounded_price = Math.round(price)
@@ -228,7 +220,20 @@ export default class MainView {
     })
   }
 
-  /* ------------- OFFERS FORM  --------------------------------------------------- */
+
+    // // Manage conditions collapses
+    // $('.collapse').on('show.bs.collapse', function (e) {
+    //   $('.collapse').collapse('hide')
+    // })
+    //
+    // // Manage about collapses
+    // $('#about').on('show.bs.collapse', function (e) {
+    //   $('.collapse').collapse('hide')
+    // })
+
+
+
+  /* ------------- METHODS  --------------------------------------------------- */
 
   // Empty form when the phone_number is not accepted
   let reset_announce_form_field = () => {

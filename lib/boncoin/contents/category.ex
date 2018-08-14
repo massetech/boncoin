@@ -4,7 +4,7 @@ defmodule Boncoin.Contents.Category do
   alias Boncoin.Contents.{Family, Announce}
 
   schema "categorys" do
-    field :active, :boolean, default: false
+    field :active, :boolean
     field :title_my, :string
     field :title_en, :string
     field :icon, :string, default: "whmcs"

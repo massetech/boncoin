@@ -43,6 +43,7 @@ defmodule Boncoin.Plug.SearchParams do
       township_id ->
         # Use the division_id corresponding to township_id
         division_id = Contents.get_township!(township_id).division_id
+          |> Integer.to_string()
         Map.merge(params, %{"division_id" => division_id})
     end
   end
@@ -53,6 +54,7 @@ defmodule Boncoin.Plug.SearchParams do
       category_id ->
         # Use the family_id corresponding to category_id
         family_id = Contents.get_category!(category_id).family_id
+          |> Integer.to_string()
         Map.merge(params, %{"family_id" => family_id})
     end
   end

@@ -15,10 +15,11 @@ span.logo {
   font-size: 30px !important; font-weight: bold
 }
 img.icon_viber{width: 50px;height: 50px;}
-/* ------------------------------ NAVBAR  ------------------------------ */
+/* ------------------------------ HEADER  ------------------------------ */
 .nav-row{height: 3em;}
 th, td {font-size: 12px; vertical-align: middle !important; padding: 0.5rem 0 !important;}
 td:hover, th:hover {cursor: pointer;}
+.border-bottom-lg{border-bottom: 4px solid $secondary !important;}
 /* ------------------------------ FLASHES  ------------------------------ */
 .flashes{
   position: absolute; width: 100%; z-index: 9999;
@@ -46,7 +47,6 @@ i {font-size: 20px!important;}
 /* ------------------------------ SEARCHBAR  ------------------------------ */
 #searchBar{
   z-index: 1000;
-  // .search-row {height: 2.5em;}
   .family-selector{
     position: relative;
     width: 20%;
@@ -249,10 +249,23 @@ a[data-toggle="collapse"] {
   img {width: 100%;border-radius: 10px;}
   img.img-small {width: 140px;border-radius: 10px;}
   .title{margin-bottom: 1em;}
-  .description{height: 75%;}
-  .btn-big-announce{
-    i {font-size: 2em;}
-    position: absolute;right: 0;
+  .text-area{
+    background-color: $primary-light;
+    // border: 10px solid $primary-light;
+    border-radius: 10px;
+    // margin: 1em;margin-bottom: 0;padding: 1em;
+    p {white-space: pre-wrap;width: 100%;}
+  }
+  // .description{
+  //   // height: 75%;
+  //   white-space: pre-wrap;
+  //   background-color: $primary-light;
+  //   border-radius: 10px;
+  //   padding: 1em;
+  // }
+  .btn-close{
+    i {font-size: 30px !important;}
+    position: absolute;right: 0;z-index: 9999;
   }
   .expand-photo{
     position: absolute;
@@ -269,8 +282,8 @@ a[data-toggle="collapse"] {
   height: 15px;
   border-radius: 100%;
 }
-.btn-see-number{
-  border: 2px solid;
-  padding: 1em;
-  border-radius: 10px;
-}
+// .btn-see-number{
+//   border: 2px solid;
+//   padding: 1em;
+//   border-radius: 10px;
+// }

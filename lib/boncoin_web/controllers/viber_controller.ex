@@ -126,7 +126,7 @@ defmodule BoncoinWeb.ViberController do
 
   # Build link for the user
   def build_announce_view_link(announce) do
-    "/offers/link?#{announce.safe_link}"
+    "/offers/#{announce.safe_link}"
     # "/offers?search[township_id]=#{announce.township_id}&search[category_id]=#{announce.category_id}"
   end
 

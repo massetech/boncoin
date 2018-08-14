@@ -10,6 +10,7 @@ defmodule BoncoinWeb.MainController do
 
   def public_index(conn, _params) do
     {announces, nb_announces, place} = Contents.list_announces_public(conn.assigns.search_params)
+    IO.inspect(conn.assigns)
     conn
       |> render(BoncoinWeb.PublicView, "announces_index.html", announces: announces, nb_announces: nb_announces, place: place)
   end

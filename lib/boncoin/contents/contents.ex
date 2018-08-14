@@ -9,7 +9,7 @@ defmodule Boncoin.Contents do
   defp filter_familys_active(query \\ Family) do
     from f in query,
       where: f.active == true,
-      select: struct(f, [:id, :title_en, :title_my, :icon])
+      select: [:id, :title_en, :title_my, :icon]
   end
 
   # METHODS ------------------------------------------------------------------
@@ -131,7 +131,7 @@ defmodule Boncoin.Contents do
   defp filter_categorys_active(query \\ Category) do
     from c in query,
       where: c.active == true,
-      select: struct(c, [:id, :title_en, :title_my, :icon])
+      select: [:id, :title_en, :title_my, :icon]
   end
 
   # METHODS ------------------------------------------------------------------
@@ -236,7 +236,7 @@ defmodule Boncoin.Contents do
   defp filter_townships_active(query \\ Township) do
     from t in query,
       where: t.active == true,
-      select: struct(t, [:id, :title_en, :title_my])
+      select: [:id, :title_en, :title_my]
   end
 
   # METHODS ------------------------------------------------------------------
@@ -580,7 +580,7 @@ defmodule Boncoin.Contents do
       {:ok, announce} ->
         # Loop on the 3 photo fields of the form
         for i <- ["image_file_1", "image_file_2", "image_file_3"] do
-          unless attrs[i] == nil do
+          unless attrs[i] == "" do
             create_announce_image(announce.id, attrs[i])
           end
         end

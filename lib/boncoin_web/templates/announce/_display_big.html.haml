@@ -1,0 +1,77 @@
+.col-12.my-3.d-none.big-announce{id: "big_announce_#{@announce.id}", name: "big_announce_#{@announce.id}"}
+  .card.card-offer
+    %a.btn-close.m-2{data-announce-id: "#{@announce.id}", href: "#"}
+      %i.fa.fa-times-circle.text-dark
+    .card-body.pb-0
+      .row
+        -# Title for small devices
+        .col-xs-12.d-block.d-sm-none.w-100.mb-3
+          %h6.font-weight-bold.text-dark.m-0= @announce.title
+          %h6.text-primary.m-0= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
+
+        -# Images carousel
+        .col-xs-12.col-sm-6
+          .carousel.slide.carousel-fade{id: "images_carousel", data-ride: "carousel"}
+            .carousel-inner
+              - for image <- @announce.images do
+                .carousel-item
+                  = img_tag BoncoinWeb.AnnounceView.image_url(image, :original)
+            %ol.carousel-indicators
+              - for i <- 1..length(@announce.images) do
+                %li{data-target: "#caroussel_img", data-slide-to: "#{i}"}
+            %a.expand-photo{href: "#{BoncoinWeb.AnnounceView.image_url(List.first(@announce.images), :original)}", data-toggle: "lightbox", data-gallery: "gallery_announce_#{@announce.id}", data-type: "image"}
+              %i.fa.fa-search-plus
+              - for image <- List.delete_at(@announce.images, 0) do
+                %div{data-toggle: "lightbox", data-gallery: "gallery_announce_#{@announce.id}", data-remote: "#{BoncoinWeb.AnnounceView.image_url(image, :original)}"}
+
+        -# Description for big devices
+        .col-xs-12.col-sm-6.d-none.d-sm-flex.flex-column
+          .row.d-flex.flex-column.justify-content-center
+            %h6.font-weight-bold.text-dark.m-0= @announce.title
+            %h6.text-primary.m-0= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
+          .row.justify-content-center.flex-grow-1.text-area.text-left.mt-2.mx-2.p-4
+            %p= @announce.description
+
+      .row.my-3
+        -# Sellors details
+        .col-xs-12.col-sm-6.d-flex.justify-content-center.align-items-start
+          .details
+            %p.m-0= BoncoinWeb.AnnounceView.show_location(@announce.township, "en")
+            %p.m-0
+              = gettext "Sold by"
+              %span.font-weight-bold= @announce.user.nickname
+              -# = announce.user.viber_active
+            %p.m-0{style: "font-size:0.75em;"}= BoncoinWeb.AnnounceView.show_date(@announce.parution_date, "en")
+
+        -# Description for small devices
+        .col-xs-12.col-sm-6.d-sm-none.d-flex.flex-column
+          .row.text-area.text-left.my-4.mx-0.p-4
+            %p= @announce.description
+
+        .col-xs-12.col-sm-4.offset-sm-1.d-flex.flex-column.justify-content-center.align-items-center
+          -# Button see number
+          %button.btn.btn-lg.btn-block.btn-outline-success.btn-show-number.mb-2{id: "btn_number_#{@announce.id}", data-announce-id: "#{@announce.id}", data-phone-number: "#{@announce.user.phone_number}"}
+            %i.fa.fa-phone.btn-icon
+            %span= gettext "See number"
+
+          -# Button report abuse
+          .d-none.d-sm-block.w-100
+            %button.btn.btn-sm.btn-block.btn-outline-warning{class: "alert_#{@announce.id}"}
+              %i.fa.fa-bell.btn-icon{}
+              %span= "Report abuse"
+          .d-block.d-sm-none.w-100
+            %button.btn.btn-lg.btn-block.btn-outline-warning{class: "alert_#{@announce.id}"}
+              %i.fa.fa-bell.btn-icon{}
+              %span= "Report abuse"
+
+          -# Show the sellor's number
+          %button.btn.btn-lg.btn-block.btn-primary.btn-see-number.d-none{id: "number_#{@announce.id}"}
+            %i.fa.fa-phone.btn-icon
+            %span
+              = String.slice(@announce.user.phone_number, 0..1)
+              = " "
+              = String.slice(@announce.user.phone_number, 2..4)
+              = " "
+              = String.slice(@announce.user.phone_number, 5..7)
+              = " "
+              = String.slice(@announce.user.phone_number, 8..10)

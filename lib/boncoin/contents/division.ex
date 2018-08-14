@@ -4,7 +4,7 @@ defmodule Boncoin.Contents.Division do
   alias Boncoin.Contents.{Township}
 
   schema "divisions" do
-    field :active, :boolean, default: false
+    field :active, :boolean
     field :latitute, :string
     field :longitude, :string
     field :title_my, :string

@@ -27,7 +27,7 @@ defmodule BoncoinWeb.AnnounceView do
     case duration do
       0 ->
         # Less than 24 hours ago
-        case day == day_now do
+        case day == day_now.day do
           true ->
             # Same day
             gettext("today, %{hour}:%{minute} %{label}", hour: hour, minute: minute, label: label) #Today, 2:30 PM
