@@ -11,19 +11,19 @@
 
 -# Category buttons
 - for family <- @conn.assigns.select_menus.familys do
-  .row.d-none.bg-white.category-selector.p-2{id: "searchFamily_#{family.id}"}
+  .row.d-none.bg-white.category-selector.m-0{id: "searchFamily_#{family.id}"}
     .col-12.my-2.text-left
       - if @conn.assigns.search_params["family_id"] == Integer.to_string(family.id) && @conn.assigns.search_params["category_id"] == "" do
-        - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: ""}, old_search: @conn.assigns.search_params), class: "btn btn-secondary btn-sm" do
+        - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: ""}, old_search: @conn.assigns.search_params), class: "btn btn-secondary" do
           %span.font-weight-bold= gettext("All %{title}", title: LayoutView.convert_zawgyi(family, "title"))
       - else
-        - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: ""}, old_search: @conn.assigns.search_params), class: "btn btn-outline-secondary btn-sm" do
+        - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: ""}, old_search: @conn.assigns.search_params), class: "btn btn-outline-secondary" do
           %span.font-weight-bold= gettext("All %{title}", title: LayoutView.convert_zawgyi(family, "title"))
-    - for category <- family.categorys do
-      .col-4.my-2
+    .col-12.my-2.text-left
+      - for category <- family.categorys do
         - if @conn.assigns.search_params["family_id"] == Integer.to_string(family.id) && @conn.assigns.search_params["category_id"] == Integer.to_string(category.id) do
-          - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: "#{category.id}"}, old_search: @conn.assigns.search_params), class: "btn btn-secondary btn-sm" do
+          - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: "#{category.id}"}, old_search: @conn.assigns.search_params), class: "btn btn-secondary mr-3" do
             %span.font-weight-bold= LayoutView.convert_zawgyi(category, "title")
         - else
-          - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: "#{category.id}"}, old_search: @conn.assigns.search_params), class: "btn btn-outline-secondary btn-sm" do
+          - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: "#{category.id}"}, old_search: @conn.assigns.search_params), class: "btn btn-outline-secondary mr-3" do
             %span.font-weight-bold= LayoutView.convert_zawgyi(category, "title")

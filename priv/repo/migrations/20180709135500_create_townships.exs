@@ -8,7 +8,7 @@ defmodule Boncoin.Repo.Migrations.CreateTownships do
       add :active, :boolean, default: false, null: false
       add :latitute, :string
       add :longitude, :string
-      add :division_id, references(:divisions, on_delete: :nothing)
+      add :division_id, references(:divisions, on_delete: :delete_all)
       timestamps()
     end
     create index(:townships, [:division_id])

@@ -10,7 +10,6 @@ defmodule Boncoin.Contents.Division do
     field :title_my, :string
     field :title_en, :string
     has_many :townships, Township, on_delete: :delete_all
-    has_many :announces, through: [:townships, :announces]
     timestamps()
   end
 

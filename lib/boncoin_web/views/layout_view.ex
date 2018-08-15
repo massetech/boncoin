@@ -23,7 +23,7 @@ defmodule BoncoinWeb.LayoutView do
         year = datetime.year
         hour = datetime.hour
         minute = datetime.minute
-        "#{year}/#{day}/#{month}-#{hour}:#{minute}"
+        "#{year}/#{month}/#{day}-#{hour}:#{minute}"
     end
   end
 
@@ -34,7 +34,7 @@ defmodule BoncoinWeb.LayoutView do
         day = datetime.day
         month = datetime.month
         year = datetime.year
-        "#{year}/#{day}/#{month}"
+        "#{year}/#{month}/#{day}"
     end
   end
 

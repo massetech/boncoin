@@ -11,7 +11,8 @@ defmodule BoncoinWeb.CategoryController do
 
   def new(conn, _params) do
     changeset = Contents.change_category(%Category{})
-    render(conn, "new.html", changeset: changeset)
+    familys = Contents.list_familys()
+    render(conn, "new.html", changeset: changeset, familys: familys)
   end
 
   def create(conn, %{"category" => category_params}) do
@@ -19,7 +20,7 @@ defmodule BoncoinWeb.CategoryController do
       {:ok, category} ->
         conn
         |> put_flash(:info, "Category created successfully.")
-        |> redirect(to: category_path(conn, :show, category))
+        |> redirect(to: category_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -32,8 +33,9 @@ defmodule BoncoinWeb.CategoryController do
 
   def edit(conn, %{"id" => id}) do
     category = Contents.get_category!(id)
+    familys = Contents.list_familys()
     changeset = Contents.change_category(category)
-    render(conn, "edit.html", category: category, changeset: changeset)
+    render(conn, "edit.html", category: category, changeset: changeset, familys: familys)
   end
 
   def update(conn, %{"id" => id, "category" => category_params}) do
@@ -43,7 +45,7 @@ defmodule BoncoinWeb.CategoryController do
       {:ok, category} ->
         conn
         |> put_flash(:info, "Category updated successfully.")
-        |> redirect(to: category_path(conn, :show, category))
+        |> redirect(to: category_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", category: category, changeset: changeset)
     end

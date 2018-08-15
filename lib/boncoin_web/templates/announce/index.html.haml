@@ -13,6 +13,7 @@
         %th= "User name"
         %th= "Viber"
         %th= "Language"
+        %th= "Division"
         %th= "Township"
         %th= "Category"
         %th= "Title"
@@ -32,6 +33,7 @@
           %td= offer.user.nickname
           %td= LayoutView.icon_active(offer.user.viber_active)
           %td= img_tag static_path(@conn, "/images/flags/1x1/#{offer.language}.svg"), class: "flag-small"
+          %td= offer.township.division.title_en
           %td= offer.township.title_en
           %td
             %i.fa{class: "fa-#{offer.category.icon}"}

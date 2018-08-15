@@ -9,7 +9,7 @@ defmodule Boncoin.Contents.Family do
     field :title_en, :string
     field :icon, :string, default: "whmcs"
     has_many :categorys, Category, on_delete: :delete_all
-    has_many :announces, through: [:categorys, :announces]
+    # has_many :announces, through: [:categorys, :announces]
     timestamps()
   end
 

@@ -19,7 +19,7 @@ defmodule BoncoinWeb.FamilyController do
       {:ok, family} ->
         conn
         |> put_flash(:info, "Family created successfully.")
-        |> redirect(to: family_path(conn, :show, family))
+        |> redirect(to: family_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -43,7 +43,7 @@ defmodule BoncoinWeb.FamilyController do
       {:ok, family} ->
         conn
         |> put_flash(:info, "Family updated successfully.")
-        |> redirect(to: family_path(conn, :show, family))
+        |> redirect(to: family_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", family: family, changeset: changeset)
     end

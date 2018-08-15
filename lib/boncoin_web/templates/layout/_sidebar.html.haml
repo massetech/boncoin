@@ -8,12 +8,12 @@
     %ul.list-unstyled.components
       - link to: announce_path(@conn, :new), class: "" do
         %li.slide-menu.text-dark.border-bottom.border-dark
-          %i.fa.fa-bullhorn
-          %span= gettext "Sell something"
+          %i.fa.fa-edit
+          %span= gettext "Selling something ?"
 
       %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#menuDivision", data-parent: "#mainMenu", data-toggle: "collapse", aria-expanded: "false"}
         %i.fa.fa-map-marker-alt
-        %span= gettext "Change location"
+        %span= gettext "Searching something ?"
       %ul.collapse.list-unstyled.collapse-level1{id: "menuDivision"}
         - link to: public_offers_path(@conn, :public_index, search: %{division_id: "", township_id: ""}, old_search: @conn.assigns.search_params), class: "" do
           %li.slide-menu.text-dark.border-bottom.border-dark
@@ -58,22 +58,10 @@
           %i.fa.fa-balance-scale
           %span= gettext "Conditions"
 
-      %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#aboutSubmenu", data-toggle: "collapse", aria-expanded: "false"}
-        %i.fa.fa-question-circle
-        %span= gettext "About us"
-      %ul.collapse.list-unstyled.collapse-level1{id: "aboutSubmenu"}
-        - link to: main_path(@conn, :about), class: "" do
-          %li.slide-menu.text-dark.border-bottom.border-dark
-            %i.fa.fa-building
-            %span= gettext "The company"
-        - link to: main_path(@conn, :about), class: "" do
-          %li.slide-menu.text-dark.border-bottom.border-dark
-            %i.fa.fa-handshake
-            %span= gettext "Work with us"
-        - link to: main_path(@conn, :about), class: "" do
-          %li.slide-menu.text-dark.border-bottom.border-dark
-            %i.fa.fa-user-tie
-            %span= gettext "Join us"
+      - link to: main_path(@conn, :about), class: "" do
+        %li.slide-menu.text-dark.border-bottom.border-dark
+          %i.fa.fa-building
+          %span= gettext "Pawchaungkaung company"
 
       %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#technicalSubmenu", data-toggle: "collapse", aria-expanded: "false"}
         %i.fa.fa-wrench

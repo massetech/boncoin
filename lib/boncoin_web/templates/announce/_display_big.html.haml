@@ -1,4 +1,4 @@
-.col-12.my-3.d-none.big-announce{id: "big_announce_#{@announce.id}", name: "big_announce_#{@announce.id}"}
+.col-12.my-3.big-announce{id: "big_announce_#{@announce.id}", name: "big_announce_#{@announce.id}"}
   .card.card-offer
     %a.btn-close.m-2{data-announce-id: "#{@announce.id}", href: "#"}
       %i.fa.fa-times-circle.text-dark
@@ -41,7 +41,7 @@
               = gettext "Sold by"
               %span.font-weight-bold= @announce.user.nickname
               -# = announce.user.viber_active
-            %p.m-0{style: "font-size:0.75em;"}= BoncoinWeb.AnnounceView.show_date(@announce.parution_date, "en")
+            %p.m-0{style: "font-size:0.75em;"}= BoncoinWeb.AnnounceView.show_date(@announce, "en")
 
         -# Description for small devices
         .col-xs-12.col-sm-6.d-sm-none.d-flex.flex-column

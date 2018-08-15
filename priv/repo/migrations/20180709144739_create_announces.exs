@@ -10,7 +10,7 @@ defmodule Boncoin.Repo.Migrations.CreateAnnounces do
       add :longitude, :string
       add :status, :string
       add :cause, :string
-      add :treated_by_id, references(:users, on_delete: :nothing)
+      add :treated_by_id, references(:users) #Admin user cannot be deleted if holding announces
       add :validity_date, :utc_datetime
       add :parution_date, :utc_datetime
       add :price, :float
@@ -20,9 +20,9 @@ defmodule Boncoin.Repo.Migrations.CreateAnnounces do
       add :nb_view, :integer
       add :nb_clic, :integer
       add :nb_alert, :integer
-      add :user_id, references(:users, on_delete: :nothing)
-      add :township_id, references(:townships, on_delete: :nothing)
-      add :category_id, references(:categorys, on_delete: :nothing)
+      add :user_id, references(:users), on_delete: :nothing # User cannot be deleted if still announces
+      add :township_id, references(:townships, on_delete: :delete_all)
+      add :category_id, references(:categorys, on_delete: :delete_all)
       add :zawgyi, :boolean, default: false, null: false
       timestamps()
     end

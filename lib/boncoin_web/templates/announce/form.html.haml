@@ -3,82 +3,84 @@
   = hidden_input f, :user_id, value: ""
   = hidden_input f, :language, value: Gettext.get_locale()
   = hidden_input f, :zawgyi, value: false
-
   .row
-    .col-xs-12.col-sm-6
+    .col-xs-12.col-sm-6.my-3
+      -# Asking for details
+      %hr.d-block.d-sm-none
       %h5.text-left= gettext "1. What are your details ?"
-
-      .row.text-left.my-4
+      .row.text-left.mt-3.mb-3
+        -# Phone number
         .col-9.pr-0
           .input-group
             %span.input-group-prepend
               .input-group-text.bg-transparent
                 %i.fa.fa-phone
             = text_input f, :phone_number, class: "form-control", autocomplete: "nope", placeholder: gettext("Main phone number")
-          %small.form-text.text-muted= gettext "Myanmar mobile only (09000000000)"
+          %small.form-text.text-muted{id: "phone_helper"}= gettext "Myanmar mobile only (09000000000)"
         .col-3.text-right
           %button.btn.btn-primary{id: "btn_check_number", drab-click: "read_user_details", data-item-id: ""}= "OK"
 
-      .row.text-left.my-4.collapse.collapsible_form
+      .row.text-left.collapse.collapsible_form
+        -# Other details
         .col-12
-          .row.no-gutters{id: "field-viber"}
-            .col-9.pr-0.d-flex.align-items-center
-              = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
-              %p.m-0.ml-2= gettext "This number is linked to Viber"
-            .col-3.text-right.d-flex.align-items-center.justify-content-end
-              %button.btn.btn-info.btn-sm.d-flex.align-items-center{id: "btn_unlink_number", drab-click: "remove_viber_link"}
-                = gettext("unlink")
-                %i.fa.fa-unlink.ml-1
-
-          - link to: main_path(@conn, :viber), id: "btn-viber", class: "btn btn-block", target: "_blank" do
-            .row.no-gutters.align-items-center
-              .col-2
-                = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
-              .col-10
-                %span= gettext "Link this number to Viber"
-                %p.m-0= gettext "to receive notifications"
-
-      .row.text-left.my-4.collapse.collapsible_form
-        .col-12
+          -# Nickname
           .form-group
             .input-group
               %span.input-group-prepend
                 .input-group-text.bg-transparent
                   %i.fa.fa-user
               = text_input f, :nickname, class: "form-control", autocomplete: "nope", placeholder: gettext("Name or nickname")
-
         .col-12
+          -# Email
           .form-group.text-left
             .input-group
               %span.input-group-prepend
                 .input-group-text.bg-transparent
                   %i.fa.fa-envelope
               = text_input f, :email, class: "form-control", type: "email", autocomplete: "nope", placeholder: gettext("Email (optional)")
+          -# Viber box
+          .row.text-left.collapse.collapsible_form
+            .col-12
+              .row.no-gutters{id: "field-viber"}
+                .col-9.pr-0.d-flex.align-items-center
+                  = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
+                  %p.m-0.ml-2= gettext "This number is linked to Viber"
+                .col-3.text-right.d-flex.align-items-center.justify-content-end
+                  %button.btn.btn-info.btn-sm.d-flex.align-items-center{id: "btn_unlink_number", drab-click: "remove_viber_link"}
+                    = gettext("unlink")
+                    %i.fa.fa-unlink.ml-1
+            - link to: main_path(@conn, :viber), id: "btn-viber", class: "btn btn-block", target: "_blank" do
+              .row.no-gutters.align-items-center
+                .col-2
+                  = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
+                .col-10
+                  %span= gettext "Link this number to Viber"
+                  %p.m-0= gettext "to receive notifications"
+        -# -# Password
+        -# .col-12
+        -#   .form-group.d-none{id: "field-password"}
+        -#     .form-group.text-left
+        -#       .input-group
+        -#         %span.input-group-prepend
+        -#           .input-group-text.bg-transparent
+        -#             %i.fa.fa-unlock-alt
+        -#         = text_input f, :password, class: "form-control", type: "password", autocomplete: "nope", placeholder: gettext("Password")
 
-        .col-12
-          .form-group.d-none{id: "field-password"}
-            .form-group.text-left
-              .input-group
-                %span.input-group-prepend
-                  .input-group-text.bg-transparent
-                    %i.fa.fa-unlock-alt
-                = text_input f, :password, class: "form-control", type: "password", autocomplete: "nope", placeholder: gettext("Password")
-
-    .col-xs-12.col-sm-6
-      -# %hr
-      %h5.text-left.collapse.collapsible_form= gettext "2. What are you selling ?"
-
-      .row.collapse.mt-4.collapsible_form
+    .col-xs-12.col-sm-6.my-3.collapse.collapsible_form
+      -# Asking for description
+      %hr.d-block.d-sm-none
+      %h5.text-left= gettext "2. What are you selling ?"
+      .row.mt-3
         .col-12
           .form-group
-            %select.form-control.selectpicker{data-style: "btn-outline-dark", title: gettext("Select item location"), data-size: "8", id: "announce_township", name: "announce[township_id]"}
+            %select.form-control.selectpicker{data-style: "btn-outline-form", title: gettext("Select item location"), data-size: "8", id: "announce_township", name: "announce[township_id]"}
               - for division <- @conn.assigns.select_menus.divisions do
                 %optgroup{label: "#{LayoutView.convert_zawgyi(division, "title")}", data-icon: "fa fa-map-marker"}
                   - for township <- division.townships do
                     %option{value: "#{township.id}"}= "#{LayoutView.convert_zawgyi(division, "title")}- #{LayoutView.convert_zawgyi(township, "title")}"
         .col-12
           .form-group
-            %select.form-control.selectpicker{data-style: "btn-outline-dark", title: gettext("Select a category"), data-size: "8", id: "announce_category", name: "announce[category_id]"}
+            %select.form-control.selectpicker{data-style: "btn-outline-form", title: gettext("Select a category"), data-size: "8", id: "announce_category", name: "announce[category_id]"}
               - for family <- @conn.assigns.select_menus.familys do
                 %optgroup{label: "#{LayoutView.convert_zawgyi(family, "title")}", data-icon: "fa fa-#{family.icon}"}
                   - for category <- family.categorys do
@@ -96,50 +98,53 @@
             .input-group
               .input-group-prepend
                 .input-group-text.bg-transparent
-                  %i.fa.fa-thumbs-up
+                  %i.fa.fa-tag
               = text_input f, :price, class: "form-control", autocomplete: "nope", placeholder: gettext("Price")
               .input-group-append
-                -# %span.input-group-text
-                -#   =".00"
-                .input-group-text{id: "choosen_currency_text"}
-                  = gettext("Kyats")
-                %button.btn.dropdown-toggle.custo-form-selector{data-toggle: "dropdown", aria-haspopup: "true", aria-expanded: "false"}
+                %button.btn.btn-form{id: "choosen_currency_text", type: "button"}= gettext("Kyats")
+                %button.btn.btn-form.dropdown-toggle.dropdown-toggle-split{type: "button", data-toggle: "dropdown", aria-haspopup: "true", aria-expanded: "false"}
                 .dropdown-menu
-                  .dropdown-item.ddown_change_currency= "Kyats"
-                  .dropdown-item.ddown_change_currency= "Lacks"
-                  .dropdown-item.ddown_change_currency= "USD"
-        .col-12
-          .form-group
-            .input-group
-              %span.input-group-prepend
-                .input-group-text.bg-transparent
-                  %i.fa.fa-edit
-              = textarea f, :description, class: "form-control", rows: "10", autocomplete: "nope", placeholder: gettext("Description (size, dimensions, condition, scratches, date of buy, ...)")
+                  .dropdown-item.ddown_change_currency= gettext("Kyats")
+                  .dropdown-item.ddown_change_currency= gettext("Lacks")
+                  .dropdown-item.ddown_change_currency= gettext("USD")
 
   .row.collapse.collapsible_form
     .col-12
+      .form-group
+        .input-group
+          %span.input-group-prepend
+            .input-group-text.bg-transparent
+              %i.fa.fa-edit
+          = textarea f, :description, class: "form-control", rows: "10", autocomplete: "nope", placeholder: gettext("Describe your offer (size, dimensions, condition, scratches, date of buy, ...)")
+
+  .row.collapse.collapsible_form.my-3
+    -# Asking for photos
+    .col-12
+      %hr.d-block.d-sm-none
       %h5.text-left= gettext("3. Show some photos")
-      %p.text-left= gettext "Please select 1, 2, or 3 photos to show the object and its condition (good or used)."
+      %p.text-left= gettext "Please select 1, 2, or 3 photos to show the object and its condition."
       -# %h3= "thanks to https://pqina.nl/slim/#docs"
     .col-12
       .row
-        .col-4
+        .col-xs-12.col-sm-4
           %fieldset.form-group
-            %input.form-control.slim{id: "image_file_1", name: "announce[image_file_1]", type: "file", data-post="output", data-force-type: "jpg", data-ratio: "1:1", data-size: "600,600", data-min-size: "300,300", data-instant-edit: "true"}
-        .col-4
+            %input.form-control.slim{id: "image_file_1", name: "announce[image_file_1]", type: "file", data-post="output", data-force-type: "jpg", data-ratio: "1:1", data-size: "600,600", data-min-size: "300,300", data-instant-edit: "true", data-label="Photo", data-label-loading="Loading"}
+        .col-xs-12.col-sm-4
           %fieldset.form-group
-            %input.form-control.slim{id: "image_file_2", name: "announce[image_file_2]", type: "file", data-post="output", data-force-type: "jpg", data-ratio: "1:1", data-size: "600,600", data-min-size: "300,300", data-instant-edit: "true"}
-        .col-4
+            %input.form-control.slim{id: "image_file_2", name: "announce[image_file_2]", type: "file", data-post="output", data-force-type: "jpg", data-ratio: "1:1", data-size: "600,600", data-min-size: "300,300", data-instant-edit: "true", data-label="Photo", data-label-loading="Loading"}
+        .col-xs-12.col-sm-4
           %fieldset.form-group
-            %input.form-control.slim{id: "image_file_3", name: "announce[image_file_3]", type: "file", data-post="output", data-force-type: "jpg", data-ratio: "1:1", data-size: "600,600", data-min-size: "300,300", data-instant-edit: "true"}
+            %input.form-control.slim{id: "image_file_3", name: "announce[image_file_3]", type: "file", data-post="output", data-force-type: "jpg", data-ratio: "1:1", data-size: "600,600", data-min-size: "300,300", data-instant-edit: "true", data-label="Photo", data-label-loading="Loading"}
 
-
-    .col-12.my-2
+  .row.collapse.collapsible_form.my-3
+    .col-12
+      %hr.d-block.d-sm-none
       .form-group.form-check
         %label.form-check-label
           = checkbox f, :conditions, class: "form-check-input", type: "radio"
-          = gettext "I understand and agree to conditions"
-  .row.collapse.collapsible_form
+          = gettext "I understand and agree to "
+          - link to: main_path(@conn, :conditions), target: "_blank" do
+            %span.text-primary.font-weight-bold= gettext "conditions"
     .col-12
       .form-group
         = submit gettext("Submit this offer"), class: "btn btn-primary btn-lg"

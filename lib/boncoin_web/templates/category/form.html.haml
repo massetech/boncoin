@@ -12,7 +12,7 @@
               .input-group-prepend
                 = label f, :family_id, class: "input-group-text"
               %select.custom-select{id: "category_family_id"}
-                - for family <- @conn.assigns.select_menus.familys do
+                - for family <- @familys do
                   %option{value: "#{family.id}"}= family.title_en
 
           .form-group

@@ -40,11 +40,6 @@ msgid "Email (optional)"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/welcome.html.haml:4
-msgid "Find something in more than "
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/templates/announce/form.html.haml:202
 msgid "I understand and agree to conditions"
 msgstr ""
@@ -77,11 +72,6 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/announce/form.html.haml:144
 msgid "Price"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/layout/_cities_list.html.haml:4
-msgid "Search in your area"
 msgstr ""
 
 #, elixir-format
@@ -131,7 +121,7 @@ msgid "3. Show some photos"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:84
+#: lib/boncoin_web/templates/public/about.html.haml:13
 msgid "About us"
 msgstr ""
 
@@ -141,18 +131,12 @@ msgid "Change language"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:20
-msgid "Change location"
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/templates/layout/_sidebar.html.haml:79
 msgid "Conditions"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:102
-#: lib/boncoin_web/templates/public/about.html.haml:54
+#: lib/boncoin_web/templates/public/about.html.haml:49
 msgid "Join us"
 msgstr ""
 
@@ -162,12 +146,12 @@ msgid "Link this number to Viber"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:132
+#: lib/boncoin_web/templates/layout/_sidebar.html.haml:114
 msgid "Log in"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:115
+#: lib/boncoin_web/templates/layout/_sidebar.html.haml:97
 msgid "Log out"
 msgstr ""
 
@@ -182,30 +166,18 @@ msgid "Myanmar mobile only (09000000000)"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:15
 #: lib/boncoin_web/templates/public/welcome.html.haml:14
 msgid "Sell something"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:108
-msgid "Technical"
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/templates/layout/_sidebar.html.haml:90
-msgid "The company"
+msgid "Technical"
 msgstr ""
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/form.html.haml:30
 msgid "This number is linked to Viber"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:96
-#: lib/boncoin_web/templates/public/about.html.haml:36
-msgid "Work with us"
 msgstr ""
 
 #, elixir-format
@@ -429,8 +401,8 @@ msgstr "These terms of use may be updated "
 #, elixir-format
 #: lib/boncoin_web/templates/public/welcome.html.haml:21
 msgid "Presenting website"
-msgstr "On this website, you can sell and find second hand products without any commission. "
-"Find everything you want in Myanmar for cheaper price !"
+msgstr "On this website, you can sell and find second-hand products for free. "
+"Find everything you need in Myanmar for cheaper price !"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:168
@@ -577,33 +549,23 @@ msgid "Please let us know if you have any question on our activity."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/about.html.haml:13
-msgid "The brand PawChaungKaung"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/public/about.html.haml:26
-msgid "contact@pawchaungkaung.com (we wont answer to messages related to offers.)"
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/templates/public/about.html.haml:21
 msgid "introduce the compagny"
-msgstr "The company is a Myanmar company and is based in Yangon."
+msgstr "Pawchaungkaung is a Myanmar company and is based in Yangon."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/about.html.haml:62
+#: lib/boncoin_web/templates/public/about.html.haml:57
 msgid "introduce the join us"
 msgstr "We are hiring Myanmar young motivated people who would like to join the PawChaungKaung "
-"adventure. If you are Myanmar citizen with proficiency in English and digital/marketing, "
-"please send us your CV !"
+"adventure. If you are Myanmar citizen with proficiency in English and a digital sales experience, "
+"please send us your CV at candidate@pawchaungkaung.com"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/about.html.haml:44
+#: lib/boncoin_web/templates/public/about.html.haml:39
 msgid "introduce the work with us"
 msgstr "PawChaungKaung proposes his services to promote your brand through adds. These adds will be displayed "
-"to visitors who come to the website. We have dedicated tools to help you reach your target, for informations "
-"please contact us !"
+"to visitors who visit the website. We have dedicated tools to help you reach your target, for informations "
+"please contact us at partners@pawchaungkaung.com"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/viber.html.haml:7
@@ -623,11 +585,6 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:49
 msgid "Manage an offer"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/new.html.haml:3
-msgid "Please note that your are acting on your own and that the website can’t hold any responsability on the transaction you may have with people who contact you. Your announce will be validated by our team and can be refused if we decide so."
 msgstr ""
 
 #, elixir-format
@@ -666,17 +623,17 @@ msgstr "In Myanmar Viber is the most used app to get in touch with people. Selle
 "send notifications and lets the sellers easily manage their offers. It is not mandatory to link "
 "your number to create an announce, but we advise sellers to create this link before creating any offer."
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:257
 msgid "How do we protect datas ?"
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:249
 msgid "How do we use these datas ?"
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/boncoin_web/templates/announce/_display_big.html.haml:63
 msgid "See number"
 msgstr ""
@@ -708,3 +665,57 @@ msgstr ""
 #: lib/boncoin_web/templates/township/form.html.haml:31
 msgid "title MY"
 msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/about.html.haml:67
+msgid "Contact us"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/about.html.haml:75
+msgid "introduce the contact us"
+msgstr "Please contact us for suggestions or to report a problem on the website by sending an email "
+"to contact@pawchaunkaung.com"
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/about.html.haml:80
+msgid "we wont answer to offers messages"
+msgstr "Please note that we won't answer to messages concerning offers or relation between sellers and buyers "
+"(for more informations, please read our terms and conditions)"
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/about.html.haml:31
+msgid "Become a partner"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/welcome.html.haml:4
+msgid "Find a good-deal in more than "
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/layout/_sidebar.html.haml:85
+msgid "Pawchaungkaung company"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/layout/_cities_list.html.haml:4
+msgid "Search arround you"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/layout/_sidebar.html.haml:20
+msgid "Searching something ?"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/layout/_sidebar.html.haml:15
+msgid "Selling something ?"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/new.html.haml:3
+msgid "Please note that your are acting on your own..."
+msgstr "Please note that your are acting on your own and that the website won’t hold any "
+"responsability on the transaction you may have with people who contact you. Your offer will "
+"be validated by our team before being published."

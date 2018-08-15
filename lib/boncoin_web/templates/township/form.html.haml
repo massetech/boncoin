@@ -12,7 +12,7 @@
               .input-group-prepend
                 = label f, :division_id, class: "input-group-text"
               %select.custom-select{id: "township_division_id"}
-                - for division <- @conn.assigns.select_menus.divisions do
+                - for division <- @divisions do
                   %option{value: "#{division.id}"}= division.title_en
 
           .form-group

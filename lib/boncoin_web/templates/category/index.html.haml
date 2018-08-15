@@ -3,6 +3,9 @@
     %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
     %li.breadcrumb-item.active{aria-current: "page"}= "Categorys"
 
+.text-right
+  = link "New Category", to: category_path(@conn, :new), class: "btn btn-outline-info btn-sm"
+
 .table-responsive
   %table.table.table-hover
     %caption= "Categorys"
@@ -32,6 +35,5 @@
           %td= "visitors"
           %td= "offers"
           %td
-            = link "New Category", to: category_path(@conn, :new), class: "btn btn-outline-info btn-sm"
             = link "Edit", to: category_path(@conn, :edit, category), class: "btn btn-outline-primary btn-sm"
             = link "Delete", to: category_path(@conn, :delete, category), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

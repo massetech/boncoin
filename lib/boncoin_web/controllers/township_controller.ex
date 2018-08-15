@@ -11,7 +11,8 @@ defmodule BoncoinWeb.TownshipController do
 
   def new(conn, _params) do
     changeset = Contents.change_township(%Township{})
-    render(conn, "new.html", changeset: changeset)
+    divisions = Contents.list_divisions()
+    render(conn, "new.html", changeset: changeset, divisions: divisions)
   end
 
   def create(conn, %{"township" => township_params}) do
@@ -19,7 +20,7 @@ defmodule BoncoinWeb.TownshipController do
       {:ok, township} ->
         conn
         |> put_flash(:info, "Township created successfully.")
-        |> redirect(to: township_path(conn, :show, township))
+        |> redirect(to: township_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -32,8 +33,9 @@ defmodule BoncoinWeb.TownshipController do
 
   def edit(conn, %{"id" => id}) do
     township = Contents.get_township!(id)
+    divisions = Contents.list_divisions()
     changeset = Contents.change_township(township)
-    render(conn, "edit.html", township: township, changeset: changeset)
+    render(conn, "edit.html", township: township, changeset: changeset, divisions: divisions)
   end
 
   def update(conn, %{"id" => id, "township" => township_params}) do
@@ -43,7 +45,7 @@ defmodule BoncoinWeb.TownshipController do
       {:ok, township} ->
         conn
         |> put_flash(:info, "Township updated successfully.")
-        |> redirect(to: township_path(conn, :show, township))
+        |> redirect(to: township_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", township: township, changeset: changeset)
     end

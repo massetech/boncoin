@@ -3,6 +3,9 @@
     %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
     %li.breadcrumb-item.active{aria-current: "page"}= "Townships"
 
+.text-right
+  = link "New Township", to: township_path(@conn, :new), class: "btn btn-outline-info btn-sm"
+
 .table-responsive
   %table.table.table-hover
     %caption= "Townships"
@@ -33,6 +36,5 @@
           %td= "visitors"
           %td= "offers"
           %td
-            = link "New Township", to: township_path(@conn, :new), class: "btn btn-outline-info btn-sm"
             = link "Edit", to: township_path(@conn, :edit, township), class: "btn btn-outline-primary btn-sm"
             = link "Delete", to: township_path(@conn, :delete, township), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

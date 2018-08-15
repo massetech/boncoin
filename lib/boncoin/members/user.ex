@@ -18,7 +18,7 @@ defmodule Boncoin.Members.User do
     field :viber_active, :boolean, default: false
     field :viber_id, :string
     has_many :announces, Announce, on_delete: :delete_all
-    has_many :treated_announces, Announce, foreign_key: :treated_by
+    has_many :treated_announces, Announce, foreign_key: :treated_by, on_delete: :nilify_all
     timestamps()
   end
 

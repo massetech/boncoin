@@ -527,7 +527,7 @@ defmodule Boncoin.Contents do
     Announce
     |> list_admin_announces()
     |> Repo.all()
-    |> Repo.preload([:user, :township, :category])
+    |> Repo.preload([:user, :category, township: [:division]])
   end
 
   def list_announces_public(%{"category_id" => category_id, "division_id" => division_id, "family_id" => family_id, "township_id" => township_id} = params) do
@@ -572,6 +572,7 @@ defmodule Boncoin.Contents do
       |> Map.merge(%{"status" => "PENDING"})
       # Convert Zawgyi to Unicode for database
       |> Map.merge(%{"title" => Rabbit.zg2uni(attrs["title"]), "description" => Rabbit.zg2uni(attrs["description"])})
+      # |> IO.inspect()
       # |> IO.inspect(limit: :infinity, printable_limit: :infinity)
     new_announce = %Announce{}
       |> Announce.changeset(params)

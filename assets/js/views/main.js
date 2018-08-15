@@ -186,7 +186,6 @@ export default class MainView {
     })
     // Currency selector
     $('.ddown_change_currency').on('click', function() {
-      // console.log(this.innerHTML)
       $('#choosen_currency_text')[0].innerHTML = this.innerHTML
       $('#announce_currency').val(this.innerHTML)
     })
@@ -239,6 +238,7 @@ export default class MainView {
   let reset_announce_form_field = () => {
     // console.log("wrong phone number : form reseted")
     $('.collapsible_form').collapse('hide')
+    $('#phone_helper').show()
     $('#announce_phone_number').val('').focus().removeClass("field-success").addClass("field-danger")
     $('#announce_user_id').val('')
     $('#announce_nickname').val('')
@@ -248,6 +248,7 @@ export default class MainView {
   let validate_phone_number_pop_field = (user_id, nickname, email, viber, nb_announces) => {
     // console.log("Good phone number : form processed with pop")
     $('#announce_phone_number').removeClass("field-danger").addClass("field-success")
+    $('#phone_helper').hide()
     $('#announce_user_id').val(user_id)
     $('#announce_nickname').val(nickname).focus()
     $('#announce_email').val(email)

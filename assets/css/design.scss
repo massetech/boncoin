@@ -141,9 +141,19 @@ div > i, .btn > i:not(.btn-icon) {
 .add-left {left: 0;z-index: -1;}
 .add-right {right: 0;z-index: -1;}
 /* ------------------------------ CUSTO BOOSTRAP  ------------------------------ */
-.custo-form-selector{
-  background-color: #e9ecef;
-  border: 1px solid #ced4da;
+.btn-form{
+  background-color: $form_grey1;
+  border: 1px solid $form-grey2;
+}
+.btn-outline-form{
+  background-color: transparent;
+  border: 1px solid $form-grey2;
+}
+.dropdown-toggle-split{
+  width: 30px;
+}
+.dropdown-toggle::after {
+  right: 10px !important;
 }
 .field-success {
   font-weight: bold;

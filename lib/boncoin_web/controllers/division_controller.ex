@@ -19,7 +19,7 @@ defmodule BoncoinWeb.DivisionController do
       {:ok, division} ->
         conn
         |> put_flash(:info, "Division created successfully.")
-        |> redirect(to: division_path(conn, :show, division))
+        |> redirect(to: division_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -43,7 +43,7 @@ defmodule BoncoinWeb.DivisionController do
       {:ok, division} ->
         conn
         |> put_flash(:info, "Division updated successfully.")
-        |> redirect(to: division_path(conn, :show, division))
+        |> redirect(to: division_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", division: division, changeset: changeset)
     end
@@ -52,7 +52,6 @@ defmodule BoncoinWeb.DivisionController do
   def delete(conn, %{"id" => id}) do
     division = Contents.get_division!(id)
     {:ok, _division} = Contents.delete_division(division)
-
     conn
     |> put_flash(:info, "Division deleted successfully.")
     |> redirect(to: division_path(conn, :index))

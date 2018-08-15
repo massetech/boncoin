@@ -165,7 +165,7 @@ defmodule Boncoin.Members do
   end
 
   def get_other_user_by_phone_number(phone_number)do
-    Uers
+    User
       |> search_other_user_for_phone_number(phone_number)
       |> Repo.one()
   end

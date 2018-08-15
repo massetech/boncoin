@@ -5,7 +5,7 @@ defmodule Boncoin.Repo.Migrations.CreateImages do
     create table(:images) do
       add :uuid, :string
       add :file, :string
-      add :announce_id, references(:announces, on_delete: :nothing)
+      add :announce_id, references(:announces, on_delete: :delete_all)
       timestamps()
     end
   end
