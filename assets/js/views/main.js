@@ -139,7 +139,11 @@ export default class MainView {
       $(this).addClass('d-none')
       $(`.alert_${announce_id}`).addClass('d-none')
       $(`#number_${announce_id}`).removeClass('d-none')
-      // Copy phone number to clipboard
+      $(`#copy_number_${announce_id}`).removeClass('d-none')
+    })
+    // Copy phone number to clipboard
+    $('.btn-copy-number').on('click', function() {
+      var phone_number = $(this).attr('data-phone-number')
       var $temp = $("<input>")
       $("body").append($temp)
       $temp.val(phone_number).select()

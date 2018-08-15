@@ -17,6 +17,8 @@ defmodule BoncoinWeb.AnnounceView do
   end
 
   def show_date(announce, language) do
+    IO.puts("hey")
+    IO.inspect(announce)
     if announce.parution_date != nil, do: datetime = announce.parution_date, else: datetime = announce.inserted_at
     day = datetime.day
     month = datetime.month

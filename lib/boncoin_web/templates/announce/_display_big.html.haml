@@ -1,4 +1,4 @@
-.col-12.my-3.big-announce{id: "big_announce_#{@announce.id}", name: "big_announce_#{@announce.id}"}
+.col-12.my-3.big-announce.d-none{id: "big_announce_#{@announce.id}", name: "big_announce_#{@announce.id}"}
   .card.card-offer
     %a.btn-close.m-2{data-announce-id: "#{@announce.id}", href: "#"}
       %i.fa.fa-times-circle.text-dark
@@ -50,7 +50,7 @@
 
         .col-xs-12.col-sm-4.offset-sm-1.d-flex.flex-column.justify-content-center.align-items-center
           -# Button see number
-          %button.btn.btn-lg.btn-block.btn-outline-success.btn-show-number.mb-2{id: "btn_number_#{@announce.id}", data-announce-id: "#{@announce.id}", data-phone-number: "#{@announce.user.phone_number}"}
+          %button.btn.btn-lg.btn-block.btn-outline-primary.btn-show-number.mb-2{id: "btn_number_#{@announce.id}", data-announce-id: "#{@announce.id}", data-phone-number: "#{@announce.user.phone_number}"}
             %i.fa.fa-phone.btn-icon
             %span= gettext "See number"
 
@@ -66,7 +66,7 @@
 
           -# Show the sellor's number
           %button.btn.btn-lg.btn-block.btn-primary.btn-see-number.d-none{id: "number_#{@announce.id}"}
-            %i.fa.fa-phone.btn-icon
+            -# %i.fa.fa-phone.btn-icon
             %span
               = String.slice(@announce.user.phone_number, 0..1)
               = " "
@@ -75,3 +75,5 @@
               = String.slice(@announce.user.phone_number, 5..7)
               = " "
               = String.slice(@announce.user.phone_number, 8..10)
+          %button.btn.btn-primary.btn-copy-number.d-none{id: "copy_number_#{@announce.id}", data-phone-number: "#{@announce.user.phone_number}"}
+            %i.fa.fa-copy

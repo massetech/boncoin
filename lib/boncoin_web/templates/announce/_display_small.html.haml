@@ -12,4 +12,4 @@
             .details
               %p.text-dark.m-0= LayoutView.convert_zawgyi(@announce.township.division, "title")
               %p.text-dark.m-0= LayoutView.convert_zawgyi(@announce.township, "title")
-              %p.text-dark.m-0{style: "font-size:0.75em;"}= BoncoinWeb.AnnounceView.show_date(@announce.parution_date, "en")
+              %p.text-dark.m-0{style: "font-size:0.75em;"}= BoncoinWeb.AnnounceView.show_date(@announce, "en")
