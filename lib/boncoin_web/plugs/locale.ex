@@ -24,7 +24,7 @@ defmodule Boncoin.Plug.Locale do
     case locale do
       "en" -> "en"
       "my" -> "my"
-      "mr" -> "my"
+      "mr" -> "mr"
       _ -> ""
     end
   end

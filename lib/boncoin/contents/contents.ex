@@ -12,6 +12,11 @@ defmodule Boncoin.Contents do
       select: [:id, :title_en, :title_my, :icon]
   end
 
+  defp select_familys_for_dropdown(query \\ Family) do
+    from f in query,
+      select: {f.title_en, f.id}
+  end
+
   # METHODS ------------------------------------------------------------------
 
   @doc """
@@ -25,6 +30,11 @@ defmodule Boncoin.Contents do
   """
   def list_familys do
     Repo.all(Family)
+  end
+
+  def list_familys_for_select() do
+    select_familys_for_dropdown
+      |> Repo.all()
   end
 
   @doc """
@@ -346,6 +356,11 @@ defmodule Boncoin.Contents do
       select: [:id, :title_en, :title_my]
   end
 
+  defp select_divisions_for_dropdown(query \\ Division) do
+    from f in query,
+      select: {f.title_en, f.id}
+  end
+
   # METHODS ------------------------------------------------------------------
 
   @doc """
@@ -359,6 +374,12 @@ defmodule Boncoin.Contents do
   """
   def list_divisions do
     Repo.all(Division)
+  end
+
+  def list_divisions_for_select() do
+    select_divisions_for_dropdown
+      |> Repo.all()
+      # |> IO.inspect()
   end
 
   @doc """

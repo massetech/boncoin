@@ -11,9 +11,7 @@
             .input-group
               .input-group-prepend
                 = label f, :family_id, class: "input-group-text"
-              %select.custom-select{id: "category_family_id"}
-                - for family <- @familys do
-                  %option{value: "#{family.id}"}= family.title_en
+              = select f, :family_id, @familys, class: "select custom-select", id: "category_family_id"
 
           .form-group
             .input-group

@@ -1,7 +1,12 @@
 import "phoenix_html";
 // import socket from "./socket"
 
+// Import CSS
 import "../css/app.scss";
+// Import static images
+function requireAll(r) { r.keys().forEach(r); }
+requireAll(require.context('../static/images/', true, /\.(png|gif|svg|jpg|jpeg)$/));
+// requireAll(require.context('../static/images/flags', true, /\.(png|gif|svg|jpg|jpeg)$/));
 
 import '../node_modules/bootstrap';                   // imports Boostrap js functions
 import '../node_modules/jquery-touchswipe';           // imports touchswipe effects

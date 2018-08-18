@@ -66,9 +66,15 @@ var common = {
           ]
       },
       {
-        test: /\.(png|jpg|gif)$/,
-        loader: "file-loader?name=/images/[name].[ext]"
+        test: /\.(png|jpg|jpeg|gif)$/,
+        // loader: "file-loader?name=/images/[name].[ext]"
+        use: [{
+          loader: 'file-loader', options: {
+            name: 'images/[path][name].[ext]', context: './static/images'
+          }
+        }]
       },
+
       {
         test: /\.(ttf|otf|eot|svg|woff2?)$/,
         loader: "file-loader?name=/fonts/[name].[ext]"

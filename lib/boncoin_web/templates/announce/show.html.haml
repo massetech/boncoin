@@ -4,20 +4,23 @@
       .col-12.my-3.big-announce
         .card.card-offer
           .card-body.pb-0
+            .offer-status.position-absolute
+              = btn_status(@announce.status)
             .row
               -# Title
               .col-xs-12.w-100.mb-3
                 %h6.font-weight-bold.text-dark.m-0= @announce.title
                 %h6.text-primary.m-0= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
-              -# Images carousel
-              - for image <- @announce.images do
-                .col-xs-12.col-sm-2.m-4.m-sm-0
-                  .carousel-item
-                  = img_tag BoncoinWeb.AnnounceView.image_url(image, :original)
-                  %a.expand-photo{href: "#{BoncoinWeb.AnnounceView.image_url(List.first(@announce.images), :original)}", data-toggle: "lightbox", data-gallery: "gallery_announce_#{@announce.id}", data-type: "image"}
-                    %i.fa.fa-search-plus
-                    - for image <- List.delete_at(@announce.images, 0) do
-                      %div{data-toggle: "lightbox", data-gallery: "gallery_announce_#{@announce.id}", data-remote: "#{BoncoinWeb.AnnounceView.image_url(image, :original)}"}
+              .col-xs-12.col-sm-6
+                -# Images
+                .row
+                  - for image <- @announce.images do
+                    .col-xs-12.col-sm-4.m-4.m-sm-0
+                      = img_tag BoncoinWeb.AnnounceView.image_url(image, :original)
+                      %a.expand-photo{href: "#{BoncoinWeb.AnnounceView.image_url(List.first(@announce.images), :original)}", data-toggle: "lightbox", data-gallery: "gallery_announce_#{@announce.id}", data-type: "image"}
+                        %i.fa.fa-search-plus
+                        - for image <- List.delete_at(@announce.images, 0) do
+                          %div{data-toggle: "lightbox", data-gallery: "gallery_announce_#{@announce.id}", data-remote: "#{BoncoinWeb.AnnounceView.image_url(image, :original)}"}
 
               -# Description for big devices
               .col-xs-12.col-sm-6.d-none.d-sm-flex.flex-column
@@ -67,37 +70,52 @@
                   - link to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: true, cause: "accepted", category_id: "#{@announce.category_id}") do
                     .btn.btn-success.btn-lg.btn-block
                       = "Accept"
+                .col-xs-12.col-sm-3.my-3
+                  - link to: "#" do
+                    .btn.btn-danger.btn-lg.btn-block{data-toggle: "collapse", href: "#refuseMenu"}
+                      = "Refuse"
               - if @announce.status in ["PENDING", "ONLINE"]  do
                 .col-xs-12.col-sm-3.my-3
                   - link to: "#" do
                     .btn.btn-info.btn-lg.btn-block{data-toggle: "collapse", href: "#moveMenu"}
                       = "Move"
+              - if @announce.status in ["ONLINE"]  do
                 .col-xs-12.col-sm-3.my-3
                   - link to: root_path(@conn, :welcome) do
                     .btn.btn-warning.btn-lg.btn-block.disabled
                       = "Remove alerts"
                 .col-xs-12.col-sm-3.my-3
                   - link to: "#" do
-                    .btn.btn-danger.btn-lg.btn-block{data-toggle: "collapse", href: "#refuseMenu"}
-                      = "Refuse"
+                    .btn.btn-danger.btn-lg.btn-block{data-toggle: "collapse", href: "#closeMenu"}
+                      = "Close"
 
-.row.collapse{id: "moveMenu"}
-  .col.d-flex.justify-content-center
-    .card.admin.my-3
-      .card-body
-        .row
-          - for family <- @conn.assigns.select_menus.familys do
-            .col-xs-12.col-sm-4.flex-column.justify-content-center
-              %h6.card-title= family.title_en
-              - for category <- family.categorys do
-                = link "Move to #{category.title_en}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: true, cause: "moved", category_id: "#{category.id}"), class: "btn btn-lg btn-block btn-outline-info m-2"
-              %hr
+.accordion{id: "reasons"}
+  .row.collapse{id: "moveMenu", data-parent: "#reasons"}
+    .col.d-flex.justify-content-center
+      .card.admin.my-3
+        .card-body
+          .row
+            - for family <- @conn.assigns.select_menus.familys do
+              .col-xs-12.col-sm-4.flex-column.justify-content-center
+                %h6.card-title= family.title_en
+                - for category <- family.categorys do
+                  = link "Move to #{category.title_en}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: true, cause: "moved", category_id: "#{category.id}"), class: "btn btn-lg btn-block m-2 btn-outline-info"
+                %hr
 
-.row.collapse{id: "refuseMenu"}
-  .col.d-flex.justify-content-center
-    .card.admin.my-3
-      .card-body
-        .row
-          - for cause <- @refusal_causes do
-            .col-xs-12.col-sm-4.flex-column.justify-content-center
-              = link "#{cause.title}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: false, cause: "#{cause.label}", category_id: "#{@announce.category_id}"), class: "btn btn-lg btn-block btn-outline-danger m-2"
+  .row.collapse{id: "refuseMenu", data-parent: "#reasons"}
+    .col.d-flex.justify-content-center
+      .card.admin.my-3
+        .card-body
+          .row
+            - for cause <- @refusal_causes do
+              .col-xs-12.col-sm-4.flex-column.justify-content-center
+                = link "#{cause.title}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: false, cause: "#{cause.label}", category_id: "#{@announce.category_id}"), class: "btn btn-lg btn-block m-2 #{cause.btn_color}"
+
+  .row.collapse{id: "closeMenu", data-parent: "#reasons"}
+    .col.d-flex.justify-content-center
+      .card.admin.my-3
+        .card-body
+          .row
+            - for cause <- @closing_causes do
+              .col-xs-12.col-sm-4.flex-column.justify-content-center
+                = link "#{cause.title}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: false, cause: "#{cause.label}", category_id: "#{@announce.category_id}"), class: "btn btn-lg btn-block m-2 #{cause.btn_color}"

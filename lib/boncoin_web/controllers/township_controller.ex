@@ -11,7 +11,8 @@ defmodule BoncoinWeb.TownshipController do
 
   def new(conn, _params) do
     changeset = Contents.change_township(%Township{})
-    divisions = Contents.list_divisions()
+    divisions = Contents.list_divisions_for_select()
+    |> IO.inspect()
     render(conn, "new.html", changeset: changeset, divisions: divisions)
   end
 
@@ -22,7 +23,8 @@ defmodule BoncoinWeb.TownshipController do
         |> put_flash(:info, "Township created successfully.")
         |> redirect(to: township_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        divisions = Contents.list_divisions_for_select()
+        render(conn, "new.html", changeset: changeset, divisions: divisions)
     end
   end
 
@@ -33,7 +35,7 @@ defmodule BoncoinWeb.TownshipController do
 
   def edit(conn, %{"id" => id}) do
     township = Contents.get_township!(id)
-    divisions = Contents.list_divisions()
+    divisions = Contents.list_divisions_for_select()
     changeset = Contents.change_township(township)
     render(conn, "edit.html", township: township, changeset: changeset, divisions: divisions)
   end
@@ -47,7 +49,8 @@ defmodule BoncoinWeb.TownshipController do
         |> put_flash(:info, "Township updated successfully.")
         |> redirect(to: township_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", township: township, changeset: changeset)
+        divisions = Contents.list_divisions_for_select()
+        render(conn, "edit.html", township: township, changeset: changeset, divisions: divisions)
     end
   end
 

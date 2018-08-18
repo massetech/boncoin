@@ -41,7 +41,9 @@ defmodule BoncoinWeb.AnnounceController do
 
   def show(conn, %{"id" => id}) do
     announce = Contents.get_announce!(id)
-    render(conn, "show.html", announce: announce, refusal_causes: Announce.refusal_causes())
+    refusal = Announce.refusal_causes()
+    closing = Announce.admin_closing_causes()
+    render(conn, "show.html", announce: announce, refusal_causes: refusal, closing_causes: closing)
   end
 
   def edit(conn, %{"link" => link}) do

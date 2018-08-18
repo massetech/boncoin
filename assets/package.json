@@ -3,6 +3,7 @@
   "license": "MIT",
   "scripts": {
     "build": "NODE_ENV=production node_modules/webpack/bin/webpack.js -p",
+    "build_dev": "NODE_ENV=development node_modules/webpack/bin/webpack.js",
     "watch": "NODE_ENV=development node_modules/webpack/bin/webpack.js --mode development --config ./webpack.config.js --progress --color --watch"
   },
   "dependencies": {

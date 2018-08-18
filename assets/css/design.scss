@@ -35,6 +35,7 @@ i {font-size: 20px!important;}
   .icon_viber{width: 30px;height: 30px;}
   .round{width: 25px;height: 25px;border-radius: 100px;}
 }
+.offer-status{right: 0;top: -20px;}
 /* ------------------------------ CONDITIONS  ------------------------------ */
 #conditions, .conditions{
   i {font-size: 30px!important;}
@@ -71,6 +72,10 @@ div > i, .btn > i:not(.btn-icon) {
 }
 .btn > i.btn-icon {margin: 0 1em; display: inline-block;}
 /* ------------------------------ SIDEBAR  ------------------------------ */
+span.language-active{
+  font-weight: 600;
+  @extend .text-secondary;
+}
 .side-bar-wrapper {
     display: block;
 }

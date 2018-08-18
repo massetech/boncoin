@@ -4,6 +4,7 @@
     %li.breadcrumb-item.active{aria-current: "page"}= "Categorys"
 
 .text-right
+  = link "View Familys", to: family_path(@conn, :index), class: "btn btn-outline-info btn-sm"
   = link "New Category", to: category_path(@conn, :new), class: "btn btn-outline-info btn-sm"
 
 .table-responsive

@@ -32,13 +32,13 @@
           %td= offer.user.phone_number
           %td= offer.user.nickname
           %td= LayoutView.icon_active(offer.user.viber_active)
-          %td= img_tag static_path(@conn, "/images/flags/1x1/#{offer.language}.svg"), class: "flag-small"
+          %td= img_tag static_path(@conn, "/fonts/#{offer.language}.svg"), class: "flag-small"
           %td= offer.township.division.title_en
           %td= offer.township.title_en
           %td
             %i.fa{class: "fa-#{offer.category.icon}"}
           %td= offer.title
-          %td= offer.price
+          %td= Kernel.round(offer.price)
           %td= offer.currency
           %td
             - link to: announce_path(@conn, :show, offer), target: "_blank" do

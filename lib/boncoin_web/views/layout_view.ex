@@ -7,6 +7,14 @@ defmodule BoncoinWeb.LayoutView do
     if Members.admin_user?(user), do: true, else: false
   end
 
+  def test_en(iso2code, nb) do
+    case nb do
+      1 -> if iso2code == "en", do: "language-active", else: ""
+      2 -> if iso2code == "my", do: "language-active", else: ""
+      3 -> if iso2code == "mr", do: "language-active", else: ""
+    end
+  end
+
   def icon_active(status) do
     case status do
       true -> "<i class='fa fa-check-circle text-success'></>" |> raw

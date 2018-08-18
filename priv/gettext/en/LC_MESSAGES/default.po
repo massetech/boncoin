@@ -434,8 +434,7 @@ msgstr "The seller posts an offer with details and photos. PawChaungKaung team w
 #: lib/boncoin_web/templates/public/conditions.html.haml:34
 msgid "introduce who are the customers"
 msgstr "The users are adults who want to sell or buy second-hand products. Professional sellers are not "
-"allowed to post offers on this website and should comply with rules and taxes applicable in the Republic of the Union of Myanmar. "
-"Therefore a user can hold a maximum of 5 offers per category at one time."
+"allowed to post offers on this website and should comply with rules and taxes applicable in the Republic of the Union of Myanmar."
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:212

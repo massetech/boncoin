@@ -37,21 +37,26 @@
                   %span= LayoutView.convert_zawgyi(township, "title")
 
       %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#languageSubmenu", data-toggle: "collapse", aria-expanded: "false"}
-        = img_tag static_path(@conn, "/images/flags/1x1/#{@conn.assigns.flag}.svg"), class: "flag"
+        = img_tag static_path(@conn, "/fonts/#{@conn.assigns.flag}.svg"), class: "flag"
         %span= gettext "Change language"
       %ul.collapse.list-unstyled.collapse-level1{id: "languageSubmenu"}
         %a{href: "?locale=en"}
           %li.slide-menu.text-dark.border-bottom.border-dark
-            = img_tag static_path(@conn, "/images/flags/1x1/#{"en"}.svg"), class: "flag"
-            = gettext "English"
+            = img_tag static_path(@conn, "/fonts/en.svg"), class: "flag"
+            %span{class: "#{LayoutView.test_en(@conn.assigns.flag, 1)}"}= gettext "English"
         %a{href: "?locale=my"}
-          %li.slide-menu.text-dark.border-bottom.border-dark
-            = img_tag static_path(@conn, "/images/flags/1x1/#{"my"}.svg"), class: "flag"
-            = gettext "Myanmar (Unicode)"
+          %li.slide-menu.text-dark.border-bottom.border-dark{class: ""}
+            = img_tag static_path(@conn, "/fonts/my.svg"), class: "flag"
+            %span{class: "#{LayoutView.test_en(@conn.assigns.flag, 2)}"}= gettext "Myanmar (Unicode)"
         %a{href: "?locale=mr"}
-          %li.slide-menu.text-dark.border-bottom.border-dark
-            = img_tag static_path(@conn, "/images/flags/1x1/#{"my"}.svg"), class: "flag"
-            = gettext "Myanmar (Zawgyi)"
+          %li.slide-menu.text-dark.border-bottom.border-dark{class: ""}
+            = img_tag static_path(@conn, "/fonts/mr.svg"), class: "flag"
+            %span{class: "#{LayoutView.test_en(@conn.assigns.flag, 3)}"}= gettext "Myanmar (Zawgyi)"
+
+      - link to: main_path(@conn, :viber), class: "" do
+        %li.slide-menu.text-dark.border-bottom.border-dark
+          %i.fab.fa-viber
+          %span= gettext "Connect to Viber"
 
       - link to: main_path(@conn, :conditions), class: "" do
         %li.slide-menu.text-dark.border-bottom.border-dark

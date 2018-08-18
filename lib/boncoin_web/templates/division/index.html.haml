@@ -4,6 +4,7 @@
     %li.breadcrumb-item.active{aria-current: "page"}= "Divisions"
 
 .text-right
+  = link "View Townships", to: township_path(@conn, :index), class: "btn btn-outline-info btn-sm"
   = link "New Division", to: division_path(@conn, :new), class: "btn btn-outline-info btn-sm"
 
 .table-responsive

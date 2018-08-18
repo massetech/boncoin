@@ -52,7 +52,8 @@
             %p.m-0= gettext "criteria to sell something"
         %hr
         .d-flex.align-items-center
-          = img_tag static_path(@conn, "/images/viber_icon.png"), class: "icon mr-3"
+          -# = img_tag static_path(@conn, "/images/viber_icon.png"), class: "icon mr-3"
+          %i.fab.fa-viber.mr-3.text-info
           .flex-column
             %h6.title= gettext "What is the Viber link ?"
             %p.m-0= gettext "explain viber process"
