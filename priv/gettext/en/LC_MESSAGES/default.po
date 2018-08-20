@@ -30,33 +30,19 @@ msgid "All Myanmar"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:167
-msgid "Description (size, dimensions, condition, scratches, date of buy, ...)"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:73
+#: lib/boncoin_web/templates/announce/form.html.haml:48
 msgid "Email (optional)"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:202
-msgid "I understand and agree to conditions"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:147
+#: lib/boncoin_web/templates/announce/form.html.haml:135
+#: lib/boncoin_web/templates/announce/form.html.haml:138
 msgid "Kyats"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:61
+#: lib/boncoin_web/templates/announce/form.html.haml:36
 msgid "Name or nickname"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:86
-msgid "Password"
 msgstr ""
 
 #, elixir-format
@@ -65,58 +51,49 @@ msgid "Please check before buying anything"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:177
-msgid "Please select 1, 2, or 3 photos to show the object and its condition (good or used)."
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:144
+#: lib/boncoin_web/templates/announce/form.html.haml:133
 msgid "Price"
 msgstr ""
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_display_big.html.haml:49
+#: lib/boncoin_web/templates/announce/show.html.haml:41
 msgid "Sold by"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:210
+#: lib/boncoin_web/templates/announce/form.html.haml:204
 msgid "Submit this offer"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:131
+#: lib/boncoin_web/templates/announce/form.html.haml:120
 msgid "Title"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:33
+#: lib/boncoin_web/views/announce_view.ex:36
 msgid "today, %{hour}:%{minute} %{label}"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:36
-#: lib/boncoin_web/views/announce_view.ex:40
+#: lib/boncoin_web/views/announce_view.ex:39
+#: lib/boncoin_web/views/announce_view.ex:43
 msgid "yesterday, %{hour}:%{minute} %{label}"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/announces_index.html.haml:9
-msgid " offers for "
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:8
+#: lib/boncoin_web/templates/announce/form.html.haml:9
 msgid "1. What are your details ?"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:94
+#: lib/boncoin_web/templates/announce/form.html.haml:83
 msgid "2. What are you selling ?"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:176
+#: lib/boncoin_web/templates/announce/form.html.haml:166
 msgid "3. Show some photos"
 msgstr ""
 
@@ -131,7 +108,7 @@ msgid "Change language"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:79
+#: lib/boncoin_web/templates/layout/_sidebar.html.haml:85
 msgid "Conditions"
 msgstr ""
 
@@ -141,27 +118,27 @@ msgid "Join us"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:45
+#: lib/boncoin_web/templates/announce/form.html.haml:71
 msgid "Link this number to Viber"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:114
+#: lib/boncoin_web/templates/layout/_sidebar.html.haml:120
 msgid "Log in"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:97
+#: lib/boncoin_web/templates/layout/_sidebar.html.haml:103
 msgid "Log out"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:17
+#: lib/boncoin_web/templates/announce/form.html.haml:18
 msgid "Main phone number"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:19
+#: lib/boncoin_web/templates/announce/form.html.haml:20
 msgid "Myanmar mobile only (09000000000)"
 msgstr ""
 
@@ -171,17 +148,17 @@ msgid "Sell something"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:90
+#: lib/boncoin_web/templates/layout/_sidebar.html.haml:96
 msgid "Technical"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:30
+#: lib/boncoin_web/templates/announce/form.html.haml:56
 msgid "This number is linked to Viber"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:34
+#: lib/boncoin_web/templates/announce/form.html.haml:60
 msgid "unlink"
 msgstr ""
 
@@ -191,8 +168,8 @@ msgid "Alcohol, cigarettes and drugs"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_search_btn_form.html.haml:20
 #: lib/boncoin_web/templates/layout/_search_btn_form.html.haml:24
+#: lib/boncoin_web/templates/layout/_search_btn_form.html.haml:31
 msgid "All %{title}"
 msgstr ""
 
@@ -426,7 +403,7 @@ msgstr "PawChaungKaung connects individuals in the Republic of the Union of Myan
 #: lib/boncoin_web/templates/public/conditions.html.haml:39
 msgid "introduce the process"
 msgstr "The seller posts an offer with details and photos. PawChaungKaung team will control that "
-"the offer is respecting conditions and presents an interest for buyers. After this validation the offer will be published for "
+"the offer is respecting conditions. After this validation the offer will be published for "
 "1 month. The buyers browse the offers and can get the seller's phone number. "
 "The relation between buyers and sellers and eventually the final transaction are held apart from the website."
 
@@ -567,11 +544,6 @@ msgstr "PawChaungKaung proposes his services to promote your brand through adds.
 "please contact us at partners@pawchaungkaung.com"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:7
-msgid "Connect with PawChaungKaung on viber to get notifications !"
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/templates/announce/new.html.haml:5
 msgid "For more details please read our"
 msgstr ""
@@ -584,11 +556,6 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:49
 msgid "Manage an offer"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:10
-msgid "You can scan this QR code on your viber application. This is possible only when you don't have any active offer."
 msgstr ""
 
 #, elixir-format
@@ -605,7 +572,7 @@ msgid "terms and conditions."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/form.html.haml:46
+#: lib/boncoin_web/templates/announce/form.html.haml:72
 msgid "to receive notifications"
 msgstr ""
 
@@ -639,29 +606,29 @@ msgstr ""
 
 #, elixir-format
 #: lib/boncoin_web/templates/division/form.html.haml:25
-#: lib/boncoin_web/templates/township/form.html.haml:37
+#: lib/boncoin_web/templates/township/form.html.haml:33
 msgid "latitude"
 msgstr ""
 
 #, elixir-format
 #: lib/boncoin_web/templates/division/form.html.haml:31
-#: lib/boncoin_web/templates/township/form.html.haml:43
+#: lib/boncoin_web/templates/township/form.html.haml:39
 msgid "longitude"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/category/form.html.haml:25
+#: lib/boncoin_web/templates/category/form.html.haml:21
 #: lib/boncoin_web/templates/division/form.html.haml:13
 #: lib/boncoin_web/templates/family/form.html.haml:13
-#: lib/boncoin_web/templates/township/form.html.haml:25
+#: lib/boncoin_web/templates/township/form.html.haml:21
 msgid "title EN"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/category/form.html.haml:31
+#: lib/boncoin_web/templates/category/form.html.haml:27
 #: lib/boncoin_web/templates/division/form.html.haml:19
 #: lib/boncoin_web/templates/family/form.html.haml:19
-#: lib/boncoin_web/templates/township/form.html.haml:31
+#: lib/boncoin_web/templates/township/form.html.haml:27
 msgid "title MY"
 msgstr ""
 
@@ -693,7 +660,7 @@ msgid "Find a good-deal in more than "
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:85
+#: lib/boncoin_web/templates/layout/_sidebar.html.haml:91
 msgid "Pawchaungkaung company"
 msgstr ""
 
@@ -718,3 +685,74 @@ msgid "Please note that your are acting on your own..."
 msgstr "Please note that your are acting on your own and that the website won’t hold any "
 "responsability on the transaction you may have with people who contact you. Your offer will "
 "be validated by our team before being published."
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/public/announces_index.html.haml:9
+msgid " offers for %{category}"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/layout/_sidebar.html.haml:79
+msgid "Connect to Viber"
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/public/viber.html.haml:9
+msgid "Connect your Viber app with PawChaungKaung to get notifications !"
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/announce/form.html.haml:158
+msgid "Describe your offer (size, dimensions, condition, scratches, date of buy, ...)"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/viber.html.haml:26
+msgid "How to scan the QR code on Viber ?"
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/announce/form.html.haml:195
+msgid "I understand and agree to "
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:139
+msgid "Lacks"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/layout/_search_btn_form.html.haml:37
+msgid "No filter"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/viber.html.haml:16
+msgid "Please scan the QR code on your Viber app and click on Message."
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/announce/form.html.haml:167
+msgid "Please select 1, 2, or 3 photos to show the object and its condition."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:140
+msgid "USD"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/form.html.haml:24
+msgid "change"
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/announce/form.html.haml:197
+msgid "conditions"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/category/form.html.haml:33
+#: lib/boncoin_web/templates/family/form.html.haml:25
+msgid "rank"
+msgstr ""
