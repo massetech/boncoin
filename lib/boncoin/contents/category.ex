@@ -7,14 +7,16 @@ defmodule Boncoin.Contents.Category do
     field :active, :boolean
     field :title_my, :string
     field :title_en, :string
-    field :icon, :string, default: "whmcs"
+    field :rank, :integer
+    field :icon, :string, default: "home"
+    field :icon_type, :string, default: "fa"
     belongs_to :family, Family
     has_many :announces, Announce, on_delete: :delete_all
     timestamps()
   end
 
-  @required_fields ~w(title_my title_en family_id icon)a
-  @optional_fields ~w(active)a
+  @required_fields ~w(title_my title_en family_id icon icon_type active rank)a
+  @optional_fields ~w()a
 
   @doc false
   def changeset(category, attrs) do

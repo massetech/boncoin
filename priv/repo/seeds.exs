@@ -17,11 +17,11 @@ Repo.insert! %Division{title_en: "Yangon", title_my: "ရန်ကုံန်",
 Repo.insert! %Division{title_en: "Dawei", title_my: "ဒာဝေး", active: true}
 Repo.insert! %Division{title_en: "Mandaley", title_my: "မန်တာလေး", active: true}
 
-Repo.insert! %Family{title_en: "Technology", title_my: "ရန်ကုံန်", active: true, icon: "mobile-alt"}
-Repo.insert! %Family{title_en: "Vehicule", title_my: "ရန်ကုံန်", active: true, icon: "car"}
-Repo.insert! %Family{title_en: "Household", title_my: "ရန်ကုံန်", active: true, icon: "home"}
-Repo.insert! %Family{title_en: "Culture", title_my: "ရန်ကုံန်", active: true, icon: "music"}
-Repo.insert! %Family{title_en: "Professional", title_my: "ရန်ကုံန်", active: true, icon: "briefcase"}
+Repo.insert! %Family{title_en: "Technology", title_my: "ရန်ကုံန်", rank: 1, active: true, icon: "mobile-alt", icon_type: "fa"}
+Repo.insert! %Family{title_en: "Vehicule", title_my: "ရန်ကုံန်", rank: 2, active: true, icon: "car", icon_type: "fa"}
+Repo.insert! %Family{title_en: "Household", title_my: "ရန်ကုံန်", rank: 3, active: true, icon: "home", icon_type: "fa"}
+Repo.insert! %Family{title_en: "Culture", title_my: "ရန်ကုံန်", rank: 4, active: true, icon: "music", icon_type: "fa"}
+Repo.insert! %Family{title_en: "Professional", title_my: "ရန်ကုံန်", rank: 5, active: true, icon: "briefcase", icon_type: "fa"}
 
 
 for division <- Repo.all(Division) do
@@ -32,7 +32,7 @@ end
 
 for family <- Repo.all(Family) do
   for i <- 1..3 do
-    Repo.insert! %Category{family_id: family.id, title_en: "Category #{i}", title_my: "ပျစ်စစ် #{i}", active: true, icon: "home"}
+    Repo.insert! %Category{family_id: family.id, title_en: "Category #{i}", title_my: "ပျစ်စစ် #{i}", rank: 2, active: true, icon: "home", icon_type: "fa"}
   end
 end
 

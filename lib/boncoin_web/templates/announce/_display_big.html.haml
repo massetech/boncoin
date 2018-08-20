@@ -75,5 +75,5 @@
               = String.slice(@announce.user.phone_number, 5..7)
               = " "
               = String.slice(@announce.user.phone_number, 8..10)
-          %button.btn.btn-primary.btn-copy-number.d-none{id: "copy_number_#{@announce.id}", data-phone-number: "#{@announce.user.phone_number}"}
+          %button.btn.btn-secondary.btn-copy-number.d-none{id: "copy_number_#{@announce.id}", data-phone-number: "#{@announce.user.phone_number}"}
             %i.fa.fa-copy

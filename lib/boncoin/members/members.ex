@@ -178,7 +178,10 @@ defmodule Boncoin.Members do
 
   def get_user_or_create_by_phone_number(phone_number) do
     case get_user_by_phone_number(phone_number) do
-      nil -> create_user(%{phone_number: phone_number, role: "MEMBER"})
+      nil ->
+        create_user(%{phone_number: phone_number, role: "MEMBER"})
+        # Call back to preload user announces
+        get_user_by_phone_number(phone_number)
       user -> {:ok, user}
     end
   end

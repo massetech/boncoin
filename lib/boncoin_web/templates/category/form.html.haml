@@ -25,10 +25,22 @@
 
           .form-group
             .input-group
+              = text_input f, :rank, class: "form-control", placeholder: gettext("rank")
+            = error_tag f, :rank
+
+          .form-group
+            .input-group
               .input-group-prepend
                 %span.input-group-text= "FA icon code"
               = text_input f, :icon, class: "form-control"
             = error_tag f, :icon
+
+          .form-group
+            .input-group
+              .input-group-prepend
+                %span.input-group-text= "FA icon type"
+              = text_input f, :icon_type, class: "form-control"
+              = error_tag f, :icon_type
 
           .form-group
             %span.switch.switch-sm
@@ -37,3 +49,4 @@
 
           .form-group
             = submit "Submit", class: "btn btn-primary"
+          = link "Cancel", to: category_path(@conn, :index), class: "btn btn-outline-info"

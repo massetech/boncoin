@@ -1,12 +1,24 @@
-.row
-  .col-12.my-2
-    = img_tag static_path(@conn, "/images/viber_icon.png"), class: "icon_viber"
-  .col-xs-12.col-sm-8.offset-sm-2.my-2
-    %h4.font-weight-bold.text-centre.viber-text
-      = gettext "Connect with PawChaungKaung on viber to get notifications !"
-    %p.font-weight-bold.text-centre.viber-text.my-4
-      = gettext "You can scan this QR code on your viber application. This is possible only when you don't have any active offer."
+.row.my-3
+  .col-12.d-flex.justify-content-center.align-items-center.my-2
+    = img_tag static_path(@conn, "/images/viber_icon.png"), class: "logo"
+    %i.fas.fa-exchange-alt.text-viber.mx-3.icon-big
+    = img_tag static_path(@conn, "/images/logo_color.jpg"), class: "logo"
+  .col-xs-12.col-sm-8.offset-sm-2
+    %h4.font-weight-bold.text-centre.text-viber
+      = gettext "Connect your Viber app with PawChaungKaung to get notifications !"
 
-.row
-  .col-xs-12.col-sm-4.offset-sm-4.my-4
-    = img_tag(static_path(@conn, "/images/viber_QR_code.png"))
+.row.my-3
+  .col-xs-12.col-sm-6.offset-sm-3.my-2
+    %h5.font-weight-bold.text-centre.text-primary
+      = gettext "Please scan the QR code on your Viber app and click on Message."
+  .col-xs-12.col-sm-6.offset-sm-3
+    = img_tag static_path(@conn, "/images/viber_QR_code.png"), class: "w-50"
+
+.row.my-5
+  .col-12
+    -# QR code explained
+    %button.btn-lg.btn-primary{data-toggle: "collapse", data-target: "#viber_explain", aria-expanded: "true", aria-controls: "object"}
+      = gettext "How to scan the QR code on Viber ?"
+    .viber-explained.collapse.my-3{id: "viber_explain", aria-labelledby: "viber_explain"}
+      = img_tag static_path(@conn, "/images/viber_QR_code_explained_1.png"), class: "m-3"
+      = img_tag static_path(@conn, "/images/viber_QR_code_explained_2.png"), class: "m-3"

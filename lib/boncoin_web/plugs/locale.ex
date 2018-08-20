@@ -10,7 +10,10 @@ defmodule Boncoin.Plug.Locale do
     # IO.inspect(conn.params["locale"])
     # IO.inspect(locale_from_params(conn))
     case locale_from_params(conn) || locale_from_cookies(conn) || locale_from_header(conn) do
-      nil -> conn
+      nil ->
+        conn
+          # By default we choose Burmese Zawgyi
+          |> assign(:flag, "mr")
       locale ->
         Gettext.put_locale(locale)
         Gettext.get_locale()

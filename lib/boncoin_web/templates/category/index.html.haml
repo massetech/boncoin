@@ -13,6 +13,7 @@
     %thead
       %tr
         %th= "ID"
+        %th= "Rank"
         %th= "Category"
         %th= "Title EN"
         %th= "Title MY"
@@ -26,11 +27,12 @@
       - for category <- @categorys do
         %tr
           %td= category.id
+          %td= category.rank
           %td= category.family.title_en
           %td= category.title_en
           %td= category.title_my
           %td
-            %p.fa{class: "fa-#{category.icon}"}
+            %p{class: "#{LayoutView.insert_icon_classes(category)}"}
           %td= LayoutView.icon_active(category.active)
           %td= "sellers"
           %td= "visitors"

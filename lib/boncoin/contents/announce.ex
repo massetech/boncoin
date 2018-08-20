@@ -16,7 +16,6 @@ defmodule Boncoin.Contents.Announce do
     field :currency, :string, default: "Kyats"
     field :status, :string, default: "PENDING"
     field :cause, :string
-    belongs_to :treated_by, User
     field :title, :string
     field :nb_view, :integer, default: 0
     field :nb_clic, :integer, default: 0
@@ -26,6 +25,7 @@ defmodule Boncoin.Contents.Announce do
     field :closing_date, :utc_datetime
     field :zawgyi, :boolean, default: false
     field :safe_link, :string
+    belongs_to :treated_by, User
     belongs_to :user, User
     belongs_to :category, Category
     belongs_to :township, Township

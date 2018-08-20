@@ -393,8 +393,8 @@ msgstr "Some items are prohibited on this website. Those items are either illega
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:7
 msgid "introduction to terms of use"
-msgstr "These terms of use may be updated "
-"at any time without any notice. It is then your responsability to read them regularly. Should you disagree to any "
+msgstr "These terms of use may be updated at any time without any notice. It is then your "
+"responsability to read them before using the service. Should you disagree to any "
 "of these terms, please do not use this website. You may only use this website in accordance with its Terms of Use "
 "and all applicable laws, rules, and regulations in the Republic of the Union of Myanmar."
 

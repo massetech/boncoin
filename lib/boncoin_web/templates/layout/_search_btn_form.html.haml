@@ -1,32 +1,44 @@
+-# Family buttons
 .row.d-flex.justify-content-center.m-0
   - for family <- @conn.assigns.select_menus.familys do
-    - if @conn.assigns.search_params["family_id"] == Integer.to_string(family.id) do
-      %label.bg-white.family-selector.border-bottom-lg{data-target: "#{family.id}"}
-        %i.fa{class: "fa-#{family.icon}"}
-        .triangle.d-none{id: "triangle_#{family.id}"}
-    - else
-      %label.bg-white.text-dark.family-selector{data-target: "#{family.id}"}
-        %i.fa{class: "fa-#{family.icon}"}
-        .triangle.d-none{id: "triangle_#{family.id}"}
+    .col.m-0.p-0
+      - if @conn.assigns.search_params["family_id"] == Integer.to_string(family.id) do
+        %label.bg-white.family-selector.border-bottom-lg{data-target: "#{family.id}"}
+          %i{class: "#{LayoutView.insert_icon_classes(family)}"}
+          .triangle.d-none{id: "triangle_#{family.id}"}
+      - else
+        %label.bg-white.text-dark.family-selector{data-target: "#{family.id}"}
+          %i{class: "#{LayoutView.insert_icon_classes(family)}"}
+          .triangle.d-none{id: "triangle_#{family.id}"}
 
 -# Category buttons
 - for family <- @conn.assigns.select_menus.familys do
   .row.d-none.bg-white.category-selector.m-0{id: "searchFamily_#{family.id}"}
-    .col-12.my-2.text-left
+    .col-12.my-3.text-left
       - if @conn.assigns.search_params["family_id"] == Integer.to_string(family.id) && @conn.assigns.search_params["category_id"] == "" do
         - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: ""}, old_search: @conn.assigns.search_params), class: "btn btn-secondary mr-3" do
-          %span.font-weight-bold= gettext("All %{title}", title: LayoutView.convert_zawgyi(family, "title"))
+          %span.font-weight-bold
+            %i.mr-1{class: "#{LayoutView.insert_icon_classes(family)}"}
+            = gettext("All %{title}", title: LayoutView.convert_zawgyi(family, "title"))
       - else
         - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: ""}, old_search: @conn.assigns.search_params), class: "btn btn-outline-secondary mr-3" do
-          %span.font-weight-bold= gettext("All %{title}", title: LayoutView.convert_zawgyi(family, "title"))
+          %span.font-weight-bold
+            %i.mr-1{class: "#{LayoutView.insert_icon_classes(family)}"}
+            = gettext("All %{title}", title: LayoutView.convert_zawgyi(family, "title"))
       -# Clear filters
       - link to: public_offers_path(@conn, :public_index, search: %{family_id: "", category_id: ""}, old_search: @conn.assigns.search_params), class: "btn btn-outline-danger mr-3" do
-        %span.font-weight-bold= gettext("Clear filters")
-    .col-12.my-2.text-left
+        %span.font-weight-bold
+          %i.mr-1.fa.fa-times
+          = gettext("No filter")
+    .col-12.text-left.mb-3
       - for category <- family.categorys do
         - if @conn.assigns.search_params["family_id"] == Integer.to_string(family.id) && @conn.assigns.search_params["category_id"] == Integer.to_string(category.id) do
-          - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: "#{category.id}"}, old_search: @conn.assigns.search_params), class: "btn btn-secondary mr-3" do
-            %span.font-weight-bold= LayoutView.convert_zawgyi(category, "title")
+          - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: "#{category.id}"}, old_search: @conn.assigns.search_params), class: "btn btn-secondary my-1" do
+            %span.font-weight-bold
+              %i.mr-1{class: "#{LayoutView.insert_icon_classes(category)}"}
+              = LayoutView.convert_zawgyi(category, "title")
         - else
-          - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: "#{category.id}"}, old_search: @conn.assigns.search_params), class: "btn btn-outline-secondary mr-3" do
-            %span.font-weight-bold= LayoutView.convert_zawgyi(category, "title")
+          - link to: public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", category_id: "#{category.id}"}, old_search: @conn.assigns.search_params), class: "btn btn-outline-secondary my-1" do
+            %span.font-weight-bold
+              %i.mr-1{class: "#{LayoutView.insert_icon_classes(category)}"}
+              = LayoutView.convert_zawgyi(category, "title")

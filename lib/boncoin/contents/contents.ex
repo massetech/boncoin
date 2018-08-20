@@ -9,6 +9,7 @@ defmodule Boncoin.Contents do
   defp filter_familys_active(query \\ Family) do
     from f in query,
       where: f.active == true,
+      order_by: [asc: :rank, asc: :id],
       select: [:id, :title_en, :title_my, :icon]
   end
 
@@ -141,6 +142,7 @@ defmodule Boncoin.Contents do
   defp filter_categorys_active(query \\ Category) do
     from c in query,
       where: c.active == true,
+      order_by: [asc: :rank, asc: :id],
       select: [:id, :title_en, :title_my, :icon]
   end
 

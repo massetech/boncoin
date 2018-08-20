@@ -7,7 +7,7 @@ defmodule Boncoin.Members.User do
   schema "users" do
     field :uid, :string
     field :email, :string
-    field :language, :string
+    field :language, :string, default: "mr"
     field :nickname, :string
     field :member_psw, :string
     field :phone_number, :string
@@ -18,7 +18,7 @@ defmodule Boncoin.Members.User do
     field :viber_active, :boolean, default: false
     field :viber_id, :string
     has_many :announces, Announce, on_delete: :delete_all
-    has_many :treated_announces, Announce, foreign_key: :treated_by, on_delete: :nilify_all
+    has_many :treated_offers, Announce, foreign_key: :treated_by_id, on_delete: :nilify_all
     timestamps()
   end
 

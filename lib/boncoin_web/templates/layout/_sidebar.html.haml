@@ -43,15 +43,15 @@
         %a{href: "?locale=en"}
           %li.slide-menu.text-dark.border-bottom.border-dark
             = img_tag static_path(@conn, "/fonts/en.svg"), class: "flag"
-            %span{class: "#{LayoutView.test_en(@conn.assigns.flag, 1)}"}= gettext "English"
+            %span{class: "#{LayoutView.test_lg(@conn.assigns.flag, 1)}"}= gettext "English"
         %a{href: "?locale=my"}
           %li.slide-menu.text-dark.border-bottom.border-dark{class: ""}
             = img_tag static_path(@conn, "/fonts/my.svg"), class: "flag"
-            %span{class: "#{LayoutView.test_en(@conn.assigns.flag, 2)}"}= gettext "Myanmar (Unicode)"
+            %span{class: "#{LayoutView.test_lg(@conn.assigns.flag, 2)}"}= gettext "Myanmar (Unicode)"
         %a{href: "?locale=mr"}
           %li.slide-menu.text-dark.border-bottom.border-dark{class: ""}
             = img_tag static_path(@conn, "/fonts/mr.svg"), class: "flag"
-            %span{class: "#{LayoutView.test_en(@conn.assigns.flag, 3)}"}= gettext "Myanmar (Zawgyi)"
+            %span{class: "#{LayoutView.test_lg(@conn.assigns.flag, 3)}"}= gettext "Myanmar (Zawgyi)"
 
       - link to: main_path(@conn, :viber), class: "" do
         %li.slide-menu.text-dark.border-bottom.border-dark

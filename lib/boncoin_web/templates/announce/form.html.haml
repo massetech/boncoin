@@ -18,7 +18,8 @@
             = text_input f, :phone_number, class: "form-control", autocomplete: "nope", placeholder: gettext("Main phone number")
           %small.form-text.text-muted{id: "phone_helper"}= gettext "Myanmar mobile only (09000000000)"
         .col-3.text-right
-          %button.btn.btn-primary{id: "btn_check_number", drab-click: "read_user_details", data-item-id: ""}= "OK"
+          %button.btn.btn-primary{id: "btn_validate_number", drab-click: "read_user_details", data-item-id: ""}= "OK"
+          %button.btn.btn-info.d-none{id: "btn_change_number", drab-click: "read_user_details", data-item-id: ""}= gettext("change")
 
       .row.text-left.collapse.collapsible_form
         -# Other details
@@ -49,13 +50,13 @@
                   %button.btn.btn-info.btn-sm.d-flex.align-items-center{id: "btn_unlink_number", drab-click: "remove_viber_link"}
                     = gettext("unlink")
                     %i.fa.fa-unlink.ml-1
-            - link to: main_path(@conn, :viber), id: "btn-viber", class: "btn btn-block", target: "_blank" do
-              .row.no-gutters.align-items-center
-                .col-2
-                  = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
-                .col-10
-                  %span= gettext "Link this number to Viber"
-                  %p.m-0= gettext "to receive notifications"
+              - link to: main_path(@conn, :viber), id: "btn-viber", class: "btn btn-block", target: "_blank" do
+                .row.no-gutters.align-items-center
+                  .col-2
+                    = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
+                  .col-10
+                    %span= gettext "Link this number to Viber"
+                    %p.m-0= gettext "to receive notifications"
         -# -# Password
         -# .col-12
         -#   .form-group.d-none{id: "field-password"}

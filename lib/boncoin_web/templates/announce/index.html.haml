@@ -47,4 +47,6 @@
           %td= "#{offer.inserted_at.year}/#{offer.inserted_at.day}/#{offer.inserted_at.hour}-#{offer.inserted_at.month}:#{offer.inserted_at.minute}"
           %td= LayoutView.format_datehour(offer.parution_date)
           %td= LayoutView.format_date(offer.validity_date)
-          %td= link "Delete", to: announce_path(@conn, :delete, offer), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"
+          %td
+            - if @conn.assigns.current_user.role == "SUPER" do
+              = link "Delete", to: announce_path(@conn, :delete, offer), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

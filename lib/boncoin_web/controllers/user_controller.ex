@@ -14,7 +14,7 @@ defmodule BoncoinWeb.UserController do
         answer = Members.read_phone_details(phone_number)
         case answer do
           {:ok, user} ->
-            data = %{scope: scope, user_id: user.id, user_nickname: user.nickname, email: user.email, viber_active: user.viber_active, nb_announces: Kernel.length(user.announces)}
+            data = %{scope: scope, user_id: user.id, user_nickname: user.nickname, email: user.email, viber_active: user.viber_active, nb_offers: Kernel.length(user.announces)}
             render(conn, "phone_api_ok.json", data: data)
           {:error, msg} -> render(conn, "phone_api_nok.json", msg: msg)
         end

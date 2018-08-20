@@ -2,13 +2,13 @@
   .col-12
     %h6.font-weight-bold.text-dark= LayoutView.convert_zawgyi(@place, "title")
     %h6.font-weight-bold.text-dark
-      %span.text-primary= @nb_announces
-      - if @conn.assigns.family_icon == "" do
+      %span= @nb_announces
+      - if @conn.assigns.category == "" do
         = gettext " offers"
       - else
-        = gettext " offers for "
-        %i.fa{class: "fa-#{@conn.assigns.family_icon}"}
-    %p.text-dark.font-italic= gettext "Please check before buying anything"
+        = gettext " offers for %{category}", category: LayoutView.convert_zawgyi(@conn.assigns.category, "title")
+        %i.fa.ml-3{class: "fa-#{@conn.assigns.category.icon}"}
+    %p.text-primary.font-italic= gettext "Please check before buying anything"
 
 .row
   - for announce <- @announces do

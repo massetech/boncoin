@@ -27,13 +27,13 @@ defmodule Boncoin.Plug.SearchParams do
     # IO.inspect(search_params)
     conn
       |> assign(:search_params, search_params)
-      |> assign(:family_icon, choose_family_icon(search_params))
+      |> assign(:category, choosen_category(search_params))
   end
 
-  defp choose_family_icon(%{"family_id" => family_id}) do
-    case family_id do
+  defp choosen_category(%{"category_id" => category_id}) do
+    case category_id do
       "" -> ""
-      family_id -> Contents.get_family!(family_id).icon
+      category_id -> Contents.get_category!(category_id)
     end
   end
 

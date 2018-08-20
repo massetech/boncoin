@@ -160,10 +160,10 @@ export default class MainView {
     $('.carousel').carousel({interval: false})
     $(".carousel-inner").swipe({
       swipeLeft:function(event, direction, distance, duration, fingerCount) {
-          $(this).parent().carousel('next');
+          $(this).parent().carousel('next')
       },
       swipeRight: function() {
-          $(this).parent().carousel('prev');
+          $(this).parent().carousel('prev')
       },
       threshold:75
     })
@@ -171,19 +171,25 @@ export default class MainView {
     /* ------------- OFFERS FORM  --------------------------------------------------- */
     // Set up the lightbox - http://ashleydw.github.io/lightbox/#no-wrapping
     $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-        event.preventDefault();
-        $(this).ekkoLightbox();
+        event.preventDefault()
+        $(this).ekkoLightbox()
     });
-    // Click on number OK or press enter
-    $('#btn_check_number').on('click', function (e) {
-      event.preventDefault();
+    // Click on number OK or press enter after filling phone number field
+    $('#btn_validate_number').on('click', function (e) {
+      event.preventDefault()
       event.stopPropagation()
       var phone_number = $("#announce_phone_number").val()
       call_phone_api(phone_number, "get_phone_details")
     })
+    // Click on change number
+    $('#btn_change_number').on('click', function (e) {
+      event.preventDefault()
+      event.stopPropagation()
+      reset_announce_form_field()
+    })
     // Click on unlink viber number
     $('#btn_unlink_number').on('click', function (e) {
-      event.preventDefault();
+      event.preventDefault()
       event.stopPropagation()
       var phone_number = $("#announce_phone_number").val()
       call_phone_api(phone_number, "unlink_viber")
@@ -242,8 +248,11 @@ export default class MainView {
   let reset_announce_form_field = () => {
     // console.log("wrong phone number : form reseted")
     $('.collapsible_form').collapse('hide')
+    $('#announce_phone_number').removeAttr('disabled')
+    $('#btn_validate_number').show()
+    $('#btn_change_number').hide()
     $('#phone_helper').show()
-    $('#announce_phone_number').val('').focus().removeClass("field-success").addClass("field-danger")
+    $('#announce_phone_number').val('').focus()//.removeClass("field-success").addClass("field-danger")
     $('#announce_user_id').val('')
     $('#announce_nickname').val('')
     $('#announce_email').val('')
@@ -251,7 +260,9 @@ export default class MainView {
   // Populate form when the phone_number is accepted
   let validate_phone_number_pop_field = (user_id, nickname, email, viber, nb_announces) => {
     // console.log("Good phone number : form processed with pop")
-    $('#announce_phone_number').removeClass("field-danger").addClass("field-success")
+    $('#announce_phone_number').attr('disabled', 'disabled')  //.removeClass("field-danger").addClass("field-success")
+    $('#btn_validate_number').hide()
+    $('#btn_change_number').removeClass('d-none').show()
     $('#phone_helper').hide()
     $('#announce_user_id').val(user_id)
     $('#announce_nickname').val(nickname).focus()
@@ -305,6 +316,7 @@ export default class MainView {
             console.log("API response not understood")
           }
         } else {
+          // No answer == reset the form
           reset_announce_form_field()
         }
       });
