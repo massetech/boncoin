@@ -4,6 +4,34 @@ defmodule BoncoinWeb.AnnounceController do
   alias Boncoin.{Contents, Members}
   alias Boncoin.Contents.Announce
 
+  def public_index(conn, _params) do
+    paginator_results = Contents.list_announces_public(nil, conn.assigns.search_params)
+      # |> IO.inspect()
+    conn
+      |> assign(:place_searched, %{title_my: "ပောပဒနိ", title_en: "All Myanmar"})
+      |> assign(:cursor_after, paginator_results.metadata.after)
+      |> assign(:nb_offers_found, paginator_results.metadata.total_count)
+      |> render("public_index.html", announces: paginator_results.entries)
+  end
+
+  # API to ba called if user wants to load more offers on public page
+  def add_offers_to_public_index(conn, %{"params" => %{"cursor_after" => cursor_after}} = params) do
+    # IO.inspect(params)
+    IO.inspect(cursor_after)
+    paginator_results = Contents.list_announces_public(cursor_after, %{"category_id" => "", "division_id" => "", "family_id" => "", "township_id" => ""})
+    offers = paginator_results.entries
+      # |> IO.inspect()
+      |> Enum.map(fn announce -> build_offer_html(announce) end)
+      # |> IO.inspect()
+    results = %{scope: "get_more_offers", offers: offers, cursor_after: paginator_results.metadata.after}
+    render(conn, "add_offers.json", data: results)
+  end
+
+  defp build_offer_html(announce) do
+    %{display_small: Phoenix.View.render_to_string(BoncoinWeb.AnnounceView, "_display_small.html", announce: announce),
+      display_big: Phoenix.View.render_to_string(BoncoinWeb.AnnounceView, "_display_big.html", announce: announce)}
+  end
+
   def index(conn, _params) do
     announces = Contents.list_announces()
     render(conn, "index.html", announces: announces)
@@ -15,6 +43,7 @@ defmodule BoncoinWeb.AnnounceController do
   end
 
   def create(conn, %{"announce" => announce_params}) do
+    # IO.inspect(announce_params, limit: :infinity, printable_limit: :infinity)
     case Contents.create_announce(announce_params) do
       {:ok, announce} ->
         conn

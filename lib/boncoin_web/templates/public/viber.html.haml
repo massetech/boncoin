@@ -1,24 +1,49 @@
-.row.my-3
-  .col-12.d-flex.justify-content-center.align-items-center.my-2
-    = img_tag static_path(@conn, "/images/viber_icon.png"), class: "logo"
-    %i.fas.fa-exchange-alt.text-viber.mx-3.icon-big
-    = img_tag static_path(@conn, "/images/logo_color.jpg"), class: "logo"
-  .col-xs-12.col-sm-8.offset-sm-2
-    %h4.font-weight-bold.text-centre.text-viber
-      = gettext "Connect your Viber app with PawChaungKaung to get notifications !"
+.accordion{id: "viber"}
+  .row.my-3
+    .col-12.d-flex.justify-content-center.align-items-center.my-2
+      = img_tag static_path(@conn, "/images/viber_icon.png"), class: "logo"
+      %i.fas.fa-exchange-alt.text-viber.mx-3.icon-big
+      = img_tag static_path(@conn, "/images/logo_color.jpg"), class: "logo"
+    .col-xs-12.col-sm-8.offset-sm-2
+      %h4.font-weight-bold.text-centre.text-viber
+        = gettext "Connect your Viber app with PawChaungKaung to get notifications !"
 
-.row.my-3
-  .col-xs-12.col-sm-6.offset-sm-3.my-2
-    %h5.font-weight-bold.text-centre.text-primary
-      = gettext "Please scan the QR code on your Viber app and click on Message."
-  .col-xs-12.col-sm-6.offset-sm-3
-    = img_tag static_path(@conn, "/images/viber_QR_code.png"), class: "w-50"
+  .row.my-3
+    .col-xs-12.col-sm-6.offset-sm-3.my-2
+      %h5.font-weight-bold.text-centre.text-primary
+        = gettext "Please scan the QR code on your Viber app and click on Message."
+    .col-xs-12.col-sm-6.offset-sm-3
+      = img_tag static_path(@conn, "/images/viber_QR_code.png"), class: "w-50"
 
-.row.my-5
-  .col-12
-    -# QR code explained
-    %button.btn-lg.btn-primary{data-toggle: "collapse", data-target: "#viber_explain", aria-expanded: "true", aria-controls: "object"}
-      = gettext "How to scan the QR code on Viber ?"
-    .viber-explained.collapse.my-3{id: "viber_explain", aria-labelledby: "viber_explain"}
-      = img_tag static_path(@conn, "/images/viber_QR_code_explained_1.png"), class: "m-3"
-      = img_tag static_path(@conn, "/images/viber_QR_code_explained_2.png"), class: "m-3"
+  .row.my-3
+    .col-xs-12.col-sm-6.offset-sm-3.my-2
+      -# QR code explained
+      %button.btn-lg.btn-primary{data-toggle: "collapse", data-target: "#viber_explain", aria-expanded: "true", aria-controls: "object", data-parent: "#viber"}
+        = gettext "How to scan the QR code on Viber ?"
+      .viber-explained.collapse.my-3{id: "viber_explain", aria-labelledby: "viber_explain", data-parent: "#viber"}
+        = img_tag static_path(@conn, "/images/viber_QR_code_explained_1.png"), class: "m-3"
+        = img_tag static_path(@conn, "/images/viber_QR_code_explained_2.png"), class: "m-3"
+
+  .row.my-3
+    .col-xs-12.col-sm-6.offset-sm-3.my-2
+      %button.btn-lg.btn-primary{data-toggle: "collapse", data-target: "#offer_list_explain", aria-expanded: "true", aria-controls: "object"}
+        = gettext "How to get your offer list ?"
+      .unlink-explained.collapse.my-3{id: "offer_list_explain", aria-labelledby: "offer_list_explain", data-parent: "#viber"}
+        %h5.font-weight-bold.text-centre.text-viber.my-5
+          = gettext "Explain how to get offer list from Viber"
+
+  .row.my-3
+    .col-xs-12.col-sm-6.offset-sm-3.my-2
+      %button.btn-lg.btn-primary{data-toggle: "collapse", data-target: "#change_explain", aria-expanded: "true", aria-controls: "object"}
+        = gettext "How to Change your number ?"
+      .unlink-explained.collapse.my-3{id: "change_explain", aria-labelledby: "change_explain", data-parent: "#viber"}
+        %h5.font-weight-bold.text-centre.text-viber.my-5
+          = gettext "Explain how to get change phone number from Viber"
+
+  .row.my-3
+    .col-xs-12.col-sm-8.offset-sm-2.my-2
+      %button.btn-lg.btn-primary{data-toggle: "collapse", data-target: "#unlink_explain", aria-expanded: "true", aria-controls: "object"}
+        = gettext "How to unlink your Viber account ?"
+      .unlink-explained.collapse.my-3{id: "unlink_explain", aria-labelledby: "unlink_explain", data-parent: "#viber"}
+        %h5.font-weight-bold.text-centre.text-viber.my-5
+          = gettext "Explain how to unlink the viber account"

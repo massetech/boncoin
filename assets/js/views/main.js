@@ -38,7 +38,6 @@ export default class MainView {
   }
 
 /* ------------- DOCUMENT LOAD  --------------------------------------------------- */
-
   let init_custom_actions = () => {
 
     /* ------------- BOOSTRAP CUSTO  --------------------------------------------------- */
@@ -108,10 +107,83 @@ export default class MainView {
       $(".triangle").addClass('d-none')
     })
 
-    /* ------------- OFFERS DISPLAY  --------------------------------------------------- */
+  /* ------------- OFFERS DISPLAY  --------------------------------------------------- */
+    load_actions_in_offers_display_page()
+    // Button see more offers
+    $('#btn-more-offers').on('click', function() {
+      event.preventDefault()
+      event.stopPropagation()
+      var cursor_after = $('#config').attr('data-cursor-after')
+      call_internal_api("/api/add_offers", "get_more_offers", {cursor_after: cursor_after})
+    })
+
+    /* ------------- OFFERS FORM  --------------------------------------------------- */
+    // Set up the lightbox - http://ashleydw.github.io/lightbox/#no-wrapping
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+        event.preventDefault()
+        $(this).ekkoLightbox()
+    });
+    // Click on number OK or press enter after filling phone number field
+    $('#btn_validate_number').on('click', function (e) {
+      event.preventDefault()
+      event.stopPropagation()
+      var phone_number = $("#announce_phone_number").val()
+      call_internal_api("/api/phone", "get_phone_details", phone_number)
+    })
+    // Click on change number
+    $('#btn_change_number').on('click', function (e) {
+      event.preventDefault()
+      event.stopPropagation()
+      reset_announce_form_field()
+    })
+    // Click on unlink viber number
+    // $('#btn_unlink_number').on('click', function (e) {
+    //   event.preventDefault()
+    //   event.stopPropagation()
+    //   var phone_number = $("#announce_phone_number").val()
+    //   call_internal_api("/api/phone", "unlink_viber", phone_number)
+    // })
+    // Currency selector
+    $('.ddown_change_currency').on('click', function() {
+      $('#choosen_currency_text')[0].innerHTML = this.innerHTML
+      $('#announce_currency').val(this.innerHTML)
+    })
+    // Checks the email field
+    $('#announce_email').on('change', function() {
+      var email = $(this).val()
+      if (validateEmail(email) == false) {
+        console.log("wrong email")
+        $(this).val('').focus()
+      }
+    })
+    // Get the title and check if it looks like Zawgyi
+    $('#announce_title').on('change', function() {
+      var title = $(this).val()
+      if (knayi.fontDetect(title) == "zawgyi") {
+        console.log("zawgyi detected")
+        $('#announce_zawgyi').val('true')
+      } else {
+        console.log("unicode detected")
+        $('#announce_zawgyi').val('false')
+      }
+    })
+    // Makes sure to get rounded prices only
+    $('#announce_price').on('change', function() {
+      var price = $(this).val()
+      var rounded_price = Math.round(price)
+      if(isNaN(rounded_price)) {
+        rounded_price = "";
+      }
+      $(this).val(rounded_price).focus()
+    })
+  }
+
+  /* ------------- METHODS  --------------------------------------------------- */
+  // Load the actions on offers display page
+  let load_actions_in_offers_display_page = () => {
     // Display big announce on small announce click
     $('.btn-small-announce').on('click', function() {
-      $(".small-announce").removeClass('d-none')
+      $(".btn-small-announce").removeClass('d-none')
       $(".big-announce").addClass('d-none')
       var announce_id = $(this).attr('data-announce-id')
       $(`#small_announce_${announce_id}`).addClass('d-none')
@@ -167,82 +239,7 @@ export default class MainView {
       },
       threshold:75
     })
-
-    /* ------------- OFFERS FORM  --------------------------------------------------- */
-    // Set up the lightbox - http://ashleydw.github.io/lightbox/#no-wrapping
-    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-        event.preventDefault()
-        $(this).ekkoLightbox()
-    });
-    // Click on number OK or press enter after filling phone number field
-    $('#btn_validate_number').on('click', function (e) {
-      event.preventDefault()
-      event.stopPropagation()
-      var phone_number = $("#announce_phone_number").val()
-      call_phone_api(phone_number, "get_phone_details")
-    })
-    // Click on change number
-    $('#btn_change_number').on('click', function (e) {
-      event.preventDefault()
-      event.stopPropagation()
-      reset_announce_form_field()
-    })
-    // Click on unlink viber number
-    $('#btn_unlink_number').on('click', function (e) {
-      event.preventDefault()
-      event.stopPropagation()
-      var phone_number = $("#announce_phone_number").val()
-      call_phone_api(phone_number, "unlink_viber")
-    })
-    // Currency selector
-    $('.ddown_change_currency').on('click', function() {
-      $('#choosen_currency_text')[0].innerHTML = this.innerHTML
-      $('#announce_currency').val(this.innerHTML)
-    })
-    // Checks the email field
-    $('#announce_email').on('change', function() {
-      var email = $(this).val()
-      if (validateEmail(email) == false) {
-        console.log("wrong email")
-        $(this).val('').focus()
-      }
-    })
-    // Get the title and check if it looks like Zawgyi
-    $('#announce_title').on('change', function() {
-      var title = $(this).val()
-      if (knayi.fontDetect(title) == "zawgyi") {
-        console.log("zawgyi detected")
-        $('#announce_zawgyi').val('true')
-      } else {
-        console.log("unicode detected")
-        $('#announce_zawgyi').val('false')
-      }
-    })
-    // Makes sure to get rounded prices only
-    $('#announce_price').on('change', function() {
-      var price = $(this).val()
-      var rounded_price = Math.round(price)
-      if(isNaN(rounded_price)) {
-        rounded_price = "";
-      }
-      $(this).val(rounded_price).focus()
-    })
   }
-
-
-    // // Manage conditions collapses
-    // $('.collapse').on('show.bs.collapse', function (e) {
-    //   $('.collapse').collapse('hide')
-    // })
-    //
-    // // Manage about collapses
-    // $('#about').on('show.bs.collapse', function (e) {
-    //   $('.collapse').collapse('hide')
-    // })
-
-
-
-  /* ------------- METHODS  --------------------------------------------------- */
 
   // Empty form when the phone_number is not accepted
   let reset_announce_form_field = () => {
@@ -272,12 +269,12 @@ export default class MainView {
     if (viber == true) {
       $('#field-viber').show()
       $('#btn-viber').hide()
-      if (nb_announces > 0) {
-        $('#btn_unlink_number').attr('disabled','disabled')
-      }
-      else {
-        $('#btn_unlink_number').removeAttr('disabled')
-      }
+      // if (nb_announces > 0) {
+      //   $('#btn_unlink_number').attr('disabled','disabled')
+      // }
+      // else {
+      //   $('#btn_unlink_number').removeAttr('disabled')
+      // }
     } else {
       $('#field-viber').hide()
       $('#btn-viber').show()
@@ -285,33 +282,48 @@ export default class MainView {
     $('.collapsible_form').collapse('show')
   }
 
-  // Call internal API to check phone number
-  let call_phone_api = (phone_number, scope) => {
-    var token = $('#config').attr('data-phone')
-    fetch("/api/phone", {
+  // Call internal phone API to check phone number
+  let call_internal_api = (url, scope, params) => {
+    var token = $('#config').attr('data-api')
+    // console.log(token)
+    fetch(url, {
       headers: {
         "accept": "application/json",
         "content-type": "application/json",
-        "Authorization": 'Bearer ' + token,
+        "Authorization": token,
       },
       method: "POST",
-      body: JSON.stringify({phone_number: phone_number, scope: scope})
+      body: JSON.stringify({scope: scope, params: params})
     })
     .then(function(response) {
       if (response.status !== 200) {
         console.log('There was on API problem. Status Code: ' + response.status);
+        console.log(response)
         return;
       }
       // Examine the text in the response
       response.json().then(function(response) {
         if ('data' in response) {
           var data = response.data
+          // console.log(data)
           if (data.scope == "get_phone_details") {
             console.log("received phone details")
             validate_phone_number_pop_field(data.user_id, data.user_nickname, data.email, data.viber_active, data.nb_announces)
-          } else if (data.scope == "unlink_viber"){
-            console.log("phone number unlinked with Viber")
-            remove_viber_btn_after_unlink()
+          // } else if (data.scope == "unlink_viber"){
+          //   console.log("phone number unlinked with Viber")
+          //   remove_viber_btn_after_unlink()
+        } else if (data.scope == "get_more_offers"){
+            console.log("received new offers to show")
+            console.log(data)
+            // Append the new offers to the page
+            for (const offer of data.offers) {
+              var small = offer.display_small
+              $("#offers-results").append(small)
+              var big = offer.display_big
+              $("#offers-results").append(big)
+            }
+            // Reload the JS functions on the new DOM
+            load_actions_in_offers_display_page()
           } else {
             console.log("API response not understood")
           }
@@ -327,7 +339,7 @@ export default class MainView {
   }
 
   // Call internal API to unlink Viber
-  let remove_viber_btn_after_unlink = () => {
-    $('#field-viber').hide()
-    $('#btn-viber').show()
-  }
+  // let remove_viber_btn_after_unlink = () => {
+  //   $('#field-viber').hide()
+  //   $('#btn-viber').show()
+  // }

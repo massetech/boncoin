@@ -15,7 +15,13 @@ defmodule Boncoin.Contents do
 
   defp select_familys_for_dropdown(query \\ Family) do
     from f in query,
-      select: {f.title_en, f.id}
+      select: {f.title_en, f.id},
+      order_by: [asc: :rank]
+  end
+
+  defp order_familys(query \\ Family) do
+    from f in query,
+      order_by: [asc: :rank, asc: :title_en]
   end
 
   # METHODS ------------------------------------------------------------------
@@ -30,7 +36,9 @@ defmodule Boncoin.Contents do
 
   """
   def list_familys do
-    Repo.all(Family)
+    Family
+      |> order_familys()
+      |> Repo.all()
   end
 
   def list_familys_for_select() do
@@ -146,6 +154,11 @@ defmodule Boncoin.Contents do
       select: [:id, :title_en, :title_my, :icon]
   end
 
+  defp order_categorys(query \\ Category) do
+    from f in query,
+      order_by: [asc: :family_id, asc: :rank, asc: :title_en]
+  end
+
   # METHODS ------------------------------------------------------------------
 
   @doc """
@@ -158,8 +171,10 @@ defmodule Boncoin.Contents do
 
   """
   def list_categorys do
-    Repo.all(Category)
-    |> Repo.preload([:family])
+    Category
+      |> order_categorys()
+      |> Repo.all()
+      |> Repo.preload([:family])
   end
 
   @doc """
@@ -481,8 +496,7 @@ defmodule Boncoin.Contents do
   # QUERIES ------------------------------------------------------------------
   defp filter_announces_online(query \\ Announce) do
     from a in query,
-      where: a.status == "ONLINE",
-      order_by: [asc: :priority, desc: :parution_date, desc: :nb_clic]
+      where: a.status == "ONLINE"
   end
 
   defp list_admin_announces(query \\ Announce) do
@@ -494,6 +508,11 @@ defmodule Boncoin.Contents do
     from a in query,
       where: a.status == "ONLINE",
       select: count("*")
+  end
+
+  defp select_announces_datas(query \\ Announce, user_query) do
+    from a in query,
+      preload: [:images, user: ^user_query, township: [:division]]
   end
 
   # defp filter_announce_public_data(query \\ Announce) do
@@ -544,6 +563,16 @@ defmodule Boncoin.Contents do
     end
   end
 
+  defp select_user_offers(query \\ Announce, user) do
+    from a in query,
+      where: a.status == "ONLINE" and a.user_id == ^user.id
+  end
+
+  defp order_announces_for_pagination(query \\ Announce) do
+    from a in query,
+      order_by: [asc: a.priority, desc: a.parution_date, asc: a.id]
+  end
+
   # METHODS ------------------------------------------------------------------
 
   def list_announces do
@@ -553,36 +582,35 @@ defmodule Boncoin.Contents do
     |> Repo.preload([:user, :category, township: [:division]])
   end
 
-  def list_announces_public(%{"category_id" => category_id, "division_id" => division_id, "family_id" => family_id, "township_id" => township_id} = params) do
+  def list_announces_public(cursor_after, %{"category_id" => category_id, "division_id" => division_id, "family_id" => family_id, "township_id" => township_id} = params) do
+    # IO.inspect(params)
     user_query = Members.filter_user_public_data()
-    announces = Announce
+    query = Announce
       |> filter_announces_online()
       |> filter_announces_by_location(division_id, township_id)
       |> filter_announces_by_kind(family_id, category_id)
-      # |> filter_announce_public_data()
-      |> Repo.all()
-      |> Repo.preload([:images, user: user_query, township: [:division]])
-    nb_announces = Kernel.length(announces)
-    place = case division_id do
-      "" ->
-        %{title_my: "ပောပဒနိ", title_en: "All Myanmar"}
-      id ->
-        division = get_division!(division_id)
-        case township_id do
-          "" ->
-            %{title_my: "ဒသဉ #{division.title_my}", title_en: "#{String.upcase(division.title_en)}"}
-          id ->
-            township = get_township!(township_id)
-            %{title_my: "#{division.title_my} - #{township.title_my}", title_en: "#{String.upcase(division.title_en)} - #{township.title_en}"}
-        end
+      |> order_announces_for_pagination()
+      |> select_announces_datas(user_query)
+    case cursor_after do
+      nil -> # Call the first time
+        %{entries: entries, metadata: metadata} = Repo.paginate(query, include_total_count: true, cursor_fields: [:priority, :parution_date, :id], limit: 2)
+          |> IO.inspect()
+      _ -> # load more entries
+        %{entries: entries, metadata: metadata} = Repo.paginate(query, after: cursor_after, cursor_fields: [:priority, :parution_date, :id], limit: 2)
+          |> IO.inspect()
     end
-    {announces, nb_announces, place}
   end
 
   def count_announces_public() do
     Announce
       |> count_announces_online()
       |> Repo.one()
+  end
+
+  def get_user_offers(user) do
+    Announce
+      |> select_user_offers(user)
+      |> Repo.all()
   end
 
   def get_announce!(id) do
@@ -634,11 +662,9 @@ defmodule Boncoin.Contents do
       {:ok, announce} ->
         # Build bot params
         if user.viber_active == true do
-          # Build response msg with the bot
-          {tracking_data, message} = %{tracking_data: "offer_treated", user: %{db_user: user, language: user.language, viber_id: user.viber_id, viber_name: user.nickname, user_msg: ""}, announce: announce}
+          bot_datas = %{tracking_data: "offer_treated", details: %{user: user, language: user.language, viber_id: user.viber_id, viber_name: user.nickname, user_msg: ""}, announce: announce}
             |> ViberController.call_bot_algorythm()
-          # Send the message to viber API
-          ViberController.send_viber_message(user.viber_id, tracking_data, message)
+            |> Enum.map(fn result_map -> ViberController.send_viber_message(user.viber_id, result_map.tracking_data, result_map.msg) end)
         end
         {:ok, announce}
       {:error, msg} -> {:error, msg}

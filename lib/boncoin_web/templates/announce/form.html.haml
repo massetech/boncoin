@@ -47,7 +47,8 @@
                   = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
                   %p.m-0.ml-2= gettext "This number is linked to Viber"
                 .col-3.text-right.d-flex.align-items-center.justify-content-end
-                  %button.btn.btn-info.btn-sm.d-flex.align-items-center{id: "btn_unlink_number", drab-click: "remove_viber_link"}
+                  -# %button.btn.btn-info.btn-sm.d-flex.align-items-center{id: "btn_unlink_number", drab-click: "remove_viber_link"}
+                  = link to: main_path(@conn, :viber), class: "btn btn-info btn-sm d-flex align-items-center" do
                     = gettext("unlink")
                     %i.fa.fa-unlink.ml-1
               - link to: main_path(@conn, :viber), id: "btn-viber", class: "btn btn-block", target: "_blank" do
@@ -149,3 +150,5 @@
     .col-12
       .form-group
         = submit gettext("Submit this offer"), class: "btn btn-primary btn-lg"
+
+%div{id: "config", data-api: "#{@conn.assigns.api_key}"}

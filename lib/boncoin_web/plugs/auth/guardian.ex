@@ -7,10 +7,12 @@ defmodule Boncoin.Auth.Guardian do
   end
 
   # Extract an id from the claims of JWT, then return the matching user
-  def resource_from_claims(claims) do
-    {:ok, %{id: claims["sub"]}}
-    # user = claims["sub"]
-    # |> Auth.get_user!
-    # {:ok, user}
+  def resource_from_claims(%{"sub" => id}) do
+    # find_me_a_resource(claims["sub"]) # {:ok, resource} or {:error, reason}
+    # {:ok, %{id: claims["sub"]}}
+    case Members.get_user!(id) do
+      nil -> {:error, :resource_not_found}
+      user -> {:ok, user}
+    end
   end
 end

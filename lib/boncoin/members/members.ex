@@ -121,21 +121,21 @@ defmodule Boncoin.Members do
     end
   end
 
-  def unlink_viber(phone_number) do
-    user = get_user_by_phone_number(phone_number)
-    case user do
-      nil -> {:error, "No user found for this phone number"}
-      user ->
-        case remove_viber_id(user) do
-          {:ok, _user} ->
-            {tracking_data, message} = %{tracking_data: "viber_removed", user: %{db_user: user, language: user.language, viber_id: user.viber_id, viber_name: user.nickname, user_msg: ""}, announce: nil}
-              |> ViberController.call_bot_algorythm()
-            ViberController.send_viber_message(user.viber_id, tracking_data, message)
-            {:ok, user}
-          {:error, msg} -> {:error, msg}
-        end
-    end
-  end
+  # def unlink_viber(phone_number) do
+  #   user = get_user_by_phone_number(phone_number)
+  #   case user do
+  #     nil -> {:error, "No user found for this phone number"}
+  #     user ->
+  #       case remove_viber_id(user) do
+  #         {:ok, _user} ->
+  #           {tracking_data, message} = %{tracking_data: "viber_removed", user: %{db_user: user, language: user.language, viber_id: user.viber_id, viber_name: user.nickname, user_msg: ""}, announce: nil}
+  #             |> ViberController.call_bot_algorythm()
+  #           ViberController.send_viber_message(user.viber_id, tracking_data, message)
+  #           {:ok, user}
+  #         {:error, msg} -> {:error, msg}
+  #       end
+  #   end
+  # end
 
   @doc """
   Gets a single user.

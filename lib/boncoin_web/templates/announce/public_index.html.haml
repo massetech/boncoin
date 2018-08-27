@@ -1,0 +1,30 @@
+.row
+  .col-12
+    %h6.font-weight-bold.text-dark= LayoutView.convert_zawgyi(@conn.assigns.place_searched, "title")
+    %h6.font-weight-bold.text-dark
+      %span= @conn.assigns.nb_offers_found
+      - if @conn.assigns.category == "" && @conn.assigns.family == "" do
+        = gettext " offers"
+      - else
+        - if @conn.assigns.category != "" do
+          = gettext " offers for %{category}", category: LayoutView.convert_zawgyi(@conn.assigns.category, "title")
+          %i.fa.ml-3{class: "#{LayoutView.insert_icon_classes(@conn.assigns.category)}"}
+        - else
+          = gettext " offers for %{family}", family: LayoutView.convert_zawgyi(@conn.assigns.family, "title")
+          %i.fa.ml-3{class: "#{LayoutView.insert_icon_classes(@conn.assigns.family)}"}
+
+    %p.text-primary.font-italic= gettext "Please check before buying anything"
+
+.row{id: "offers-results"}
+  - for announce <- @announces do
+    = render BoncoinWeb.AnnounceView, "_display_small.html", announce: announce
+    = render BoncoinWeb.AnnounceView, "_display_big.html", announce: announce
+
+.row
+  .col-12.my-3
+    - link to: "#", class: "btn btn-lg btn-info text-white", id: "btn-more-offers" do
+      %i.fas.fa-arrow-alt-circle-down.btn-icon
+      %span= gettext "More offers"
+
+%div{id: "config", data-api: "#{@conn.assigns.api_key}", data-cursor-after: "#{@conn.assigns.cursor_after}"}
+-# data-search-params: "#{@conn.assigns.search_params}",

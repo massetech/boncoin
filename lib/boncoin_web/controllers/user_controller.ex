@@ -8,24 +8,26 @@ defmodule BoncoinWeb.UserController do
     render(conn, "index.html", users: users)
   end
 
-  def check_phone(conn, %{"scope" => scope, "phone_number" => phone_number}) do
+  # API to ba called for a phone number on announce page
+  def check_phone(conn, %{"scope" => scope, "params" => phone_number}) do
     case scope do
       "get_phone_details" ->
         answer = Members.read_phone_details(phone_number)
+        |> IO.inspect()
         case answer do
           {:ok, user} ->
             data = %{scope: scope, user_id: user.id, user_nickname: user.nickname, email: user.email, viber_active: user.viber_active, nb_offers: Kernel.length(user.announces)}
             render(conn, "phone_api_ok.json", data: data)
           {:error, msg} -> render(conn, "phone_api_nok.json", msg: msg)
         end
-      "unlink_viber" ->
-        answer = Members.unlink_viber(phone_number)
-        case answer do
-          {:ok, user} ->
-            data = %{scope: scope}
-            render(conn, "phone_api_ok.json", data: data)
-          {:error, msg} -> render(conn, "phone_api_nok.json", msg: msg)
-        end
+      # "unlink_viber" ->
+      #   answer = Members.unlink_viber(phone_number)
+      #   case answer do
+      #     {:ok, user} ->
+      #       data = %{scope: scope}
+      #       render(conn, "phone_api_ok.json", data: data)
+      #     {:error, msg} -> render(conn, "phone_api_nok.json", msg: msg)
+      #   end
     end
   end
 

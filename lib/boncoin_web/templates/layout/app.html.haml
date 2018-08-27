@@ -43,6 +43,6 @@
 
     -# = render_gon_script(@conn)
     %script(src='#{static_path(@conn, "/js/app.js")}')
-    %div{id: "config", data-phone: "#{@conn.assigns.api_key}"}
+    -# %div{id: "config", data-internal-api: "", data-cursor-after: "#{@conn.assigns.cursor_after}"}
     -# = raw(@conn.assigns.flash_messages)
     =# Drab.Client.run(@conn)

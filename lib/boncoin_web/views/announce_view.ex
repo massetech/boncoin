@@ -2,6 +2,10 @@ defmodule BoncoinWeb.AnnounceView do
   use BoncoinWeb, :view
   alias BoncoinWeb.LayoutView
 
+  def render("add_offers.json", %{data: data}) do
+    %{data: data}
+  end
+
   def image_url(image, type) do
     Boncoin.AnnounceImage.url({image.file, image}, type)
   end
@@ -17,8 +21,6 @@ defmodule BoncoinWeb.AnnounceView do
   end
 
   def show_date(announce, language) do
-    IO.puts("hey")
-    IO.inspect(announce)
     if announce.parution_date != nil, do: datetime = announce.parution_date, else: datetime = announce.inserted_at
     day = datetime.day
     month = datetime.month

@@ -76,7 +76,9 @@ defmodule Boncoin.ViberApi do
   def post(path, payload \\ %{}) do
     uri = URI.merge(@api_url, path) |> to_string
     resp = HTTPotion.post uri, body: Poison.encode!(payload), headers: prepare_headers(@token)
-    resp.body |> Poison.decode |> handle_response
+    resp.body
+      |> Poison.decode
+      |> handle_response
   end
 
   defp prepare_headers(access_token) do

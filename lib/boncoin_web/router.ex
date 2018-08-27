@@ -12,12 +12,12 @@ defmodule BoncoinWeb.Router do
     plug Boncoin.Plug.Locale
     plug Boncoin.Plug.SearchParams
     plug Boncoin.Plug.LoadAdds
-    plug Boncoin.Plug.ApiToken
   end
 
   pipeline :auth do
     plug Boncoin.Auth.Pipeline
     plug Boncoin.Auth.CurrentUser
+    plug Boncoin.Auth.SetApiToken
   end
 
   pipeline :login_required do
@@ -28,27 +28,28 @@ defmodule BoncoinWeb.Router do
     plug Boncoin.Plugs.RequireAdmin
   end
 
-  pipeline :api_viber do
-    plug :accepts, ["json"]
-    plug Boncoin.Viber.CurrentUser
-  end
+  # pipeline :api_viber do
+  #   plug :accepts, ["json"]
+  #   plug Boncoin.Viber.CurrentUser
+  # end
 
-  pipeline :api_internal do
+  pipeline :api do
     plug :accepts, ["json"]
-    plug Boncoin.Auth.Pipeline
-    # plug Boncoin.Plug.CheckInput
-    # plug Guardian.Plug.EnsureAuthenticated, claims: %{"typ" => "user-access"}
+    plug Boncoin.Auth.CheckApiAccess
   end
 
   # ---------------  SCOPES ----------------------------------
-  scope "/api", BoncoinWeb do
-    pipe_through :api_viber
-    post "/viber", ViberController, :callback
-  end
+  # scope "/api", BoncoinWeb do
+  #   # pipe_through [:api_viber]
+  #   # plug Boncoin.Viber.CurrentUser
+  #   # post "/viber", ViberController, :callback
+  # end
 
   scope "/api", BoncoinWeb do
-    pipe_through :api_internal
+    pipe_through [:api]
+    post "/viber", ViberController, :callback
     post "/phone", UserController, :check_phone
+    post "/add_offers", AnnounceController, :add_offers_to_public_index
   end
 
   scope "/", BoncoinWeb do
@@ -57,7 +58,7 @@ defmodule BoncoinWeb.Router do
     get "/conditions", MainController, :conditions
     get "/about", MainController, :about
     get "/viber", MainController, :viber
-    get "/offers", MainController, :public_index, as: :public_offers
+    get "/offers", AnnounceController, :public_index, as: :public_offers
     resources "/offers", AnnounceController, only: [:new, :create]
     get "/offers/:link", AnnounceController, :edit
     get "/close", AnnounceController, :close
@@ -77,13 +78,13 @@ defmodule BoncoinWeb.Router do
   end
 
   scope "/viber", BoncoinWeb do
-    pipe_through :browser
+    pipe_through [:browser]
     get "/connect", ViberController, :connect
     get "/disconnect", ViberController, :disconnect
   end
 
   scope "/auth", BoncoinWeb do
-    pipe_through :browser
+    pipe_through [:browser]
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
     delete "/logout", AuthController, :delete
