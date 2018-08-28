@@ -23,7 +23,10 @@
 .row
   .col-12.my-3
     - link to: "#", class: "btn btn-lg btn-info text-white", id: "btn-more-offers" do
-      %i.fas.fa-arrow-alt-circle-down.btn-icon
+      %i.fas.fa-arrow-alt-circle-down.btn-icon.spinner-static
+      %span= gettext "More offers"
+    - link to: "#", class: "btn btn-lg btn-info text-white d-none", id: "btn-more-offers-wait" do
+      %i.fa.fa-sync.fa-spin.btn-icon.spinner-dynamic
       %span= gettext "More offers"
 
 %div{id: "config", data-api: "#{@conn.assigns.api_key}", data-cursor-after: "#{@conn.assigns.cursor_after}"}

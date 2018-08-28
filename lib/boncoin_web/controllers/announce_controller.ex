@@ -7,6 +7,7 @@ defmodule BoncoinWeb.AnnounceController do
   def public_index(conn, _params) do
     paginator_results = Contents.list_announces_public(nil, conn.assigns.search_params)
       # |> IO.inspect()
+    IO.inspect(paginator_results.metadata)
     conn
       |> assign(:place_searched, %{title_my: "ပောပဒနိ", title_en: "All Myanmar"})
       |> assign(:cursor_after, paginator_results.metadata.after)
@@ -19,10 +20,9 @@ defmodule BoncoinWeb.AnnounceController do
     # IO.inspect(params)
     IO.inspect(cursor_after)
     paginator_results = Contents.list_announces_public(cursor_after, %{"category_id" => "", "division_id" => "", "family_id" => "", "township_id" => ""})
+    IO.inspect(paginator_results.metadata)
     offers = paginator_results.entries
-      # |> IO.inspect()
       |> Enum.map(fn announce -> build_offer_html(announce) end)
-      # |> IO.inspect()
     results = %{scope: "get_more_offers", offers: offers, cursor_after: paginator_results.metadata.after}
     render(conn, "add_offers.json", data: results)
   end

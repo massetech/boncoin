@@ -1,5 +1,6 @@
 defmodule Boncoin.Auth.Guardian do
   use Guardian, otp_app: :boncoin
+  alias Boncoin.Members
 
   # Returns something that can identify our user
   def subject_for_token(user, _claims) do

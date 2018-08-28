@@ -41,7 +41,7 @@
           %td= Kernel.round(offer.price)
           %td= offer.currency
           %td
-            - link to: announce_path(@conn, :show, offer), target: "_blank" do
+            - link to: announce_path(@conn, :show, offer) do
               = btn_status(offer.status)
           %td= "#{offer.nb_view}, #{offer.nb_clic}, #{offer.nb_alert}"
           %td= "#{offer.inserted_at.year}/#{offer.inserted_at.day}/#{offer.inserted_at.hour}-#{offer.inserted_at.month}:#{offer.inserted_at.minute}"

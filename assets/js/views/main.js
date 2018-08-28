@@ -284,8 +284,9 @@ export default class MainView {
 
   // Call internal phone API to check phone number
   let call_internal_api = (url, scope, params) => {
+    $("#btn-more-offers").addClass("d-none")
+    $("#btn-more-offers-wait").removeClass("d-none")
     var token = $('#config').attr('data-api')
-    // console.log(token)
     fetch(url, {
       headers: {
         "accept": "application/json",
@@ -296,6 +297,8 @@ export default class MainView {
       body: JSON.stringify({scope: scope, params: params})
     })
     .then(function(response) {
+      $("#btn-more-offers-wait").addClass("d-none")
+      $("#btn-more-offers").removeClass("d-none")
       if (response.status !== 200) {
         console.log('There was on API problem. Status Code: ' + response.status);
         console.log(response)

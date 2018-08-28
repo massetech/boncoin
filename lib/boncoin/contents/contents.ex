@@ -591,13 +591,14 @@ defmodule Boncoin.Contents do
       |> filter_announces_by_kind(family_id, category_id)
       |> order_announces_for_pagination()
       |> select_announces_datas(user_query)
+    # Process.sleep(3000)
     case cursor_after do
       nil -> # Call the first time
-        %{entries: entries, metadata: metadata} = Repo.paginate(query, include_total_count: true, cursor_fields: [:priority, :parution_date, :id], limit: 2)
-          |> IO.inspect()
+        %{entries: entries, metadata: metadata} = Repo.paginate(query, include_total_count: true, cursor_fields: [:priority, :parution_date, :id], limit: 4)
+          # |> IO.inspect()
       _ -> # load more entries
-        %{entries: entries, metadata: metadata} = Repo.paginate(query, after: cursor_after, cursor_fields: [:priority, :parution_date, :id], limit: 2)
-          |> IO.inspect()
+        %{entries: entries, metadata: metadata} = Repo.paginate(query, after: cursor_after, include_total_count: true, cursor_fields: [:priority, :parution_date, :id], limit: 4)
+          # |> IO.inspect()
     end
   end
 
