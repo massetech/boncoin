@@ -23,7 +23,12 @@ defmodule BoncoinWeb.AnnounceController do
     IO.inspect(paginator_results.metadata)
     offers = paginator_results.entries
       |> Enum.map(fn announce -> build_offer_html(announce) end)
-    results = %{scope: "get_more_offers", offers: offers, cursor_after: paginator_results.metadata.after}
+    case paginator_results.metadata.after do
+      nil -> # There are no more records after
+        results = %{scope: "get_more_offers", offers: offers, new_cursor_after: nil}
+      new_cursor_after -> # There are still records after
+        results = %{scope: "get_more_offers", offers: offers, new_cursor_after: paginator_results.metadata.after}
+    end
     render(conn, "add_offers.json", data: results)
   end
 

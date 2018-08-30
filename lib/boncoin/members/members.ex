@@ -101,6 +101,10 @@ defmodule Boncoin.Members do
   def read_phone_details(phone_number) do
     cond do
       String.match?(phone_number, ~r/^([09]{1})([0-9]{10})$/) -> # The number is a Myanmar mobile number
+        # # case get_user_by_phone_number(phone_number) do
+        #   {:ok, user} -> {:ok, user}
+        #   user -> {:ok, user}
+        # end
         get_user_or_create_by_phone_number(phone_number)
       true -> # The number is a NOT a Myanmar mobile number
         {:error, "wrong Myanmar phone number"}
@@ -181,7 +185,7 @@ defmodule Boncoin.Members do
       nil ->
         create_user(%{phone_number: phone_number, role: "MEMBER"})
         # Call back to preload user announces
-        get_user_by_phone_number(phone_number)
+        # get_user_by_phone_number(phone_number)
       user -> {:ok, user}
     end
   end

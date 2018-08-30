@@ -4,6 +4,7 @@ defmodule BoncoinWeb.UserView do
 
   def render("phone_api_ok.json", %{data: data}) do
     %{data: data}
+    |> IO.inspect()
   end
 
   def render("phone_api_nok.json", %{msg: msg}) do

@@ -10,16 +10,16 @@
       %h5.text-left= gettext "1. What are your details ?"
       .row.text-left.mt-3.mb-3
         -# Phone number
-        .col-9.pr-0
+        .col-8.pr-0
           .input-group
             %span.input-group-prepend
               .input-group-text.bg-transparent
                 %i.fa.fa-phone
             = text_input f, :phone_number, class: "form-control", autocomplete: "nope", placeholder: gettext("Main phone number")
           %small.form-text.text-muted{id: "phone_helper"}= gettext "Myanmar mobile only (09000000000)"
-        .col-3.text-right
-          %button.btn.btn-primary{id: "btn_validate_number", drab-click: "read_user_details", data-item-id: ""}= "OK"
-          %button.btn.btn-info.d-none{id: "btn_change_number", drab-click: "read_user_details", data-item-id: ""}= gettext("change")
+        .col-4.text-right
+          %button.btn.btn-primary.btn-block.m-0{id: "btn_validate_number", drab-click: "read_user_details", data-item-id: ""}= "OK"
+          %button.btn.btn-info.btn-block.m-0.d-none{id: "btn_change_number", drab-click: "read_user_details", data-item-id: ""}= gettext("change")
 
       .row.text-left.collapse.collapsible_form
         -# Other details
@@ -129,13 +129,13 @@
     .col-12
       .row
         .col-xs-12.col-sm-4
-          %fieldset.form-group
+          %fieldset.form-group.m-3.mx-sm-0
             %input.form-control.slim{id: "image_file_1", name: "announce[image_file_1]", type: "file", data-post="output", data-force-type: "jpg", data-ratio: "1:1", data-size: "600,600", data-min-size: "300,300", data-instant-edit: "true", data-label="Photo", data-label-loading="Loading"}
         .col-xs-12.col-sm-4
-          %fieldset.form-group
+          %fieldset.form-group.m-3.mx-sm-0
             %input.form-control.slim{id: "image_file_2", name: "announce[image_file_2]", type: "file", data-post="output", data-force-type: "jpg", data-ratio: "1:1", data-size: "600,600", data-min-size: "300,300", data-instant-edit: "true", data-label="Photo", data-label-loading="Loading"}
         .col-xs-12.col-sm-4
-          %fieldset.form-group
+          %fieldset.form-group.m-3.mx-sm-0
             %input.form-control.slim{id: "image_file_3", name: "announce[image_file_3]", type: "file", data-post="output", data-force-type: "jpg", data-ratio: "1:1", data-size: "600,600", data-min-size: "300,300", data-instant-edit: "true", data-label="Photo", data-label-loading="Loading"}
 
   .row.collapse.collapsible_form.my-3

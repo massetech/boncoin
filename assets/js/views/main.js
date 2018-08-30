@@ -255,18 +255,18 @@ export default class MainView {
     $('#announce_email').val('')
   }
   // Populate form when the phone_number is accepted
-  let validate_phone_number_pop_field = (user_id, nickname, email, viber, nb_announces) => {
+  let validate_phone_number_pop_field = (data) => {
     // console.log("Good phone number : form processed with pop")
     $('#announce_phone_number').attr('disabled', 'disabled')  //.removeClass("field-danger").addClass("field-success")
     $('#btn_validate_number').hide()
     $('#btn_change_number').removeClass('d-none').show()
     $('#phone_helper').hide()
-    $('#announce_user_id').val(user_id)
-    $('#announce_nickname').val(nickname).focus()
-    $('#announce_email').val(email)
+    $('#announce_user_id').val(data.user_id)
+    $('#announce_nickname').val(data.nickname).focus()
+    $('#announce_email').val(data.email)
     // if (password == "") {$('#field-password').hide()}
     // else {$('#field-password').show()}
-    if (viber == true) {
+    if (data.viber == true) {
       $('#field-viber').show()
       $('#btn-viber').hide()
       // if (nb_announces > 0) {
@@ -280,6 +280,26 @@ export default class MainView {
       $('#btn-viber').show()
     }
     $('.collapsible_form').collapse('show')
+  }
+
+  // Add new offers received by the button load more
+  let add_new_offers_to_page = (data) => {
+    var new_cursor_after = data.new_cursor_after
+    $('#config').attr('data-cursor-after', new_cursor_after)
+    if (data.new_cursor_after == null) {
+      $("#btn-more-offers-wait").addClass("d-none")
+    } else {
+      $("#btn-more-offers-wait").addClass("d-none")
+      $("#btn-more-offers").removeClass("d-none")
+    }
+    for (const offer of data.offers) {
+      var small = offer.display_small
+      $("#offers-results").append(small)
+      var big = offer.display_big
+      $("#offers-results").append(big)
+    }
+    // Reload the JS functions on the new DOM
+    load_actions_in_offers_display_page()
   }
 
   // Call internal phone API to check phone number
@@ -297,36 +317,27 @@ export default class MainView {
       body: JSON.stringify({scope: scope, params: params})
     })
     .then(function(response) {
-      $("#btn-more-offers-wait").addClass("d-none")
-      $("#btn-more-offers").removeClass("d-none")
       if (response.status !== 200) {
         console.log('There was on API problem. Status Code: ' + response.status);
         console.log(response)
+        $("#btn-more-offers-wait").addClass("d-none")
+        $("#btn-more-offers").removeClass("d-none")
         return;
       }
       // Examine the text in the response
       response.json().then(function(response) {
         if ('data' in response) {
           var data = response.data
-          // console.log(data)
+          console.log(data)
           if (data.scope == "get_phone_details") {
             console.log("received phone details")
-            validate_phone_number_pop_field(data.user_id, data.user_nickname, data.email, data.viber_active, data.nb_announces)
+            validate_phone_number_pop_field(data)
           // } else if (data.scope == "unlink_viber"){
           //   console.log("phone number unlinked with Viber")
           //   remove_viber_btn_after_unlink()
         } else if (data.scope == "get_more_offers"){
             console.log("received new offers to show")
-            console.log(data)
-            // Append the new offers to the page
-            for (const offer of data.offers) {
-              var small = offer.display_small
-              $("#offers-results").append(small)
-              var big = offer.display_big
-              $("#offers-results").append(big)
-            }
-            // Reload the JS functions on the new DOM
-            load_actions_in_offers_display_page()
+            add_new_offers_to_page(data)
           } else {
             console.log("API response not understood")
           }

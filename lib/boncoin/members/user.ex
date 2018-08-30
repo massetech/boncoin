@@ -4,6 +4,8 @@ defmodule Boncoin.Members.User do
   alias Boncoin.Contents.{Announce}
   alias Boncoin.CustomModules
 
+  @derive {Poison.Encoder, only: [:id, :email, :nickname, :phone_number, :viber_active]}
+
   schema "users" do
     field :uid, :string
     field :email, :string

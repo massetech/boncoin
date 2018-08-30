@@ -570,7 +570,9 @@ defmodule Boncoin.Contents do
 
   defp order_announces_for_pagination(query \\ Announce) do
     from a in query,
-      order_by: [asc: a.priority, desc: a.parution_date, asc: a.id]
+      # order_by: [asc: a.id]
+      order_by: [asc: a.priority, asc: a.parution_date, asc: a.id]
+      # order_by: [asc: a.parution_date]
   end
 
   # METHODS ------------------------------------------------------------------
@@ -587,17 +589,17 @@ defmodule Boncoin.Contents do
     user_query = Members.filter_user_public_data()
     query = Announce
       |> filter_announces_online()
-      |> filter_announces_by_location(division_id, township_id)
-      |> filter_announces_by_kind(family_id, category_id)
+      # |> filter_announces_by_location(division_id, township_id)
+      # |> filter_announces_by_kind(family_id, category_id)
       |> order_announces_for_pagination()
       |> select_announces_datas(user_query)
     # Process.sleep(3000)
     case cursor_after do
       nil -> # Call the first time
-        %{entries: entries, metadata: metadata} = Repo.paginate(query, include_total_count: true, cursor_fields: [:priority, :parution_date, :id], limit: 4)
+        %{entries: entries, metadata: metadata} = Repo.paginate(query, include_total_count: true, cursor_fields: [:priority, :parution_date, :parution_date], limit: 4)
           # |> IO.inspect()
       _ -> # load more entries
-        %{entries: entries, metadata: metadata} = Repo.paginate(query, after: cursor_after, include_total_count: true, cursor_fields: [:priority, :parution_date, :id], limit: 4)
+        %{entries: entries, metadata: metadata} = Repo.paginate(query, after: cursor_after, include_total_count: true, cursor_fields: [:priority, :parution_date, :parution_date], limit: 4)
           # |> IO.inspect()
     end
   end
