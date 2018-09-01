@@ -7,6 +7,7 @@ defmodule Boncoin.Auth.CheckApiAccess do
   def init(opts), do: opts
 
   def call(conn, _opts) do
+    IO.inspect(conn)
     auth_internal = get_req_header(conn, "authorization")
     |> List.first()
     auth_viber = get_req_header(conn, "x-viber-content-signature")
@@ -25,7 +26,7 @@ defmodule Boncoin.Auth.CheckApiAccess do
               |> Phoenix.Controller.render(BoncoinWeb.ErrorView, "401.json", message: message)
               |> halt()
         end
-      auth_viber == "9d3941b33d45c165400d84dba9328ee0b687a5a18b347617091be0a56d" -> # API call from Viber
+      auth_viber != nil -> # API call from Viber
         viber_id = conn.params["sender"]["id"] || conn.params["user_id"] || nil
         if viber_id == nil, do: user = nil, else: user = Members.get_user_by_viber_id(viber_id)
         conn
