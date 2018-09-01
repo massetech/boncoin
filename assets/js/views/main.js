@@ -259,16 +259,17 @@ export default class MainView {
   // Populate form when the phone_number is accepted
   let validate_phone_number_pop_field = (data) => {
     // console.log("Good phone number : form processed with pop")
+    console.log(data)
     $('#announce_phone_number').attr('disabled', 'disabled')  //.removeClass("field-danger").addClass("field-success")
     $('#btn_validate_number').hide()
     $('#btn_change_number').removeClass('d-none').show()
     $('#phone_helper').hide()
-    $('#announce_user_id').val(data.user_id)
-    $('#announce_nickname').val(data.nickname).focus()
-    $('#announce_email').val(data.email)
+    $('#announce_user_id').val(data.user.user_id)
+    $('#announce_nickname').val(data.user.nickname).focus()
+    $('#announce_email').val(data.user.email)
     // if (password == "") {$('#field-password').hide()}
     // else {$('#field-password').show()}
-    if (data.viber == true) {
+    if (data.user.viber_active == true) {
       $('#field-viber').show()
       $('#btn-viber').hide()
       // if (nb_announces > 0) {
@@ -330,7 +331,7 @@ export default class MainView {
       response.json().then(function(response) {
         if ('data' in response) {
           var data = response.data
-          console.log(data)
+          // console.log(data)
           if (data.scope == "get_phone_details") {
             console.log("received phone details")
             validate_phone_number_pop_field(data)

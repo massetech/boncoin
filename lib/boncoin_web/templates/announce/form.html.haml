@@ -7,7 +7,7 @@
     .col-xs-12.col-sm-6.my-3
       -# Asking for details
       %hr.d-block.d-sm-none
-      %h5.text-left= gettext "1. What are your details ?"
+      %h5.text-left= gettext "1. Fill your details"
       .row.text-left.mt-3.mb-3
         -# Phone number
         .col-8.pr-0
@@ -71,22 +71,22 @@
     .col-xs-12.col-sm-6.my-3.collapse.collapsible_form
       -# Asking for description
       %hr.d-block.d-sm-none
-      %h5.text-left= gettext "2. What are you selling ?"
+      %h5.text-left= gettext "2. Describe your offer"
       .row.mt-3
         .col-12
           .form-group
             %select.form-control.selectpicker{data-style: "btn-outline-form", title: gettext("Select item location"), data-size: "8", id: "announce_township", name: "announce[township_id]"}
               - for division <- @conn.assigns.select_menus.divisions do
-                %optgroup{label: "#{LayoutView.convert_zawgyi(division, "title")}", data-icon: "fa fa-map-marker"}
+                %optgroup{label: "#{LayoutView.convert_zawgyi(division, "title")}"}
                   - for township <- division.townships do
                     %option{value: "#{township.id}"}= "#{LayoutView.convert_zawgyi(division, "title")}- #{LayoutView.convert_zawgyi(township, "title")}"
         .col-12
           .form-group
             %select.form-control.selectpicker{data-style: "btn-outline-form", title: gettext("Select a category"), data-size: "8", id: "announce_category", name: "announce[category_id]"}
               - for family <- @conn.assigns.select_menus.familys do
-                %optgroup{label: "#{LayoutView.convert_zawgyi(family, "title")}", data-icon: "fa fa-#{family.icon}"}
+                %optgroup{label: "#{LayoutView.convert_zawgyi(family, "title")}", data-icon: "mr-1 fa fa-#{family.icon}"}
                   - for category <- family.categorys do
-                    %option{value: "#{category.id}", data-icon: "fa fa-#{category.icon}"}= "#{LayoutView.convert_zawgyi(category, "title")}"
+                    %option{value: "#{category.id}", data-icon: "mr-1 fa fa-#{category.icon}"}= "#{LayoutView.convert_zawgyi(category, "title")}"
         .col-12
           .form-group
             .form-group.text-left

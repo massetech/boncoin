@@ -38,7 +38,7 @@ i {font-size: 20px!important;}
 }
 .offer-status{right: 0;top: -20px;}
 /* ------------------------------ CONDITIONS  ------------------------------ */
-#conditions, .conditions{
+#conditions, .conditions, #about, .about{
   i {font-size: 30px!important;}
   img.icon {width: 30px !important;}
 }
@@ -68,6 +68,9 @@ div > i, .btn > i:not(.btn-icon) {
   display: flex; align-items: center; justify-content: center;
 }
 .btn > i.btn-icon {margin: 0 1em; display: inline-block;}
+i.width-20 {width: 20px;}
+i.width-30 {width: 30px;}
+i.width-40 {width: 40px;}
 /* ------------------------------ SIDEBAR  ------------------------------ */
 span.language-active{
   font-weight: 600;

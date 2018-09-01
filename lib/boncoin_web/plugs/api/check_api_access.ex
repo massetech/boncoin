@@ -7,11 +7,10 @@ defmodule Boncoin.Auth.CheckApiAccess do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    IO.inspect(conn)
     auth_internal = get_req_header(conn, "authorization")
-    |> List.first()
+      |> List.first()
     auth_viber = get_req_header(conn, "x-viber-content-signature")
-    |> List.first()
+      |> List.first()
 
     cond do
       auth_internal != nil -> # API call from internal

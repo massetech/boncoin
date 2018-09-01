@@ -669,8 +669,7 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:66
 msgid "Decide to sell something"
-msgstr "When a seller posts an offer, he must guaranty that the object was legally acquired. He also has to make sure that the offer "
-"represents an interest for potential buyers. The seller fixes the proposed price and may accept negotiation."
+msgstr ""
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:82
@@ -680,9 +679,7 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:257
 msgid "Explaining cookies"
-msgstr "Cookies are these little files hided by the internet browser when a user visits any website. Our website use them "
-"to identify which language the user prefers and get some traffic informations. To protect our users privacy, there "
-"is no personal information stored in our cookie."
+msgstr ""
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:241

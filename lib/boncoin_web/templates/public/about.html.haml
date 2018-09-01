@@ -1,10 +1,7 @@
-.row.conditions
+.row.about
   .col-12
     %h4.font-weight-bold.text-info= gettext "About PawChaungKaung"
     %h5.text-primary.my-4= gettext "Please let us know if you have any question on our activity."
-    -# .d-flex.align-items-center.my-4
-    -#   %i.fa.fa-envelope.mr-3.text-primary
-    -#   %p.m-0.text-left= gettext "contact@pawchaungkaung.com"
 
 .accordion{id: "about"}
 
@@ -12,50 +9,40 @@
     %a{data-toggle: "collapse", data-target: "#company", aria-expanded: "true", aria-controls: "company"}
       .card-header
         .d-flex.align-items-center
-          %i.fa.fa-desktop.mr-3.text-info
+          %i.width-40.fa.fa-desktop.mr-3.text-info
           %h6.card-title.mb-0= gettext "About us"
     %div.collapse{id: "company", aria-labelledby: "compagny", data-parent: "#about"}
       .card-body
-        .d-flex.align-items-center
-          %i.fa.fa-building.mr-3.text-info
-          %p.m-0= gettext "introduce the compagny"
+        = render "_card_body.html", title: gettext("Who are whe ?"), text: gettext("introduce the compagny"), icon: "fa fa-building"
 
   .card.text-left
     %a{data-toggle: "collapse", data-target: "#work_with_us", aria-expanded: "true", aria-controls: "work_with_us"}
       .card-header
         .d-flex.align-items-center
-          %i.fa.fa-handshake.mr-3.text-info
+          %i.width-40.fa.fa-handshake.mr-3.text-info
           %h6.card-title.mb-0= gettext "Become a partner"
     %div.collapse{id: "work_with_us", aria-labelledby: "work_with_us", data-parent: "#about"}
       .card-body
-        .d-flex.align-items-center
-          %i.fa.fa-audio-description.mr-3.text-info
-          %p.m-0= gettext "introduce the work with us"
+        = render "_card_body.html", title: gettext("What can we offer ?"), text: gettext("introduce the work with us"), icon: "fa fa-audio-description"
 
   .card.text-left
     %a{data-toggle: "collapse", data-target: "#join_us", aria-expanded: "true", aria-controls: "join_us"}
       .card-header
         .d-flex.align-items-center
-          %i.fa.fa-user-tie.mr-3.text-info
+          %i.width-40.fa.fa-user-tie.mr-3.text-info
           %h6.card-title.mb-0= gettext "Join us"
     %div.collapse{id: "join_us", aria-labelledby: "join_us", data-parent: "#about"}
       .card-body
-        .d-flex.align-items-center
-          %i.fa.fa-envelope.mr-3.text-info
-          %p.m-0= gettext "introduce the join us"
+        = render "_card_body.html", title: gettext("You want to join us ?"), text: gettext("introduce the join us"), icon: "fa fa-envelope"
 
   .card.text-left
     %a{data-toggle: "collapse", data-target: "#contact_us", aria-expanded: "true", aria-controls: "contact_us"}
       .card-header
         .d-flex.align-items-center
-          %i.fa.fa-comments.mr-3.text-info
+          %i.width-40.fa.fa-comments.mr-3.text-info
           %h6.card-title.mb-0= gettext "Contact us"
     %div.collapse{id: "contact_us", aria-labelledby: "contact_us", data-parent: "#about"}
       .card-body
-        .d-flex.align-items-center
-          %i.fa.fa-envelope.mr-3.text-info
-          %p.m-0= gettext "introduce the contact us"
+        = render "_card_body.html", title: gettext("How to contact us"), text: gettext("introduce the contact us"), icon: "fa fa-envelope"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-exclamation-circle.mr-3.text-info
-          %p.m-0= gettext "we wont answer to offers messages"
+        = render "_card_body.html", title: gettext("Please note"), text: gettext("we wont answer to offers messages"), icon: "fa fa-exclamation-circle"

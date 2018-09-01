@@ -14,9 +14,6 @@ defmodule BoncoinWeb.ViberController do
       send_name: true,
       send_photo: false
     }
-    # |> IO.inspect()
-    # System.get_env("VIBER_SECRET")
-    # |> IO.inspect()
     ViberApi.post("set_webhook", params)
     conn
       |> redirect(to: main_path(conn, :dashboard))
@@ -56,7 +53,7 @@ defmodule BoncoinWeb.ViberController do
   # Receive a message from the user with tracking_data
   def callback(conn, %{"event" => "message", "timestamp" => timestamp, "sender" => %{"id" => viber_id, "name" => viber_name}, "message" => %{"type" => "text", "text" => user_msg}} = params) do
     IO.puts("User #{viber_id} spoke at #{timestamp}")
-    IO.inspect(params)
+    # IO.inspect(params)
     # Set up default variables
     tracking_data = params["message"]["tracking_data"] || nil
     language = nil
@@ -149,8 +146,8 @@ defmodule BoncoinWeb.ViberController do
 
   def call_bot_algorythm(%{tracking_data: tracking_data, details: %{user: user, language: language, viber_id: viber_id, viber_name: viber_name, user_msg: user_msg}, announce: announce} = bot_params) do
     IO.puts("Bot params")
-    bot_params
-    |> IO.inspect()
+    IO.inspect(bot_params)
+
     cond do
 
     # User asks to change language

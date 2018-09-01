@@ -9,14 +9,14 @@
         = gettext "Connect your Viber app with PawChaungKaung to get notifications !"
 
   .row.my-3
-    .col-xs-12.col-sm-6.offset-sm-3.my-2
+    .col-xs-12.col-sm-8.offset-sm-2.my-2
       %h5.font-weight-bold.text-centre.text-primary
-        = gettext "Please scan the QR code on your Viber app and click on Message."
+        = gettext "Please scan the QR code on your Viber app open a conversation."
     .col-xs-12.col-sm-6.offset-sm-3
       = img_tag static_path(@conn, "/images/viber_QR_code.png"), class: "w-50"
 
   .row.my-3
-    .col-xs-12.col-sm-6.offset-sm-3.my-2
+    .col-xs-12.col-sm-8.offset-sm-2.my-2
       -# QR code explained
       %button.btn-lg.btn-primary{data-toggle: "collapse", data-target: "#viber_explain", aria-expanded: "true", aria-controls: "object", data-parent: "#viber"}
         = gettext "How to scan the QR code on Viber ?"
@@ -25,7 +25,7 @@
         = img_tag static_path(@conn, "/images/viber_QR_code_explained_2.png"), class: "m-3"
 
   .row.my-3
-    .col-xs-12.col-sm-6.offset-sm-3.my-2
+    .col-xs-12.col-sm-8.offset-sm-2.my-2
       %button.btn-lg.btn-primary{data-toggle: "collapse", data-target: "#offer_list_explain", aria-expanded: "true", aria-controls: "object"}
         = gettext "How to get your offer list ?"
       .unlink-explained.collapse.my-3{id: "offer_list_explain", aria-labelledby: "offer_list_explain", data-parent: "#viber"}
@@ -33,7 +33,7 @@
           = gettext "Explain how to get offer list from Viber"
 
   .row.my-3
-    .col-xs-12.col-sm-6.offset-sm-3.my-2
+    .col-xs-12.col-sm-8.offset-sm-2.my-2
       %button.btn-lg.btn-primary{data-toggle: "collapse", data-target: "#change_explain", aria-expanded: "true", aria-controls: "object"}
         = gettext "How to Change your number ?"
       .unlink-explained.collapse.my-3{id: "change_explain", aria-labelledby: "change_explain", data-parent: "#viber"}

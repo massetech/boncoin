@@ -3,10 +3,10 @@
     %h4.font-weight-bold.text-info= gettext "Our terms of use"
     %h5.text-primary.my-4= gettext "Your access to PawChaungKaung implies your fully agreement to these terms of use."
     .d-flex.align-items-center
-      %i.fa.fa-exclamation-circle.mr-3.text-primary
+      %i.fa.fa-exclamation-circle.mr-3.text-primary.d-none.d-sm-block
       %p.m-0.text-left= gettext "introduction to terms of use"
     .d-flex.align-items-center.my-4
-      %i.fa.fa-award.mr-3.text-primary
+      %i.fa.fa-award.mr-3.text-primary.d-none.d-sm-block
       %p.m-0.text-left= gettext "introduction to trademark"
 
 .accordion{id: "conditions"}
@@ -15,177 +15,86 @@
     %a{data-toggle: "collapse", data-target: "#object", aria-expanded: "true", aria-controls: "object"}
       .card-header
         .d-flex.align-items-center
-          %i.fa.fa-desktop.mr-3.text-info
+          %i.width-40.fa.fa-desktop.mr-3.text-info
           %h6.card-title.mb-0= gettext "Object of PawChaungKaung"
     %div.collapse{id: "object", aria-labelledby: "object", data-parent: "#conditions"}
       .card-body
-        .d-flex.align-items-center
-          %i.fa.fa-question-circle.mr-3.text-info
-          %p.m-0= gettext "introduce the website"
+        = render "_card_body.html", title: gettext("Our activity"), text: gettext("introduce the website"), icon: "fa fa-question-circle"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-users.mr-3.text-info
-          %p.m-0= gettext "introduce who are the customers"
+        = render "_card_body.html", title: gettext("Our users"), text: gettext("introduce who are the customers"), icon: "fa fa-users"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-cog.mr-3.text-info
-          %p.m-0= gettext "introduce the process"
+        = render "_card_body.html", title: gettext("How it works"), text: gettext("introduce the process"), icon: "fa fa-cog"
 
   .card.text-left
     %a{data-toggle: "collapse", data-target: "#submission", aria-expanded: "true", aria-controls: "submission"}
       .card-header
         .d-flex.align-items-center
-          %i.fa.fa-edit.mr-3.text-info
+          %i.width-40.fa.fa-edit.mr-3.text-info
           %h6.card-title.mb-0= gettext "Manage an offer"
     %div.collapse{id: "submission", aria-labelledby: "submission", data-parent: "#conditions"}
       .card-body
-        .d-flex.align-items-center
-          %i.fa.fa-hand-point-up.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Please note"
-            %p.m-0= gettext "introduce add submission rule"
+        = render "_card_body.html", title: gettext("Please note"), text: gettext("introduce add submission rule"), icon: "fa fa-hand-point-up"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-hand-holding-usd.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Decide to sell something"
-            %p.m-0= gettext "criteria to sell something"
+        = render "_card_body.html", title: gettext("Decide to sell something"), text: gettext("criteria to sell something"), icon: "fa fa-hand-holding-usd"
         %hr
-        .d-flex.align-items-center
-          -# = img_tag static_path(@conn, "/images/viber_icon.png"), class: "icon mr-3"
-          %i.fab.fa-viber.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Link a number to a Viber"
-            %p.m-0= gettext "explain viber process"
+        = render "_card_body.html", title: gettext("Link a number to a Viber"), text: gettext("explain viber process"), icon: "fab fa-viber"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-align-left.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Describe an offer"
-            %p.m-0= gettext "explaining how to describe your offer"
+        = render "_card_body.html", title: gettext("Describe an offer"), text: gettext("explaining how to describe your offer"), icon: "fa fa-align-left"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-camera.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Choose the photos"
-            %p= gettext "explaining how to use photographs"
+        = render "_card_body.html", title: gettext("Choose the photos"), text: gettext("explaining how to use photographs"), icon: "fa fa-camera"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-trash-alt.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Remove an offer"
-            %p= gettext "explaining removing offer"
+        = render "_card_body.html", title: gettext("Remove an offer"), text: gettext("explaining removing offer"), icon: "fa fa-trash-alt"
 
   .card.text-left
     %a{data-toggle: "collapse", data-target: "#prohibited", aria-expanded: "true", aria-controls: "prohibited"}
       .card-header
         .d-flex.align-items-center
-          %i.fa.fa-ban.mr-3.text-info
+          %i.width-40.fa.fa-ban.mr-3.text-info
           %h6.card-title.mb-0= gettext "Prohibited items"
     %div.collapse{id: "prohibited", aria-labelledby: "prohibited", data-parent: "#conditions"}
       .card-body
-        .d-flex.align-items-center
-          %i.fa.fa-exclamation-triangle.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Please note"
-            %p.m-0= gettext "introduce prohibition list"
+        = render "_card_body.html", title: gettext("Please note"), text: gettext("introduce prohibition list"), icon: "fa fa-exclamation-triangle"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-user-secret.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Private or protected contents"
-            %p.m-0= gettext "detail on private"
+        = render "_card_body.html", title: gettext("Private or protected contents"), text: gettext("detail on private"), icon: "fa fa-user-secret"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-smoking-ban.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Alcohol, cigarettes and drugs"
-            %p.m-0= gettext "detail on drugs"
+        = render "_card_body.html", title: gettext("Alcohol, cigarettes and drugs"), text: gettext("detail on drugs"), icon: "fa fa-smoking-ban"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-bomb.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Arms and explosives"
-            %p.m-0= gettext "detail on arms"
+        = render "_card_body.html", title: gettext("Arms and explosives"), text: gettext("detail on arms"), icon: "fa fa-bomb"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-child.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Humans and animals"
-            %p.m-0= gettext "detail on humans"
+        = render "_card_body.html", title: gettext("Humans and animals"), text: gettext("detail on humans"), icon: "fa fa-child"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-tablets.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Medicine and chemicals"
-            %p.m-0= gettext "detail on medicines"
+        = render "_card_body.html", title: gettext("Medicine and chemicals"), text: gettext("detail on medicines"), icon: "fa fa-tablets"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-surprise.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Sexual and shocking contents"
-            %p.m-0= gettext "detail on shocking"
+        = render "_card_body.html", title: gettext("Sexual and shocking contents"), text: gettext("detail on shocking"), icon: "fa fa-surprise"
 
   .card.text-left
     %a{data-toggle: "collapse", data-target: "#terms", aria-expanded: "true", aria-controls: "terms"}
       .card-header
         .d-flex.align-items-center
-          %i.fa.fa-handshake.mr-3.text-info
+          %i.width-40.fa.fa-handshake.mr-3.text-info
           %h6.card-title.mb-0= gettext "The contract between us"
     %div.collapse{id: "terms", aria-labelledby: "terms", data-parent: "#conditions"}
       .card-body
-        .d-flex.align-items-center
-          %i.fa.fa-desktop.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "PawChaungKaung responsability"
-            %p.m-0= gettext "explaining site responsability"
+        = render "_card_body.html", title: gettext("PawChaungKaung responsability"), text: gettext("explaining site responsability"), icon: "fa fa-desktop"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-user-tie.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Sellers responsibilities"
-            %p.m-0= gettext "explaining seller responsibilities"
+        = render "_card_body.html", title: gettext("Sellers responsibilities"), text: gettext("explaining seller responsibilities"), icon: "fa fa-user-tie"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-users.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Buyers responsibilities"
-            %p.m-0= gettext "explaining buyers responsibilities"
+        = render "_card_body.html", title: gettext("Buyers responsibilities"), text: gettext("explaining buyers responsibilities"), icon: "fa fa-users"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-users.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Buyer's and seller's rights"
-            %p.m-0= gettext "explaining buyers rights"
+        = render "_card_body.html", title: gettext("Buyer's and seller's rights"), text: gettext("explaining buyers rights"), icon: "fa fa-users"
 
   .card.text-left
     %a{data-toggle: "collapse", data-target: "#privacy", aria-expanded: "true", aria-controls: "privacy"}
       .card-header
         .d-flex.align-items-center
-          %i.fa.fa-user-secret.mr-3.text-info
+          %i.width-40.fa.fa-user-secret.mr-3.text-info
           %h6.card-title.mb-0= gettext "Your privacy"
     %div.collapse{id: "privacy", aria-labelledby: "privacy", data-parent: "#conditions"}
       .card-body
-        .d-flex.align-items-center
-          %i.fa.fa-database.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Informations that we collect"
-            %p= gettext "explaining informations collected"
+        = render "_card_body.html", title: gettext("Informations that we collect"), text: gettext("explaining informations collected"), icon: "fa fa-database"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-user-cog.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "How we use these datas"
-            %p= gettext "explaining informations using"
+        = render "_card_body.html", title: gettext("How we use these datas"), text: gettext("explaining informations using"), icon: "fa fa-user-cog"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-user-shield.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Privacy and datas protection"
-            %p= gettext "explaining privacy protection"
+        = render "_card_body.html", title: gettext("Privacy and datas protection"), text: gettext("explaining privacy protection"), icon: "fa fa-user-shield"
         %hr
-        .d-flex.align-items-center
-          %i.fa.fa-fingerprint.mr-3.text-info
-          .flex-column
-            %h6.title= gettext "Explaining cookies"
-            %p= gettext "explaining cookies"
+        = render "_card_body.html", title: gettext("Explaining cookies"), text: gettext("explaining cookies"), icon: "fa fa-fingerprint"

@@ -2,6 +2,8 @@
   %ol.breadcrumb
     %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
     %li.breadcrumb-item.active{aria-current: "page"}= "Users"
+  %li
+    %span= "#{@conn.assigns.current_user.email}"
 
 .table-responsive
   %table.table.table-hover
