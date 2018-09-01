@@ -13,7 +13,7 @@
 
       %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#menuDivision", data-parent: "#mainMenu", data-toggle: "collapse", aria-expanded: "false"}
         %i.fa.fa-map-marker-alt
-        %span= gettext "Searching something ?"
+        %span= gettext "Where do you search ?"
       %ul.collapse.list-unstyled.collapse-level1{id: "menuDivision"}
         - link to: public_offers_path(@conn, :public_index, search: %{division_id: "", township_id: ""}, old_search: @conn.assigns.search_params), class: "" do
           %li.slide-menu.text-dark.border-bottom.border-dark

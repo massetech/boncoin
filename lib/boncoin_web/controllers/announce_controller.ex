@@ -6,21 +6,17 @@ defmodule BoncoinWeb.AnnounceController do
 
   def public_index(conn, _params) do
     paginator_results = Contents.list_announces_public(nil, conn.assigns.search_params)
-      # |> IO.inspect()
-    IO.inspect(paginator_results.metadata)
     conn
-      |> assign(:place_searched, %{title_my: "ပောပဒနိ", title_en: "All Myanmar"})
+      |> IO.inspect()
+      # |> assign(:place_searched, %{title_my: "ပောပဒနိ", title_en: "All Myanmar"})
       |> assign(:cursor_after, paginator_results.metadata.after)
       |> assign(:nb_offers_found, paginator_results.metadata.total_count)
       |> render("public_index.html", announces: paginator_results.entries)
   end
 
   # API to ba called if user wants to load more offers on public page
-  def add_offers_to_public_index(conn, %{"params" => %{"cursor_after" => cursor_after}} = params) do
-    # IO.inspect(params)
-    IO.inspect(cursor_after)
-    paginator_results = Contents.list_announces_public(cursor_after, %{"category_id" => "", "division_id" => "", "family_id" => "", "township_id" => ""})
-    IO.inspect(paginator_results.metadata)
+  def add_offers_to_public_index(conn, %{"params" => %{"cursor_after" => cursor_after, "search_params" => search_params}} = params) do
+    paginator_results = Contents.list_announces_public(cursor_after, search_params)
     offers = paginator_results.entries
       |> Enum.map(fn announce -> build_offer_html(announce) end)
     case paginator_results.metadata.after do

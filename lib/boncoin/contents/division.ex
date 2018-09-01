@@ -1,6 +1,6 @@
 defmodule Boncoin.Contents.Division do
   use Ecto.Schema
-  import Ecto.Changeset
+  import Ecto.{Query, Changeset}
   alias Boncoin.Contents.{Township}
 
   schema "divisions" do
@@ -21,6 +21,17 @@ defmodule Boncoin.Contents.Division do
     division
     |> cast(attrs, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
+  end
+
+  def filter_divisions_active(query) do
+    from d in query,
+      where: d.active == true,
+      select: [:id, :title_en, :title_my]
+  end
+
+  def select_divisions_for_dropdown(query) do
+    from f in query,
+      select: {f.title_en, f.id}
   end
 
 end

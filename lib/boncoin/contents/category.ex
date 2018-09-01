@@ -1,6 +1,6 @@
 defmodule Boncoin.Contents.Category do
   use Ecto.Schema
-  import Ecto.Changeset
+  import Ecto.{Query, Changeset}
   alias Boncoin.Contents.{Family, Announce}
 
   schema "categorys" do
@@ -25,4 +25,17 @@ defmodule Boncoin.Contents.Category do
     |> validate_required(@required_fields)
     |> assoc_constraint(:family)
   end
+
+  def filter_categorys_active(query) do
+    from c in query,
+      where: c.active == true,
+      order_by: [asc: :rank, asc: :id],
+      select: [:id, :title_en, :title_my, :icon]
+  end
+
+  def order_categorys_for_public(query) do
+    from f in query,
+      order_by: [asc: :family_id, asc: :rank, asc: :title_en]
+  end
+
 end

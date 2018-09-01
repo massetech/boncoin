@@ -1,6 +1,6 @@
 defmodule Boncoin.Contents.Family do
   use Ecto.Schema
-  import Ecto.Changeset
+  import Ecto.{Query, Changeset}
   alias Boncoin.Contents.{Category}
 
   schema "familys" do
@@ -21,7 +21,26 @@ defmodule Boncoin.Contents.Family do
   @doc false
   def changeset(family, attrs) do
     family
-    |> cast(attrs, @required_fields ++ @optional_fields)
-    |> validate_required(@required_fields)
+      |> cast(attrs, @required_fields ++ @optional_fields)
+      |> validate_required(@required_fields)
   end
+
+  def filter_familys_active(query) do
+    from f in query,
+      where: f.active == true,
+      order_by: [asc: :rank, asc: :id],
+      select: [:id, :title_en, :title_my, :icon]
+  end
+
+  def select_familys_for_dropdown(query) do
+    from f in query,
+      select: {f.title_en, f.id},
+      order_by: [asc: :rank]
+  end
+
+  def order_familys_for_public(query) do
+    from f in query,
+      order_by: [asc: :rank, asc: :title_en]
+  end
+
 end

@@ -68,16 +68,18 @@ defmodule BoncoinWeb.ViberController do
     end
 
     # Detect the choosen language in language scope
-    if tracking_data == "language" do
+    language = if tracking_data == "language" do
       msg_first_key = String.slice(user_msg,0,1)
-      if Enum.member?(["1", "2", "3"], msg_first_key), do: language = convert_language(msg_first_key)
+      if Enum.member?(["1", "2", "3"], msg_first_key), do: convert_language(msg_first_key), else: language
     end
 
     # Detect the language in phone scope
-    if Enum.member?(["link_phone_mr", "link_phone_my", "link_phone_en"], tracking_data) == true do
-      language = String.replace(tracking_data, "link_phone_", "")
-      tracking_data = "link_phone"
-    end
+    {language, tracking_data} =
+      if Enum.member?(["link_phone_mr", "link_phone_my", "link_phone_en"], tracking_data) == true do
+        {String.replace(tracking_data, "link_phone_", ""), "link_phone"}
+      else
+        {language, tracking_data}
+      end
 
     # Call bot algorythm and send the resulting messages to viber API
     bot_datas = %{tracking_data: tracking_data, details: %{user: user, language: language, viber_id: viber_id, viber_name: viber_name, user_msg: user_msg}, announce: %{}}

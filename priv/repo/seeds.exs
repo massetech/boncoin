@@ -45,7 +45,12 @@ picture_3 = "{\"server\":null,\"meta\":{},\"input\":{\"name\":\"sofa.JPG\",\"typ
 
 # Generate 50 offers
 for i <- 1..50 do
-  announce_params = %{"user_id" => 2, "language" => "en", "category_id" => 1, "township_id" => 1, "title" => "my sofa nb_#{i}",
+  township_id = case rem(i,3) do
+    0 -> 1
+    1 -> 2
+    2 -> 3
+  end
+  announce_params = %{"user_id" => 2, "language" => "en", "category_id" => 1, "township_id" => township_id, "title" => "my sofa nb_#{i}",
     "price" => 10.0, "description" => "its a nice sofa dude", "currency" => "USD", "conditions" => "true",
     "image_file_1" => picture_1, "image_file_2" => picture_2, "image_file_3" => picture_3}
   Boncoin.Contents.create_announce(announce_params)

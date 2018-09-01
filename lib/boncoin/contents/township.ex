@@ -1,6 +1,6 @@
 defmodule Boncoin.Contents.Township do
   use Ecto.Schema
-  import Ecto.Changeset
+  import Ecto.{Query, Changeset}
   alias Boncoin.Contents.{Division, Announce}
 
   schema "townships" do
@@ -20,9 +20,15 @@ defmodule Boncoin.Contents.Township do
   @doc false
   def changeset(township, attrs) do
     township
-    |> cast(attrs, @required_fields ++ @optional_fields)
-    |> validate_required(@required_fields)
-    |> assoc_constraint(:division)
+      |> cast(attrs, @required_fields ++ @optional_fields)
+      |> validate_required(@required_fields)
+      |> assoc_constraint(:division)
+  end
+
+  def filter_townships_active(query) do
+    from t in query,
+      where: t.active == true,
+      select: [:id, :title_en, :title_my]
   end
 
 end

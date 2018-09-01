@@ -1,6 +1,6 @@
 defmodule Boncoin.Contents.Image do
   use Ecto.Schema
-  import Ecto.Changeset
+  import Ecto.{Query, Changeset}
   alias Boncoin.Contents.{Announce, Image}
   use Arc.Ecto.Schema
 

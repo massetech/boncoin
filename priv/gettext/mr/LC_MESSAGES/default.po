@@ -12,7 +12,6 @@ msgstr ""
 "Plural-Forms: nplurals=1\n"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/announces_index.html.haml:7
 #: lib/boncoin_web/templates/public/welcome.html.haml:6
 msgid " offers"
 msgstr ""
@@ -46,11 +45,6 @@ msgid "Name or nickname"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/announces_index.html.haml:16
-msgid "Please check before buying anything"
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/templates/announce/form.html.haml:133
 msgid "Price"
 msgstr ""
@@ -72,13 +66,13 @@ msgid "Title"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:36
+#: lib/boncoin_web/views/announce_view.ex:38
 msgid "today, %{hour}:%{minute} %{label}"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:39
-#: lib/boncoin_web/views/announce_view.ex:43
+#: lib/boncoin_web/views/announce_view.ex:41
+#: lib/boncoin_web/views/announce_view.ex:45
 msgid "yesterday, %{hour}:%{minute} %{label}"
 msgstr ""
 
@@ -143,6 +137,7 @@ msgid "Myanmar mobile only (09000000000)"
 msgstr ""
 
 #, elixir-format
+#: lib/boncoin_web/templates/layout/_sidebar.html.haml:15
 #: lib/boncoin_web/templates/public/welcome.html.haml:14
 msgid "Sell something"
 msgstr ""
@@ -593,26 +588,11 @@ msgid "Search arround you"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:20
-msgid "Searching something ?"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:15
-msgid "Selling something ?"
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/templates/announce/new.html.haml:3
 msgid "Please note that your are acting on your own..."
 msgstr "Please note that your are acting on your own and that the website won’t hold any "
 "responsability on the transaction you may have with people who contact you. Your offer will "
 "be validated by our team before being published."
-
-#, elixir-format
-#: lib/boncoin_web/templates/public/announces_index.html.haml:10
-msgid " offers for %{category}"
-msgstr ""
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/viber.html.haml:10
@@ -739,11 +719,6 @@ msgid "Sellers responsibilities"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/announces_index.html.haml:13
-msgid " offers for %{family}"
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:212
 msgid "Buyer's and seller's rights"
 msgstr ""
@@ -781,4 +756,25 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/layout/_sidebar.html.haml:79
 msgid "Viber notifications"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/public_index.html.haml:5
+msgid "%{nb_offers}offers found for %{arbo_searched}"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/public_index.html.haml:21
+#: lib/boncoin_web/templates/announce/public_index.html.haml:25
+msgid "More offers"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/public_index.html.haml:7
+msgid "Please meet the seller and try the product before giving any money"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/layout/_sidebar.html.haml:20
+msgid "Where do you search ?"
 msgstr ""

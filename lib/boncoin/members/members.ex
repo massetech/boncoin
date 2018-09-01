@@ -11,8 +11,7 @@ defmodule Boncoin.Members do
   alias BoncoinWeb.ViberController
 
   # -------------------------------- UEBERAUTH ----------------------------------------
-  # QUERIES ------------------------------------------------------------------
-  # METHODS ------------------------------------------------------------------
+
   def sign_in_user(%Auth{} = auth) do
     user = email_from_auth(auth)
       |> check_admin_email()
@@ -36,43 +35,6 @@ defmodule Boncoin.Members do
   defp email_from_auth(%{info: %{email: email}}), do: email
 
   # -------------------------------- USER ----------------------------------------
-  # QUERIES ------------------------------------------------------------------
-  defp search_guest_user(query \\ User) do
-    from u in User,
-      where: u.role == "GUEST"
-  end
-
-  defp filter_admin_users_by_email(query \\ User, email) do
-    from u in User,
-      where: u.email == ^email and u.role in ["SUPER", "ADMIN"]
-  end
-
-  defp filter_user_by_viber_id(query \\ User, viber_id) do
-    from u in User,
-      where: u.viber_id == ^viber_id
-  end
-
-  defp filter_user_by_phone_number(query \\ User, phone_number) do
-    from u in User,
-      where: u.phone_number == ^phone_number
-  end
-
-  defp search_other_user_for_phone_number(query \\ User, phone_number) do
-    from u in User,
-      where: u.phone_number == ^phone_number,
-      left_join: a in assoc(u, :announces),
-      on: a.status in ["PENDING", "ONLINE"],
-      group_by: u.id,
-      select: %{id: u.id, viber_active: u.viber_active, nb_announces: count(a.id)}
-  end
-
-  def filter_user_public_data(query \\ User) do
-    from u in User,
-      # select: map(u, [:nickname, :email, :phone_number])
-      select: %{nickname: u.nickname, email: u.email, phone_number: u.phone_number, viber_active: u.viber_active, role: u.role}
-  end
-
-  # METHODS ------------------------------------------------------------------
 
   @doc """
   Checks if an email is ADMIN or USER.
@@ -80,8 +42,8 @@ defmodule Boncoin.Members do
 
   defp check_admin_email(email) do
     User
-    |> filter_admin_users_by_email(email)
-    |> Repo.one()
+      |> User.filter_admin_users_by_email(email)
+      |> Repo.one()
   end
 
   @doc """
@@ -94,17 +56,14 @@ defmodule Boncoin.Members do
 
   """
   def list_users do
-    Repo.all(User)
-    |> Repo.preload(:announces)
+    User
+      |> Repo.all()
+      |> Repo.preload(:announces)
   end
 
   def read_phone_details(phone_number) do
     cond do
       String.match?(phone_number, ~r/^([09]{1})([0-9]{10})$/) -> # The number is a Myanmar mobile number
-        # # case get_user_by_phone_number(phone_number) do
-        #   {:ok, user} -> {:ok, user}
-        #   user -> {:ok, user}
-        # end
         get_user_or_create_by_phone_number(phone_number)
       true -> # The number is a NOT a Myanmar mobile number
         {:error, "wrong Myanmar phone number"}
@@ -113,8 +72,8 @@ defmodule Boncoin.Members do
 
   def get_guest_user() do
     User
-    |> search_guest_user()
-    |> Repo.one()
+      |> User.search_guest_user()
+      |> Repo.one()
   end
 
   def admin_user? (user) do
@@ -163,29 +122,27 @@ defmodule Boncoin.Members do
 
   def get_user_by_phone_number(phone_number) do
     User
-      |> filter_user_by_phone_number(phone_number)
+      |> User.filter_user_by_phone_number(phone_number)
       |> Repo.one()
       |> Repo.preload(:announces)
   end
 
   def get_other_user_by_phone_number(phone_number)do
     User
-      |> search_other_user_for_phone_number(phone_number)
+      |> User.search_other_user_for_phone_number(phone_number)
       |> Repo.one()
   end
 
   def get_user_by_viber_id(viber_id) do
     User
-    |> filter_user_by_viber_id(viber_id)
-    |> Repo.one()
+      |> User.filter_user_by_viber_id(viber_id)
+      |> Repo.one()
   end
 
   def get_user_or_create_by_phone_number(phone_number) do
     case get_user_by_phone_number(phone_number) do
       nil ->
         create_user(%{phone_number: phone_number, role: "MEMBER"})
-        # Call back to preload user announces
-        # get_user_by_phone_number(phone_number)
       user -> {:ok, user}
     end
   end
@@ -204,8 +161,8 @@ defmodule Boncoin.Members do
   """
   def create_user(attrs \\ %{}) do
     %User{}
-    |> User.changeset(attrs)
-    |> Repo.insert()
+      |> User.changeset(attrs)
+      |> Repo.insert()
   end
 
   @doc """
@@ -222,8 +179,8 @@ defmodule Boncoin.Members do
   """
   def update_user(%User{} = user, attrs) do
     user
-    |> User.changeset(attrs)
-    |> Repo.update()
+      |> User.changeset(attrs)
+      |> Repo.update()
   end
 
   def remove_viber_id(user) do

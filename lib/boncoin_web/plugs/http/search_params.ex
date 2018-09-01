@@ -23,16 +23,33 @@ defmodule Boncoin.Plug.SearchParams do
       |> resolve_township_conflicts()
       |> resolve_category_conflicts()
 
-    # IO.puts("search_params OUT")
-    # IO.inspect(search_params)
+    search_titles = %{
+      searched_place: build_searched_place(search_params["division_id"], search_params["township_id"]),
+      searched_arbo: build_searched_arbo(search_params["family_id"], search_params["category_id"])
+    }
+
     conn
       |> assign(:search_params, search_params)
-      |> assign(:category, choosen_category(search_params))
-      |> assign(:family, choosen_family(search_params))
-      |> assign(:place_searched, build_place_searched(search_params["division_id"], search_params["township_id"]))
+      |> assign(:search_titles, search_titles)
   end
 
-  defp build_place_searched(division_id, township_id) do
+  defp build_searched_arbo(family_id, category_id) do
+    case family_id do
+      "" ->
+        %{title_my: "", title_en: ""}
+      id ->
+        family = Contents.get_family!(family_id)
+        case category_id do
+          "" ->
+            %{title_my: "#{family.title_my}", title_en: "#{family.title_en}"}
+          id ->
+            category = Contents.get_category!(category_id)
+            %{title_my: "#{category.title_my}", title_en: "#{category.title_en}"}
+        end
+    end
+  end
+
+  defp build_searched_place(division_id, township_id) do
     case division_id do
       "" ->
         %{title_my: "ပောပဒနိ", title_en: "All Myanmar"}
@@ -40,10 +57,10 @@ defmodule Boncoin.Plug.SearchParams do
         division = Contents.get_division!(division_id)
         case township_id do
           "" ->
-            %{title_my: "ဒသဉ #{division.title_my}", title_en: "#{String.upcase(division.title_en)}"}
+            %{title_my: "ဒသဉ #{division.title_my}", title_en: "#{division.title_en}"}
           id ->
             township = Contents.get_township!(township_id)
-            %{title_my: "#{division.title_my} - #{township.title_my}", title_en: "#{String.upcase(division.title_en)} - #{township.title_en}"}
+            %{title_my: "#{division.title_my} - #{township.title_my}", title_en: "#{division.title_en} - #{township.title_en}"}
         end
     end
   end

@@ -2,29 +2,10 @@ defmodule Boncoin.Contents do
   import Ecto.Query, warn: false
   alias Boncoin.{Repo, Members}
   alias Boncoin.Contents.{Family, Category, Township, Division, Announce, Image}
+  alias Boncoin.Members.{User}
   alias BoncoinWeb.ViberController
 
   # -------------------------------- FAMILY ----------------------------------------
-  # QUERIES ------------------------------------------------------------------
-  defp filter_familys_active(query \\ Family) do
-    from f in query,
-      where: f.active == true,
-      order_by: [asc: :rank, asc: :id],
-      select: [:id, :title_en, :title_my, :icon]
-  end
-
-  defp select_familys_for_dropdown(query \\ Family) do
-    from f in query,
-      select: {f.title_en, f.id},
-      order_by: [asc: :rank]
-  end
-
-  defp order_familys(query \\ Family) do
-    from f in query,
-      order_by: [asc: :rank, asc: :title_en]
-  end
-
-  # METHODS ------------------------------------------------------------------
 
   @doc """
   Returns the list of familys.
@@ -37,12 +18,13 @@ defmodule Boncoin.Contents do
   """
   def list_familys do
     Family
-      |> order_familys()
+      |> Family.order_familys_for_public()
       |> Repo.all()
   end
 
   def list_familys_for_select() do
-    select_familys_for_dropdown
+    Family
+      |> Family.select_familys_for_dropdown()
       |> Repo.all()
   end
 
@@ -56,10 +38,11 @@ defmodule Boncoin.Contents do
   #     |> Repo.one()
   # end
 
-  def list_familys_active do
-    query = filter_categorys_active()
+  def list_familys_active() do
+    query = Category
+      |> Category.filter_categorys_active()
     Family
-      |> filter_familys_active()
+      |> Family.filter_familys_active()
       |> Repo.all()
       |> Repo.preload([categorys: query])
   end
@@ -94,8 +77,8 @@ defmodule Boncoin.Contents do
   """
   def create_family(attrs \\ %{}) do
     %Family{}
-    |> Family.changeset(attrs)
-    |> Repo.insert()
+      |> Family.changeset(attrs)
+      |> Repo.insert()
   end
 
   @doc """
@@ -112,8 +95,8 @@ defmodule Boncoin.Contents do
   """
   def update_family(%Family{} = family, attrs) do
     family
-    |> Family.changeset(attrs)
-    |> Repo.update()
+      |> Family.changeset(attrs)
+      |> Repo.update()
   end
 
   @doc """
@@ -146,20 +129,6 @@ defmodule Boncoin.Contents do
   end
 
   # -------------------------------- CATEGORY ----------------------------------------
-  # QUERIES ------------------------------------------------------------------
-  defp filter_categorys_active(query \\ Category) do
-    from c in query,
-      where: c.active == true,
-      order_by: [asc: :rank, asc: :id],
-      select: [:id, :title_en, :title_my, :icon]
-  end
-
-  defp order_categorys(query \\ Category) do
-    from f in query,
-      order_by: [asc: :family_id, asc: :rank, asc: :title_en]
-  end
-
-  # METHODS ------------------------------------------------------------------
 
   @doc """
   Returns the list of categorys.
@@ -172,7 +141,7 @@ defmodule Boncoin.Contents do
   """
   def list_categorys do
     Category
-      |> order_categorys()
+      |> Category.order_categorys_for_public()
       |> Repo.all()
       |> Repo.preload([:family])
   end
@@ -207,8 +176,8 @@ defmodule Boncoin.Contents do
   """
   def create_category(attrs \\ %{}) do
     %Category{}
-    |> Category.changeset(attrs)
-    |> Repo.insert()
+      |> Category.changeset(attrs)
+      |> Repo.insert()
   end
 
   @doc """
@@ -225,8 +194,8 @@ defmodule Boncoin.Contents do
   """
   def update_category(%Category{} = category, attrs) do
     category
-    |> Category.changeset(attrs)
-    |> Repo.update()
+      |> Category.changeset(attrs)
+      |> Repo.update()
   end
 
   @doc """
@@ -259,14 +228,6 @@ defmodule Boncoin.Contents do
   end
 
   # -------------------------------- TOWNSHIP ----------------------------------------
-  # QUERIES ------------------------------------------------------------------
-  defp filter_townships_active(query \\ Township) do
-    from t in query,
-      where: t.active == true,
-      select: [:id, :title_en, :title_my]
-  end
-
-  # METHODS ------------------------------------------------------------------
 
   @doc """
   Returns the list of townships.
@@ -278,8 +239,9 @@ defmodule Boncoin.Contents do
 
   """
   def list_townships do
-    Repo.all(Township)
-    |> Repo.preload([:division])
+    Township
+      |> Repo.all()
+      |> Repo.preload([:division])
   end
 
   @doc """
@@ -314,8 +276,8 @@ defmodule Boncoin.Contents do
   """
   def create_township(attrs \\ %{}) do
     %Township{}
-    |> Township.changeset(attrs)
-    |> Repo.insert()
+      |> Township.changeset(attrs)
+      |> Repo.insert()
   end
 
   @doc """
@@ -332,8 +294,8 @@ defmodule Boncoin.Contents do
   """
   def update_township(%Township{} = township, attrs) do
     township
-    |> Township.changeset(attrs)
-    |> Repo.update()
+      |> Township.changeset(attrs)
+      |> Repo.update()
   end
 
   @doc """
@@ -366,19 +328,6 @@ defmodule Boncoin.Contents do
   end
 
   # -------------------------------- DIVISION ----------------------------------------
-  # QUERIES ------------------------------------------------------------------
-  defp filter_divisions_active(query \\ Division) do
-    from d in query,
-      where: d.active == true,
-      select: [:id, :title_en, :title_my]
-  end
-
-  defp select_divisions_for_dropdown(query \\ Division) do
-    from f in query,
-      select: {f.title_en, f.id}
-  end
-
-  # METHODS ------------------------------------------------------------------
 
   @doc """
   Returns the list of divisions.
@@ -390,13 +339,14 @@ defmodule Boncoin.Contents do
 
   """
   def list_divisions do
-    Repo.all(Division)
+    Division
+      |> Repo.all()
   end
 
   def list_divisions_for_select() do
-    select_divisions_for_dropdown
+    Division
+      |> Division.select_divisions_for_dropdown()
       |> Repo.all()
-      # |> IO.inspect()
   end
 
   @doc """
@@ -404,9 +354,10 @@ defmodule Boncoin.Contents do
   """
 
   def list_divisions_active do
-    query = filter_townships_active()
+    query = Township
+      |> Township.filter_townships_active()
     Division
-      |> filter_divisions_active()
+      |> Division.filter_divisions_active()
       |> Repo.all()
       |> Repo.preload([townships: query])
   end
@@ -441,8 +392,8 @@ defmodule Boncoin.Contents do
   """
   def create_division(attrs \\ %{}) do
     %Division{}
-    |> Division.changeset(attrs)
-    |> Repo.insert()
+      |> Division.changeset(attrs)
+      |> Repo.insert()
   end
 
   @doc """
@@ -459,8 +410,8 @@ defmodule Boncoin.Contents do
   """
   def update_division(%Division{} = division, attrs) do
     division
-    |> Division.changeset(attrs)
-    |> Repo.update()
+      |> Division.changeset(attrs)
+      |> Repo.update()
   end
 
   @doc """
@@ -493,147 +444,61 @@ defmodule Boncoin.Contents do
   end
 
   # -------------------------------- ANNOUNCE ----------------------------------------
-  # QUERIES ------------------------------------------------------------------
-  defp filter_announces_online(query \\ Announce) do
-    from a in query,
-      where: a.status == "ONLINE"
-  end
-
-  defp list_admin_announces(query \\ Announce) do
-    from a in query,
-      order_by: [asc: :inserted_at, desc: :parution_date, desc: :nb_clic]
-  end
-
-  defp count_announces_online(query \\ Announce) do
-    from a in query,
-      where: a.status == "ONLINE",
-      select: count("*")
-  end
-
-  defp select_announces_datas(query \\ Announce, user_query) do
-    from a in query,
-      preload: [:images, user: ^user_query, township: [:division]]
-  end
-
-  # defp filter_announce_public_data(query \\ Announce) do
-  #   from a in query, abs(number)
-  #     select: [:id, :price]
-  #     # select: map(a, [:id, :price])
-  #     # select: struct(a, [:id, :price])
-  #     # select: %Announce{id: a.id, price: a.price}
-  # end
-
-  defp filter_announces_by_location(query \\ Announce, division_id, township_id) do
-    case division_id do
-      "" ->
-        from a in query,
-          join: t in assoc(a, :township), where: t.active == true,
-          join: d in assoc(t, :division), where: d.active == true
-      _ ->
-        case township_id do
-          "" ->
-            from a in query,
-              join: t in assoc(a, :township), where: t.active == true,
-              join: d in assoc(t, :division), where: d.active == true and d.id == ^division_id
-          _ ->
-            from a in query,
-              join: t in assoc(a, :township), where: t.active == true and t.id == ^township_id,
-              join: d in assoc(t, :division), where: d.active == true and t.id == ^division_id
-        end
-    end
-  end
-
-  defp filter_announces_by_kind(query \\ Announce, family_id, category_id) do
-    case family_id do
-      "" ->
-        from a in query,
-          join: t in assoc(a, :category), where: t.active == true,
-          join: d in assoc(t, :family), where: d.active == true
-      _ ->
-        case category_id do
-          "" ->
-            from a in query,
-              join: t in assoc(a, :category), where: t.active == true,
-              join: d in assoc(t, :family), where: d.active == true and d.id == ^family_id
-          _ ->
-            from a in query,
-              join: t in assoc(a, :category), where: t.active == true and t.id == ^category_id,
-              join: d in assoc(t, :family), where: d.active == true and t.id == ^family_id
-        end
-    end
-  end
-
-  defp select_user_offers(query \\ Announce, user) do
-    from a in query,
-      where: a.status == "ONLINE" and a.user_id == ^user.id
-  end
-
-  defp order_announces_for_pagination(query \\ Announce) do
-    from a in query,
-      # order_by: [asc: a.id]
-      order_by: [asc: a.priority, asc: a.parution_date, asc: a.id]
-      # order_by: [asc: a.parution_date]
-  end
-
-  # METHODS ------------------------------------------------------------------
 
   def list_announces do
     Announce
-    |> list_admin_announces()
-    |> Repo.all()
-    |> Repo.preload([:user, :category, township: [:division]])
+      |> Announce.list_admin_announces()
+      |> Repo.all()
+      |> Repo.preload([:user, :category, township: [:division]])
   end
 
   def list_announces_public(cursor_after, %{"category_id" => category_id, "division_id" => division_id, "family_id" => family_id, "township_id" => township_id} = params) do
-    # IO.inspect(params)
-    user_query = Members.filter_user_public_data()
-    query = Announce
-      |> filter_announces_online()
-      # |> filter_announces_by_location(division_id, township_id)
-      # |> filter_announces_by_kind(family_id, category_id)
-      |> order_announces_for_pagination()
-      |> select_announces_datas(user_query)
+    user_query = User
+      |> User.filter_user_public_data()
+    offer_query = Announce
+      |> Announce.filter_announces_online()
+      |> Announce.filter_announces_by_location(division_id, township_id)
+      |> Announce.filter_announces_by_kind(family_id, category_id)
+      |> Announce.sort_announces_for_pagination()
+      |> Announce.select_announces_datas(user_query)
     # Process.sleep(3000)
     case cursor_after do
       nil -> # Call the first time
-        %{entries: entries, metadata: metadata} = Repo.paginate(query, include_total_count: true, cursor_fields: [:priority, :parution_date, :parution_date], limit: 4)
-          # |> IO.inspect()
+        %{entries: entries, metadata: metadata} = Repo.paginate(offer_query, include_total_count: true, cursor_fields: [:priority, :parution_date], sort_direction: :desc, limit: 4)
       _ -> # load more entries
-        %{entries: entries, metadata: metadata} = Repo.paginate(query, after: cursor_after, include_total_count: true, cursor_fields: [:priority, :parution_date, :parution_date], limit: 4)
-          # |> IO.inspect()
+        %{entries: entries, metadata: metadata} = Repo.paginate(offer_query, after: cursor_after, include_total_count: true, cursor_fields: [:priority, :parution_date], sort_direction: :desc, limit: 4)
     end
   end
 
   def count_announces_public() do
     Announce
-      |> count_announces_online()
+      |> Announce.count_announces_online()
       |> Repo.one()
   end
 
   def get_user_offers(user) do
     Announce
-      |> select_user_offers(user)
+      |> Announce.select_user_offers(user)
       |> Repo.all()
   end
 
   def get_announce!(id) do
     Repo.get!(Announce, id)
-    |> Repo.preload([:user, :images, township: [:division], category: [:family]])
+      |> Repo.preload([:user, :images, township: [:division], category: [:family]])
   end
 
   def create_announce(attrs \\ %{}) do
     params = attrs
       |> Map.merge(%{"status" => "PENDING"})
-      # Convert Zawgyi to Unicode for database
+      # Convert Zawgyi to Unicode before inserting into database
       |> Map.merge(%{"title" => Rabbit.zg2uni(attrs["title"]), "description" => Rabbit.zg2uni(attrs["description"])})
-      # |> IO.inspect()
       # |> IO.inspect(limit: :infinity, printable_limit: :infinity)
     new_announce = %Announce{}
       |> Announce.changeset(params)
       |> Repo.insert()
     case new_announce do
       {:ok, announce} ->
-        # Loop on the 3 photo fields of the form
+        # Loop on the 3 photo fields of the form params
         for i <- ["image_file_1", "image_file_2", "image_file_3"] do
           unless attrs[i] == "" do
             create_announce_image(announce.id, attrs[i])
@@ -663,7 +528,7 @@ defmodule Boncoin.Contents do
     # Update the announce
     case update_announce(announce, params) do
       {:ok, announce} ->
-        # Build bot params
+        # Call Viber bot
         if user.viber_active == true do
           bot_datas = %{tracking_data: "offer_treated", details: %{user: user, language: user.language, viber_id: user.viber_id, viber_name: user.nickname, user_msg: ""}, announce: announce}
             |> ViberController.call_bot_algorythm()
@@ -687,13 +552,14 @@ defmodule Boncoin.Contents do
   end
 
   def delete_announce(%Announce{} = announce) do
-    # Remove the link to the images ; see https://github.com/stavro/arc_ecto/issues/40
+    # Remove the link to the images first to delete from socket
+    # see https://github.com/stavro/arc_ecto/issues/40
     images = announce.images
     for image <- images do
       image
         |> Image.changeset(%{file: nil})
         |> Repo.update!()
-      # Since the above deletion doesn't really need to happen synchronously, you can delete it asynchronously to speed up the request/response.
+      # Delete asynchronously to speed up the request/response.
       spawn(fn -> Boncoin.AnnounceImage.delete({image.file, image}) end)
     end
     # Delete the announce will delete the images (belongs_to)
@@ -705,13 +571,6 @@ defmodule Boncoin.Contents do
   end
 
   # -------------------------------- IMAGE ----------------------------------------
-  # QUERIES ------------------------------------------------------------------
-  # def filter_image_public_data(query \\ Image) do
-  #   from i in Image,
-  #     select: %{file: i.file}
-  # end
-
-  # METHODS ------------------------------------------------------------------
 
   @doc """
   Returns the list of images.

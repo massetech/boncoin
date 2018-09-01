@@ -1,6 +1,6 @@
 defmodule Boncoin.Members.User do
   use Ecto.Schema
-  import Ecto.Changeset
+  import Ecto.{Query, Changeset}
   alias Boncoin.Contents.{Announce}
   alias Boncoin.CustomModules
 
@@ -45,4 +45,39 @@ defmodule Boncoin.Members.User do
   def role_select_btn() do
     [guest: "GUEST", member: "MEMBER", admin: "ADMIN", super: "SUPER"]
   end
+
+  def search_guest_user(query) do
+    from u in query,
+      where: u.role == "GUEST"
+  end
+
+  def filter_admin_users_by_email(query, email) do
+    from u in query,
+      where: u.email == ^email and u.role in ["SUPER", "ADMIN"]
+  end
+
+  def filter_user_by_viber_id(query, viber_id) do
+    from u in query,
+      where: u.viber_id == ^viber_id
+  end
+
+  def filter_user_by_phone_number(query, phone_number) do
+    from u in query,
+      where: u.phone_number == ^phone_number
+  end
+
+  def search_other_user_for_phone_number(query, phone_number) do
+    from u in query,
+      where: u.phone_number == ^phone_number,
+      left_join: a in assoc(u, :announces),
+      on: a.status in ["PENDING", "ONLINE"],
+      group_by: u.id,
+      select: %{id: u.id, viber_active: u.viber_active, nb_announces: count(a.id)}
+  end
+
+  def filter_user_public_data(query) do
+    from u in query,
+      select: %{nickname: u.nickname, email: u.email, phone_number: u.phone_number, viber_active: u.viber_active, role: u.role}
+  end
+
 end

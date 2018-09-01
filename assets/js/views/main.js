@@ -114,7 +114,9 @@ export default class MainView {
       event.preventDefault()
       event.stopPropagation()
       var cursor_after = $('#config').attr('data-cursor-after')
-      call_internal_api("/api/add_offers", "get_more_offers", {cursor_after: cursor_after})
+      var search_params = JSON.parse($('#config').attr('data-search-params'))
+      console.log(search_params)
+      call_internal_api("/api/add_offers", "get_more_offers", {cursor_after: cursor_after, search_params: search_params})
     })
 
     /* ------------- OFFERS FORM  --------------------------------------------------- */

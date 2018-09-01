@@ -1,9 +1,9 @@
 defmodule Boncoin.Contents.Announce do
   use Ecto.Schema
-  import Ecto.Changeset
+  import Ecto.{Query, Changeset}
   alias Boncoin.Contents.{Category, Township, Image}
   alias Boncoin.Members.{User}
-  alias Boncoin.CustomModules
+  alias Boncoin.CustomModules # Used to make some Zawgyi conversion
 
   schema "announces" do
     field :conditions, :boolean, default: false
@@ -77,6 +77,78 @@ defmodule Boncoin.Contents.Announce do
       %{label: "ADMIN_CANCELLED", title: "Offer cancelled by user", btn_color: "btn-outline-info"},
       %{label: "ADMIN_REMOVED", title: "Offer removed by admin", btn_color: "btn-outline-danger"}
     ]
+  end
+
+  def filter_announces_online(query) do
+    from a in query,
+      where: a.status == "ONLINE"
+  end
+
+  def list_admin_announces(query) do
+    from a in query,
+      order_by: [asc: :inserted_at, desc: :parution_date, desc: :nb_clic]
+  end
+
+  def count_announces_online(query) do
+    from a in query,
+      where: a.status == "ONLINE",
+      select: count("*")
+  end
+
+  def select_announces_datas(query, user_query) do
+    from a in query,
+      preload: [:images, user: ^user_query, township: [:division]]
+  end
+
+  def filter_announces_by_location(query, division_id, township_id) do
+    case division_id do
+      "" ->
+        from a in query,
+          join: t in assoc(a, :township), where: t.active == true,
+          join: d in assoc(t, :division), where: d.active == true
+      _ ->
+        case township_id do
+          "" ->
+            from a in query,
+              join: t in assoc(a, :township), where: t.active == true,
+              join: d in assoc(t, :division), where: d.active == true and d.id == ^division_id
+          _ ->
+            from a in query,
+              join: t in assoc(a, :township), where: t.active == true and t.id == ^township_id,
+              join: d in assoc(t, :division), where: d.active == true and t.id == ^division_id
+        end
+    end
+  end
+
+  def filter_announces_by_kind(query, family_id, category_id) do
+    case family_id do
+      "" ->
+        from a in query,
+          join: t in assoc(a, :category), where: t.active == true,
+          join: d in assoc(t, :family), where: d.active == true
+      _ ->
+        case category_id do
+          "" ->
+            from a in query,
+              join: t in assoc(a, :category), where: t.active == true,
+              join: d in assoc(t, :family), where: d.active == true and d.id == ^family_id
+          _ ->
+            from a in query,
+              join: t in assoc(a, :category), where: t.active == true and t.id == ^category_id,
+              join: d in assoc(t, :family), where: d.active == true and t.id == ^family_id
+        end
+    end
+  end
+
+  def select_user_offers(query, user) do
+    from a in query,
+      where: a.status == "ONLINE" and a.user_id == ^user.id
+  end
+
+  def sort_announces_for_pagination(query) do
+    from a in query,
+      order_by: [desc: a.priority, desc: a.parution_date], # Pagination is blocked on DESC
+      select: a
   end
 
 end
