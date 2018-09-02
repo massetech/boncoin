@@ -1,6 +1,7 @@
 defmodule Boncoin.Contents.Announce do
   use Ecto.Schema
   import Ecto.{Query, Changeset}
+  import Boncoin.Gettext
   alias Boncoin.Contents.{Category, Township, Image}
   alias Boncoin.Members.{User}
   alias Boncoin.CustomModules # Used to make some Zawgyi conversion
@@ -41,13 +42,36 @@ defmodule Boncoin.Contents.Announce do
     params = attrs
       |> CustomModules.convert_fields_to_burmese_uni([:title, :description])
     announce
-    |> cast(params, @required_fields ++ @optional_fields)
-    |> validate_required(@required_fields)
-    |> assoc_constraint(:user)
-    |> assoc_constraint(:category)
-    |> assoc_constraint(:township)
-    |> validate_inclusion(:status, ["PENDING", "ONLINE", "REFUSED", "OUTDATED", "CLOSED"])
-    |> validate_inclusion(:currency, ["Kyats", "Lacks", "USD"])
+      |> cast(params, @required_fields ++ @optional_fields)
+      |> validate_required(@required_fields)
+      |> assoc_constraint(:user)
+      |> assoc_constraint(:category)
+      |> assoc_constraint(:township)
+      |> validate_inclusion(:status, ["PENDING", "ONLINE", "REFUSED", "OUTDATED", "CLOSED"])
+      |> validate_inclusion(:currency, ["Kyats", "Lacks", "USD"])
+  end
+
+  def check_offer_has_one_photo_min(changeset, %{"image_file_1" => picture_1, "image_file_2" => picture_2, "image_file_3" => picture_3}) do
+    cond do
+      picture_1 == "" && picture_2 == "" && picture_3 == "" -> # no photo on params
+        changeset
+          |> add_error(:photo, "no photo was given")
+      true -> # at least one photo on params
+        changeset
+    end
+  end
+
+  def show_errors_in_msg(changeset) do
+    IO.inspect(changeset)
+    case List.first(changeset.errors) do
+      {:surname, _msg} -> gettext("Please fill your name.")
+      {:title, _msg} -> gettext("Please put a title to your offer.")
+      {:price, _msg} -> gettext("Please give a price to your offer.")
+      {:description, _msg} -> gettext("Please write a description of your offer.")
+      {:photo, _msg} -> gettext("Please post at least one photo.")
+      true -> # Something else went wrong
+        gettext("Sorry wwe have a technical problem.")
+    end
   end
 
   def status_select_btn() do

@@ -264,7 +264,7 @@ export default class MainView {
     $('#btn_validate_number').hide()
     $('#btn_change_number').removeClass('d-none').show()
     $('#phone_helper').hide()
-    $('#announce_user_id').val(data.user.user_id)
+    $('#announce_user_id').val(data.user.id)
     $('#announce_nickname').val(data.user.nickname).focus()
     $('#announce_email').val(data.user.email)
     // if (password == "") {$('#field-password').hide()}

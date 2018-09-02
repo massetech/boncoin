@@ -493,10 +493,12 @@ defmodule Boncoin.Contents do
       # Convert Zawgyi to Unicode before inserting into database
       |> Map.merge(%{"title" => Rabbit.zg2uni(attrs["title"]), "description" => Rabbit.zg2uni(attrs["description"])})
       # |> IO.inspect(limit: :infinity, printable_limit: :infinity)
-    new_announce = %Announce{}
+    offer = %Announce{}
       |> Announce.changeset(params)
+      |> Announce.check_offer_has_one_photo_min(params)
       |> Repo.insert()
-    case new_announce do
+      # |> IO.inspect()
+    case offer do
       {:ok, announce} ->
         # Loop on the 3 photo fields of the form params
         for i <- ["image_file_1", "image_file_2", "image_file_3"] do

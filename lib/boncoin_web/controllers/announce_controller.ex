@@ -48,10 +48,13 @@ defmodule BoncoinWeb.AnnounceController do
     case Contents.create_announce(announce_params) do
       {:ok, announce} ->
         conn
-        |> put_flash(:info, "Announce created successfully.")
-        |> redirect(to: public_offers_path(conn, :public_index, search: %{township_id: "#{announce.township_id}"}))
+          |> put_flash(:info, gettext("Announce created successfully."))
+          |> redirect(to: public_offers_path(conn, :public_index, search: %{township_id: "#{announce.township_id}"}))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        msg = Announce.show_errors_in_msg(changeset)
+        conn
+          |> put_flash(:alert, msg)
+          |> render("new.html", changeset: changeset)
     end
   end
 
