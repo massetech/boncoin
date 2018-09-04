@@ -8,6 +8,7 @@ a:hover, button:hover, i:hover {cursor: pointer;text-decoration: none;box-shadow
 // a {color: inherit;}
 .text-viber{font-family: "Helvetica-Bold"; color: $viber-color;}
 i.icon-big{font-size: 30px !important;}
+// p {text-align: center;}
 /* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 /* ------------------------------ LOGO  ------------------------------ */
 span.logo {
@@ -41,6 +42,7 @@ i {font-size: 20px!important;}
 #conditions, .conditions, #about, .about{
   i {font-size: 30px!important;}
   img.icon {width: 30px !important;}
+  p {text-align: justify;}
 }
 /* ------------------------------ ADDS @ BACKGROUNDS  ------------------------------ */
 .add{
@@ -264,12 +266,13 @@ a[data-toggle="collapse"] {
   p{font-style: italic;}
 }
 /* ------------------------------ PAGE : SEE ANNOUNCE  ------------------------------ */
+.big-announce > .card-offer {min-height: 95vh;}
 .card-offer {
   img {width: 100%;border-radius: 10px;}
   img.img-small {width: 140px;border-radius: 10px;}
   .title{margin-bottom: 1em;}
   .text-area{
-    background-color: $primary-light;
+    // background-color: $primary-light;
     border-radius: 10px;
     p {white-space: pre-wrap;width: 100%;}
   }
@@ -279,7 +282,7 @@ a[data-toggle="collapse"] {
   }
   .btn-copy-number{
     border-radius: 100px;
-    position: absolute;right: 0px;top:-10px;height: 40px;width: 40px;
+    position: absolute;right: 0px;height: 40px;width: 40px;
   }
   .expand-photo{
     position: absolute;

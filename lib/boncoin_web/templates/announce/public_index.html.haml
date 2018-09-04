@@ -2,7 +2,10 @@
   .col-12
     %h6.font-weight-bold.text-dark= LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_place, "title")
     %h6.font-weight-bold.text-dark
-      %span= gettext("%{nb_offers}offers found for %{arbo_searched}", nb_offers: @conn.assigns.nb_offers_found, arbo_searched: LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_arbo, "title"))
+      - if @conn.assigns.search_titles.searched_arbo.title_en == "" do
+        %span= gettext("%{nb_offers}offers found", nb_offers: @conn.assigns.nb_offers_found)
+      - else
+        %span= gettext("%{nb_offers}offers found for %{arbo_searched}", nb_offers: @conn.assigns.nb_offers_found, arbo_searched: LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_arbo, "title"))
 
     %p.text-primary.font-italic= gettext "Please meet the seller and try the product before giving any money"
 

@@ -18,7 +18,7 @@ defmodule Boncoin.Plug.SearchParams do
     end
 
     search_params = %{"family_id" => "", "category_id" => "", "division_id" => "", "township_id" => ""}
-      |> Map.merge(old_search_map)
+      |> Map.merge(old_search_map) # We start by old search to keep between pages old_search: @conn.assigns.search_params)
       |> Map.merge(new_search_map)
       |> resolve_township_conflicts()
       |> resolve_category_conflicts()
