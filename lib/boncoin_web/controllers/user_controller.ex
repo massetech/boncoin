@@ -17,7 +17,7 @@ defmodule BoncoinWeb.UserController do
         answer = Members.read_phone_details(phone_number)
         case answer do
           {:ok, user} ->
-            if is_list(user.announces), do: nb_offers = Kernel.length(user.announces), else: nb_offers = 0
+            nb_offers = if is_list(user.announces), do: Kernel.length(user.announces), else: 0
             results = %{scope: scope, data: %{user: user, nb_offers: nb_offers}, error: ""}
             render(conn, "phone_api.json", results: results)
           {:error, msg} ->

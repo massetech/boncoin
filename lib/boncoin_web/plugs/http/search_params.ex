@@ -8,13 +8,13 @@ defmodule Boncoin.Plug.SearchParams do
     # IO.puts("search_params IN")
     # IO.inspect(conn.params)
 
-    case Map.has_key?(conn.params, "search") do
-      true -> new_search_map = conn.params["search"]
-      false -> new_search_map = %{} # Nothing will happen on the merge
+    new_search_map = case Map.has_key?(conn.params, "search") do
+      true -> conn.params["search"]
+      false -> %{} # Nothing will happen on the merge
     end
-    case Map.has_key?(conn.params, "old_search") do
-      true -> old_search_map = conn.params["old_search"]
-      false -> old_search_map = %{} # Nothing will happen on the merge
+    old_search_map = case Map.has_key?(conn.params, "old_search") do
+      true -> conn.params["old_search"]
+      false -> %{} # Nothing will happen on the merge
     end
 
     search_params = %{"family_id" => "", "category_id" => "", "division_id" => "", "township_id" => ""}

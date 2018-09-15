@@ -17,11 +17,11 @@ defmodule BoncoinWeb.AnnounceController do
     paginator_results = Contents.list_announces_public(cursor_after, search_params)
     offers = paginator_results.entries
       |> Enum.map(fn announce -> build_offer_html(announce) end)
-    case paginator_results.metadata.after do
+    results = case paginator_results.metadata.after do
       nil -> # There are no more records after
-        results = %{scope: scope, data: %{offers: offers, new_cursor_after: nil}, error: ""}
+        %{scope: scope, data: %{offers: offers, new_cursor_after: nil}, error: ""}
       new_cursor_after -> # There are still records after
-        results = %{scope: scope, data: %{offers: offers, new_cursor_after: paginator_results.metadata.after}, error: ""}
+        %{scope: scope, data: %{offers: offers, new_cursor_after: paginator_results.metadata.after}, error: ""}
     end
     # Count KPI add_more by township
     if search_params["township_id"] != "" do

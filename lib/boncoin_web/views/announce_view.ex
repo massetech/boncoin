@@ -24,7 +24,7 @@ defmodule BoncoinWeb.AnnounceView do
   end
 
   def show_date(announce, language) do
-    if announce.parution_date != nil, do: datetime = announce.parution_date, else: datetime = announce.inserted_at
+    datetime = if announce.parution_date != nil, do: announce.parution_date, else: announce.inserted_at
     day = datetime.day
     month = datetime.month
     year = datetime.year

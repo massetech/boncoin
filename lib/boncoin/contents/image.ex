@@ -26,19 +26,17 @@ defmodule Boncoin.Contents.Image do
 
   # See fix on https://github.com/stavro/arc_ecto/issues/23
   defp fix_image_file(changeset, attrs) do
-    cond do
+    new_params = cond do
       attrs == %{file: nil} -> # We are in a image delete
-        new_params = attrs
+        attrs
       true -> # We are on an image input
         decoded_file = attrs.file
           |> Poison.decode!
-        new_params = %{
-          "announce_id" => attrs.announce_id,
+        %{"announce_id" => attrs.announce_id,
           "file" => %{
             # content_type: decoded_file["output"]["type"],
             filename: decoded_file["output"]["name"],
-            binary: Base.decode64!(clean_up_picture_binary (decoded_file["output"]["image"]))
-          }
+            binary: Base.decode64!(clean_up_picture_binary (decoded_file["output"]["image"]))}
         }
     end
     cast_attachments(changeset, new_params, [:file])
