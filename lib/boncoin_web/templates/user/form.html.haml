@@ -1,16 +1,24 @@
 - form_for @changeset, @action, fn f ->
-  = hidden_input f, :role, value: "ADMIN"
-  = hidden_input f, :language, value: "en"
-
   .row
     .col-xs-12.col-sm-6.offset-sm-3
       .card
         .card-body
           .form-group
             .input-group
-              = text_input f, :email, class: "form-control", type: "email", autocomplete: "nope", placeholder: gettext("Email (Gmail)")
+              .input-group-prepend
+                = label f, :role, class: "input-group-text"
+              = select f, :role, @roles, class: "select custom-select"
+          .form-group
+            .input-group
+              .input-group-prepend
+                = label f, :language, class: "input-group-text"
+              = select f, :language, @languages, class: "select custom-select"
+          .form-group
+            .input-group
+              = text_input f, :email, class: "form-control", type: "email", autocomplete: "nope", placeholder: gettext("Email (Gmail only)")
           .form-group
             .input-group
               = text_input f, :phone_number, class: "form-control", autocomplete: "nope", placeholder: gettext("Phone number")
           .form-group
-            = submit gettext("Create admin user"), class: "btn btn-primary"
+            = submit gettext("Create user"), class: "btn btn-primary"
+          = link "Cancel", to: user_path(@conn, :index), class: "btn btn-outline-info"

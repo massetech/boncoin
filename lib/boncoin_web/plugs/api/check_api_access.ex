@@ -2,7 +2,7 @@ defmodule Boncoin.Auth.CheckApiAccess do
   import Plug.Conn
   alias Boncoin.Members
 
-  @salt System.get_env("SECRET_SALT")
+  @salt Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:secret_salt]
 
   def init(opts), do: opts
 

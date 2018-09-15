@@ -12,7 +12,6 @@ defmodule BoncoinWeb.TownshipController do
   def new(conn, _params) do
     changeset = Contents.change_township(%Township{})
     divisions = Contents.list_divisions_for_select()
-    |> IO.inspect()
     render(conn, "new.html", changeset: changeset, divisions: divisions)
   end
 
@@ -21,10 +20,14 @@ defmodule BoncoinWeb.TownshipController do
       {:ok, township} ->
         conn
         |> put_flash(:info, "Township created successfully.")
-        |> redirect(to: township_path(conn, :index))
+        |> put_status(308)
+        |> redirect(to: category_path(conn, :index))
+        |> halt()
       {:error, %Ecto.Changeset{} = changeset} ->
         divisions = Contents.list_divisions_for_select()
-        render(conn, "new.html", changeset: changeset, divisions: divisions)
+        conn
+        |> put_flash(:info, "Errors, please check.")
+        |> render("new.html", changeset: changeset, divisions: divisions)
     end
   end
 
@@ -47,19 +50,24 @@ defmodule BoncoinWeb.TownshipController do
       {:ok, township} ->
         conn
         |> put_flash(:info, "Township updated successfully.")
-        |> redirect(to: township_path(conn, :index))
+        |> put_status(308)
+        |> redirect(to: category_path(conn, :index))
+        |> halt()
       {:error, %Ecto.Changeset{} = changeset} ->
         divisions = Contents.list_divisions_for_select()
-        render(conn, "edit.html", township: township, changeset: changeset, divisions: divisions)
+        conn
+        |> put_flash(:info, "Errors, please check.")
+        |> render("edit.html", township: township, changeset: changeset, divisions: divisions)
     end
   end
 
   def delete(conn, %{"id" => id}) do
     township = Contents.get_township!(id)
     {:ok, _township} = Contents.delete_township(township)
-
     conn
     |> put_flash(:info, "Township deleted successfully.")
-    |> redirect(to: township_path(conn, :index))
+    |> put_status(308)
+    |> redirect(to: category_path(conn, :index))
+    |> halt()
   end
 end

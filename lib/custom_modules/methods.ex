@@ -1,19 +1,20 @@
 defmodule Boncoin.CustomModules do
   import Ecto.Changeset
 
-  # def get_first_error(errors_array) do
-  #   [{title, {msg, _}} | _tail] = errors_array
-  #   "Check first error : #{title} : #{msg}"
-  # end
+  def get_changeset_error(changeset) do
+    {key, {msg, type}} = List.first(changeset.errors)
+    msg
+  end
 
   def convert_fields_to_burmese_uni(params, keys_list) do
     params
-      # |> IO.inspect()
       |> Enum.into(%{}, fn {k, v} -> convert_field_to_burmese(k, v, keys_list) end)
-      # |> IO.inspect()
   end
 
+  defp convert_field_to_burmese(key, nil, keys_list), do: {key, nil} # Avoid bug if nil is passed
   defp convert_field_to_burmese(key, value, keys_list) do
+    # IO.puts("in da loop")
+    # IO.inspect(value)
     case Enum.member?(keys_list, key) do
       false -> {key, value}
       true -> {key, Rabbit.zg2uni(value)}

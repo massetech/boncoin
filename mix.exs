@@ -19,7 +19,7 @@ defmodule Boncoin.Mixfile do
   def application do
     [
       mod: {Boncoin.Application, []},
-      extra_applications: [:logger, :runtime_tools, :timex, :httpotion]
+      extra_applications: [:ex_machina, :logger, :runtime_tools, :timex, :httpotion]
     ]
   end
 
@@ -54,7 +54,8 @@ defmodule Boncoin.Mixfile do
       {:httpotion, "~> 3.1.0"},
       {:distillery, "~> 2.0.0-rc.4"},
       {:cipher, ">= 1.4.0"},
-      {:paginator, "~> 0.4"}
+      {:paginator, "~> 0.4"},
+      {:ex_machina, "~> 2.2"},
     ]
   end
 

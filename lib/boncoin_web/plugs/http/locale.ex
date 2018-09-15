@@ -6,9 +6,6 @@ defmodule Boncoin.Plug.Locale do
   @locales Gettext.known_locales(BoncoinWeb.Gettext)
 
   def call(conn, _opts) do
-    # IO.inspect(@locales)
-    # IO.inspect(conn.params["locale"])
-    # IO.inspect(locale_from_params(conn))
     case locale_from_params(conn) || locale_from_cookies(conn) || locale_from_header(conn) do
       nil ->
         conn
@@ -73,7 +70,6 @@ defmodule Boncoin.Plug.Locale do
         |> Enum.map(&(&1.tag))
         |> Enum.reject(&is_nil/1)
         |> ensure_language_fallbacks()
-
         _ ->
         []
       end

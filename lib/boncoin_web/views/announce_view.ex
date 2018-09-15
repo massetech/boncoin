@@ -2,12 +2,15 @@ defmodule BoncoinWeb.AnnounceView do
   use BoncoinWeb, :view
   alias BoncoinWeb.LayoutView
 
-  def render("add_offers.json", %{data: data}) do
-    %{data: data}
+  def render("offer_api.json", %{results: results}) do
+    %{results: results}
   end
 
   def image_url(image, type) do
-    Boncoin.AnnounceImage.url({image.file, image}, type)
+    case image do
+      nil -> "default_url" # We allow nil image for test only
+      _ -> Boncoin.AnnounceImage.url({image.file, image}, type)
+    end
   end
 
   def btn_status(status) do
@@ -54,8 +57,11 @@ defmodule BoncoinWeb.AnnounceView do
   end
 
   def show_location(township, language) do
+    uni = "#{township.title_my}" #{township.division.title_my},
     case language do
-      "en" -> "#{township.division.title_en}, #{township.title_en}"
+      "en" -> "#{township.title_en}"
+      "my" -> uni
+      "en" -> Rabbit.uni2zg(uni)
     end
   end
 

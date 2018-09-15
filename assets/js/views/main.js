@@ -208,12 +208,33 @@ export default class MainView {
     })
     // Show the sellor's number
     $('.btn-show-number').on('click', function() {
-      var announce_id = $(this).attr('data-announce-id')
-      var phone_number = $(this).attr('data-phone-number')
-      $(this).addClass('d-none')
-      $(`.alert_${announce_id}`).addClass('d-none')
-      $(`#number_${announce_id}`).removeClass('d-none')
-      $(`#copy_number_${announce_id}`).removeClass('d-none')
+      $(this).closest('div.offer-actions').addClass('d-none').next('div.offer-contact').removeClass('d-none')
+    })
+    // Hide the sellor's number
+    $('.btn-see-number').on('click', function() {
+      $(this).closest('div.offer-contact').addClass('d-none').prev('div.offer-actions').removeClass('d-none')
+    })
+    // Send an alert on the offer
+    $('.btn-offer-alert').on('click', function() {
+      var offer_id = $(this).attr('data-offer-id')
+      call_internal_api("/api/alert", "alert_on_offer", offer_id)
+      // $(this).closest('div.offer-actions').addClass('d-none').next('div.offer-contact').removeClass('d-none')
+    })
+    // Keep the offer in likes cookie
+    $('.btn-offer-like').on('click', function() {
+      var offer_id = $(this).attr('data-offer-id')
+      if (document.cookie.indexOf('likes') == -1 ) { // Cookie doesnt exist yet
+        var arr = new Array(0)
+        var cookie = JSON.stringify(arr)
+      } else { // Cookie exist already
+        var cookie = document.cookie.replace(/(?:(?:^|.*;\s*)likes\s*\=\s*([^;]*).*$)|^.*$/, "$1")
+      }
+      var likes = JSON.parse(cookie)
+      console.log(likes)
+      if (likes.includes(offer_id)){} else {
+        likes.push(offer_id)
+        document.cookie = "likes=" + JSON.stringify(likes)
+      }
     })
     // Copy phone number to clipboard
     $('.btn-copy-number').on('click', function() {
@@ -257,27 +278,17 @@ export default class MainView {
     $('#announce_email').val('')
   }
   // Populate form when the phone_number is accepted
-  let validate_phone_number_pop_field = (data) => {
-    // console.log("Good phone number : form processed with pop")
-    console.log(data)
+  let validate_phone_number_pop_field = (user) => {
     $('#announce_phone_number').attr('disabled', 'disabled')  //.removeClass("field-danger").addClass("field-success")
     $('#btn_validate_number').hide()
     $('#btn_change_number').removeClass('d-none').show()
     $('#phone_helper').hide()
-    $('#announce_user_id').val(data.user.id)
-    $('#announce_nickname').val(data.user.nickname).focus()
-    $('#announce_email').val(data.user.email)
-    // if (password == "") {$('#field-password').hide()}
-    // else {$('#field-password').show()}
-    if (data.user.viber_active == true) {
+    $('#announce_user_id').val(user.id)
+    $('#announce_nickname').val(user.nickname).focus()
+    $('#announce_email').val(user.email)
+    if (user.viber_active == true) {
       $('#field-viber').show()
       $('#btn-viber').hide()
-      // if (nb_announces > 0) {
-      //   $('#btn_unlink_number').attr('disabled','disabled')
-      // }
-      // else {
-      //   $('#btn_unlink_number').removeAttr('disabled')
-      // }
     } else {
       $('#field-viber').hide()
       $('#btn-viber').show()
@@ -285,17 +296,22 @@ export default class MainView {
     $('.collapsible_form').collapse('show')
   }
 
+  // Disable an alert button after getting back a response
+  let disable_alert_button = (offer_id) => {
+    $(`#btn_alert_${offer_id}`).addClass("disabled").removeClass('btn-offer-alert')
+  }
+
   // Add new offers received by the button load more
-  let add_new_offers_to_page = (data) => {
-    var new_cursor_after = data.new_cursor_after
+  let add_new_offers_to_page = (offers, new_cursor_after) => {
+    var new_cursor_after = new_cursor_after
     $('#config').attr('data-cursor-after', new_cursor_after)
-    if (data.new_cursor_after == null) {
+    if (new_cursor_after == null) {
       $("#btn-more-offers-wait").addClass("d-none")
     } else {
       $("#btn-more-offers-wait").addClass("d-none")
       $("#btn-more-offers").removeClass("d-none")
     }
-    for (const offer of data.offers) {
+    for (const offer of offers) {
       var small = offer.display_small
       $("#offers-results").append(small)
       var big = offer.display_big
@@ -307,8 +323,10 @@ export default class MainView {
 
   // Call internal phone API to check phone number
   let call_internal_api = (url, scope, params) => {
-    $("#btn-more-offers").addClass("d-none")
-    $("#btn-more-offers-wait").removeClass("d-none")
+    if (scope == "get_more_offers"){
+      $("#btn-more-offers").addClass("d-none")
+      $("#btn-more-offers-wait").removeClass("d-none")
+    }
     var token = $('#config').attr('data-api')
     fetch(url, {
       headers: {
@@ -322,41 +340,45 @@ export default class MainView {
     .then(function(response) {
       if (response.status !== 200) {
         console.log('There was on API problem. Status Code: ' + response.status);
-        console.log(response)
+        // console.log(response)
         $("#btn-more-offers-wait").addClass("d-none")
         $("#btn-more-offers").removeClass("d-none")
         return;
       }
       // Examine the text in the response
       response.json().then(function(response) {
-        if ('data' in response) {
-          var data = response.data
-          // console.log(data)
-          if (data.scope == "get_phone_details") {
-            console.log("received phone details")
-            validate_phone_number_pop_field(data)
-          // } else if (data.scope == "unlink_viber"){
-          //   console.log("phone number unlinked with Viber")
-          //   remove_viber_btn_after_unlink()
-        } else if (data.scope == "get_more_offers"){
+        if ('results' in response) {
+          console.log(response)
+          var scope = response.results.scope
+          var data = response.results.data
+          var error = response.results.error
+          if (scope == "get_phone_details") {
+            if ('user' in data) {
+              console.log("received phone details")
+              validate_phone_number_pop_field(data.user)
+            } else {
+              console.log(error)
+              reset_announce_form_field()
+            }
+          } else if (scope == "get_more_offers"){
             console.log("received new offers to show")
-            add_new_offers_to_page(data)
+            add_new_offers_to_page(data.offers, data.new_cursor_after)
+          } else if (scope == "alert_on_offer"){
+            if ('offer_id' in data) {
+              console.log("alert posted on offer")
+              disable_alert_button(data.offer_id)
+            } else {
+              console.log(error)
+            }
           } else {
-            console.log("API response not understood")
+          console.log("API response not understood")
           }
         } else {
-          // No answer == reset the form
-          reset_announce_form_field()
+          console.log("Problem in Json response")
         }
-      });
+      })
     })
     .catch(function(err) {
       console.log('Fetch Error :-S', err);
     })
   }
-
-  // Call internal API to unlink Viber
-  // let remove_viber_btn_after_unlink = () => {
-  //   $('#field-viber').hide()
-  //   $('#btn-viber').show()
-  // }

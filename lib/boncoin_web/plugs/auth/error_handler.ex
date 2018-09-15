@@ -10,8 +10,10 @@ defmodule Boncoin.Auth.ErrorHandler do
           |> render(BoncoinWeb.ErrorView, "401.json")
       "html" ->
         conn
-          |> put_flash(:error, "You must be logged in to access that part.")
+          |> put_flash(:alert, "You must be logged in to access that part.")
+          |> put_status(308)
           |> redirect(to: "/")
+          |> halt()
     end
   end
 

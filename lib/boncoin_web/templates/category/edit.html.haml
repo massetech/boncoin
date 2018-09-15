@@ -2,5 +2,5 @@
   %ol.breadcrumb
     %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
     %li.breadcrumb-item= link "Categorys", to: category_path(@conn, :index)
-    %li.breadcrumb-item.active{aria-current: "page"}= "New category"
+    %li.breadcrumb-item.active{aria-current: "page"}= "Edit category"
 = render "form.html", Map.put(assigns, :action, category_path(@conn, :update, @category))

@@ -4,6 +4,7 @@ config :boncoin, BoncoinWeb.Endpoint,
   load_from_system_env: true,
   server: true, # Without this line, your app will not start the web server!
   secret_key_base: "${SECRET_KEY_BASE}",
+  secret_salt: "${SECRET_SALT}",
   http: [port: "${PORT}"],
   check_origin: false,
   root: ".",

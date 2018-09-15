@@ -26,7 +26,6 @@ defmodule Boncoin.Contents.Image do
 
   # See fix on https://github.com/stavro/arc_ecto/issues/23
   defp fix_image_file(changeset, attrs) do
-    IO.inspect(attrs)
     cond do
       attrs == %{file: nil} -> # We are in a image delete
         new_params = attrs

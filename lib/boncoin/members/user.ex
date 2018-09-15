@@ -24,8 +24,8 @@ defmodule Boncoin.Members.User do
     timestamps()
   end
 
-  @required_fields ~w()a
-  @optional_fields ~w(uid role nickname phone_number email viber_active viber_id language member_psw)a
+  @required_fields ~w(language nickname phone_number)a
+  @optional_fields ~w(email uid role viber_active viber_id member_psw)a
 
   @doc false
   def changeset(user, attrs) do
@@ -38,12 +38,17 @@ defmodule Boncoin.Members.User do
     |> unique_constraint(:phone_number, message: "Phone number is already taken")
     # |> validate_format(:email, ~r/@/, message: "This is not an email")
     # |> validate_format(:phone_number, ~r/@/, message: "This is not a Myanmar phone number")
-    |> validate_inclusion(:provider, ["google"])
-    |> validate_inclusion(:role, ["GUEST", "MEMBER", "ADMIN", "SUPER"])
+    |> validate_inclusion(:provider, ["google"], message: "Oauth provider not supported")
+    |> validate_inclusion(:language, ["mr", "my", "en"], message: "Language not supported")
+    |> validate_inclusion(:role, ["GUEST", "MEMBER", "ADMIN", "PARTNER", "SUPER"], message: "Role not supported")
   end
 
   def role_select_btn() do
-    [guest: "GUEST", member: "MEMBER", admin: "ADMIN", super: "SUPER"]
+    [guest: "GUEST", member: "MEMBER", admin: "ADMIN", partner: "PARTNER", super: "SUPER"]
+  end
+
+  def language_select_btn() do
+    [English: "en", Myanmar_Zawgyi: "mr", Myanmar_Unicode: "my"]
   end
 
   def search_guest_user(query) do

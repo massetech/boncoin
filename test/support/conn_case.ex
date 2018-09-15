@@ -14,6 +14,8 @@ defmodule BoncoinWeb.ConnCase do
   """
 
   use ExUnit.CaseTemplate
+  import Boncoin.Factory
+  alias Boncoin.Auth.Guardian
 
   using do
     quote do
@@ -26,13 +28,33 @@ defmodule BoncoinWeb.ConnCase do
     end
   end
 
-
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Boncoin.Repo)
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Boncoin.Repo, {:shared, self()})
     end
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    # if tags[:internal_api] do
+    #   Boncoin.Support.Helpers.launch_api()
+    # end
+
+    # Manage Guardian authentication
+    # See https://medium.com/@simon.strom/how-to-test-controller-authenticated-by-guardian-in-elixir-phoenix-b9bfa141ed4
+    {conn, user} = cond do
+      tags[:admin_authenticated] == true ->
+        user = insert(:admin_user)
+        conn = Phoenix.ConnTest.build_conn()
+          |> Guardian.Plug.sign_in(user, %{"typ" => "user-access"})
+        {conn, user}
+      tags[:member_authenticated] == true ->
+        user = insert(:member_user)
+        conn = Phoenix.ConnTest.build_conn()
+          |> Guardian.Plug.sign_in(user, %{"typ" => "user-access"})
+        {conn, user}
+      true ->
+        user = insert(:guest_user)
+        {Phoenix.ConnTest.build_conn(), user}
+    end
+    {:ok, conn: conn, user: user}
   end
 
 end

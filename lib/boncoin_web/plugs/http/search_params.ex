@@ -28,6 +28,11 @@ defmodule Boncoin.Plug.SearchParams do
       searched_arbo: build_searched_arbo(search_params["family_id"], search_params["category_id"])
     }
 
+    # Count KPI searches by township
+    if search_params["township_id"] != "" && (search_params["family_id"] != "" || search_params["category_id"] != "") do
+      Contents.add_kpi_township_traffic(search_params["township_id"], "new_search")
+    end
+
     conn
       |> assign(:search_params, search_params)
       |> assign(:search_titles, search_titles)

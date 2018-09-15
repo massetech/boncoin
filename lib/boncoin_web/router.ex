@@ -12,6 +12,7 @@ defmodule BoncoinWeb.Router do
     plug Boncoin.Plug.Locale
     plug Boncoin.Plug.SearchParams
     plug Boncoin.Plug.LoadAdds
+    plug Boncoin.Plug.Location
   end
 
   pipeline :auth do
@@ -28,28 +29,19 @@ defmodule BoncoinWeb.Router do
     plug Boncoin.Plugs.RequireAdmin
   end
 
-  # pipeline :api_viber do
-  #   plug :accepts, ["json"]
-  #   plug Boncoin.Viber.CurrentUser
-  # end
-
   pipeline :api do
     plug :accepts, ["json"]
     plug Boncoin.Auth.CheckApiAccess
   end
 
   # ---------------  SCOPES ----------------------------------
-  # scope "/api", BoncoinWeb do
-  #   # pipe_through [:api_viber]
-  #   # plug Boncoin.Viber.CurrentUser
-  #   # post "/viber", ViberController, :callback
-  # end
 
   scope "/api", BoncoinWeb do
     pipe_through [:api]
     post "/viber", ViberController, :callback
     post "/phone", UserController, :check_phone
     post "/add_offers", AnnounceController, :add_offers_to_public_index
+    post "/alert", AnnounceController, :add_alert_to_offer
   end
 
   scope "/", BoncoinWeb do

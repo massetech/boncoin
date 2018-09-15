@@ -6,7 +6,6 @@ defmodule BoncoinWeb.ImageController do
 
   def index(conn, _params) do
     images = Contents.list_images()
-    |> IO.inspect()
     render(conn, "index.html", images: images)
   end
 

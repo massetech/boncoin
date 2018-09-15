@@ -14,8 +14,10 @@ defmodule Boncoin.Plugs.RequireAdmin do
         conn
       false ->
         conn
-        |> put_flash(:error, "You cant access to this part.")
-        |> redirect(to: "/")
+          |> put_flash(:alert, "You must be admin to access that part.")
+          |> put_status(308)
+          |> redirect(to: "/")
+          |> halt()
     end
   end
 end

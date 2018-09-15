@@ -1,9 +1,9 @@
 .row
   .col-12
     %h6.font-weight-bold.text-dark
-      = gettext "Find a good-deal in more than "
-      %span.text-primary= @nb_announces
-      = gettext " offers"
+      = gettext "Find a good-deal in more than %{nb_offers}offers", nb_offers: @nb_announces
+      -# %span.text-primary= @nb_announces
+      -# = gettext " offers"
 .row.justify-content-center.my-4
   .col-xs-12.col-sm-6
     - link to: announce_path(@conn, :new), class: "btn btn-lg btn-secondary text-white mb-4 btn-block" do

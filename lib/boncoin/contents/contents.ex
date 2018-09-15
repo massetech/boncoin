@@ -1,9 +1,56 @@
 defmodule Boncoin.Contents do
   import Ecto.Query, warn: false
   alias Boncoin.{Repo, Members}
-  alias Boncoin.Contents.{Family, Category, Township, Division, Announce, Image}
+  alias Boncoin.Contents.{Family, Category, Township, Division, Announce, Image, TrafficKpi}
   alias Boncoin.Members.{User}
-  alias BoncoinWeb.ViberController
+  alias Boncoin.CustomModules.ViberBot
+
+  # -------------------------------- TRAFFIC KPI ----------------------------------------
+
+  def add_kpi_township_traffic(township_id, type) do
+    date_now = Timex.now()
+    add_new_guest = if type == "new_user", do: 1, else: 0
+    add_old_guest = if type == "old_user", do: 1, else: 0
+    add_search = if type == "new_search", do: 1, else: 0
+    add_more = if type == "add_more", do: 1, else: 0
+    kpi = TrafficKpi
+      |> TrafficKpi.select_township_traffic_kpi_by_date(township_id, {date_now.year, date_now.month, date_now.day})
+      |> Repo.one()
+      # |> IO.inspect()
+    results = case kpi do
+      nil -> %TrafficKpi{} # Not yet any record for this township / date
+        |> TrafficKpi.changeset(
+          %{township_id: township_id, date: date_now,
+          nb_new_guest: add_new_guest,
+          nb_old_guest: add_old_guest,
+          nb_cat_searches: add_search,
+          nb_click_add_more: add_more}
+        )
+      traffic_kpi -> traffic_kpi # Already record for this township / date
+        |> TrafficKpi.changeset(
+          %{township_id: township_id, date: date_now,
+          nb_new_guest: traffic_kpi.nb_new_guest + add_new_guest,
+          nb_old_guest: traffic_kpi.nb_old_guest + add_old_guest,
+          nb_cat_searches: traffic_kpi.nb_cat_searches + add_search,
+          nb_click_add_more: traffic_kpi.nb_click_add_more + add_more}
+        )
+    end
+    |> Repo.insert_or_update
+    # |> IO.inspect()
+
+  end
+
+  def create_traffic_kpi(attrs \\ %{}) do
+    %TrafficKpi{}
+      |> TrafficKpi.changeset(attrs)
+      |> Repo.insert()
+  end
+
+  def update_traffic_kpi(%TrafficKpi{} = traffic_kpi, attrs) do
+    traffic_kpi
+      |> TrafficKpi.changeset(attrs)
+      |> Repo.update()
+  end
 
   # -------------------------------- FAMILY ----------------------------------------
 
@@ -244,6 +291,12 @@ defmodule Boncoin.Contents do
       |> Repo.preload([:division])
   end
 
+  def list_townships_active do
+    Township
+      |> Township.filter_townships_active()
+      |> Repo.all()
+  end
+
   @doc """
   Gets a single township.
 
@@ -260,6 +313,10 @@ defmodule Boncoin.Contents do
   """
   def get_township!(id) do
     Repo.get!(Township, id)
+  end
+
+  def get_township(id) do
+    Repo.get(Township, id)
   end
 
   @doc """
@@ -464,9 +521,9 @@ defmodule Boncoin.Contents do
     # Process.sleep(3000)
     case cursor_after do
       nil -> # Call the first time
-        %{entries: entries, metadata: metadata} = Repo.paginate(offer_query, include_total_count: true, cursor_fields: [:priority, :parution_date], sort_direction: :desc, limit: 4)
+        %{entries: entries, metadata: metadata} = Repo.paginate(offer_query, cursor_fields: [:priority, :parution_date], sort_direction: :desc)
       _ -> # load more entries
-        %{entries: entries, metadata: metadata} = Repo.paginate(offer_query, after: cursor_after, include_total_count: true, cursor_fields: [:priority, :parution_date], sort_direction: :desc, limit: 4)
+        %{entries: entries, metadata: metadata} = Repo.paginate(offer_query, after: cursor_after, cursor_fields: [:priority, :parution_date], sort_direction: :desc)
     end
   end
 
@@ -490,14 +547,9 @@ defmodule Boncoin.Contents do
   def create_announce(attrs \\ %{}) do
     params = attrs
       |> Map.merge(%{"status" => "PENDING"})
-      # Convert Zawgyi to Unicode before inserting into database
-      |> Map.merge(%{"title" => Rabbit.zg2uni(attrs["title"]), "description" => Rabbit.zg2uni(attrs["description"])})
-      # |> IO.inspect(limit: :infinity, printable_limit: :infinity)
     offer = %Announce{}
       |> Announce.changeset(params)
-      |> Announce.check_offer_has_one_photo_min(params)
       |> Repo.insert()
-      # |> IO.inspect()
     case offer do
       {:ok, announce} ->
         # Loop on the 3 photo fields of the form params
@@ -513,7 +565,7 @@ defmodule Boncoin.Contents do
   end
 
   defp build_safe_link(announce_id) do
-    Cipher.encrypt(Kernel.inspect(announce_id))
+    Cipher.encrypt(Integer.to_string(announce_id))
   end
 
   def validate_announce(admin_user, %{"announce_id" => announce_id, "validate" => validate, "cause" => cause, "category_id" => category_id}) do
@@ -525,15 +577,12 @@ defmodule Boncoin.Contents do
     end
     if category_id == nil, do: category_id = announce.category_id, else: category_id
     dates = calc_announce_validity_date()
-    # Build the params
     params = %{treated_by_id: admin_user.id, status: status, cause: cause, category_id: category_id, parution_date: dates.parution_date, validity_date: dates.validity_date}
-    # Update the announce
     case update_announce(announce, params) do
       {:ok, announce} ->
-        # Call Viber bot
         if user.viber_active == true do
-          bot_datas = %{tracking_data: "offer_treated", details: %{user: user, language: user.language, viber_id: user.viber_id, viber_name: user.nickname, user_msg: ""}, announce: announce}
-            |> ViberController.call_bot_algorythm()
+          bot_datas = %{scope: "offer_treated", user: user, announce: announce, viber: %{viber_id: user.viber_id, viber_name: user.nickname, user_msg: ""}}
+            |> ViberBot.call_bot_algorythm()
             |> Enum.map(fn result_map -> ViberController.send_viber_message(user.viber_id, result_map.tracking_data, result_map.msg) end)
         end
         {:ok, announce}
@@ -545,6 +594,13 @@ defmodule Boncoin.Contents do
     parution_date = Timex.now()
     validity_date = Timex.shift(parution_date, days: 30)
     %{parution_date: parution_date, validity_date: validity_date}
+  end
+
+  def add_alert_to_announce(announce_id) do
+    case Repo.get(Announce, announce_id) do
+      nil -> {:error, "offer not found"}
+      offer -> update_announce(offer, %{nb_alert: offer.nb_alert + 1})
+    end
   end
 
   def update_announce(%Announce{} = announce, attrs) do

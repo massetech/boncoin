@@ -1,88 +1,73 @@
 defmodule BoncoinWeb.DivisionControllerTest do
   use BoncoinWeb.ConnCase
+  import Boncoin.Factory
 
-  alias Boncoin.Contents
-
-  @create_attrs %{active: true, latitute: "some latitute", longitude: "some longitude", title_bi: "some title_bi", title_en: "some title_en"}
-  @update_attrs %{active: false, latitute: "some updated latitute", longitude: "some updated longitude", title_bi: "some updated title_bi", title_en: "some updated title_en"}
-  @invalid_attrs %{active: nil, latitute: nil, longitude: nil, title_bi: nil, title_en: nil}
-
-  def fixture(:division) do
-    {:ok, division} = Contents.create_division(@create_attrs)
-    division
-  end
+  @create_attrs %{active: true, title_my: "some title_bi", title_en: "some title_en"}
+  @update_attrs %{active: false, title_my: "some updated title_bi", title_en: "some updated title_en"}
+  @invalid_attrs %{active: true, title_my: nil, title_en: nil}
+  @moduletag :admin_authenticated
+  @moduletag :DivisionController
+  @moduletag :Controller
 
   describe "index" do
     test "lists all divisions", %{conn: conn} do
       conn = get conn, division_path(conn, :index)
-      assert html_response(conn, 200) =~ "Listing Divisions"
+      assert html_response(conn, 200) =~ "Divisions"
     end
   end
 
   describe "new division" do
     test "renders form", %{conn: conn} do
       conn = get conn, division_path(conn, :new)
-      assert html_response(conn, 200) =~ "New Division"
+      assert html_response(conn, 200) =~ "New division"
     end
   end
 
   describe "create division" do
-    test "redirects to show when data is valid", %{conn: conn} do
+    test "render index when data is valid", %{conn: conn} do
       conn = post conn, division_path(conn, :create), division: @create_attrs
-
-      assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == division_path(conn, :show, id)
-
-      conn = get conn, division_path(conn, :show, id)
-      assert html_response(conn, 200) =~ "Show Division"
+      # IO.inspect(html_response(conn, 200), limit: :infinity, printable_limit: :infinity)
+      assert html_response(conn, 308)
+      assert get_flash(conn, :info) == "Division created successfully."
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post conn, division_path(conn, :create), division: @invalid_attrs
-      assert html_response(conn, 200) =~ "New Division"
+      assert html_response(conn, 200) =~ "New division"
+      assert html_response(conn, 200) =~ "Errors, please check"
     end
   end
 
   describe "edit division" do
-    setup [:create_division]
-
-    test "renders form for editing chosen division", %{conn: conn, division: division} do
+    test "renders form for editing chosen division", %{conn: conn} do
+      division = insert(:division)
       conn = get conn, division_path(conn, :edit, division)
-      assert html_response(conn, 200) =~ "Edit Division"
+      assert html_response(conn, 200) =~ "Edit division"
     end
   end
 
   describe "update division" do
-    setup [:create_division]
-
-    test "redirects when data is valid", %{conn: conn, division: division} do
+    test "redirects when data is valid", %{conn: conn} do
+      division = insert(:division)
       conn = put conn, division_path(conn, :update, division), division: @update_attrs
-      assert redirected_to(conn) == division_path(conn, :show, division)
-
-      conn = get conn, division_path(conn, :show, division)
-      assert html_response(conn, 200) =~ "some updated latitute"
+      assert html_response(conn, 308)
+      assert get_flash(conn, :info) == "Division updated successfully."
     end
 
-    test "renders errors when data is invalid", %{conn: conn, division: division} do
+    test "renders errors when data is invalid", %{conn: conn} do
+      division = insert(:division)
       conn = put conn, division_path(conn, :update, division), division: @invalid_attrs
-      assert html_response(conn, 200) =~ "Edit Division"
+      assert html_response(conn, 200) =~ "Edit division"
+      assert html_response(conn, 200) =~ "Errors, please check."
     end
   end
 
   describe "delete division" do
-    setup [:create_division]
-
-    test "deletes chosen division", %{conn: conn, division: division} do
+    test "deletes chosen division", %{conn: conn} do
+      division = insert(:division)
       conn = delete conn, division_path(conn, :delete, division)
-      assert redirected_to(conn) == division_path(conn, :index)
-      assert_error_sent 404, fn ->
-        get conn, division_path(conn, :show, division)
-      end
+      assert html_response(conn, 308)
+      assert get_flash(conn, :info) == "Division deleted successfully."
     end
-  end
-
-  defp create_division(_) do
-    division = fixture(:division)
-    {:ok, division: division}
   end
 end

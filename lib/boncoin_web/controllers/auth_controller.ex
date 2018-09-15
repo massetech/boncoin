@@ -19,7 +19,8 @@ defmodule BoncoinWeb.AuthController do
 
   def callback(%{assigns: %{ueberauth_failure: _fails}} = conn, _params) do
     conn
-      |> put_flash(:error, "Failed to authenticate.")
+      |> put_flash(:error, "Couldn't log you on Google.")
+      |> put_status(308)
       |> redirect(to: root_path(conn, :welcome))
   end
 

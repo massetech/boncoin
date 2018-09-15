@@ -170,6 +170,9 @@ span.language-active{
   font-weight: bold;
   @extend .text-danger;
 }
+.btn-warning{
+  color: white;
+}
 // move the triangle, that usually sits next to the text, to the right part of the sidebar
 a[data-toggle="collapse"] {
     position: relative;
@@ -266,7 +269,10 @@ a[data-toggle="collapse"] {
   p{font-style: italic;}
 }
 /* ------------------------------ PAGE : SEE ANNOUNCE  ------------------------------ */
-.big-announce > .card-offer {min-height: 95vh;}
+@include media-breakpoint-down(xs) {
+  .big-announce > .card-offer {min-height: 100vh;} // To show on full screen on mobile
+}
+
 .card-offer {
   img {width: 100%;border-radius: 10px;}
   img.img-small {width: 140px;border-radius: 10px;}
@@ -280,14 +286,10 @@ a[data-toggle="collapse"] {
     i {font-size: 30px !important;}
     position: absolute;right: 0;z-index: 9999;
   }
-  .btn-copy-number{
-    border-radius: 100px;
-    position: absolute;right: 0px;height: 40px;width: 40px;
-  }
   .expand-photo{
     position: absolute;
-    bottom: -10px;
-    right: -10px;
+    bottom: 0px;
+    right: 0px;
     background-color: white;
     padding: 5px;
     border-radius: 10px;
@@ -299,8 +301,22 @@ a[data-toggle="collapse"] {
   height: 15px;
   border-radius: 100%;
 }
-// .btn-see-number{
-//   border: 2px solid;
-//   padding: 1em;
-//   border-radius: 10px;
+.offer-bottom{
+  position: absolute;
+  bottom: 0;width: 90%; // 90% since padding in card
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+.offer-actions{
+  button {width: 33%;}
+}
+// .offer-contact{
+//   position: absolute;
+//   bottom: 0;width: 90%; // 90% since padding in card
 // }
+.btn-copy-number{
+  border-radius: 100px;
+  position: absolute;right: 4px;top: 4px;height: 40px;width: 40px;
+}

@@ -2,6 +2,7 @@ defmodule BoncoinWeb.UserController do
   use BoncoinWeb, :controller
   alias Boncoin.Members
   alias Boncoin.Members.User
+  import Boncoin.CustomModules
 
   def index(conn, _params) do
     users = Members.list_users()
@@ -14,73 +15,50 @@ defmodule BoncoinWeb.UserController do
     case scope do
       "get_phone_details" ->
         answer = Members.read_phone_details(phone_number)
-        # |> IO.inspect()
         case answer do
           {:ok, user} ->
-            IO.inspect(user)
             if is_list(user.announces), do: nb_offers = Kernel.length(user.announces), else: nb_offers = 0
-            data = %{scope: scope, user: user, nb_offers: nb_offers}
-            |> IO.inspect()
-            render(conn, "phone_api_ok.json", data: data)
-          {:error, msg} -> render(conn, "phone_api_nok.json", msg: msg)
+            results = %{scope: scope, data: %{user: user, nb_offers: nb_offers}, error: ""}
+            render(conn, "phone_api.json", results: results)
+          {:error, msg} ->
+            results = %{scope: scope, data: %{}, error: msg}
+            render(conn, "phone_api.json", results: results)
         end
-      # "unlink_viber" ->
-      #   answer = Members.unlink_viber(phone_number)
-      #   case answer do
-      #     {:ok, user} ->
-      #       data = %{scope: scope}
-      #       render(conn, "phone_api_ok.json", data: data)
-      #     {:error, msg} -> render(conn, "phone_api_nok.json", msg: msg)
-      #   end
     end
   end
 
   def new(conn, _params) do
     changeset = Members.change_user(%User{})
-    render(conn, "new.html", changeset: changeset)
+    roles = Members.User.role_select_btn()
+    languages = Members.User.language_select_btn()
+    render(conn, "new.html", changeset: changeset, roles: roles, languages: languages)
   end
 
   def create(conn, %{"user" => user_params}) do
     case Members.create_user(user_params) do
       {:ok, user} ->
         conn
-        |> put_flash(:info, "User created successfully.")
-        |> redirect(to: user_path(conn, :index))
+          |> put_flash(:info, "User created successfully.")
+          |> put_status(308)
+          |> redirect(to: user_path(conn, :index))
+          |> halt()
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        roles = Members.User.role_select_btn()
+        languages = Members.User.language_select_btn()
+        error = get_changeset_error(changeset)
+        conn
+          |> put_flash(:info, "Errors, please check.")
+          |> render("new.html", changeset: changeset, languages: languages, roles: roles)
     end
   end
-  #
-  # def show(conn, %{"id" => id}) do
-  #   user = Members.get_user!(id)
-  #   render(conn, "show.html", user: user)
-  # end
-  #
-  # def edit(conn, %{"id" => id}) do
-  #   user = Members.get_user!(id)
-  #   changeset = Members.change_user(user)
-  #   render(conn, "edit.html", user: user, changeset: changeset)
-  # end
-  #
-  # def update(conn, %{"id" => id, "user" => user_params}) do
-  #   user = Members.get_user!(id)
-  #
-  #   case Members.update_user(user, user_params) do
-  #     {:ok, user} ->
-  #       conn
-  #       |> put_flash(:info, "User updated successfully.")
-  #       |> redirect(to: user_path(conn, :show, user))
-  #     {:error, %Ecto.Changeset{} = changeset} ->
-  #       render(conn, "edit.html", user: user, changeset: changeset)
-  #   end
-  # end
 
   def delete(conn, %{"id" => id}) do
     user = Members.get_user!(id)
     {:ok, _user} = Members.delete_user(user)
-
     conn
-    |> put_flash(:info, "User deleted successfully.")
+    |> put_flash(:info, "USer deleted successfully.")
+    |> put_status(308)
     |> redirect(to: user_path(conn, :index))
+    |> halt()
   end
 end

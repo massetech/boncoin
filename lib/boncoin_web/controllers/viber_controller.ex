@@ -38,54 +38,28 @@ defmodule BoncoinWeb.ViberController do
   end
 
   # Welcome message when a user opens a new conversation
-  def callback(conn, %{"event" => "conversation_started", "user" => %{"name" => user_name}} = params) do
-    IO.puts("#{user_name} opened a new conversation")
-    %{tracking_data: tracking_data, msg: msg} = case conn.assigns.current_user do
-      nil -> ViberBot.treat_msg("welcome")
-      user -> ViberBot.treat_msg("welcome_back", user)
-    end
+  def callback(conn, %{"event" => "conversation_started", "user" => %{"name" => viber_name}} = params) do
+    IO.puts("#{viber_name} opened a new conversation")
+
+    %{scope: scope, msg: msg} = %{scope: "welcome", user: conn.assigns.current_user, announce: nil, viber: %{viber_id: nil, viber_name: viber_name, user_msg: nil}}
+      |> ViberBot.call_bot_algorythm()
+      |> List.first()
     sender = build_sender()
+
     conn
       |> put_status(:ok)
-      |> render("send_message.json", sender: sender, message: msg, tracking_data: tracking_data)
+      |> render("send_message.json", sender: sender, message: msg, tracking_data: scope)
   end
 
-  # Receive a message from the user with tracking_data
+  # Treat a message comming from the user
   def callback(conn, %{"event" => "message", "timestamp" => timestamp, "sender" => %{"id" => viber_id, "name" => viber_name}, "message" => %{"type" => "text", "text" => user_msg}} = params) do
     IO.puts("User #{viber_id} spoke at #{timestamp}")
-    IO.inspect(params)
 
-    # Set up variables
-    language = nil
     tracking_data = params["message"]["tracking_data"] || nil
-    msg_first_key = String.slice(user_msg,0,1)
-    msg_five_key = String.slice(user_msg,0,5) |> IO.inspect()
-    user = conn.assigns.current_user
-    {tracking_data, language} = case tracking_data do
-      "language" -> {"language", convert_language(msg_first_key)}
-      "link_phone_mr" -> {"link_phone", "mr"}
-      "link_phone_my" -> {"link_phone", "my"}
-      "link_phone_en" -> {"link_phone", "en"}
-      _ ->
-        if user != nil do
-          case msg_five_key do
-            "*123#" -> {"change_language", user.language} # User wants to change his language
-            "*111#" -> {"list_offers", user.language} # User wants to see his offers
-            "*888#" -> {"change_phone", user.language} # User wants to change his phone number
-            "*999#" -> {"quit_viber", user.language} # User wants to quit Viber
-            _ -> {tracking_data, user.language}
-          end
-        else
-          {"language", nil}  # Fallback for language scope if any problem
-        end
-    end
-
-    # Call bot algorythm and send the resulting messages to viber API
-    bot_datas = %{tracking_data: tracking_data, announce: %{}, params: %{user: user, language: language, viber_id: viber_id, viber_name: viber_name, user_msg: user_msg}}
+    %{scope: tracking_data, user: conn.assigns.current_user, announce: nil, viber: %{viber_id: viber_id, viber_name: viber_name, user_msg: user_msg}}
       |> ViberBot.call_bot_algorythm()
       |> Enum.map(fn result_map -> send_viber_message(viber_id, result_map.tracking_data, result_map.msg) end)
 
-    # Confirm to Viber the msg was well received
     conn
       |> put_status(:ok)
       |> render("confirm_answer.json", status: "ok")
@@ -119,15 +93,6 @@ defmodule BoncoinWeb.ViberController do
       text: message
     }
     ViberApi.post("send_message", data)
-  end
-
-  defp convert_language(msg_first_key) do
-    case msg_first_key do
-      "1" -> "mr"
-      "2" -> "my"
-      "3" -> "en"
-      _ -> nil
-    end
   end
 
   # Viber msg signature

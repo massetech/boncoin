@@ -74,14 +74,14 @@
         %span= gettext "Technical"
       %ul.collapse.list-unstyled.collapse-level1{id: "technicalSubmenu"}
         - if LayoutView.check_admin(@conn.assigns[:current_user]) do
-          - link to: auth_path(@conn, :delete), method: :delete, class: "" do
-            %li.slide-menu.text-dark.border-bottom.border-dark
-              %i.width-20.fa.fa-sign-out-alt
-              %span= gettext "Log out"
           - link to: main_path(@conn, :dashboard) do
             %li.slide-menu.text-dark.border-bottom.border-dark
               %i.width-20.fa.fa-code-branch
               %span= "#{Application.spec(:boncoin, :vsn)}"
+          - link to: auth_path(@conn, :delete), method: :delete, class: "" do
+            %li.slide-menu.text-dark.border-bottom.border-dark
+              %i.width-20.fa.fa-sign-out-alt
+              %span= gettext "Log out"
         - else
           - link to: auth_path(@conn, :request, "google"), class: "" do
             %li.slide-menu.text-dark.border-bottom.border-dark

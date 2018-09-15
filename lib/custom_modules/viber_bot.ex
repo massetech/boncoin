@@ -6,14 +6,19 @@ defmodule Boncoin.CustomModules.ViberBot do
 
   # -------------------- DECISION  -------------------------------
 
-  def call_bot_algorythm(%{tracking_data: tracking_data, announce: announce, params: %{user: user, language: language, viber_id: viber_id, viber_name: viber_name, user_msg: user_msg}} = bot_params) do
-    # IO.puts("Bot params")
-    # IO.inspect(bot_params)
-
+  def call_bot_algorythm(%{scope: scope, user: user, announce: announce, viber: %{viber_id: viber_id, viber_name: viber_name, user_msg: user_msg}}) do
     cond do
 
+      # We are welcoming the user
+      scope == "welcome" ->
+        case user do
+          nil -> [treat_msg("welcome")]
+          user -> [treat_msg("welcome_back", user)]
+        end
+
       # We are waiting for a LANGUAGE
-      tracking_data == "language" ->
+      scope == "language" ->
+        language = String.slice(user_msg,0,1) |> convert_language()
         case user do
           nil -> # User unknown : we were waiting the user language input
             case language do
@@ -31,7 +36,8 @@ defmodule Boncoin.CustomModules.ViberBot do
         end
 
       # We are waiting for a NEW PHONE NUMBER to create the user
-      tracking_data == "link_phone" ->
+      user == nil && scope == "link_phone_mr" || scope == "link_phone_my" || scope == "link_phone_en" ->
+        language = String.slice(scope, 11..12)
         case String.match?(user_msg, ~r/^([09]{1})([0-9]{10})$/) do
           false -> [treat_msg("repeat_phone", language)] # There is no phone number in the message : ask again for it
           true -> # There is a phone number in the message
@@ -48,17 +54,17 @@ defmodule Boncoin.CustomModules.ViberBot do
         end
 
       # We send a NOTIFICATION to user
-      tracking_data == "offer_treated" ->
+      scope == "offer_treated" ->
         case announce.status do
           "ONLINE" -> [treat_msg("announce_accepted", user, announce, build_announce_view_link(announce))]
           "REFUSED" -> [treat_msg("announce_refused", user, announce)]
         end
 
       # User wants to CHANGE LANGUAGE
-      tracking_data == "change_language" -> [treat_msg("change_language", user)]
+      user != nil && user_msg == "*123#" -> [treat_msg("change_language", user)]
 
       # User wants to see his OFFERS LIST
-      tracking_data == "list_offers" ->
+      user != nil && user_msg == "*111#" ->
         offers = Contents.get_user_offers(user)
         case Kernel.length(offers) do
           0 -> [treat_msg("0_active_offer", user)]
@@ -68,10 +74,10 @@ defmodule Boncoin.CustomModules.ViberBot do
         end
 
       # User wants to UPDATE PHONE NUMBER
-      tracking_data == "change_phone" -> [treat_msg("change_phone", user)]
+      user != nil && user_msg == "*888#" -> [treat_msg("change_phone", user)]
 
       # User confirms to UPDATE PHONE NUMBER
-      tracking_data == "update_phone" ->
+      user != nil && scope == "update_phone" ->
         case String.match?(user_msg, ~r/^([09]{1})([0-9]{10})$/) do
         false -> [treat_msg("wrong_phone_number", user)] # There is no phone number in the message : cancel the update
         true -> # There is a phone number in the message
@@ -81,49 +87,47 @@ defmodule Boncoin.CustomModules.ViberBot do
           cond do
             user.phone_number == user_msg -> [treat_msg("same_phone_number", user)] # Same phone number then user old one
             other_user == nil -> # The phone number is not used yet : update the user phone number
-              case Members.update_user(user, %{phone_number: phone_number, nickname: viber_name, language: language}) do
+              case Members.update_user(user, %{phone_number: phone_number}) do
                 {:ok, user} -> [treat_msg("new_phone_updated", user)]
-                _ -> [treat_msg("technical problem", language)]
+                _ -> [treat_msg("technical problem", user.language)]
               end
             true -> manage_phone_number_conflicts(user, other_user, phone_number, nil, nil, nil, "udate_phone") # The phone number is already used : check the rights
           end
         end
 
       # User is quitting Viber
-      tracking_data == "quit_viber" ->
-        # answer = Members.unlink_viber(user.phone_number)
+      user != nil && user_msg == "*999#" ->
         answer = Members.remove_viber_id(user)
         case answer do
           {:ok, user} -> [treat_msg("quit_viber", user)]
           {:error, _msg} -> [treat_msg("cannot_quit_viber", user)]
         end
 
-      # We are waiting nothing (fallback)
-      true ->
-        cond do
-          user == nil -> [treat_msg("repeat_phone", language)] # The user is not recognized : return to phone demand
-          tracking_data == nil && user_msg == "0" -> [treat_msg("propose_help", user)] # User asked for help
-          true -> [treat_msg("nothing_to_say", user)] # Nothing to say
-        end
+      # User asked for help
+      user_msg == "0" -> [treat_msg("propose_help", user)]
+
+      # Nothing to say (fallback)
+      user != nil -> [treat_msg("nothing_to_say", user)]
+      true -> [treat_msg("welcome")] # [treat_msg("repeat_phone", "mr")]
 
     end
   end
 
-  def manage_phone_number_conflicts(user, other_user, phone_number, viber_id, user_name, language, tracking_data) do
+  def manage_phone_number_conflicts(user, other_user, phone_number, viber_id, user_name, language, scope) do
     # This loop can be used with or without user
     cond do
-      other_user. viber_active == true -> [treat_msg("viber_conflict_contact_us", language, user_name)] # 2 Vibers for the same account : contact us
+      other_user.viber_active == true -> [treat_msg("viber_conflict_contact_us", language, user_name)] # 2 Vibers for the same account : contact us
       # Rules removed to let a user link to Viber even if there is some announces
       # other_user.nb_announces > 0 -> treat_msg("wait_for_no_more_offers", language, user_name, other_user.nb_announces) # The new phone number has active offers : wait until there is no more
       # other_user.nb_announces == 0 &&
-      tracking_data == "link_phone" -> # The phone is not linked to viber and has no announce yet : use it to create new user
+      scope == "link_phone" -> # The phone is not linked to viber and has no announce yet : use it to create new user
         other_user = Members.get_user!(other_user.id)
         case Members.update_user(other_user, %{viber_active: true, viber_id: viber_id, nickname: user_name, language: language}) do
           {:ok, user} -> [treat_msg("new_phone_updated", user)]
           _ -> [treat_msg("technical problem", language)]
         end
       # other_user.nb_announces == 0 &&
-      tracking_data == "udate_phone" -> # The new phone is not linked to viber and has no announce yet : update the user phone number
+      scope == "udate_phone" -> # The new phone is not linked to viber and has no announce yet : update the user phone number
         # Known user phone update
         case Members.delete_user(other_user) do
           {:ok, _} ->
@@ -145,95 +149,131 @@ defmodule Boncoin.CustomModules.ViberBot do
     "/offers/#{announce.safe_link}"
   end
 
+  defp convert_language(language_key) do
+    case language_key do
+      "1" -> "mr"
+      "2" -> "my"
+      "3" -> "en"
+      _ -> nil
+    end
+  end
+
   # -------------------- MESSAGES   -------------------------------
 
   # User is not known
-  def treat_msg("welcome") do %{tracking_data: "language", msg: welcome_msg()} end
-  def treat_msg("ask_phone", language) do %{tracking_data: "link_phone_#{language}", msg: ask_phone_msg(language)} end
-  def treat_msg("repeat_phone", language) do %{tracking_data: "link_phone_#{language}", msg: ask_again_phone_msg(language)} end
-  def treat_msg("technical problem", language) do %{tracking_data: "link_phone_#{language}", msg: announce_technical_error(language)} end
-  def treat_msg("viber_conflict_contact_us", language, user_name) do %{tracking_data: nil, msg: announce_viber_account_conflict(language, user_name)} end
+  def treat_msg("welcome") do %{scope: "language", msg: welcome_msg()} end
+  def treat_msg("ask_phone", language) do %{scope: "link_phone_#{language}", msg: ask_phone_msg(language)} end
+  def treat_msg("repeat_phone", language) do %{scope: "link_phone_#{language}", msg: ask_again_phone_msg(language)} end
+  def treat_msg("technical problem", language) do %{scope: "link_phone_#{language}", msg: announce_technical_error(language)} end
+  def treat_msg("viber_conflict_contact_us", language, user_name) do %{scope: nil, msg: announce_viber_account_conflict(language, user_name)} end
 
   # User is  known
-  def treat_msg("new_user_created", user) do %{tracking_data: nil, msg: confirm_user_created(user.language, user.nickname)} end
-  def treat_msg("welcome_back", user) do %{tracking_data: nil, msg: welcome_back_msg(user.language, user.nickname)} end
-  def treat_msg("nothing_to_say", user) do %{tracking_data: nil, msg: nothing_to_say_msg(user.language, user.nickname)} end
-  def treat_msg("announce_accepted", user, announce, link) do %{tracking_data: nil, msg: tell_offer_accepted(user.language, user.nickname, announce.title, LayoutView.format_date(announce.validity_date), link)} end
-  def treat_msg("announce_refused", user, announce) do %{tracking_data: nil, msg: tell_offer_refused(user.language, user.nickname, announce.title, announce.cause)} end
-  def treat_msg("propose_help", user) do %{tracking_data: "help", msg: inform_help(user.language, user.nickname)} end
-  def treat_msg("change_language", user) do %{tracking_data: "language", msg: change_language_msg(user.language, user.nickname)} end
-  def treat_msg("change_phone", user) do %{tracking_data: "update_phone", msg: alert_before_phone_update(user.language, user.nickname)} end
-  def treat_msg("wrong_phone_number", user) do %{tracking_data: nil, msg: inform_wrong_phone_number(user.language, user.nickname)} end
-  def treat_msg("same_phone_number", user) do %{tracking_data: nil, msg: tell_same_phone_number(user.language, user.nickname)} end
-  def treat_msg("new_phone_updated", user) do %{tracking_data: nil, msg: confirm_new_phone_number_updated(user.language, user.nickname)} end
+  def treat_msg("new_user_created", user) do %{scope: nil, msg: confirm_user_created(user.language, user.nickname)} end
+  def treat_msg("welcome_back", user) do %{scope: nil, msg: welcome_back_msg(user.language, user.nickname)} end
+  def treat_msg("nothing_to_say", user) do %{scope: nil, msg: nothing_to_say_msg(user.language, user.nickname)} end
+  def treat_msg("announce_accepted", user, announce, link) do %{scope: nil, msg: tell_offer_accepted(user.language, user.nickname, announce.title, LayoutView.format_date(announce.validity_date), link)} end
+  def treat_msg("announce_refused", user, announce) do %{scope: nil, msg: tell_offer_refused(user.language, user.nickname, announce.title, announce.cause)} end
+  def treat_msg("propose_help", user) do %{scope: "help", msg: inform_help(user.language, user.nickname)} end
+  def treat_msg("change_language", user) do %{scope: "language", msg: change_language_msg(user.language, user.nickname)} end
+  def treat_msg("change_phone", user) do %{scope: "update_phone", msg: alert_before_phone_update(user.language, user.nickname)} end
+  def treat_msg("wrong_phone_number", user) do %{scope: nil, msg: inform_wrong_phone_number(user.language, user.nickname)} end
+  def treat_msg("same_phone_number", user) do %{scope: nil, msg: tell_same_phone_number(user.language, user.nickname)} end
+  def treat_msg("new_phone_updated", user) do %{scope: nil, msg: confirm_new_phone_number_updated(user.language, user.nickname)} end
 
-  def treat_msg("quit_viber", user) do %{tracking_data: nil, msg: tell_viber_quitted(user.language, user.nickname)} end
-  def treat_msg("cannot_quit_viber", user) do %{tracking_data: nil, msg: tell_viber_cannot_quit(user.language, user.nickname)} end
-  def treat_msg("0_active_offer", user) do %{tracking_data: nil, msg: tell_no_active_offer(user.language, user.nickname)} end
-  def treat_msg("nb_active_offers", user, nb_offers) do %{tracking_data: nil, msg: tell_nb_active_offers(user.language, user.nickname, nb_offers)} end
-  def treat_msg("detail_active_offer", user, offer, link) do %{tracking_data: nil, msg: detail_active_offers(user.language, offer.title, LayoutView.format_date(offer.validity_date), link)} end
+  def treat_msg("quit_viber", user) do %{scope: nil, msg: tell_viber_quitted(user.language, user.nickname)} end
+  def treat_msg("cannot_quit_viber", user) do %{scope: nil, msg: tell_viber_cannot_quit(user.language, user.nickname)} end
+  def treat_msg("0_active_offer", user) do %{scope: nil, msg: tell_no_active_offer(user.language, user.nickname)} end
+  def treat_msg("nb_active_offers", user, nb_offers) do %{scope: nil, msg: tell_nb_active_offers(user.language, user.nickname, nb_offers)} end
+  def treat_msg("detail_active_offer", user, offer, link) do %{scope: nil, msg: detail_active_offers(user.language, offer.title, LayoutView.format_date(offer.validity_date), link)} end
 
   defp welcome_msg() do
-    "Welcome to Pawchaungkaung !\nWhat is your language ?\n  -> ျမမ္မားစာအတြက္ [1] ႏွိပ္ပါ \n  -> မြမ်မားစာအတွက် [2] နှိပ်ပါ \n  -> For English send [3]"
+    uni = "ပေါချောင်ကောင်းမှကြိုဆိုပါတယ်။ ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပါ"
+    "#{Rabbit.uni2zg(uni)}\nWelcome to Pawchaungkaung, please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [၁]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [၂]\n  -> For English send [3]"
   end
 
   defp change_language_msg(language, nickname) do
+    uni = "ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပ"
     case language do
-      _ -> "Please choose your language\n  -> ျမမ္မားစာအတြက္ [1] ႏွိပ္ပါ \n  -> မြမ်မားစာအတွက် [2] နှိပ်ပါ \n  -> For English send [3]"
+      "en" -> "Please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [၁]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [၂]\n  -> For English send [3]"
+      "my" -> "#{uni}\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [၁]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [၂]\n  -> For English send [3]"
+      "mr" -> "#{Rabbit.uni2zg(uni)}\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [၁]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [၂]\n  -> For English send [3]"
     end
   end
 
-  defp change_phone_msg(language, nickname) do
-    case language do
-      _ -> "Please choose your language\n  -> ျမမ္မားစာအတြက္ [1] ႏွိပ္ပါ \n  -> မြမ်မားစာအတွက် [2] နှိပ်ပါ \n  -> For English send [3]"
-    end
-  end
+  # defp change_phone_msg(language, nickname) do
+  #   case language do
+  #     _ -> "Please choose your language\n  -> ျမမ္မားစာအတြက္ [1] ႏွိပ္ပါ \n  -> မြမ်မားစာအတွက် [2] နှိပ်ပါ \n  -> For English send [3]"
+  #   end
+  # end
 
   defp welcome_back_msg(language, nickname) do
+    uni = "ပေါချောင်ကေင်းမှတစ်ဖန်ကြိုဆိုပါတယ် #{nickname} ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပါ။\n\n"
     case language do
-      _ -> "Welcome back to Pawchaungkaung #{nickname} !\n\nPlease visit us on #{@website_url}\n\nFor help please send [0]"
+      "en" -> "Welcome back to Pawchaungkaung #{nickname} !\n\nPlease visit us on #{@website_url}\n\nFor help please send [0]"
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp nothing_to_say_msg(language, nickname) do
+    uni = "မင်္ဂလာပါ #{nickname}။\n\nကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။\n\n"
     case language do
-      _ -> "Hi #{nickname} ! #{say_something_neutral(language)}\n\nPlease visit us on #{@website_url}\n\nFor help please send [0]"
+      "en" -> "Hi #{nickname} ! #{say_something_neutral(language)}\n\nPlease visit us on #{@website_url}\n\nFor help please send [0]"
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp ask_phone_msg(language) do
+    uni = "အခုစကားပြောလို့ရပါပြီ။ သင့်ကိုသတိပြုမိရန်သင်၏ဖုန်းနံပါတ်ကိုနှိပ်ပါ။"
     case language do
-      _ -> "Now we can speak! Please also type your mobile phone number."
+      "en" -> "Now we can speak! Please also type your mobile phone number."
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp ask_again_phone_msg(language) do
+    uni = "နောက်တစ်ကြိမ်မေးရတဲ့အတွက်အားနာပါတယ်။ Website မှသင့်ကိုသိရှိဖို့လိုအပ်ပါတယ်။ သင်၏ဖုန်းနံပါတ်ကိုရိုက်ထည့်ပါ။"
     case language do
-      _ -> "Sorry but we need to identify you. Please type your mobile phone number."
+      "en" -> "Sorry but we need to identify you. Please type your mobile phone number."
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp inform_wrong_phone_number(language, nickname) do
+    uni = "စိတ်မကောင်းပါဘူး။ ဒီနံပါတ်မှားနေပါတယ်။ တဖန်ထပ်ကြိုးစားကြည့်ရန် [*888#] ဟုရိုက်ထည့်ပါ။"
     case language do
-      _ -> "Sorry #{nickname}, this is not a good phone number. To try again please type [*888#]."
+      "en" -> "Sorry #{nickname}, this is not a good phone number. To try again please type [*888#]."
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp alert_before_phone_update(language, nickname) do
+    uni = ""
     case language do
-      _ -> "All your offers will be moved to this new phone number. If you are sure please type your new phone number now.\n"
+      "en" -> "All your offers will be moved to this new phone number. If you are sure please type your new phone number now.\n"
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp confirm_user_created(language, nickname) do
     case language do
-      _ -> "Cool #{nickname}! Your phone number and viber account are now linked.\n Please visit us on #{@website_url}"
+      "en" -> "Your phone number and viber account are now linked.\n Please visit us on #{@website_url}"
+      "my" -> "သင်၏ဖုန်းနံပါတ်နှင့်ဗိုင်ဘာနံပါတ်တို့သည်ဆက်သွယ်ပြီးပြီဖြစ်သည်။ ကျေးဇူးပြု၍ သို့ဝင်ကြည့်ပါ။"
+      "mr" -> "သင္၏ဖုန္းနံပါတ္ႏွင့္ဗိုင္ဘာနံပါတ္တို႔သည္ဆက္သြယ္ၿပီးၿပီျဖစ္သည္။ ေက်းဇူးျပဳ၍ သို႔ဝင္ၾကည့္ပါ။"
     end
   end
 
   defp tell_same_phone_number(language, nickname) do
+    uni = "သင်သိလား သင့်ရဲ့ဖုန်းနံပါတ်က ပေါချောင်ကောင်းရဲ့ဗိုင်ဘာနဲ့ ဆက်အသွယ်ရပြီးသားဖြစ်နေပြီ။ :)"
     case language do
-      _ -> "You know what #{nickname}, your phone number was already linked to this viber account :)"
+      "en" -> "You know what #{nickname}, your phone number was already linked to this viber account :)"
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -245,19 +285,27 @@ defmodule Boncoin.CustomModules.ViberBot do
 
   defp announce_phone_used(language) do
     case language do
-      _ -> "Sorry but this phone number is linked to another Viber user. Please unlink it first on #{@website_url_form} or contact us."
+      "en" -> "Sorry but this phone number is linked to another Viber user. Please unlink it first on #{@website_url_form} or contact us."
+      "my" -> "စိတ်မကောင်းပါဘူး ဒီနံဖုန်းပါတ်ကအခြားဗိုင်ဘာအကောင့်နဲ့ ချိတ်ဆက် ပြီးဖြစ်နေပါပြီ။ ကျေးဇူးပြု၍ ချိတ်ဆက်မှုကိုဖြုတ်ပြစ်ရန် #{@website_url_form}  သို့ဝင်ကြည့်ပါ။ (သို့) ပေါချောင်ကောင်းသို့ဆက်သွယ်ပါ။"
+      "mr" -> "စိတ္မေကာင္းပါဘူး ဒီနံဖုန္းပါတ္ကအျခားဗိုင္ဘာအေကာင့္နဲ႕ ခ်ိတ္ဆက္ ၿပီးျဖစ္ေနပါၿပီ။ ေက်းဇူးျပဳ၍ ခ်ိတ္ဆက္မႈကိုျဖဳတ္ျပစ္ရန္ #{@website_url_form} သို႔ဝင္ၾကည့္ပါ။ (သို႔) ေပါေခ်ာင္ေကာင္းသို႔ဆက္သြယ္ပါ။"
     end
   end
 
   defp announce_technical_error(language) do
+    uni = "စိတ်မကောင်းပါဘူး website နည်းပညာပိုင်းဆိုင်ရာမှာ ပြဿနာရှိနေပါတယ်။"
     case language do
-      _ -> "Sorry we have a technical problem."
+      "en" -> "Sorry we have a technical problem."
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp announce_viber_account_conflict(language, nickname) do
+    uni = "စိတ်မကောင်းပါဘူး #{nickname} ဒီဖုန်းနံပါတ်ကိုအခြားဗိုင်ဘာမှအသုံးပြုပြီးဖြစ်ပါတယ်။ ကျေးဇူးပြု၍ နောက်ထပ်တစ်ကြိမ်ပြန် ကြိုးစားကြည့်ပါ။ (သို့) ပေါချောင်ကောင်းသို့ဆက်သွယ်ပါ။"
     case language do
-      _ -> "Sorry #{nickname}, this phone number is linked to another Viber user. Please unlink it first on #{@website_url_form} or contact us."
+      "en" -> "Sorry #{nickname}, this phone number is linked to another Viber user. Please unlink it first on #{@website_url_form} or contact us."
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -268,20 +316,29 @@ defmodule Boncoin.CustomModules.ViberBot do
   end
 
   defp tell_offer_accepted(language, nickname, title, validity_date, link) do
+    uni = "မင်္ဂလာပါ #{nickname} သင်၏ရောင်းရန်ပစ္စည်း သည်ကြော်ငြာတင်လိုက်ပြီဖြစ်ပါသည်။ ၎င်းကို #{validity_date} အထိ (၁)လအကြာ ကြော်ငြာတင်ထားမည် ဖြစ်သည်။ သင်၏ကြော်ငြာကိုသင့်အလိုကျစီမံနိုင်ရန် #{@website_url}#{link} သို့ဝင်ပါ။"
     case language do
-      _ -> "Hi #{nickname}, your offer #{title} is now published !\nIt will be online for 1 month until #{validity_date}.\nYou can manage your offer on #{@website_url}#{link}"
+      "en" -> "Hi #{nickname}, your offer #{title} is now published !\nIt will be online for 1 month until #{validity_date}.\nYou can manage your offer on #{@website_url}#{link}"
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp tell_offer_refused(language, nickname, title, cause) do
+    uni = "မင်္ဂလာပါ #{nickname}, စိတ်မကောင်းပါဘူး သင့်ရဲ့ #{title} ကြော်ငြာဟာ #{cause} ကြောင့်ငြင်းပယ်ခြင်းခံရပါတယ်။ ကျေးဇူးပြု၍ #{@website_url_form} တွင်အသစ်တစ်ဖန်ပြန်လုပ်ပါ။"
     case language do
-      _ -> "Hi #{nickname}, we are sorry but your offer #{title} was refused because #{cause}. \nPlease create a new one on #{@website_url_form}"
+      "en" -> "Hi #{nickname}, we are sorry but your offer #{title} was refused because #{cause}. \nPlease create a new one on #{@website_url_form}"
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp tell_viber_quitted(language, nickname) do
+    uni = "မင်္ဂလာပါ #{nickname}, သင့်ရဲ့ဗိုင်ဘာ ချိတ်ဆက်မှုကိုဖြုတ်ပြစ်ပြီးဖြစ်ပါပြီ။ မကြာခင်မှာ #{@website_url} တွင်ပြန်ဆုံကြမယ်နော်။"
     case language do
-      _ -> "Your Viber account has been unlinked.\nHope to see you soon on #{@website_url}"
+      "en" -> "Your Viber account has been unlinked.\nHope to see you soon on #{@website_url}"
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -293,13 +350,13 @@ defmodule Boncoin.CustomModules.ViberBot do
 
   defp tell_no_active_offer(language, nickname) do
     case language do
-      _ -> "Hey #{nickname}, you dont any offer yet. Please create one on #{@website_url_form}"
+      _ -> "Hey #{nickname}, you don't have any offer yet. Please create one on #{@website_url_form}"
     end
   end
 
   defp tell_nb_active_offers(language, nickname, nb_offers) do
     case language do
-      _ -> "Ok #{nickname}, you have #{nb_offers} active offers."
+      _ -> "Ok #{nickname}, you have #{nb_offers} active offers :"
     end
   end
 
@@ -311,20 +368,38 @@ defmodule Boncoin.CustomModules.ViberBot do
 
   defp say_something_neutral(language) do
     case Enum.random([1, 2, 3, 4, 5]) do
-      1 -> case language do
+      1 ->
+        # Say nothing
+        case language do
           _ -> ""
         end
-      2 -> case language do
-          _ -> "Hope you are fine !"
+      2 ->
+        uni = "အဆင်ပြေမယ်လို့မျှော်လင့်ပါတယ်။"
+        case language do
+          "en" -> "Hope you are fine !"
+          "my" -> uni
+          "mr" -> Rabbit.uni2zg(uni)
         end
-      3 -> case language do
-          _ -> "What's up ?"
+      3 ->
+        uni = "ဘာတွေထူးလဲ။"
+        case language do
+          "en" -> "What's up ?"
+          "my" -> uni
+          "mr" -> Rabbit.uni2zg(uni)
         end
-      4 -> case language do
-          _ -> "Searching something ?"
+      4 ->
+        uni = "ဘာအလိုရှိပါသလဲ။"
+        case language do
+          "en" -> "Searching something ?"
+          "my" -> uni
+          "mr" -> Rabbit.uni2zg(uni)
         end
-      5 -> case language do
-          _ -> "Selling something ?"
+      5 ->
+        uni = "တစ်ခုခုရောင်းချင်ပါသလား။"
+        case language do
+          "en" -> "Selling something ?"
+          "my" -> uni
+          "mr" -> Rabbit.uni2zg(uni)
         end
     end
   end

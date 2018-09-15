@@ -1,8 +1,8 @@
 defmodule Boncoin.Auth.SetApiToken do
   import Plug.Conn
 
-  @salt System.get_env("SECRET_SALT")
-
+  @salt Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:secret_salt]
+  
   def init(opts), do: opts
 
   def call(conn, _opts) do

@@ -13,9 +13,7 @@ defmodule Boncoin.Members do
   # -------------------------------- UEBERAUTH ----------------------------------------
 
   def sign_in_user(%Auth{} = auth) do
-    user = email_from_auth(auth)
-      |> check_admin_email()
-      |> IO.inspect()
+    user = email_from_auth(auth) |> check_admin_email()
     case user do
       nil -> {:error, "User not allowed to log in as admin"}
       user -> update_user(user, basic_info(auth))
@@ -73,7 +71,8 @@ defmodule Boncoin.Members do
   def get_guest_user() do
     User
       |> User.search_guest_user()
-      |> Repo.one()
+      |> Repo.all()
+      |> List.first()
   end
 
   def admin_user? (user) do

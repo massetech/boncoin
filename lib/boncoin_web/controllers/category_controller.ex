@@ -20,10 +20,14 @@ defmodule BoncoinWeb.CategoryController do
       {:ok, category} ->
         conn
         |> put_flash(:info, "Category created successfully.")
+        |> put_status(308)
         |> redirect(to: category_path(conn, :index))
+        |> halt()
       {:error, %Ecto.Changeset{} = changeset} ->
         familys = Contents.list_familys_for_select()
-        render(conn, "new.html", changeset: changeset, familys: familys)
+        conn
+        |> put_flash(:info, "Errors, please check.")
+        |> render("new.html", changeset: changeset, familys: familys)
     end
   end
 
@@ -46,19 +50,24 @@ defmodule BoncoinWeb.CategoryController do
       {:ok, category} ->
         conn
         |> put_flash(:info, "Category updated successfully.")
+        |> put_status(308)
         |> redirect(to: category_path(conn, :index))
+        |> halt()
       {:error, %Ecto.Changeset{} = changeset} ->
         familys = Contents.list_familys_for_select()
-        render(conn, "edit.html", category: category, changeset: changeset, familys: familys)
+        conn
+        |> put_flash(:info, "Errors, please check.")
+        |> render("edit.html", category: category, changeset: changeset, familys: familys)
     end
   end
 
   def delete(conn, %{"id" => id}) do
     category = Contents.get_category!(id)
     {:ok, _category} = Contents.delete_category(category)
-
     conn
     |> put_flash(:info, "Category deleted successfully.")
+    |> put_status(308)
     |> redirect(to: category_path(conn, :index))
+    |> halt()
   end
 end

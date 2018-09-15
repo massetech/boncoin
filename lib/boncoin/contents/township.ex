@@ -1,7 +1,7 @@
 defmodule Boncoin.Contents.Township do
   use Ecto.Schema
   import Ecto.{Query, Changeset}
-  alias Boncoin.Contents.{Division, Announce}
+  alias Boncoin.Contents.{Division, Announce, TrafficKpi}
 
   schema "townships" do
     field :active, :boolean
@@ -11,6 +11,7 @@ defmodule Boncoin.Contents.Township do
     field :title_en, :string
     belongs_to :division, Division
     has_many :announces, Announce, on_delete: :delete_all
+    has_many :traffic_kpis, TrafficKpi, on_delete: :delete_all
     timestamps()
   end
 

@@ -2,8 +2,14 @@
   %ol.breadcrumb
     %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
     %li.breadcrumb-item.active{aria-current: "page"}= "Users"
-  %li
-    %span= "#{@conn.assigns.current_user.email}"
+
+.row.my-3
+  .col-xs-12.col-sm-6.text-left
+    %span= "Logged in as"
+    %span.text-primary= "#{@conn.assigns.current_user.email}"
+  .col-xs-12.col-sm-6.text-right
+    -# = link "View Divisions", to: division_path(@conn, :index), class: "btn btn-outline-info btn-sm"
+    = link "New USer", to: user_path(@conn, :new), class: "btn btn-outline-info btn-sm"
 
 .table-responsive
   %table.table.table-hover

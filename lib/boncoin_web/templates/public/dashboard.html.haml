@@ -7,7 +7,7 @@
   .col-xs-12.col-lg-6.my-4
     .card
       .card-header
-        %h5.card-title.text-left= "Users"
+        %h5.card-title= "Traffic on the website"
       .card-body
         .row
           .col-xs-12.col-sm-6
@@ -23,13 +23,13 @@
             %li= "language"
       .card-footer
         = link "All users", to: user_path(@conn, :index), class: "btn btn-info btn-small"
-        = link "New admin", to: user_path(@conn, :new), class: "btn btn-info btn-small"
+        = link "Purge users", to: user_path(@conn, :index), class: "btn btn-danger btn-small"
 
   /------------- OFFERS -------------------------
   .col-xs-12.col-lg-6.my-4
     .card
       .card-header
-        %h5.card-title.text-left= "Offers"
+        %h5.card-title= "Offers online"
       .card-body
         .row
           .col-xs-12.col-sm-6

@@ -4,6 +4,8 @@ use Mix.Config
 # you can enable the server option below.
 config :boncoin, BoncoinWeb.Endpoint,
   http: [port: 4001],
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
+  secret_salt: System.get_env("SECRET_SALT"),
   server: false
 
 # Print only warnings and errors during test
@@ -17,3 +19,20 @@ config :boncoin, Boncoin.Repo,
   database: "boncoin_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+  client_id: System.get_env("GOOGLE_AUTH_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_AUTH_CLIENT_SECRET")
+
+config :boncoin, Boncoin.Auth.Guardian,
+  secret_key: System.get_env("GUARDIAN_SECRET")
+
+config :arc,
+  bucket: System.get_env("GOOGLE_CLOUD_BUCKET")
+
+config :goth, json: "secrets/google_service.json" |> Path.expand |> File.read!
+# config :goth, json: {:system, "GCP_CREDENTIALS"}
+
+config :cipher, keyphrase: "testiekeyphraseforcipher",
+  ivphrase: "testieivphraseforcipher",
+  magic_token: "magictoken"
