@@ -11,7 +11,6 @@ defmodule BoncoinWeb.UserController do
 
   # API to ba called for a phone number on announce page
   def check_phone(conn, %{"scope" => scope, "params" => phone_number} = params) do
-    IO.inspect(params)
     case scope do
       "get_phone_details" ->
         answer = Members.read_phone_details(phone_number)

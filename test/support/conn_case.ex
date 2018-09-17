@@ -54,6 +54,10 @@ defmodule BoncoinWeb.ConnCase do
         user = insert(:guest_user)
         {Phoenix.ConnTest.build_conn(), user}
     end
+
+    # Fix the language to English
+    # conn = %{conn | params: Map.put(conn.params, "locale", "en")}
+    # conn |> IO.inspect()
     {:ok, conn: conn, user: user}
   end
 

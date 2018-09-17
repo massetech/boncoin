@@ -4,8 +4,8 @@ config :boncoin,
   ecto_repos: [Boncoin.Repo]
 
 config :boncoin, Boncoin.Gettext,
-  default_locale: "en",
-  locales: ~w(en my mr)
+  default_locale: "mr",
+  locales: ~w(mr my en)
 
 config :boncoin, Boncoin.Auth.Guardian,
   issuer: "Boncoin.#{Mix.env}",

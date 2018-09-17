@@ -589,7 +589,7 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/announce/form.html.haml:24
 msgid "change"
-msgstr "ေျပာင္းလဲရန္"
+msgstr "ေျပာင္းရန္"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/form.html.haml:197

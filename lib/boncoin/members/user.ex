@@ -32,6 +32,7 @@ defmodule Boncoin.Members.User do
     params = attrs
       |> CustomModules.convert_fields_to_burmese_uni([:email, :nickname])
     user
+    |> Map.put(:uuid, Ecto.UUID.generate)
     |> cast(params, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
     |> unique_constraint(:email, message: "Email is already taken")
