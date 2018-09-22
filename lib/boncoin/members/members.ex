@@ -1,11 +1,6 @@
 defmodule Boncoin.Members do
-
-  @moduledoc """
-  The Members context.
-  """
-
   import Ecto.Query, warn: false
-  alias Boncoin.{Repo}
+  alias Boncoin.{Repo, ViberApi, Contents}
   alias Boncoin.Members.User
   alias Ueberauth.Auth
   alias BoncoinWeb.ViberController
@@ -34,25 +29,12 @@ defmodule Boncoin.Members do
 
   # -------------------------------- USER ----------------------------------------
 
-  @doc """
-  Checks if an email is ADMIN or USER.
-  """
-
   defp check_admin_email(email) do
     User
       |> User.filter_admin_users_by_email(email)
       |> Repo.one()
   end
 
-  @doc """
-  Returns the list of users.
-
-  ## Examples
-
-      iex> list_users()
-      [%User{}, ...]
-
-  """
   def list_users do
     User
       |> Repo.all()
@@ -62,7 +44,7 @@ defmodule Boncoin.Members do
   def read_phone_details(phone_number) do
     cond do
       String.match?(phone_number, ~r/^([09]{1})([0-9]{10})$/) -> # The number is a Myanmar mobile number
-        get_user_or_create_by_phone_number(phone_number)
+        get_or_initialize_user_by_phone_number(phone_number)
       true -> # The number is a NOT a Myanmar mobile number
         {:error, "wrong Myanmar phone number"}
     end
@@ -83,41 +65,7 @@ defmodule Boncoin.Members do
     end
   end
 
-  # def unlink_viber(phone_number) do
-  #   user = get_user_by_phone_number(phone_number)
-  #   case user do
-  #     nil -> {:error, "No user found for this phone number"}
-  #     user ->
-  #       case remove_viber_id(user) do
-  #         {:ok, _user} ->
-  #           {tracking_data, message} = %{tracking_data: "viber_removed", user: %{db_user: user, language: user.language, viber_id: user.viber_id, viber_name: user.nickname, user_msg: ""}, announce: nil}
-  #             |> ViberController.call_bot_algorythm()
-  #           ViberController.send_viber_message(user.viber_id, tracking_data, message)
-  #           {:ok, user}
-  #         {:error, msg} -> {:error, msg}
-  #       end
-  #   end
-  # end
-
-  @doc """
-  Gets a single user.
-
-  Raises `Ecto.NoResultsError` if the User does not exist.
-
-  ## Examples
-
-      iex> get_user!(123)
-      %User{}
-
-      iex> get_user!(456)
-      ** (Ecto.NoResultsError)
-
-  """
   def get_user!(id), do: Repo.get!(User, id)
-
-  @doc """
-  Reads the data known for a phone number.
-  """
 
   def get_user_by_phone_number(phone_number) do
     User
@@ -138,44 +86,37 @@ defmodule Boncoin.Members do
       |> Repo.one()
   end
 
-  def get_user_or_create_by_phone_number(phone_number) do
+  def get_or_initialize_user_by_phone_number(phone_number) do
     case get_user_by_phone_number(phone_number) do
-      nil ->
-        create_user(%{phone_number: phone_number, role: "MEMBER"})
+      nil -> {:new_user, %User{}}
       user -> {:ok, user}
     end
   end
 
-  @doc """
-  Creates a user.
+  # def create_or_update_user(%{"phone_number" => phone_number} = params) do
+  #   case get_user_by_phone_number(phone_number) do
+  #     nil -> create_user(params)
+  #     user -> update_user(user, params)
+  #   end
+  # end
 
-  ## Examples
-
-      iex> create_user(%{field: value})
-      {:ok, %User{}}
-
-      iex> create_user(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
   def create_user(attrs \\ %{}) do
     %User{}
       |> User.changeset(attrs)
       |> Repo.insert()
   end
 
-  @doc """
-  Updates a user.
+  def create_user_announce(%{"phone_number" => phone_number} = params) do
+    user = case get_user_by_phone_number(phone_number) do
+      nil -> create_user(params)
+      user -> update_user(user, params) # Guest user pass by here
+    end
+    case user do
+      {:ok, user} -> Contents.create_announce(params["announces"]["0"], user.id)
+      error_user -> error_user
+    end
+  end
 
-  ## Examples
-
-      iex> update_user(user, %{field: new_value})
-      {:ok, %User{}}
-
-      iex> update_user(user, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
   def update_user(%User{} = user, attrs) do
     user
       |> User.changeset(attrs)
@@ -237,4 +178,25 @@ defmodule Boncoin.Members do
   def change_user(%User{} = user) do
     User.changeset(user, %{})
   end
+
+  # -------------------------------- VIBER ----------------------------------------
+
+  # Send datas to viber API
+  def send_viber_message(viber_id, scope, message) do
+    data = %{
+      sender: build_sender(),
+      receiver: viber_id,
+      type: "text",
+      tracking_data: scope,
+      text: message
+    }
+    ViberApi.post("send_message", data)
+  end
+
+  # Viber msg signature
+  def build_sender() do
+    %{name: "PawChaungKaung", avatar: ""}
+  end
+
+
 end

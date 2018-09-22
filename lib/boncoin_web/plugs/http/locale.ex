@@ -8,10 +8,10 @@ defmodule Boncoin.Plug.Locale do
   def call(conn, _opts) do
     case locale_from_params(conn) || locale_from_cookies(conn) do
       nil ->
-        Gettext.put_locale("mr") # Language by default no handled by Gettext
+        Gettext.put_locale("en") # Language by default no handled by Gettext
         conn
-          |> persist_locale("mr")
-          |> assign(:flag, "mr")
+          |> persist_locale("en")
+          |> assign(:flag, "en")
       locale ->
         Gettext.put_locale(locale)
         conn

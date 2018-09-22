@@ -33,7 +33,8 @@ defmodule BoncoinWeb.AuthController do
           |> redirect(to: root_path(conn, :welcome))
       _ ->
         conn
-          |> put_flash(:error, "Sorry couldn't sign you in.")
+          |> put_flash(:alert, "Sorry you are not allowed to log in.")
+          |> put_status(308)
           |> redirect(to: root_path(conn, :welcome))
     end
   end

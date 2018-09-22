@@ -5,11 +5,11 @@
         .row
           .col-6
             = img_tag BoncoinWeb.AnnounceView.image_url(List.first(@announce.images), :original), class: "img-small"
-          .col-6.p-0
+          .col-6.p-0.pl-2.text-left
             .title
-              %h6.font-weight-bold.text-dark.m-0= LayoutView.convert_zawgyi(@announce.title)
-              %h6.text-primary.m-0= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
+              %p.font-weight-bold.text-dark.m-0= LayoutView.convert_zawgyi(@announce.title)
+              %p.text-success.m-0= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
             .details
-              %p.text-dark.m-0= LayoutView.convert_zawgyi(@announce.township.division, "title")
+              %p.text-dark.m-0= BoncoinWeb.AnnounceView.show_date(@announce, "en")
               %p.text-dark.m-0= LayoutView.convert_zawgyi(@announce.township, "title")
-              %p.text-dark.m-0{style: "font-size:0.75em;"}= BoncoinWeb.AnnounceView.show_date(@announce, "en")
+              %p.text-dark.m-0= LayoutView.convert_zawgyi(@announce.township.division, "title")

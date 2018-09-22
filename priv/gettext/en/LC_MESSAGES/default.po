@@ -61,17 +61,6 @@ msgid "Title"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:41
-msgid "today, %{hour}:%{minute} %{label}"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:44
-#: lib/boncoin_web/views/announce_view.ex:48
-msgid "yesterday, %{hour}:%{minute} %{label}"
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/templates/announce/form.html.haml:166
 msgid "3. Show some photos"
 msgstr ""
@@ -118,7 +107,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/form.html.haml:20
-msgid "Myanmar mobile only (09000000000)"
+msgid "Myanmar mobile only (09xxxxxxxxx)"
 msgstr ""
 
 #, elixir-format
@@ -176,12 +165,12 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/layout/_sidebar.html.haml:66
 msgid "Myanmar (Unicode)"
-msgstr ""
+msgstr "မြန်မာ (ယူနီကုတ်)"
 
 #, elixir-format
 #: lib/boncoin_web/templates/layout/_sidebar.html.haml:72
 msgid "Myanmar (Zawgyi)"
-msgstr ""
+msgstr "ျမန္မာ (ေဇာ္ဂ်ီ)"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:3
@@ -429,7 +418,7 @@ msgid "About PawChaungKaung"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/form.html.haml:29
+#: lib/boncoin_web/templates/user/form.html.haml:34
 msgid "Phone number"
 msgstr ""
 
@@ -711,18 +700,18 @@ msgid "Viber notifications"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/public_index.html.haml:8
+#: lib/boncoin_web/templates/announce/public_index.html.haml:10
 msgid "%{nb_offers}offers found for %{arbo_searched}"
 msgstr "%{nb_offers} offers found for %{arbo_searched}"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/public_index.html.haml:24
-#: lib/boncoin_web/templates/announce/public_index.html.haml:28
+#: lib/boncoin_web/templates/announce/public_index.html.haml:26
+#: lib/boncoin_web/templates/announce/public_index.html.haml:30
 msgid "More offers"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/public_index.html.haml:10
+#: lib/boncoin_web/templates/announce/public_index.html.haml:12
 msgid "Please meet the seller and try the product before giving any money"
 msgstr ""
 
@@ -787,7 +776,7 @@ msgid "You want to join us ?"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/public_index.html.haml:6
+#: lib/boncoin_web/templates/announce/public_index.html.haml:8
 msgid "%{nb_offers}offers found"
 msgstr "%{nb_offers} offers found"
 
@@ -802,12 +791,12 @@ msgid "Find a good-deal in more than %{nb_offers}offers"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/form.html.haml:33
+#: lib/boncoin_web/templates/user/form.html.haml:38
 msgid "Create user"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/form.html.haml:24
+#: lib/boncoin_web/templates/user/form.html.haml:29
 msgid "Email (Gmail only)"
 msgstr ""
 
@@ -861,7 +850,38 @@ msgstr ""
 msgid "Photo 3"
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/boncoin_web/templates/public/viber.html.haml:50
 msgid "How to change your number ?"
 msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/user/form.html.haml:24
+msgid "Nickname"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/views/announce_view.ex:40
+msgid "yesterday"
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/views/announce_view.ex:41
+msgid "one day ago"
+msgid_plural "%{count} days ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/views/announce_view.ex:39
+msgid "one hour ago"
+msgid_plural "%{count} hours ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/views/announce_view.ex:38
+msgid "one minute ago"
+msgid_plural "%{count} minutes ago"
+msgstr[0] ""
+msgstr[1] ""

@@ -5,8 +5,8 @@ defmodule Boncoin.MembersTest do
   import Boncoin.Factory
 
   describe "users" do
-    @valid_attrs %{email: "some email", language: "en", nickname: "some name", phone_number: "09030303030", viber_active: true, viber_id: "some viber_id"}
-    @update_attrs %{email: "some updated email", language: "mr", nickname: "some updated name", phone_number: "09726272625", viber_active: false, viber_id: "some updated viber_id"}
+    @valid_attrs %{email: "some_email@gmail.com", language: "en", nickname: "some name", phone_number: "09030303030", viber_active: true, viber_id: "some viber_id"}
+    @update_attrs %{email: "some_other_email@gmail.com", language: "mr", nickname: "some updated name", phone_number: "09726272625", viber_active: false, viber_id: "some updated viber_id"}
     @invalid_attrs %{email: nil, language: nil, nickname: nil, password: nil, phone_number: nil, viber_active: nil, viber_id: nil}
 
     test "list_users/0 returns all users" do
@@ -21,7 +21,7 @@ defmodule Boncoin.MembersTest do
 
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Members.create_user(@valid_attrs)
-      assert user.email == "some email"
+      assert user.email == "some_email@gmail.com"
       assert user.language == "en"
       assert user.nickname == "some name"
       assert user.phone_number == "09030303030"
@@ -37,7 +37,7 @@ defmodule Boncoin.MembersTest do
       user = insert(:user)
       assert {:ok, user} = Members.update_user(user, @update_attrs)
       assert %User{} = user
-      assert user.email == "some updated email"
+      assert user.email == "some_other_email@gmail.com"
       assert user.language == "mr"
       assert user.nickname == "some updated name"
       assert user.phone_number == "09726272625"

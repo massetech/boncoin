@@ -10,13 +10,23 @@ defmodule BoncoinWeb.AnnounceControllerTest do
   @moduletag :AnnounceController
   @moduletag :Controller
 
+  defp build_offer_params(attrs, %{phone_number: phone_number, nickname: nickname}, township_id, category_id) do
+    %{user: %{
+        phone_number: phone_number, nickname: nickname,
+        announces: %{'0': Map.merge(attrs, %{township_id: township_id, category_id: category_id})}
+      }
+    }
+  end
+
   describe "admin" do
     @describetag :admin_authenticated
     test "lists all announces in dashboard", %{conn: conn} do
       conn = get conn, announce_path(conn, :index)
       assert html_response(conn, 200) =~ "Offers"
     end
-
+    test "treats offer sends a notification to the user" do
+      # See what to do
+    end
     test "deletes chosen announce from dashboard", %{conn: conn} do
       announce = insert(:announce)
       conn = delete conn, announce_path(conn, :delete, announce)
@@ -69,73 +79,135 @@ defmodule BoncoinWeb.AnnounceControllerTest do
     end
   end
 
-  describe "new announce" do
-    test "renders form", %{conn: conn} do
-      conn = get conn, announce_path(conn, :new)
-      assert html_response(conn, 200) =~ "Fill your details"
-    end
-  end
+  # describe "new announce" do
+  #   test "renders form", %{conn: conn} do
+  #     conn = get conn, announce_path(conn, :new)
+  #     assert html_response(conn, 200) =~ "Fill your details"
+  #   end
+  # end
 
-  describe "create announce" do
-    test "redirects to public offers when data is valid", %{conn: conn} do
-      user = insert(:member_user)
+  describe "new user creates announce" do
+    test "renders errors when phone number is guest", %{conn: conn} do
+      user_params = %{phone_number: "09000000000", nickname: "some_nickname"}
       township = insert(:township)
       category = insert(:category)
-      conn = post conn, announce_path(conn, :create), announce: Map.merge(@create_attrs, %{user_id: user.id, township_id: township.id, category_id: category.id})
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
+      assert html_response(conn, 200) =~ "Fill your details"
+      assert get_flash(conn, :alert) == "Please check your phone number."
+    end
+
+    test "renders errors when user surname is empty", %{conn: conn} do
+      user_params = %{phone_number: "09000000010", nickname: ""}
+      township = insert(:township)
+      category = insert(:category)
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
+      assert html_response(conn, 200) =~ "Fill your details"
+      assert get_flash(conn, :alert) == "Please check your name or nickname."
+    end
+
+    test "redirects to public offers when data is valid", %{conn: conn} do
+      user_params = %{phone_number: "09000000001", nickname: "some_nickname"}
+      township = insert(:township)
+      category = insert(:category)
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
       assert html_response(conn, 302) =~ "/offers?search[township_id]"
       assert get_flash(conn, :info) == "Announce created successfully."
     end
 
-    test "renders errors when user is guest", %{conn: conn} do
-      user = insert(:user, %{role: "GUEST", phone_number: "09020102010"})
-      township = insert(:township)
-      category = insert(:category)
-      conn = post conn, announce_path(conn, :create), announce: Map.merge(@create_attrs, %{user_id: user.id, township_id: township.id, category_id: category.id})
-      assert html_response(conn, 200) =~ "Fill your details"
-      assert get_flash(conn, :alert) == "Please choose another phone number."
-    end
-
     test "renders errors when title is empty", %{conn: conn} do
-      user = insert(:member_user)
+      user_params = %{phone_number: "09000000002", nickname: "some_nickname"}
       township = insert(:township)
       category = insert(:category)
-      conn = post conn, announce_path(conn, :create), announce: Map.merge(@create_attrs, %{title: "", user_id: user.id, township_id: township.id, category_id: category.id})
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{title: ""}), user_params, township.id, category.id)
       assert html_response(conn, 200) =~ "Fill your details"
       assert get_flash(conn, :alert) == "Please put a title to your offer."
     end
 
     test "renders errors when description is empty", %{conn: conn} do
-      user = insert(:member_user)
+      user_params = %{phone_number: "09000000003", nickname: "some_nickname"}
       township = insert(:township)
       category = insert(:category)
-      conn = post conn, announce_path(conn, :create), announce: Map.merge(@create_attrs, %{description: "", user_id: user.id, township_id: township.id, category_id: category.id})
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{description: ""}), user_params, township.id, category.id)
       assert html_response(conn, 200) =~ "Fill your details"
       assert get_flash(conn, :alert) == "Please write a description of your offer."
     end
 
     test "renders errors when price is empty", %{conn: conn} do
-      user = insert(:member_user)
+      user_params = %{phone_number: "09000000004", nickname: "some_nickname"}
       township = insert(:township)
       category = insert(:category)
-      conn = post conn, announce_path(conn, :create), announce: Map.merge(@create_attrs, %{price: "", user_id: user.id, township_id: township.id, category_id: category.id})
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{price: ""}), user_params, township.id, category.id)
       assert html_response(conn, 200) =~ "Fill your details"
       assert get_flash(conn, :alert) == "Please give a price to your offer."
     end
 
-    test "renders errors when surname is empty", %{conn: conn} do
-      user = insert(:member_user)
+    test "renders errors when no photo is given", %{conn: conn} do
+      user_params = %{phone_number: "09000000005", nickname: "some_nickname"}
       township = insert(:township)
       category = insert(:category)
-      conn = post conn, announce_path(conn, :create), announce: Map.merge(@create_attrs, %{surname: "", user_id: user.id, township_id: township.id, category_id: category.id})
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{image_file_1: ""}), user_params, township.id, category.id)
       assert html_response(conn, 200) =~ "Fill your details"
-      assert get_flash(conn, :alert) == "Please fill your name or surname."
+      assert get_flash(conn, :alert) == "Please post at least one photo."
+    end
+  end
+
+  describe "existing user creates announce" do
+    test "renders errors when user surname is empty", %{conn: conn} do
+      user = insert(:user, %{phone_number: "09000000110"})
+      user_params = %{phone_number: user.phone_number, nickname: ""}
+      township = insert(:township)
+      category = insert(:category)
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
+      assert html_response(conn, 200) =~ "Fill your details"
+      assert get_flash(conn, :alert) == "Please check your name or nickname."
+    end
+
+    test "redirects to public offers when data is valid", %{conn: conn} do
+      user = insert(:user, %{phone_number: "09000000111"})
+      user_params = %{phone_number: user.phone_number, nickname: user.nickname}
+      township = insert(:township)
+      category = insert(:category)
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
+      assert html_response(conn, 302) =~ "/offers?search[township_id]"
+      assert get_flash(conn, :info) == "Announce created successfully."
+    end
+
+    test "renders errors when title is empty", %{conn: conn} do
+      user = insert(:user, %{phone_number: "09000000112"})
+      user_params = %{phone_number: user.phone_number, nickname: user.nickname}
+      township = insert(:township)
+      category = insert(:category)
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{title: ""}), user_params, township.id, category.id)
+      assert html_response(conn, 200) =~ "Fill your details"
+      assert get_flash(conn, :alert) == "Please put a title to your offer."
+    end
+
+    test "renders errors when description is empty", %{conn: conn} do
+      user = insert(:user, %{phone_number: "09000000113"})
+      user_params = %{phone_number: user.phone_number, nickname: user.nickname}
+      township = insert(:township)
+      category = insert(:category)
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{description: ""}), user_params, township.id, category.id)
+      assert html_response(conn, 200) =~ "Fill your details"
+      assert get_flash(conn, :alert) == "Please write a description of your offer."
+    end
+
+    test "renders errors when price is empty", %{conn: conn} do
+      user = insert(:user, %{phone_number: "09000000114"})
+      user_params = %{phone_number: user.phone_number, nickname: user.nickname}
+      township = insert(:township)
+      category = insert(:category)
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{price: ""}), user_params, township.id, category.id)
+      assert html_response(conn, 200) =~ "Fill your details"
+      assert get_flash(conn, :alert) == "Please give a price to your offer."
     end
 
     test "renders errors when no photo is given", %{conn: conn} do
-      user = insert(:member_user)
+      user = insert(:user, %{phone_number: "09000000115"})
+      user_params = %{phone_number: user.phone_number, nickname: user.nickname}
       township = insert(:township)
       category = insert(:category)
-      conn = post conn, announce_path(conn, :create), announce: Map.merge(@create_attrs, %{image_file_1: "", user_id: user.id, township_id: township.id, category_id: category.id})
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{image_file_1: ""}), user_params, township.id, category.id)
       assert html_response(conn, 200) =~ "Fill your details"
       assert get_flash(conn, :alert) == "Please post at least one photo."
     end

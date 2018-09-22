@@ -6,7 +6,7 @@
       -# = gettext " offers"
 .row.justify-content-center.my-4
   .col-xs-12.col-sm-6
-    - link to: announce_path(@conn, :new), class: "btn btn-lg btn-secondary text-white mb-4 btn-block" do
+    - link to: user_path(@conn, :new_user_announce), class: "btn btn-lg btn-secondary text-white mb-4 btn-block" do
       %i.fa.fa-edit.btn-icon{}
       %span= gettext "Sell something"
     = render BoncoinWeb.LayoutView, "_cities_list.html", assigns

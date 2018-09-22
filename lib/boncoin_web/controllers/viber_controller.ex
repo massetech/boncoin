@@ -44,7 +44,7 @@ defmodule BoncoinWeb.ViberController do
     %{scope: scope, msg: msg} = %{scope: "welcome", user: conn.assigns.current_user, announce: nil, viber: %{viber_id: nil, viber_name: viber_name, user_msg: nil}}
       |> ViberBot.call_bot_algorythm()
       |> List.first()
-    sender = build_sender()
+    sender = Members.build_sender()
 
     conn
       |> put_status(:ok)
@@ -55,10 +55,10 @@ defmodule BoncoinWeb.ViberController do
   def callback(conn, %{"event" => "message", "timestamp" => timestamp, "sender" => %{"id" => viber_id, "name" => viber_name}, "message" => %{"type" => "text", "text" => user_msg}} = params) do
     IO.puts("User #{viber_id} spoke at #{timestamp}")
 
-    tracking_data = params["message"]["tracking_data"] || nil
-    %{scope: tracking_data, user: conn.assigns.current_user, announce: nil, viber: %{viber_id: viber_id, viber_name: viber_name, user_msg: user_msg}}
+    scope = params["message"]["tracking_data"] || nil # scope is not always there (1st discussion)
+    %{scope: scope, user: conn.assigns.current_user, announce: nil, viber: %{viber_id: viber_id, viber_name: viber_name, user_msg: user_msg}}
       |> ViberBot.call_bot_algorythm()
-      |> Enum.map(fn result_map -> send_viber_message(viber_id, result_map.tracking_data, result_map.msg) end)
+      |> Enum.map(fn result_map -> Members.send_viber_message(viber_id, result_map.scope, result_map.msg) end)
 
     conn
       |> put_status(:ok)
@@ -79,25 +79,6 @@ defmodule BoncoinWeb.ViberController do
     conn
       |> put_status(:ok)
       |> render("confirm_answer.json", status: "ok")
-  end
-
-  # ---------------------------- FUNCTIONS -------------------------------------
-
-  # Send datas to viber API
-  def send_viber_message(viber_id, tracking_data, message) do
-    data = %{
-      sender: build_sender(),
-      receiver: viber_id,
-      type: "text",
-      tracking_data: tracking_data,
-      text: message
-    }
-    ViberApi.post("send_message", data)
-  end
-
-  # Viber msg signature
-  def build_sender() do
-    %{name: "PawChaungKaung", avatar: ""}
   end
 
 end

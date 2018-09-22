@@ -3,8 +3,8 @@ defmodule BoncoinWeb.UserControllerTest do
   alias Boncoin.Members
   import Boncoin.Factory
 
-  @create_attrs %{email: "some email", language: "en", nickname: "some name", phone_number: "09010101010", role: "MEMBER", token: "some token", viber_active: true}
-  @update_attrs %{email: "some updated email", language: "my", nickname: "some updated name", phone_number: "09020202020", role: "ADMIN", token: "some updated token", viber_active: false}
+  @create_attrs %{email: "some_email@gmail.com", language: "en", nickname: "some name", phone_number: "09010101010", role: "MEMBER", token: "some token", viber_active: true}
+  @update_attrs %{email: "another_email@gmail.com", language: "my", nickname: "some updated name", phone_number: "09020202020", role: "ADMIN", token: "some updated token", viber_active: false}
   @invalid_attrs %{email: nil, language: nil, nickname: nil, phone_number: nil}
   @moduletag :admin_authenticated
   @moduletag :UserController
@@ -27,7 +27,7 @@ defmodule BoncoinWeb.UserControllerTest do
   describe "create user" do
     test "redirects to index when data is valid", %{conn: conn} do
       conn = post conn, user_path(conn, :create), user: @create_attrs
-      assert html_response(conn, 308)
+      assert html_response(conn, 302)
       assert get_flash(conn, :info) == "User created successfully."
     end
     test "renders errors when data is invalid", %{conn: conn} do
@@ -41,8 +41,15 @@ defmodule BoncoinWeb.UserControllerTest do
     test "deletes chosen user", %{conn: conn} do
       user = insert(:user)
       conn = delete conn, user_path(conn, :delete, user)
-      assert html_response(conn, 308)
-      assert get_flash(conn, :info) == "USer deleted successfully."
+      assert html_response(conn, 302)
+      assert get_flash(conn, :info) == "User deleted successfully."
+    end
+  end
+
+  describe "new user announce" do
+    test "renders form", %{conn: conn} do
+      conn = get conn, user_path(conn, :new_user_announce)
+      assert html_response(conn, 200) =~ "Fill your details"
     end
   end
 

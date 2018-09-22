@@ -20,9 +20,7 @@ defmodule BoncoinWeb.TownshipController do
       {:ok, township} ->
         conn
         |> put_flash(:info, "Township created successfully.")
-        |> put_status(308)
-        |> redirect(to: category_path(conn, :index))
-        |> halt()
+        |> redirect(to: township_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         divisions = Contents.list_divisions_for_select()
         conn
@@ -50,9 +48,7 @@ defmodule BoncoinWeb.TownshipController do
       {:ok, township} ->
         conn
         |> put_flash(:info, "Township updated successfully.")
-        |> put_status(308)
-        |> redirect(to: category_path(conn, :index))
-        |> halt()
+        |> redirect(to: township_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         divisions = Contents.list_divisions_for_select()
         conn
@@ -66,8 +62,6 @@ defmodule BoncoinWeb.TownshipController do
     {:ok, _township} = Contents.delete_township(township)
     conn
     |> put_flash(:info, "Township deleted successfully.")
-    |> put_status(308)
     |> redirect(to: category_path(conn, :index))
-    |> halt()
   end
 end

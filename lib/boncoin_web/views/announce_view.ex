@@ -24,31 +24,21 @@ defmodule BoncoinWeb.AnnounceView do
   end
 
   def show_date(announce, language) do
-    datetime = if announce.parution_date != nil, do: announce.parution_date, else: announce.inserted_at
-    day = datetime.day
-    month = datetime.month
-    year = datetime.year
-    {hour, label} = Timex.Time.to_12hour_clock(datetime.hour) # {2, :pm}
-    minute = datetime.minute
     day_now = Timex.now()
-    duration = Timex.diff(day_now, datetime, :days)
-    case duration do
-      0 ->
-        # Less than 24 hours ago
-        case day == day_now.day do
-          true ->
-            # Same day
-            gettext("today, %{hour}:%{minute} %{label}", hour: hour, minute: minute, label: label) #Today, 2:30 PM
-          false ->
-            # Yesterday
-            gettext("yesterday, %{hour}:%{minute} %{label}", hour: hour, minute: minute, label: label) #Yesterday, 2:30 PM
-        end
-      1 ->
-        # Less than 48 hours ago
-        gettext("yesterday, %{hour}:%{minute} %{label}", hour: hour, minute: minute, label: label) #Yesterday, 2:30 PM
-      _ ->
-        # Another day
-        "#{year}/#{month}/#{day}" #1018/10/02
+    datetime = if announce.parution_date != nil, do: announce.parution_date, else: announce.inserted_at
+    year = datetime.year
+    month = datetime.month
+    day = datetime.day
+    minute = datetime.minute
+    # {hour, label} = Timex.Time.to_12hour_clock(datetime.hour) # {2, :pm}
+    duration_day = Timex.diff(day_now, datetime, :days)
+    duration_hour = Timex.diff(day_now, datetime, :hours)
+    duration_min = Timex.diff(day_now, datetime, :minutes)
+    cond do
+      duration_min < 60 -> ngettext("one minute ago", "%{count} minutes ago", duration_min)
+      duration_hour < 24 && day == day_now.day -> ngettext("one hour ago", "%{count} hours ago", duration_hour)
+      duration_day == 1 -> gettext("yesterday")
+      true -> ngettext("one day ago", "%{count} days ago", duration_day)
     end
   end
 

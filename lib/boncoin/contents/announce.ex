@@ -15,7 +15,7 @@ defmodule Boncoin.Contents.Announce do
     field :latitute, :string
     field :longitude, :string
     field :price, :float
-    field :currency, :string, default: "Kyats"
+    field :currency, :string, default: "ကျပ်"
     field :status, :string, default: "PENDING"
     field :cause, :string
     field :title, :string
@@ -51,27 +51,7 @@ defmodule Boncoin.Contents.Announce do
       |> validate_inclusion(:status, ["PENDING", "ONLINE", "REFUSED", "OUTDATED", "CLOSED"])
       |> validate_inclusion(:currency, ["Kyats", "Lacks", "USD"])
       |> check_offer_has_one_photo_min(params)
-      |> check_user_is_not_guest(params)
-      |> check_user_surname_is_not_empty(params)
   end
-
-  defp check_user_is_not_guest(changeset, %{"user_id" => user_id}) do
-    user = Members.get_user!(user_id)
-    case user.role do
-      "GUEST" -> add_error(changeset, :user, "guest phone number is forbidden")
-      _ -> changeset
-    end
-  end
-  defp check_user_is_not_guest(changeset, %{}), do: changeset
-
-  defp check_user_surname_is_not_empty(changeset, %{"surname" => surname}) do
-    if surname == "" do
-      add_error(changeset, :surname, "user surname is not given")
-    else
-      changeset
-    end
-  end
-  defp check_user_surname_is_not_empty(changeset, %{}), do: changeset
 
   defp check_offer_has_one_photo_min(changeset, %{"image_file_1" => picture_1, "image_file_2" => picture_2, "image_file_3" => picture_3}) do
     cond do
@@ -84,18 +64,22 @@ defmodule Boncoin.Contents.Announce do
   end
   defp check_offer_has_one_photo_min(changeset, %{}), do: changeset
 
-  def show_errors_in_msg(changeset) do
-    case List.first(changeset.errors) do
-      {:surname, _msg} -> gettext("Please fill your name or surname.")
-      {:title, _msg} -> gettext("Please put a title to your offer.")
-      {:price, _msg} -> gettext("Please give a price to your offer.")
-      {:description, _msg} -> gettext("Please write a description of your offer.")
-      {:photo, _msg} -> gettext("Please post at least one photo.")
-      {:user, _msg} -> gettext("Please choose another phone number.")
-      true -> # Something else went wrong
-        gettext("Sorry we have a technical problem.")
-    end
+  def build_safe_link(announce_id) do
+    Cipher.encrypt(Integer.to_string(announce_id))
   end
+
+  # def show_errors_in_msg(changeset) do
+  #   case List.first(changeset.errors) do
+  #     # {:surname, _msg} -> gettext("Please fill your name or surname.")
+  #     {:title, _msg} -> gettext("Please put a title to your offer.")
+  #     {:price, _msg} -> gettext("Please give a price to your offer.")
+  #     {:description, _msg} -> gettext("Please write a description of your offer.")
+  #     {:photo, _msg} -> gettext("Please post at least one photo.")
+  #     {:user, _msg} -> gettext("Please choose another phone number.")
+  #     _ -> # Something else went wrong
+  #       gettext("Sorry we have a technical problem.")
+  #   end
+  # end
 
   def status_select_btn() do
     [pending: "PENDING", accepted: "ONLINE", refused: "REFUSED", outdated: "OUTDATED", closed: "CLOSED"]

@@ -129,7 +129,7 @@ export default class MainView {
     $('#btn_validate_number').on('click', function (e) {
       event.preventDefault()
       event.stopPropagation()
-      var phone_number = $("#announce_phone_number").val()
+      var phone_number = $("#user_phone_number").val()
       call_internal_api("/api/phone", "get_phone_details", phone_number)
     })
     // Click on change number
@@ -151,13 +151,13 @@ export default class MainView {
       $('#announce_currency').val(this.innerHTML)
     })
     // Checks the email field
-    $('#announce_email').on('change', function() {
-      var email = $(this).val()
-      if (validateEmail(email) == false) {
-        console.log("wrong email")
-        $(this).val('').focus()
-      }
-    })
+    // $('#announce_email').on('change', function() {
+    //   var email = $(this).val()
+    //   if (validateEmail(email) == false) {
+    //     console.log("wrong email")
+    //     $(this).val('').focus()
+    //   }
+    // })
     // Get the title and check if it looks like Zawgyi
     $('#announce_title').on('change', function() {
       var title = $(this).val()
@@ -268,24 +268,24 @@ export default class MainView {
   let reset_announce_form_field = () => {
     // console.log("wrong phone number : form reseted")
     $('.collapsible_form').collapse('hide')
-    $('#announce_phone_number').removeAttr('disabled')
+    $('#user_phone_number').removeAttr('readonly')
     $('#btn_validate_number').show()
     $('#btn_change_number').hide()
     $('#phone_helper').show()
-    $('#announce_phone_number').val('').focus()//.removeClass("field-success").addClass("field-danger")
-    $('#announce_user_id').val('')
-    $('#announce_nickname').val('')
-    $('#announce_email').val('')
+    $('#user_phone_number').val('').focus()//.removeClass("field-success").addClass("field-danger")
+    // $('#announce_user_id').val('')
+    $('#user_nickname').val('')
+    // $('#user_nickname').val('')
   }
   // Populate form when the phone_number is accepted
   let validate_phone_number_pop_field = (user) => {
-    $('#announce_phone_number').attr('disabled', 'disabled')  //.removeClass("field-danger").addClass("field-success")
+    $('#user_phone_number').attr('readonly', 'readonly')  //.removeClass("field-danger").addClass("field-success")
     $('#btn_validate_number').hide()
     $('#btn_change_number').removeClass('d-none').show()
     $('#phone_helper').hide()
     $('#announce_user_id').val(user.id)
-    $('#announce_nickname').val(user.nickname).focus()
-    $('#announce_email').val(user.email)
+    $('#user_nickname').val(user.nickname).focus()
+    // $('#announce_user_email').val(user.email)
     if (user.viber_active == true) {
       $('#field-viber').show()
       $('#btn-viber').hide()

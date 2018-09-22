@@ -1,7 +1,8 @@
 defmodule BoncoinWeb.UserController do
   use BoncoinWeb, :controller
-  alias Boncoin.Members
+  alias Boncoin.{Members, Contents}
   alias Boncoin.Members.User
+  alias Boncoin.Contents.Announce
   import Boncoin.CustomModules
 
   def index(conn, _params) do
@@ -19,9 +20,12 @@ defmodule BoncoinWeb.UserController do
             nb_offers = if is_list(user.announces), do: Kernel.length(user.announces), else: 0
             results = %{scope: scope, data: %{user: user, nb_offers: nb_offers}, error: ""}
             render(conn, "phone_api.json", results: results)
-          {:error, msg} ->
-            results = %{scope: scope, data: %{}, error: msg}
+          {:new_user, user} ->
+            results = %{scope: scope, data: %{user: user, nb_offers: 0}, error: ""}
             render(conn, "phone_api.json", results: results)
+          # {:error, msg} ->
+          #   results = %{scope: scope, data: %{}, error: msg}
+          #   render(conn, "phone_api.json", results: results)
         end
     end
   end
@@ -38,16 +42,35 @@ defmodule BoncoinWeb.UserController do
       {:ok, user} ->
         conn
           |> put_flash(:info, "User created successfully.")
-          |> put_status(308)
           |> redirect(to: user_path(conn, :index))
-          |> halt()
       {:error, %Ecto.Changeset{} = changeset} ->
         roles = Members.User.role_select_btn()
         languages = Members.User.language_select_btn()
-        error = get_changeset_error(changeset)
         conn
           |> put_flash(:info, "Errors, please check.")
           |> render("new.html", changeset: changeset, languages: languages, roles: roles)
+    end
+  end
+
+  def new_user_announce(conn, _params) do
+    changeset = Members.change_user(%User{announces: [%Announce{}]})
+    render(conn, "new_user_announce.html", changeset: changeset)
+  end
+
+  def create_announce(conn, %{"user" => params}) do
+    case Members.create_user_announce(params) do
+      {:ok, announce} ->
+        Contents.add_safe_link_to_last_offer(announce)
+        conn
+          |> put_flash(:info, gettext("Announce created successfully."))
+          |> redirect(to: public_offers_path(conn, :public_index, search: %{township_id: "#{announce.township_id}"}))
+      {:error, %Ecto.Changeset{} = changeset} ->
+        %{"announces" => %{"0" => offer_params}} = params
+        new_offer = Announce.changeset(%Announce{}, offer_params)
+        new_changeset = Members.change_user(%User{announces: [new_offer]})
+        conn
+          |> put_flash(:alert, User.show_errors_in_msg(changeset))
+          |> render("new_user_announce.html", changeset: new_changeset)
     end
   end
 
@@ -55,9 +78,7 @@ defmodule BoncoinWeb.UserController do
     user = Members.get_user!(id)
     {:ok, _user} = Members.delete_user(user)
     conn
-    |> put_flash(:info, "USer deleted successfully.")
-    |> put_status(308)
+    |> put_flash(:info, "User deleted successfully.")
     |> redirect(to: user_path(conn, :index))
-    |> halt()
   end
 end

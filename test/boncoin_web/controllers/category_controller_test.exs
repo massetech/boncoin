@@ -27,7 +27,7 @@ defmodule BoncoinWeb.CategoryControllerTest do
     test "redirects to show when data is valid", %{conn: conn} do
       family = insert(:family)
       conn = post conn, category_path(conn, :create), category: Map.put(@create_attrs, :family_id, family.id)
-      assert html_response(conn, 308)
+      assert html_response(conn, 302)
       assert get_flash(conn, :info) == "Category created successfully."
     end
 
@@ -50,7 +50,7 @@ defmodule BoncoinWeb.CategoryControllerTest do
     test "redirects when data is valid", %{conn: conn} do
       category = insert(:category)
       conn = put conn, category_path(conn, :update, category), category: @update_attrs
-      assert html_response(conn, 308)
+      assert html_response(conn, 302)
       assert get_flash(conn, :info) == "Category updated successfully."
     end
 
@@ -66,7 +66,7 @@ defmodule BoncoinWeb.CategoryControllerTest do
     test "deletes chosen category", %{conn: conn} do
       category = insert(:category)
       conn = delete conn, category_path(conn, :delete, category)
-      assert html_response(conn, 308)
+      assert html_response(conn, 302)
       assert get_flash(conn, :info) == "Category deleted successfully."
     end
   end

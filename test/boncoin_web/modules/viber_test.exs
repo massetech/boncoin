@@ -49,7 +49,7 @@ defmodule BoncoinWeb.ViberTest do
       %{scope: scope, msg: msg} = %{scope: "language", user: user, announce: nil, viber: %{viber_id: nil, viber_name: "viber_name", user_msg: "3"}}
         |> call_bot_algorythm()
         |> List.first()
-      assert msg =~ "Please visit us on"
+      assert msg =~ "https://www.pawchaungkaung.com"
     end
   end
 

@@ -19,9 +19,7 @@ defmodule BoncoinWeb.FamilyController do
       {:ok, family} ->
         conn
         |> put_flash(:info, "Family created successfully.")
-        |> put_status(308)
-        |> redirect(to: category_path(conn, :index))
-        |> halt()
+        |> redirect(to: family_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         conn
         |> put_flash(:info, "Errors, please check.")
@@ -46,9 +44,7 @@ defmodule BoncoinWeb.FamilyController do
       {:ok, family} ->
         conn
         |> put_flash(:info, "Family updated successfully.")
-        |> put_status(308)
-        |> redirect(to: category_path(conn, :index))
-        |> halt()
+        |> redirect(to: family_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         conn
         |> put_flash(:info, "Errors, please check.")
@@ -61,8 +57,6 @@ defmodule BoncoinWeb.FamilyController do
     {:ok, _family} = Contents.delete_family(family)
     conn
     |> put_flash(:info, "Family deleted successfully.")
-    |> put_status(308)
     |> redirect(to: category_path(conn, :index))
-    |> halt()
   end
 end

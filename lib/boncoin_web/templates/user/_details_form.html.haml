@@ -1,0 +1,48 @@
+%hr.d-block.d-sm-none
+%h5.text-left= gettext "1. Fill your details"
+.row.text-left.mt-3.mb-3
+  .col-8.pr-0
+    .input-group
+      %span.input-group-prepend
+        .input-group-text.bg-transparent
+          %i.fa.fa-phone
+      = text_input @u, :phone_number, class: "form-control", autocomplete: "nope", placeholder: gettext("Main phone number")
+    %small.form-text.text-muted{id: "phone_helper"}= gettext "Myanmar mobile only (09000000000)"
+  .col-4.text-right
+    %button.btn.btn-primary.btn-block.m-0{id: "btn_validate_number", drab-click: "read_user_details", data-item-id: ""}= "OK"
+    %button.btn.btn-info.btn-block.m-0.d-none{id: "btn_change_number", drab-click: "read_user_details", data-item-id: ""}= gettext("change")
+.row.text-left.collapse.collapsible_form
+  .col-12
+    .form-group
+      .input-group
+        %span.input-group-prepend
+          .input-group-text.bg-transparent
+            %i.fa.fa-user
+        = text_input @u, :nickname, class: "form-control", autocomplete: "nope", placeholder: gettext("Name or nickname")
+  .col-12
+    -# Email
+    -# .form-group.text-left
+    -#   .input-group
+    -#     %span.input-group-prepend
+    -#       .input-group-text.bg-transparent
+    -#         %i.fa.fa-envelope
+    -#     = text_input @u, :email, class: "form-control", type: "email", autocomplete: "nope", placeholder: gettext("Email (optional)")
+    -# Viber box
+    .row.text-left.collapse.collapsible_form
+      .col-12
+        .row.no-gutters{id: "field-viber"}
+          .col-9.pr-0.d-flex.align-items-center
+            = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
+            %p.m-0.ml-2= gettext "This number is linked to Viber"
+          .col-3.text-right.d-flex.align-items-center.justify-content-end
+            -# %button.btn.btn-info.btn-sm.d-flex.align-items-center{id: "btn_unlink_number", drab-click: "remove_viber_link"}
+            = link to: main_path(@conn, :viber), class: "btn btn-info btn-sm d-flex align-items-center" do
+              = gettext("unlink")
+              %i.fa.fa-unlink.ml-1
+        - link to: main_path(@conn, :viber), id: "btn-viber", class: "btn btn-block", target: "_blank" do
+          .row.no-gutters.align-items-center
+            .col-2
+              = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
+            .col-10
+              %span= gettext "Link this number to Viber"
+              %p.m-0= gettext "to receive notifications"

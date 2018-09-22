@@ -3,6 +3,7 @@ defmodule BoncoinWeb.AnnounceController do
   use Drab.Controller, commanders: [BoncoinWeb.AnnounceCommander]
   alias Boncoin.{Contents, Members}
   alias Boncoin.Contents.Announce
+  alias Boncoin.Members.User
 
   def public_index(conn, _params) do
     paginator_results = Contents.list_announces_public(nil, conn.assigns.search_params)
@@ -51,25 +52,6 @@ defmodule BoncoinWeb.AnnounceController do
   def index(conn, _params) do
     announces = Contents.list_announces()
     render(conn, "index.html", announces: announces)
-  end
-
-  def new(conn, _params) do
-    changeset = Contents.change_announce(%Announce{})
-    render(conn, "new.html", changeset: changeset)
-  end
-
-  def create(conn, %{"announce" => announce_params}) do
-    case Contents.create_announce(announce_params) do
-      {:ok, announce} ->
-        conn
-          |> put_flash(:info, gettext("Announce created successfully."))
-          |> redirect(to: public_offers_path(conn, :public_index, search: %{township_id: "#{announce.township_id}"}))
-      {:error, %Ecto.Changeset{} = changeset} ->
-        msg = Announce.show_errors_in_msg(changeset)
-        conn
-          |> put_flash(:alert, msg)
-          |> render("new.html", changeset: changeset)
-    end
   end
 
   def treat(conn, params) do

@@ -386,15 +386,6 @@ defmodule Boncoin.Contents do
 
   # -------------------------------- DIVISION ----------------------------------------
 
-  @doc """
-  Returns the list of divisions.
-
-  ## Examples
-
-      iex> list_divisions()
-      [%Division{}, ...]
-
-  """
   def list_divisions do
     Division
       |> Repo.all()
@@ -405,10 +396,6 @@ defmodule Boncoin.Contents do
       |> Division.select_divisions_for_dropdown()
       |> Repo.all()
   end
-
-  @doc """
-  Returns the list of active divisions and their active townships.
-  """
 
   def list_divisions_active do
     query = Township
@@ -544,29 +531,44 @@ defmodule Boncoin.Contents do
       |> Repo.preload([:user, :images, township: [:division], category: [:family]])
   end
 
-  def create_announce(attrs \\ %{}) do
+  def create_announce(attrs \\ %{}, user_id) do
     params = attrs
-      |> Map.merge(%{"status" => "PENDING"})
-    offer = %Announce{}
+      |> Map.merge(%{"status" => "PENDING", "user_id" => user_id}) # Make sure the offer is on pending
+    %Announce{}
       |> Announce.changeset(params)
       |> Repo.insert()
-    case offer do
-      {:ok, announce} ->
-        # Loop on the 3 photo fields of the form params
-        for i <- ["image_file_1", "image_file_2", "image_file_3"] do
-          unless attrs[i] == "" do
-            create_announce_image(announce.id, attrs[i])
-          end
-        end
-        # Encrypt announce ID and generate a safe_link
-        update_announce(announce, %{"safe_link" => build_safe_link(announce.id)})
-      error -> error
-    end
   end
 
-  defp build_safe_link(announce_id) do
-    Cipher.encrypt(Integer.to_string(announce_id))
-  end
+  # def create_announce(attrs \\ %{}) do
+  #   result_user = Members.create_or_update_user(attrs["user"]) # Create the user or update its params
+  #     |> IO.inspect()
+  #   offer = case result_user do
+  #     {:ok, user} ->
+  #       params = attrs
+  #         |> Map.merge(%{"status" => "PENDING", "user_id" => user.id}) # Make sure the offer is on pending
+  #       %Announce{}
+  #         |> Announce.changeset(params)
+  #         |> Repo.insert()
+  #     error_user -> Announce.changeset(%Announce{}, attrs)
+  #       # error_user # !!!!!! find a way to report user pb in announce changeset
+  #   end
+  #   case offer do
+  #     {:ok, announce} ->
+  #       # Loop on the 3 photo fields of the form params
+  #       for i <- ["image_file_1", "image_file_2", "image_file_3"] do
+  #         unless attrs[i] == "" do
+  #           create_announce_image(announce.id, attrs[i])
+  #         end
+  #       end
+  #       # Encrypt announce ID and generate a safe_link
+  #       update_announce(announce, %{"safe_link" => build_safe_link(announce.id)})
+  #     error_offer -> error_offer
+  #   end
+  # end
+  #
+  # defp build_safe_link(announce_id) do
+  #   Cipher.encrypt(Integer.to_string(announce_id))
+  # end
 
   def validate_announce(admin_user, %{"announce_id" => announce_id, "validate" => validate, "cause" => cause, "category_id" => category_id}) do
     announce = get_announce!(announce_id)
@@ -583,7 +585,7 @@ defmodule Boncoin.Contents do
         if user.viber_active == true do
           bot_datas = %{scope: "offer_treated", user: user, announce: announce, viber: %{viber_id: user.viber_id, viber_name: user.nickname, user_msg: ""}}
             |> ViberBot.call_bot_algorythm()
-            |> Enum.map(fn result_map -> ViberController.send_viber_message(user.viber_id, result_map.tracking_data, result_map.msg) end)
+            |> Enum.map(fn result_map -> Members.send_viber_message(user.viber_id, result_map.scope, result_map.msg) end)
         end
         {:ok, announce}
       {:error, msg} -> {:error, msg}
@@ -607,6 +609,11 @@ defmodule Boncoin.Contents do
     announce
     |> Announce.changeset(attrs)
     |> Repo.update()
+  end
+
+  def add_safe_link_to_last_offer(announce) do
+    # Encrypt announce ID and generate a safe_link
+    update_announce(announce, %{"safe_link" => Announce.build_safe_link(announce.id)})
   end
 
   def delete_announce(%Announce{} = announce) do

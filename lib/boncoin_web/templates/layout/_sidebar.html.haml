@@ -32,7 +32,7 @@
                   %i.width-20.fa.fa-
                   %span= LayoutView.convert_zawgyi(township, "title")
 
-      - link to: announce_path(@conn, :new), class: "" do
+      - link to: user_path(@conn, :new_user_announce), class: "" do
         %li.slide-menu.text-dark.border-bottom.border-dark
           %i.width-20.fa.fa-edit
           %span= gettext "Sell something"

@@ -51,7 +51,11 @@ defmodule BoncoinWeb.Router do
     get "/about", MainController, :about
     get "/viber", MainController, :viber
     get "/offers", AnnounceController, :public_index, as: :public_offers
-    resources "/offers", AnnounceController, only: [:new, :create]
+    scope "/user" do
+      get "/offer", UserController, :new_user_announce
+      post "/create", UserController, :create_announce
+    end
+    # resources "/offers", AnnounceController, only: [:new, :create]
     get "/offers/:link", AnnounceController, :edit
     get "/close", AnnounceController, :close
   end

@@ -26,7 +26,7 @@ defmodule BoncoinWeb.FamilyControllerTest do
   describe "create family" do
     test "redirects to index when data is valid", %{conn: conn} do
       conn = post conn, family_path(conn, :create), family: @create_attrs
-      assert html_response(conn, 308)
+      assert html_response(conn, 302)
       assert get_flash(conn, :info) == "Family created successfully."
     end
 
@@ -49,7 +49,7 @@ defmodule BoncoinWeb.FamilyControllerTest do
     test "redirects when data is valid", %{conn: conn} do
       family = insert(:family)
       conn = put conn, family_path(conn, :update, family), family: @update_attrs
-      assert html_response(conn, 308)
+      assert html_response(conn, 302)
       assert get_flash(conn, :info) == "Family updated successfully."
     end
     test "renders errors when data is invalid", %{conn: conn} do
@@ -64,7 +64,7 @@ defmodule BoncoinWeb.FamilyControllerTest do
     test "deletes chosen family", %{conn: conn} do
       family = insert(:family)
       conn = delete conn, family_path(conn, :delete, family)
-      assert html_response(conn, 308)
+      assert html_response(conn, 302)
       assert get_flash(conn, :info) == "Family deleted successfully."
     end
   end

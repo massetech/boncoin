@@ -1,0 +1,43 @@
+.card.mb-4.info
+  .card-body.text-left
+    %p= gettext "Please note that your are acting on your own..."
+    %p.m-0
+      = gettext "For more details please read our"
+      - link to: main_path(@conn, :conditions), target: "_blank" do
+        %span.text-primary.font-weight-bold= gettext "terms and conditions."
+      = gettext "For more details... (burmese end)"
+
+- form_for @changeset, user_path(@conn, :create_announce), fn u ->
+  = inputs_for u, :announces, fn a ->
+    .row
+      .col-xs-12.col-sm-6.order-xs-1.my-3
+        = render "_details_form.html", conn: @conn, u: u
+      .col-xs-12.col-sm-6.order-xs-2.my-3.collapse.collapsible_form
+        = render BoncoinWeb.AnnounceView, "_describe_offer.html", conn: @conn, a: a
+      .col-xs-12.col-sm-6.order-xs-3.order-sm-4.my-3.collapse.collapsible_form
+        .form-group
+          .input-group
+            %span.input-group-prepend
+              .input-group-text.bg-transparent
+                %i.fa.fa-edit
+            = textarea a, :description, class: "form-control", rows: "10", autocomplete: "nope", placeholder: gettext("Describe your offer (size, dimensions, condition, scratches, date of buy, ...)")
+      .col-xs-12.col-sm-6.order-xs-4.order-sm-3.my-3.collapse.collapsible_form
+        = render BoncoinWeb.AnnounceView, "_select_photos.html"
+
+    .row.my-3.collapse.collapsible_form
+      .col-12
+        %hr.d-block.d-sm-none
+        .form-group.form-check
+          %label.form-check-label
+            = checkbox a, :conditions, class: "form-check-input", type: "radio"
+            = gettext "I understand and agree to "
+            - link to: main_path(@conn, :conditions), target: "_blank" do
+              %span.text-primary.font-weight-bold= gettext "conditions"
+            = gettext "I understand and agree to (burmese end)"
+      .col-12
+        .form-group
+          = submit gettext("Submit this offer"), class: "btn btn-primary btn-lg"
+
+  <% end %>
+
+%div{id: "config", data-api: "#{@conn.assigns.api_key}"}

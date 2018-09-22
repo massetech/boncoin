@@ -15,6 +15,9 @@
               = select f, :language, @languages, class: "select custom-select"
           .form-group
             .input-group
+              = text_input f, :nickname, class: "form-control", autocomplete: "nope", placeholder: gettext("Nickname")
+          .form-group
+            .input-group
               = text_input f, :email, class: "form-control", type: "email", autocomplete: "nope", placeholder: gettext("Email (Gmail only)")
           .form-group
             .input-group

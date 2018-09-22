@@ -27,7 +27,7 @@ defmodule BoncoinWeb.DivisionControllerTest do
     test "render index when data is valid", %{conn: conn} do
       conn = post conn, division_path(conn, :create), division: @create_attrs
       # IO.inspect(html_response(conn, 200), limit: :infinity, printable_limit: :infinity)
-      assert html_response(conn, 308)
+      assert html_response(conn, 302)
       assert get_flash(conn, :info) == "Division created successfully."
     end
 
@@ -50,7 +50,7 @@ defmodule BoncoinWeb.DivisionControllerTest do
     test "redirects when data is valid", %{conn: conn} do
       division = insert(:division)
       conn = put conn, division_path(conn, :update, division), division: @update_attrs
-      assert html_response(conn, 308)
+      assert html_response(conn, 302)
       assert get_flash(conn, :info) == "Division updated successfully."
     end
 
@@ -66,7 +66,7 @@ defmodule BoncoinWeb.DivisionControllerTest do
     test "deletes chosen division", %{conn: conn} do
       division = insert(:division)
       conn = delete conn, division_path(conn, :delete, division)
-      assert html_response(conn, 308)
+      assert html_response(conn, 302)
       assert get_flash(conn, :info) == "Division deleted successfully."
     end
   end

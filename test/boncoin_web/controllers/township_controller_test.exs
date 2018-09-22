@@ -27,7 +27,7 @@ defmodule BoncoinWeb.TownshipControllerTest do
     test "redirects to show when data is valid", %{conn: conn} do
       division = insert(:division)
       conn = post conn, township_path(conn, :create), township: Map.put(@create_attrs, :division_id, division.id)
-      assert html_response(conn, 308)
+      assert html_response(conn, 302)
       assert get_flash(conn, :info) == "Township created successfully."
     end
 
@@ -50,7 +50,7 @@ defmodule BoncoinWeb.TownshipControllerTest do
     test "redirects when data is valid", %{conn: conn} do
       township = insert(:township)
       conn = put conn, township_path(conn, :update, township), township: @update_attrs
-      assert html_response(conn, 308)
+      assert html_response(conn, 302)
       assert get_flash(conn, :info) == "Township updated successfully."
     end
 
@@ -66,7 +66,7 @@ defmodule BoncoinWeb.TownshipControllerTest do
     test "deletes chosen township", %{conn: conn} do
       township = insert(:township)
       conn = delete conn, township_path(conn, :delete, township)
-      assert html_response(conn, 308)
+      assert html_response(conn, 302)
       assert get_flash(conn, :info) == "Township deleted successfully."
     end
   end
