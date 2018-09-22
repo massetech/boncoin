@@ -2,7 +2,7 @@
 %html(lang="en")
   %head
     -# <!-- Global site tag (gtag.js) - Google Analytics -->
-    - if Mix.env == :prod do
+    - if Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:google_analytics] == true do
       %script(src="https://www.googletagmanager.com/gtag/js?id=UA-125321228-1" async)
       %script
         window.dataLayer = window.dataLayer || [];

@@ -6,6 +6,7 @@ config :boncoin, BoncoinWeb.Endpoint,
   http: [port: 4001],
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
   secret_salt: System.get_env("SECRET_SALT"),
+  google_analytics: false,
   server: false
 
 # Print only warnings and errors during test
