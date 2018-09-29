@@ -2,11 +2,10 @@ defmodule Boncoin.Auth.CheckApiAccess do
   import Plug.Conn
   alias Boncoin.Members
 
-  @salt Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:secret_salt]
-
   def init(opts), do: opts
 
   def call(conn, _opts) do
+    salt = Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:secret_salt]
     auth_internal = get_req_header(conn, "authorization")
       |> List.first()
     auth_viber = get_req_header(conn, "x-viber-content-signature")

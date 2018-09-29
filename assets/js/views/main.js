@@ -340,7 +340,7 @@ export default class MainView {
     .then(function(response) {
       if (response.status !== 200) {
         console.log('There was on API problem. Status Code: ' + response.status);
-        // console.log(response)
+        console.log(response)
         $("#btn-more-offers-wait").addClass("d-none")
         $("#btn-more-offers").removeClass("d-none")
         return;
