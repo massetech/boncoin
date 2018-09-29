@@ -52,6 +52,24 @@ defmodule Boncoin.CustomModules.ViberBot do
             end
         end
 
+        # 2nd chance for a NEW PHONE NUMBER to create the user
+        user == nil && scope == "2nd_link_phone_mr" || scope == "2nd_link_phone_my" || scope == "2nd_link_phone_en" ->
+          language = String.slice(scope, 15..16)
+          case String.match?(user_msg, ~r/^([09]{1})([0-9]{10})$/) do
+            false -> [treat_msg("welcome")] # There is no phone number in the message for the 2nd time : return to language asking
+            true -> # There is a phone number in the message
+              phone_number = user_msg
+              other_user = Members.get_other_user_by_phone_number(phone_number)
+              case other_user do
+                nil -> # The phone number is not used yet : create the user with this phone number
+                  case Members.create_user(%{phone_number: phone_number, viber_active: true, viber_id: viber_id, nickname: viber_name, language: language}) do
+                    {:ok, new_user} -> [treat_msg("new_user_created", new_user)]
+                    _ -> [treat_msg("technical problem", language)]
+                  end
+                other_user -> manage_phone_number_conflicts(nil, other_user, phone_number, viber_id, viber_name, language, "link_phone") # The phone number is already used : check the rights
+              end
+          end
+
       # We send a NOTIFICATION to user
       scope == "offer_treated" ->
         case announce.status do
@@ -162,7 +180,7 @@ defmodule Boncoin.CustomModules.ViberBot do
   # User is not known
   def treat_msg("welcome") do %{scope: "language", msg: welcome_msg()} end
   def treat_msg("ask_phone", language) do %{scope: "link_phone_#{language}", msg: ask_phone_msg(language)} end
-  def treat_msg("repeat_phone", language) do %{scope: "link_phone_#{language}", msg: ask_again_phone_msg(language)} end
+  def treat_msg("repeat_phone", language) do %{scope: "2nd_link_phone_#{language}", msg: ask_again_phone_msg(language)} end
   def treat_msg("technical problem", language) do %{scope: "link_phone_#{language}", msg: announce_technical_error(language)} end
   def treat_msg("viber_conflict_contact_us", language, user_name) do %{scope: nil, msg: announce_viber_account_conflict(language, user_name)} end
 
@@ -193,9 +211,9 @@ defmodule Boncoin.CustomModules.ViberBot do
   defp change_language_msg(language, nickname) do
     uni = "ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပ"
     case language do
-      "en" -> "Please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [၁]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [၂]\n  -> For English send [3]"
-      "my" -> "#{uni}\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [၁]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [၂]\n  -> For English send [3]"
-      "mr" -> "#{Rabbit.uni2zg(uni)}\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [၁]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [၂]\n  -> For English send [3]"
+      "en" -> "Please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [1]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [2]\n  -> For English send [3]"
+      "my" -> "#{uni}\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [1]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [2]\n  -> For English send [3]"
+      "mr" -> "#{Rabbit.uni2zg(uni)}\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [1]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [2]\n  -> For English send [3]"
     end
   end
 
