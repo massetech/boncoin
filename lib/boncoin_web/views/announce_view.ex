@@ -46,13 +46,13 @@ defmodule BoncoinWeb.AnnounceView do
     "#{Kernel.round(price)} #{currency}"
   end
 
-  def show_location(township, language) do
-    uni = "#{township.title_my}" #{township.division.title_my},
-    case language do
-      "en" -> "#{township.title_en}"
-      "my" -> uni
-      "en" -> Rabbit.uni2zg(uni)
-    end
-  end
+  # def show_location(township, language) do
+  #   uni = "#{township.title_my}" #{township.division.title_my},
+  #   case language do
+  #     "en" -> "#{township.title_en}"
+  #     "my" -> uni
+  #     "en" -> Rabbit.uni2zg(uni)
+  #   end
+  # end
 
 end

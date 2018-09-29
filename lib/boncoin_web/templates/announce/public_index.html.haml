@@ -1,15 +1,15 @@
 .row
   .col-12
-    %h6.font-weight-bold.text-dark
-      = LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_place, "title")
-    %h6.font-weight-bold.text-dark
-      -# = " - "
-      - if @conn.assigns.search_titles.searched_arbo.title_en == "" do
-        = gettext("%{nb_offers}offers found", nb_offers: @conn.assigns.nb_offers_found)
-      - else
-        = gettext("%{nb_offers}offers found for %{arbo_searched}", nb_offers: @conn.assigns.nb_offers_found, arbo_searched: LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_arbo, "title"))
-
-    %p.text-primary.font-italic= gettext "Please meet the seller and try the product before giving any money"
+    .card.mb-4.bg-secondary
+      .card-body
+        %h6.text-white
+          - if @conn.assigns.search_titles.searched_arbo.title_en == "" do
+            -# Search by place only
+            = gettext("%{nb_offers}offers found in%{place_searched}", nb_offers: @conn.assigns.nb_offers_found, place_searched: LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_place, "title"))
+          - else
+            -# Search by place and arbo
+            = gettext("%{nb_offers}offers found for%{arbo_searched}in%{place_searched}", nb_offers: @conn.assigns.nb_offers_found, arbo_searched: LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_arbo, "title"), place_searched: LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_place, "title"))
+        %p.text-primary.mb-0= gettext "Please meet the seller and try the product before giving any money"
 
 .row{id: "offers-results"}
   - for announce <- @announces do

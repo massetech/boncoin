@@ -25,14 +25,14 @@
           %span.input-group-prepend
             .input-group-text.bg-transparent
               %i.fa.fa-font
-          = text_input @a, :title, class: "form-control", autocomplete: "nope", placeholder: gettext("Title")
+          = text_input @a, :title, class: "form-control", maxlength: "30", autocomplete: "nope", placeholder: gettext("Title")
   .col-12
     .form-group
       .input-group
         .input-group-prepend
           .input-group-text.bg-transparent
             %i.fa.fa-tag
-        = text_input @a, :price, class: "form-control", autocomplete: "nope", placeholder: gettext("Price")
+        = text_input @a, :price, class: "form-control", maxlength: "10", autocomplete: "nope", placeholder: gettext("Price")
         .input-group-append
           %button.btn.btn-form{id: "choosen_currency_text", type: "button"}= gettext("Kyats")
           %button.btn.btn-form.dropdown-toggle.dropdown-toggle-split{type: "button", data-toggle: "dropdown", aria-haspopup: "true", aria-expanded: "false"}

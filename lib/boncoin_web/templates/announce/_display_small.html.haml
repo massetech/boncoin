@@ -1,15 +1,15 @@
 .col-xs-12.col-sm-6.my-3
   %a.btn-small-announce{id: "small_announce_#{@announce.id}", data-announce-id: "#{@announce.id}", name: "small_announce_#{@announce.id}", href: "#"}
-    .card.card-offer
+    .card.card-offer.shadow.bg-white.rounded
       .card-body
         .row
           .col-6
             = img_tag BoncoinWeb.AnnounceView.image_url(List.first(@announce.images), :original), class: "img-small"
           .col-6.p-0.pl-2.text-left
             .title
-              %p.font-weight-bold.text-dark.m-0= LayoutView.convert_zawgyi(@announce.title)
-              %p.text-success.m-0= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
+              %p.font-weight-bold.font-s-9.text-secondary.m-0.mb-1= LayoutView.convert_zawgyi(@announce.title)
+              %p.font-weight-bold.font-s-9.text-success.m-0= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
             .details
-              %p.text-dark.m-0= BoncoinWeb.AnnounceView.show_date(@announce, "en")
-              %p.text-dark.m-0= LayoutView.convert_zawgyi(@announce.township, "title")
-              %p.text-dark.m-0= LayoutView.convert_zawgyi(@announce.township.division, "title")
+              %p.font-s-8.text-dark.m-0= LayoutView.convert_zawgyi(@announce.township, "title")
+              %p.font-s-8.text-dark.m-0= LayoutView.convert_zawgyi(@announce.township.division, "title")
+              %p.font-s-8.text-dark.m-0= BoncoinWeb.AnnounceView.show_date(@announce, "en")

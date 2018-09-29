@@ -1,40 +1,26 @@
 .col-12.big-announce.d-none.p-0.p-sm-3{id: "big_announce_#{@announce.id}", name: "big_announce_#{@announce.id}"}
-  .card.card-offer.mb-3
+  .card.card-offer.shadow.bg-white.rounded.mb-3
     %a.btn-close.m-2{data-announce-id: "#{@announce.id}", href: "#"}
       %i.fa.fa-times-circle.text-dark
     .card-body.pb-0
       .row
         -# Images carousel (on left for big devices)
-        .col-xs-12.col-sm-6
-          .carousel.slide.carousel-fade{id: "images_carousel", data-ride: "carousel"}
-            .carousel-inner
-              - for image <- @announce.images do
-                .carousel-item
-                  = img_tag BoncoinWeb.AnnounceView.image_url(image, :original)
-            %ol.carousel-indicators
-              - for i <- 1..length(@announce.images) do
-                %li{data-target: "#caroussel_img", data-slide-to: "#{i}"}
-            %a.expand-photo{href: "#{BoncoinWeb.AnnounceView.image_url(List.first(@announce.images), :original)}", data-toggle: "lightbox", data-gallery: "gallery_announce_#{@announce.id}", data-type: "image"}
-              %i.fa.fa-search-plus
-              - for image <- List.delete_at(@announce.images, 0) do
-                %div{data-toggle: "lightbox", data-gallery: "gallery_announce_#{@announce.id}", data-remote: "#{BoncoinWeb.AnnounceView.image_url(image, :original)}"}
-
-        -# Description (for big devices) .d-none.d-sm-flex.flex-column
+        = render "_carousel.html", assigns
+        -# Description
         .col-xs-12.col-sm-6.mt-3.mt-sm-0
-          .row.d-flex.flex-column.justify-content-center
-            %h6.font-weight-bold.text-dark.m-0= @announce.title
-            %p{style: "font-size:0.75em;"}.m-0
-              = gettext "Sold by"
-              = @announce.user.nickname #%span.font-weight-bold
-              = gettext "in %{location}", location: BoncoinWeb.AnnounceView.show_location(@announce.township, "en")
-            %h6.text-primary.mt-1= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
-          -# Description for big devices
-          .row.justify-content-center.flex-grow-1.text-area.text-left.mt-2.mx-2.p-4
+          -# Offer header
+          .d-flex.flex-column.justify-content-center.mb-3
+            %h6.font-weight-bold.text-secondary.m-0= @announce.title
+            %h6.font-weight-bold.text-success.mt-1= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
+            %p.m-0
+              = gettext("Sold by%{seller_name}in %{township}, %{division}", seller_name: @announce.user.nickname, township: LayoutView.convert_zawgyi(@announce.township, "title"), division: LayoutView.convert_zawgyi(@announce.township.division, "title"))
+          -# Description of offer
+          .justify-content-top.flex-grow-1.text-area.text-left
             %p= @announce.description
-          -# Actions for the big devices
-          .offer-bottom.d-none.d-sm-block
-            = render "_show_actions.html", assigns
+          -# Actions for big devices
+          .d-none.d-sm-block.w-100.mb-3{id: "offer_actions_#{@announce.id}"}
+            = render "_actions.html", assigns
 
-        -# Actions fot the small devices
-        .offer-bottom.d-sm-none
-          = render "_show_actions.html", assigns
+        -# Actions fot small devices
+        .col-xs-12.d-sm-none.w-100.mb-3{id: "offer_actions_#{@announce.id}"}
+          = render "_actions.html", assigns

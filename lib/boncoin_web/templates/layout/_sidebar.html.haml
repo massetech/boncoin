@@ -2,34 +2,33 @@
   %i.fas.fa-times-circle.text-white
 %nav.bg-white{id: "sidebar"}
   - link to: root_path(@conn, :welcome), class: "brand-logo text-white" do
-    .sidebar-header.bg-primary.text-white
-      %h3= "PawChaungKaung"
+    .sidebar-header.bg-primary.text-secondary.border-bottom.border-dark
+      = render "_logo_white.html", assigns
   %div{id: "mainMenu"}
     %ul.list-unstyled.components
-
       %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#menuDivision", data-parent: "#mainMenu", data-toggle: "collapse", aria-expanded: "false"}
         %i.width-20.fa.fa-map-marker-alt
         %span= gettext "Where do you search ?"
       %ul.collapse.list-unstyled.collapse-level1{id: "menuDivision"}
         - link to: public_offers_path(@conn, :public_index, search: %{division_id: "", township_id: ""}), class: "" do
           %li.slide-menu.text-dark.border-bottom.border-dark
-            %i.width-20.fa.fa-
+            %i.width-20
             %span= gettext "All Myanmar"
         - for division <- @conn.assigns.select_menus.divisions do
           -# Nested parent
           %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#subMenuDivision_#{division.id}", data-parent="#subMenuDivision_#{division.id}", data-toggle: "collapse", aria-expanded: "false"}
-            %i.width-20.fa.fa-
+            %i.width-20
             %span= LayoutView.convert_zawgyi(division, "title")
           -# Nested child
           %ul.collapse.list-unstyled.collapse-level2{id: "subMenuDivision_#{division.id}"}
             - link to: public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: ""}) do
               %li.slide-menu.text-dark.border-bottom.border-dark
-                %i.width-20.fa.fa-
+                %i.width-20
                 %span= gettext("All %{division_title}", division_title: LayoutView.convert_zawgyi(division, "title"))
             - for township <- division.townships do
               - link to: public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: "#{township.id}"}) do
                 %li.slide-menu.text-dark.border-bottom.border-dark
-                  %i.width-20.fa.fa-
+                  %i.width-20
                   %span= LayoutView.convert_zawgyi(township, "title")
 
       - link to: user_path(@conn, :new_user_announce), class: "" do

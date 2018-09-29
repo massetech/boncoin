@@ -11,22 +11,19 @@ defmodule BoncoinWeb.UserController do
   end
 
   # API to ba called for a phone number on announce page
-  def check_phone(conn, %{"scope" => scope, "params" => phone_number} = params) do
-    case scope do
-      "get_phone_details" ->
-        answer = Members.read_phone_details(phone_number)
-        case answer do
-          {:ok, user} ->
-            nb_offers = if is_list(user.announces), do: Kernel.length(user.announces), else: 0
-            results = %{scope: scope, data: %{user: user, nb_offers: nb_offers}, error: ""}
-            render(conn, "phone_api.json", results: results)
-          {:new_user, user} ->
-            results = %{scope: scope, data: %{user: user, nb_offers: 0}, error: ""}
-            render(conn, "phone_api.json", results: results)
-          # {:error, msg} ->
-          #   results = %{scope: scope, data: %{}, error: msg}
-          #   render(conn, "phone_api.json", results: results)
-        end
+  def check_phone(conn, %{"scope" => "get_phone_details", "params" => phone_number} = params) do
+    answer = Members.read_phone_details(phone_number)
+    case answer do
+      {:ok, user} ->
+        nb_offers = if is_list(user.announces), do: Kernel.length(user.announces), else: 0
+        results = %{scope: "get_phone_details", data: %{user: user, nb_offers: nb_offers}, error: ""}
+        render(conn, "phone_api.json", results: results)
+      {:new_user, user} ->
+        results = %{scope: "get_phone_details", data: %{user: user, nb_offers: 0}, error: ""}
+        render(conn, "phone_api.json", results: results)
+      # {:error, msg} ->
+      #   results = %{scope: scope, data: %{}, error: msg}
+      #   render(conn, "phone_api.json", results: results)
     end
   end
 

@@ -1,7 +1,9 @@
 .row.about
   .col-12
-    %h4.font-weight-bold.text-info= gettext "About PawChaungKaung"
-    %h5.text-primary.my-4= gettext "Please let us know if you have any question on our activity."
+    .card.mb-4.bg-secondary
+      .card-body
+        %h5.font-weight-bold.text-white.mb-3= gettext "About PawChaungKaung"
+        %h6.text-white.m-0= gettext "Please let us know if you have any question on our activity."
 
 .accordion{id: "about"}
 
@@ -9,7 +11,7 @@
     %a{data-toggle: "collapse", data-target: "#company", aria-expanded: "true", aria-controls: "company"}
       .card-header
         .d-flex.align-items-center
-          %i.width-40.fa.fa-desktop.mr-3.text-info
+          %i.width-40.fa.fa-desktop.mr-3.text-secondary
           %h6.card-title.mb-0= gettext "About us"
     %div.collapse{id: "company", aria-labelledby: "compagny", data-parent: "#about"}
       .card-body
@@ -19,7 +21,7 @@
     %a{data-toggle: "collapse", data-target: "#work_with_us", aria-expanded: "true", aria-controls: "work_with_us"}
       .card-header
         .d-flex.align-items-center
-          %i.width-40.fa.fa-handshake.mr-3.text-info
+          %i.width-40.fa.fa-handshake.mr-3.text-secondary
           %h6.card-title.mb-0= gettext "Become a partner"
     %div.collapse{id: "work_with_us", aria-labelledby: "work_with_us", data-parent: "#about"}
       .card-body
@@ -29,7 +31,7 @@
     %a{data-toggle: "collapse", data-target: "#join_us", aria-expanded: "true", aria-controls: "join_us"}
       .card-header
         .d-flex.align-items-center
-          %i.width-40.fa.fa-user-tie.mr-3.text-info
+          %i.width-40.fa.fa-user-tie.mr-3.text-secondary
           %h6.card-title.mb-0= gettext "Join us"
     %div.collapse{id: "join_us", aria-labelledby: "join_us", data-parent: "#about"}
       .card-body
@@ -39,7 +41,7 @@
     %a{data-toggle: "collapse", data-target: "#contact_us", aria-expanded: "true", aria-controls: "contact_us"}
       .card-header
         .d-flex.align-items-center
-          %i.width-40.fa.fa-comments.mr-3.text-info
+          %i.width-40.fa.fa-comments.mr-3.text-secondary
           %h6.card-title.mb-0= gettext "Contact us"
     %div.collapse{id: "contact_us", aria-labelledby: "contact_us", data-parent: "#about"}
       .card-body

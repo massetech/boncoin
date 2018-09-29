@@ -57,15 +57,15 @@ defmodule Boncoin.Plug.SearchParams do
   defp build_searched_place(division_id, township_id) do
     case division_id do
       "" ->
-        %{title_my: "ပောပဒနိ", title_en: "All Myanmar"}
+        %{title_my: "မြန်မာနိုင်ငံအတွင်း", title_en: "All Myanmar"}
       id ->
         division = Contents.get_division!(division_id)
         case township_id do
           "" ->
-            %{title_my: "ဒသဉ #{division.title_my}", title_en: "#{division.title_en}"}
+            %{title_my: "#{division.title_my}အတွင်း", title_en: "#{division.title_en}"}
           id ->
             township = Contents.get_township!(township_id)
-            %{title_my: "#{division.title_my} - #{township.title_my}", title_en: "#{division.title_en} - #{township.title_en}"}
+            %{title_my: "#{township.title_my}၊#{division.title_my}", title_en: "#{division.title_en} - #{township.title_en}"}
         end
     end
   end

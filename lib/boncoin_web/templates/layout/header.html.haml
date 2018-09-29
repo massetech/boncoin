@@ -1,20 +1,20 @@
 .container-fluid.m-0.p-0
   .row.nav-row.align-items-center.bg-primary.m-0.p-0
     .col.col-xs-1.text-left.p-0
-      %button.btn.bg-primary.text-white{type: "button", id: "sidebarCollapse"}
-        %span
+      %button.btn.bg-primary.text-secondary{type: "button", id: "sidebarCollapse"}
         %i.fa.fa-bars
     .col.col-xs-8.text-center.p-0
       = render "_logo_white.html", assigns
     .col.col-xs-1.text-right.p-0
-      %button.btn.bg-primary.text-white{type: "button", data-toggle: "collapse", data-target: "#searchBar", aria-expanded: "false"}
+      %button.btn.bg-primary.text-secondary{type: "button", data-toggle: "collapse", data-target: "#searchBar", aria-expanded: "false"}
         %i.fa.fa-search
 
 
   .row.collapse.bg-primary.m-0.p-0{id: "searchBar"}
     -# Search field
-    .col-xs-12.col-sm-10.offset-sm-1.col-lg-8.offset-lg-2.align-middle
+    -# .col-xs-12.col-sm-10.offset-sm-1.col-lg-8.offset-lg-2.align-middle
       =# render "_search_text_form.html", assigns
+      
     -# Family buttons
     .col-xs-12.my-3.w-100
       = render "_search_btn_form.html", assigns

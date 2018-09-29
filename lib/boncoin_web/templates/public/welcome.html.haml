@@ -1,18 +1,20 @@
 .row
   .col-12
-    %h6.font-weight-bold.text-dark
-      = gettext "Find a good-deal in more than %{nb_offers}offers", nb_offers: @nb_announces
-      -# %span.text-primary= @nb_announces
-      -# = gettext " offers"
+    .card.mb-4.bg-secondary
+      .card-body
+        %h4.text-white
+          = gettext "Find a good-deal in more than %{nb_offers}offers", nb_offers: @nb_announces
 .row.justify-content-center.my-4
   .col-xs-12.col-sm-6
-    - link to: user_path(@conn, :new_user_announce), class: "btn btn-lg btn-secondary text-white mb-4 btn-block" do
-      %i.fa.fa-edit.btn-icon{}
+    - link to: user_path(@conn, :new_user_announce), class: "btn btn-lg btn-outline-secondary text-secondary mb-4 btn-block" do
+      %i.width-30.fa.fa-edit.btn-icon{}
       %span= gettext "Sell something"
     = render BoncoinWeb.LayoutView, "_cities_list.html", assigns
 
 .row.justify-content-center
-  .col-xs-12.col-sm-10.my-4
-    %h5.text-info= gettext "Presenting website"
-  .col-xs-12.col-sm-6
+  .col-xs-12.col-sm-8.my-4
+    .card.shadow.bg-white.rounded
+      .card-body
+        %h5.text-secondary= gettext "Presenting website"
+  .col-xs-12.col-sm-8.my-4
     = img_tag(static_path(@conn, "/images/video_explain.png"))

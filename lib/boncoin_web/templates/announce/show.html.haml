@@ -31,12 +31,8 @@
               -# Sellors details
               .col-xs-12.col-sm-6.d-flex.justify-content-center.align-items-start
                 .details
-                  %p.m-0= BoncoinWeb.AnnounceView.show_location(@announce.township, "en")
                   %p.m-0
-                    = gettext "Sold by"
-                    %span.font-weight-bold= @announce.user.nickname
-                    -# = announce.user.viber_active
-                  %p.m-0{style: "font-size:0.75em;"}= BoncoinWeb.AnnounceView.show_date(@announce, "en")
+                    = gettext("Sold by%{seller_name}in %{township}, %{division}", seller_name: @announce.user.nickname, township: LayoutView.convert_zawgyi(@announce.township, "title"), division: LayoutView.convert_zawgyi(@announce.township.division, "title"))
 
               -# Description for small devices
               .col-xs-12.col-sm-6.d-sm-none.d-flex.flex-column

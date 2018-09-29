@@ -117,7 +117,7 @@ defmodule BoncoinWeb.ViberTest do
       %{scope: scope, msg: msg} = %{scope: nil, user: user, announce: nil, viber: %{viber_id: nil, viber_name: nil, user_msg: "*111#"}}
         |> call_bot_algorythm()
         |> List.first()
-      assert msg =~ "you don't have any offer yet"
+      assert msg =~ "You don't have any offer yet"
     end
     test "announce 3 offers online", %{conn: conn} do
       user = insert(:user)

@@ -1,6 +1,7 @@
 .dropdown.my-2
-  %button.btn.btn-lg.btn-block.btn-outline-dark.dropdown-toggle{type: "button", data-toggle: "dropdown", aria-haspopup: "true", aria-expanded: "false"}
+  %button.btn.btn-lg.btn-block.btn-outline-secondary.dropdown-toggle{type: "button", data-toggle: "dropdown", aria-haspopup: "true", aria-expanded: "false"}
     %i.fa.fa-map-marker-alt.btn-icon
+    -# %i.fas.fa-crosshairs.btn-icon
     %span= gettext "Search arround you"
   %ul.dropdown-menu.multi-level{role: "menu", aria-labelledby; "dropdownMenu"}
     %li= link gettext("All Myanmar"), to: public_offers_path(@conn, :public_index, search: %{division_id: "", township_id: ""}, old_search: @conn.assigns.search_params), class: "dropdown-item"

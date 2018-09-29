@@ -13,7 +13,7 @@ defmodule BoncoinWeb.MainControllerTest do
       insert_list(3, :announce, %{status: "ONLINE"})
       insert_list(2, :announce, %{status: "REFUSED"})
       conn = get build_conn(), "/"
-      assert html_response(conn, 200) =~ "more than 3offers"
+      assert html_response(conn, 200) =~ "more than 3 offers"
     end
   end
 
