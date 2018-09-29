@@ -87,26 +87,27 @@ defmodule Boncoin.Contents.Announce do
 
   def refusal_causes() do
     [
-      %{label: "NOT_ALLOWED", title: "Content not allowed", btn_color: "btn-outline-danger"},
-      %{label: "UNCLEAR", title: "Description not clear", btn_color: "btn-outline-alert"},
-      %{label: "BAD_PHOTOS", title: "Photos not good", btn_color: "btn-outline-alert"},
-      %{label: "NO_INTEREST", title: "Offer not interesting", btn_color: "btn-outline-danger"},
-      %{label: "SHOCKING", title: "Offer can shock people", btn_color: "btn-outline-danger"}
+      %{label: "NOT_ALLOWED", title_my: "", title_en: "the content is not allowed", btn_color: "btn-outline-danger"},
+      %{label: "UNCLEAR", title_my: "", title_en: "the description is unclear", btn_color: "btn-outline-danger"},
+      %{label: "BAD_PHOTOS", title_my: "", title_en: "the photos are not good", btn_color: "btn-outline-danger"},
+      %{label: "NO_INTEREST", title_my: "", title_en: "the object looks too old", btn_color: "btn-outline-danger"},
+      %{label: "SHOCKING", title_my: "", title_en: "it can shock people", btn_color: "btn-outline-danger"}
     ]
   end
 
   def closing_causes() do
     [
-      %{label: "USER_SOLD", title: "Item was sold", btn_color: "btn-outline-info"},
-      %{label: "USER_CANCELLED", title: "Offer cancelled", btn_color: "btn-outline-info"}
+      %{label: "USER_SOLD", btn_color: "btn-outline-info"},
+      %{label: "USER_CANCELLED", btn_color: "btn-outline-info"}
     ]
   end
 
   def admin_closing_causes() do
     [
-      %{label: "ADMIN_SOLD", title: "Item was sold by user", btn_color: "btn-outline-info"},
-      %{label: "ADMIN_CANCELLED", title: "Offer cancelled by user", btn_color: "btn-outline-info"},
-      %{label: "ADMIN_REMOVED", title: "Offer removed by admin", btn_color: "btn-outline-danger"}
+      %{label: "ADMIN_SOLD", title_my: "", title_en: "as asked by email", btn_color: "btn-outline-info"},
+      %{label: "ADMIN_CANCELLED", title_my: "", title_en: "as asked by email", btn_color: "btn-outline-info"},
+      %{label: "ADMIN_REMOVED", title_my: "", title_en: "after an admin decision", btn_color: "btn-outline-danger"},
+      %{label: "ADMIN_CLOSED", title_my: "", title_en: "because it is too old", btn_color: "btn-outline-danger"}
     ]
   end
 
@@ -117,7 +118,7 @@ defmodule Boncoin.Contents.Announce do
 
   def list_admin_announces(query) do
     from a in query,
-      order_by: [asc: :inserted_at, desc: :parution_date, desc: :nb_clic]
+      order_by: [asc: :status, desc: :parution_date]
   end
 
   def count_announces_online(query) do

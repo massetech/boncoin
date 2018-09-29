@@ -13,7 +13,7 @@ defmodule Boncoin.Auth.CheckApiAccess do
 
     cond do
       auth_internal != nil -> # API call from internal
-        case Phoenix.Token.verify(conn, @salt, auth_internal, max_age: 60*60*12) do
+        case Phoenix.Token.verify(conn, salt, auth_internal, max_age: 60*60*12) do
           {:ok, user_id} -> # API call authorized
             conn
               |> assign(:current_user, Members.get_user!(user_id))

@@ -46,7 +46,17 @@ defmodule BoncoinWeb.AnnounceController do
         results = %{scope: scope, data: %{}, error: msg}
         render(conn, "offer_api.json", results: results)
     end
+  end
 
+  def add_click_on_offer(conn, %{"params" => offer_id, "scope" => scope} = params) do
+    case Contents.add_clic_to_announce(offer_id) do
+      {:ok, _} ->
+        results = %{scope: scope, data: %{offer_id: offer_id}, error: ""}
+        render(conn, "offer_api.json", results: results)
+      {:error, msg} ->
+        results = %{scope: scope, data: %{}, error: msg}
+        render(conn, "offer_api.json", results: results)
+    end
   end
 
   def index(conn, _params) do
@@ -56,7 +66,7 @@ defmodule BoncoinWeb.AnnounceController do
 
   def treat(conn, params) do
     admin_user = Members.get_user!(conn.assigns.current_user.id)
-    case Contents.validate_announce(admin_user, params) do
+    case Contents.treat_announce(admin_user, params) do
       {:ok, announce} ->
         conn
         |> put_flash(:info, "Announce treated successfully.")

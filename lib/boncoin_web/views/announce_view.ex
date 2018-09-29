@@ -15,7 +15,7 @@ defmodule BoncoinWeb.AnnounceView do
 
   def btn_status(status) do
     case status do
-      "PENDING" -> "<div class='btn btn-primary btn-sm'>PENDING</div>" |> raw
+      "PENDING" -> "<div class='btn btn-secondary btn-sm'>PENDING</div>" |> raw
       "ONLINE" -> "<div class='btn btn-success btn-sm'>ONLINE</div>" |> raw
       "REFUSED" -> "<div class='btn btn-danger btn-sm'>REFUSED</div>" |> raw
       "OUTDATED" -> "<div class='btn btn-warning btn-sm'>OUTDATED</div>" |> raw

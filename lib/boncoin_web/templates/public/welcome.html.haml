@@ -1,8 +1,8 @@
 .row
   .col-12
     .card.mb-4.bg-secondary
-      .card-body
-        %h4.text-white
+      .card-body.p-2
+        %h5.text-white.m-0
           = gettext "Find a good-deal in more than %{nb_offers}offers", nb_offers: @nb_announces
 .row.justify-content-center.my-4
   .col-xs-12.col-sm-6
@@ -14,7 +14,7 @@
 .row.justify-content-center
   .col-xs-12.col-sm-8.my-4
     .card.shadow.bg-white.rounded
-      .card-body
+      .card-body.text-left
         %h5.text-secondary= gettext "Presenting website"
   - unless Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:google_analytics] == true do
     .col-xs-12.col-sm-8.my-4

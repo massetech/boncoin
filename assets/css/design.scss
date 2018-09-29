@@ -290,17 +290,17 @@ a[data-toggle="collapse"] {
     p {white-space: pre-wrap;width: 100%;}
   }
   .btn-close{
-    i {font-size: 30px !important;}
+    i {font-size: 30px !important;background-color: white;border-radius: 50%;}
     position: absolute;right: 0;z-index: 9999;
   }
   .expand-photo{
     position: absolute;
     bottom: 0px;
     right: 0px;
-    background-color: white;
+    background-color: white;border-radius: 50%;
     padding: 5px;
     border-radius: 10px;
-    i {font-size: 20px;}
+    i {}
   }
 }
 .carousel-indicators li {

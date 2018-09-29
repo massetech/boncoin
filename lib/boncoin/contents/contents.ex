@@ -570,25 +570,48 @@ defmodule Boncoin.Contents do
   #   Cipher.encrypt(Integer.to_string(announce_id))
   # end
 
-  def validate_announce(admin_user, %{"announce_id" => announce_id, "validate" => validate, "cause" => cause, "category_id" => category_id}) do
+  def treat_announce(admin_user, %{"announce_id" => announce_id, "validate" => validate, "cause" => cause, "category_id" => category_id}) do
     announce = get_announce!(announce_id)
+    new_offer? = if announce.status == "PENDING", do: true, else: false
     user = Members.get_user!(announce.user_id)
-    status = case validate do
-      "true" -> "ONLINE"
-      "false" -> "REFUSED"
+    {status, user_msg} = case validate do
+      "true" -> {"ONLINE", ""}
+      "false" ->
+        if new_offer? == true do
+          msg_map = Enum.find(Announce.refusal_causes(), &(&1.label == cause))
+          {"REFUSED", convert_zawgyi(msg_map, user.language)}
+        else
+          msg_map = Enum.find(Announce.admin_closing_causes(), &(&1.label == cause))
+          {"CLOSED", convert_zawgyi(msg_map, user.language)}
+        end
     end
     if category_id == nil, do: category_id = announce.category_id, else: category_id
     dates = calc_announce_validity_date()
     params = %{treated_by_id: admin_user.id, status: status, cause: cause, category_id: category_id, parution_date: dates.parution_date, validity_date: dates.validity_date}
     case update_announce(announce, params) do
       {:ok, announce} ->
-        if user.viber_active == true do
-          bot_datas = %{scope: "offer_treated", user: user, announce: announce, viber: %{viber_id: user.viber_id, viber_name: user.nickname, user_msg: ""}}
-            |> ViberBot.call_bot_algorythm()
-            |> Enum.map(fn result_map -> Members.send_viber_message(user.viber_id, result_map.scope, result_map.msg) end)
+        cond do
+          user.viber_active == true && new_offer? == true -> # Viber msg for new offers
+            %{scope: "offer_treated", user: user, announce: announce, viber: %{viber_id: user.viber_id, viber_name: user.nickname, user_msg: user_msg}}
+              |> ViberBot.call_bot_algorythm()
+              |> Enum.map(fn result_map -> Members.send_viber_message(user.viber_id, result_map.scope, result_map.msg) end)
+          user.viber_active == true && status == "CLOSED" -> # Viber msg for old offers closed by admin
+            %{scope: "offer_closed", user: user, announce: announce, viber: %{viber_id: user.viber_id, viber_name: user.nickname, user_msg: user_msg}}
+              |> ViberBot.call_bot_algorythm()
+              |> Enum.map(fn result_map -> Members.send_viber_message(user.viber_id, result_map.scope, result_map.msg) end)
+          true -> # Do nothing
         end
         {:ok, announce}
       {:error, msg} -> {:error, msg}
+    end
+  end
+
+  defp convert_zawgyi(msg_map, user_lg) do
+    uni = msg_map.title_my
+    case user_lg do
+      "en" -> msg_map.title_en
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -602,6 +625,13 @@ defmodule Boncoin.Contents do
     case Repo.get(Announce, announce_id) do
       nil -> {:error, "offer not found"}
       offer -> update_announce(offer, %{nb_alert: offer.nb_alert + 1})
+    end
+  end
+
+  def add_clic_to_announce(announce_id) do
+    case Repo.get(Announce, announce_id) do
+      nil -> {:error, "offer not found"}
+      offer -> update_announce(offer, %{nb_clic: offer.nb_clic + 1})
     end
   end
 

@@ -63,7 +63,7 @@
             .row
               - if @announce.status in ["PENDING"] do
                 .col-xs-12.col-sm-3.my-3
-                  - link to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: true, cause: "accepted", category_id: "#{@announce.category_id}") do
+                  - link to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: true, cause: "ACCEPTED", category_id: "#{@announce.category_id}") do
                     .btn.btn-success.btn-lg.btn-block
                       = "Accept"
                 .col-xs-12.col-sm-3.my-3
@@ -95,7 +95,7 @@
               .col-xs-12.col-sm-4.flex-column.justify-content-center
                 %h6.card-title= family.title_en
                 - for category <- family.categorys do
-                  = link "Move to #{category.title_en}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: true, cause: "moved", category_id: "#{category.id}"), class: "btn btn-lg btn-block m-2 btn-outline-info"
+                  = link "Move to #{category.title_en}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: true, cause: "MOVED", category_id: "#{category.id}"), class: "btn btn-lg btn-block m-2 btn-outline-info"
                 %hr
 
   .row.collapse{id: "refuseMenu", data-parent: "#reasons"}
@@ -105,7 +105,7 @@
           .row
             - for cause <- @refusal_causes do
               .col-xs-12.col-sm-4.flex-column.justify-content-center
-                = link "#{cause.title}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: false, cause: "#{cause.label}", category_id: "#{@announce.category_id}"), class: "btn btn-lg btn-block m-2 #{cause.btn_color}"
+                = link "#{cause.title_en}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: false, cause: "#{cause.label}", category_id: "#{@announce.category_id}"), class: "btn btn-lg btn-block m-2 #{cause.btn_color}"
 
   .row.collapse{id: "closeMenu", data-parent: "#reasons"}
     .col.d-flex.justify-content-center
@@ -114,4 +114,4 @@
           .row
             - for cause <- @closing_causes do
               .col-xs-12.col-sm-4.flex-column.justify-content-center
-                = link "#{cause.title}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: false, cause: "#{cause.label}", category_id: "#{@announce.category_id}"), class: "btn btn-lg btn-block m-2 #{cause.btn_color}"
+                = link "#{cause.title_en}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: false, cause: "#{cause.label}", category_id: "#{@announce.category_id}"), class: "btn btn-lg btn-block m-2 #{cause.btn_color}"

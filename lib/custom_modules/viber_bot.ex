@@ -70,12 +70,15 @@ defmodule Boncoin.CustomModules.ViberBot do
               end
           end
 
-      # We send a NOTIFICATION to user
+      # We send a NOTIFICATION to user after treating the offer
       scope == "offer_treated" ->
         case announce.status do
           "ONLINE" -> [treat_msg("announce_accepted", user, announce, build_announce_view_link(announce))]
-          "REFUSED" -> [treat_msg("announce_refused", user, announce)]
+          "REFUSED" -> [treat_msg("announce_refused", user, announce, user_msg)]
         end
+
+      # We send a NOTIFICATION to user after removing his offer
+      scope == "offer_closed" -> [treat_msg("announce_closed", user, announce, user_msg)]
 
       # User wants to CHANGE LANGUAGE
       user != nil && user_msg == "*123#" -> [treat_msg("change_language", user)]
@@ -189,7 +192,8 @@ defmodule Boncoin.CustomModules.ViberBot do
   def treat_msg("welcome_back", user) do %{scope: nil, msg: welcome_back_msg(user.language, user.nickname)} end
   def treat_msg("nothing_to_say", user) do %{scope: nil, msg: nothing_to_say_msg(user.language, user.nickname)} end
   def treat_msg("announce_accepted", user, announce, link) do %{scope: nil, msg: tell_offer_accepted(user.language, user.nickname, announce.title, LayoutView.format_date(announce.validity_date), link)} end
-  def treat_msg("announce_refused", user, announce) do %{scope: nil, msg: tell_offer_refused(user.language, user.nickname, announce.title, announce.cause)} end
+  def treat_msg("announce_refused", user, announce, reason) do %{scope: nil, msg: tell_offer_refused(user.language, user.nickname, announce.title, reason)} end
+  def treat_msg("announce_closed", user, announce, reason) do %{scope: nil, msg: tell_offer_closed(user.language, user.nickname, announce.title, reason)} end
   def treat_msg("propose_help", user) do %{scope: "help", msg: inform_help(user.language, user.nickname)} end
   def treat_msg("change_language", user) do %{scope: "language", msg: change_language_msg(user.language, user.nickname)} end
   def treat_msg("change_phone", user) do %{scope: "update_phone", msg: alert_before_phone_update(user.language, user.nickname)} end
@@ -353,6 +357,16 @@ defmodule Boncoin.CustomModules.ViberBot do
     uni = "မင်္ဂလာပါ #{nickname}၊ စိတ်မကောင်းပါဘူး သင့်ရဲ့ #{title} ကြော်ငြာဟာ #{cause} ကြောင့်ငြင်းပယ်ခြင်းခံရပါတယ်။ ကျေးဇူးပြု၍ #{@website_url_form} တွင်အသစ်တစ်ဖန်ပြန်လုပ်ပါ။"
     case language do
       "en" -> "Hi #{nickname}, we are sorry but your offer #{title} was refused because #{cause}. \nPlease create a new one on #{@website_url_form}"
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
+    end
+  end
+
+  defp tell_offer_closed(language, nickname, title, cause) do
+    # uni = "မင်္ဂလာပါ #{nickname}၊ သင့်ရဲ့ #{title} ကြော်ငြာဟာ #{cause} ကြောင့်ငြင်းပယ်ခြင်းခံရပါတယ်။ ကျေးဇူးပြု၍ #{@website_url_form} တွင်အသစ်တစ်ဖန်ပြန်လုပ်ပါ။"
+    uni = ""
+    case language do
+      "en" -> "Hi #{nickname}, your offer #{title}has been closed #{cause}. \nPlease come back to #{@website_url_form}"
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end

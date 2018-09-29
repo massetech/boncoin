@@ -138,13 +138,6 @@ export default class MainView {
       event.stopPropagation()
       reset_announce_form_field()
     })
-    // Click on unlink viber number
-    // $('#btn_unlink_number').on('click', function (e) {
-    //   event.preventDefault()
-    //   event.stopPropagation()
-    //   var phone_number = $("#announce_phone_number").val()
-    //   call_internal_api("/api/phone", "unlink_viber", phone_number)
-    // })
     // Currency selector
     $('.ddown_change_currency').on('click', function() {
       $('#choosen_currency_text')[0].innerHTML = this.innerHTML
@@ -209,6 +202,11 @@ export default class MainView {
     // Show the sellor's number
     $('.btn-show-number').on('click', function() {
       $(this).closest('div.offer-actions').addClass('d-none').next('div.offer-contact').removeClass('d-none')
+      var offer_id = $(this).attr('data-offer-id')
+      $(this).removeAttr('data-offer-id')
+      if (offer_id != undefined) {
+        call_internal_api("/api/count_clic", "count_clic_number", offer_id)
+      }
     })
     // Hide the sellor's number
     $('.btn-see-number').on('click', function() {
@@ -217,8 +215,10 @@ export default class MainView {
     // Send an alert on the offer
     $('.btn-offer-alert').on('click', function() {
       var offer_id = $(this).attr('data-offer-id')
-      call_internal_api("/api/alert", "alert_on_offer", offer_id)
-      // $(this).closest('div.offer-actions').addClass('d-none').next('div.offer-contact').removeClass('d-none')
+      $(this).removeAttr('data-offer-id')
+      if (offer_id != undefined) {
+        call_internal_api("/api/alert", "alert_on_offer", offer_id)
+      }
     })
     // Keep the offer in likes cookie
     $('.btn-offer-like').on('click', function() {
@@ -323,6 +323,7 @@ export default class MainView {
 
   // Call internal phone API to check phone number
   let call_internal_api = (url, scope, params) => {
+    // console.log(params)
     if (scope == "get_more_offers"){
       $("#btn-more-offers").addClass("d-none")
       $("#btn-more-offers-wait").removeClass("d-none")
@@ -348,7 +349,7 @@ export default class MainView {
       // Examine the text in the response
       response.json().then(function(response) {
         if ('results' in response) {
-          console.log(response)
+          // console.log(response)
           var scope = response.results.scope
           var data = response.results.data
           var error = response.results.error
@@ -367,6 +368,12 @@ export default class MainView {
             if ('offer_id' in data) {
               console.log("alert posted on offer")
               disable_alert_button(data.offer_id)
+            } else {
+              console.log(error)
+            }
+          } else if (scope == "count_clic_number"){
+            if ('offer_id' in data) {
+              console.log("clic posted on offer")
             } else {
               console.log(error)
             }

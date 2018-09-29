@@ -42,6 +42,7 @@ defmodule BoncoinWeb.Router do
     post "/phone", UserController, :check_phone
     post "/add_offers", AnnounceController, :add_offers_to_public_index
     post "/alert", AnnounceController, :add_alert_to_offer
+    post "/count_clic", AnnounceController, :add_click_on_offer
   end
 
   scope "/", BoncoinWeb do

@@ -2,7 +2,7 @@
   .col-4.m-0.p-0
     -# .d-flex.justify-content-between.align-items-center
     -# Button see number
-    %button.btn.btn-block.d-flex.flex-column.justify-content-center.align-items-center.btn-success.btn-show-number{id: "btn_show_number_#{@announce.id}"}
+    %button.btn.btn-block.d-flex.flex-column.justify-content-center.align-items-center.btn-success.btn-show-number{id: "btn_show_number_#{@announce.id}", data-offer-id: "#{@announce.id}"}
       %i.fa.fa-phone.btn-icon
       %span.font-s-8= gettext "Number"
   .col-4.m-0.p-0
