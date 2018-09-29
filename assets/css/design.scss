@@ -71,7 +71,7 @@ i {font-size: 20px!important;}
     border-right: 20px solid transparent;
     border-bottom: 20px solid white;
 }
-/* ------------------------------ ICONS  ------------------------------ */
+/* ------------------------------ ICONS & BUTTONS  ------------------------------ */
 // Fix the color or boostrap a dropdown not changing COLOURS
 a.btn:hover, a.slide-menu:hover {i, span {@extend .text-white;}}
 
@@ -79,7 +79,6 @@ div > i, .btn > i:not(.btn-icon) {
   display: flex; align-items: center; justify-content: center;
 }
 .btn > i.btn-icon {
-  // margin: 0 1em;
   display: inline-block;
 }
 i.width-20 {width: 20px;}

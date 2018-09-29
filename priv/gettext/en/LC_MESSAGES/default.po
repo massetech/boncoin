@@ -780,17 +780,17 @@ msgid "Email (Gmail only)"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_actions.html.haml:4
+#: lib/boncoin_web/templates/announce/_actions.html.haml:5
 msgid "Number"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_actions.html.haml:10
+#: lib/boncoin_web/templates/announce/_actions.html.haml:11
 msgid "Report"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_actions.html.haml:16
+#: lib/boncoin_web/templates/announce/_actions.html.haml:17
 msgid "Save"
 msgstr ""
 
@@ -871,7 +871,16 @@ msgid "%{nb_offers}offers found in%{place_searched}"
 msgstr "%{nb_offers} offers found in %{place_searched}"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_display_big.html.haml:14
 #: lib/boncoin_web/templates/announce/show.html.haml:40
 msgid "Sold by%{seller_name}in %{township}, %{division}"
+msgstr "Sold by %{seller_name} in %{township}, %{division}"
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/announce/_display_big.html.haml:14
+msgid "Sold by%{seller_name}"
 msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/_display_big.html.haml:17
+msgid "in %{township}, %{division}"
+msgstr "In %{township}, %{division}"

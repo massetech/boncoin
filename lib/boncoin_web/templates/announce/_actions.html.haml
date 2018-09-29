@@ -1,31 +1,33 @@
-.col-xs-4
-  -# .d-flex.justify-content-between.align-items-center
-  -# Button see number
-  %button.btn.d-flex.flex-column.justify-content-center.align-items-center.btn-primary.btn-show-number{id: "btn_show_number_#{@announce.id}"}
-    %i.fa.fa-phone.btn-icon
-    %span= gettext "Number"
-.col-xs-4
-  -# Button report abuse
-  %button.btn.d-flex.flex-column.justify-content-center.align-items-center.btn-warning.btn-offer-alert{id: "btn_alert_#{@announce.id}", data-offer-id: "#{@announce.id}"}
-    %i.fas.fa-exclamation-triangle.btn-icon
-    %span= gettext "Report"
-.col-xs-4
-  -# Button like
-  %button.btn.d-flex.flex-column.justify-content-center.align-items-center.btn-secondary.btn-offer-like{id: "btn_like_#{@announce.id}", data-offer-id: "#{@announce.id}"}
-    %i.fa.fa-heart.btn-icon
-    %span= gettext "Save"
+.row.m-0.mt-3.offer-actions{id: "offer_actions_#{@announce.id}"}
+  .col-4.m-0.p-0
+    -# .d-flex.justify-content-between.align-items-center
+    -# Button see number
+    %button.btn.btn-block.d-flex.flex-column.justify-content-center.align-items-center.btn-success.btn-show-number{id: "btn_show_number_#{@announce.id}"}
+      %i.fa.fa-phone.btn-icon
+      %span.font-s-8= gettext "Number"
+  .col-4.m-0.p-0
+    -# Button report abuse
+    %button.btn.btn-block.d-flex.flex-column.justify-content-center.align-items-center.btn-warning.btn-offer-alert{id: "btn_alert_#{@announce.id}", data-offer-id: "#{@announce.id}"}
+      %i.fas.fa-exclamation-triangle.btn-icon
+      %span.font-s-8= gettext "Report"
+  .col-4.m-0.p-0
+    -# Button like
+    %button.btn.btn-block.d-flex.flex-column.justify-content-center.align-items-center.btn-secondary.btn-offer-like{id: "btn_like_#{@announce.id}", data-offer-id: "#{@announce.id}"}
+      %i.fa.fa-heart.btn-icon
+      %span.font-s-8= gettext "Save"
 
--# Show the sellor's number
-.mb-3.d-none{id: "offer_contact_#{@announce.id}"}
-  %button.btn.btn-block.btn-lg.d-flex.justify-content-center.align-items-center.btn-primary.btn-see-number{id: "show_number_#{@announce.id}"}
-    -# %i.fa.fa-phone.btn-icon
-    %span
-      = String.slice(@announce.user.phone_number, 0..1)
-      = " "
-      = String.slice(@announce.user.phone_number, 2..4)
-      = " "
-      = String.slice(@announce.user.phone_number, 5..7)
-      = " "
-      = String.slice(@announce.user.phone_number, 8..10)
-  %button.btn.btn-secondary.btn-copy-number{id: "copy_number_#{@announce.id}", data-phone-number: "#{@announce.user.phone_number}"}
-    %i.fa.fa-copy
+.row.m-0.mt-3.offer-contact.d-none{id: "offer_contact_#{@announce.id}"}
+  -# Show the sellor's number
+  .col-12.m-0.p-0
+    %button.btn.btn-lg.btn-block.d-flex.justify-content-center.align-items-center.btn-secondary.btn-see-number{id: "show_number_#{@announce.id}"}
+      -# %i.fa.fa-phone.btn-icon
+      %span
+        = String.slice(@announce.user.phone_number, 0..1)
+        = " "
+        = String.slice(@announce.user.phone_number, 2..4)
+        = " "
+        = String.slice(@announce.user.phone_number, 5..7)
+        = " "
+        = String.slice(@announce.user.phone_number, 8..10)
+    %button.btn.bg-white.text-secondary.btn-copy-number{id: "copy_number_#{@announce.id}", data-phone-number: "#{@announce.user.phone_number}"}
+      %i.fa.fa-copy
