@@ -679,8 +679,8 @@ msgid "Viber notifications"
 msgstr "ဗိုင္ဘာသတိေပးခ်က္မ်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/public_index.html.haml:27
-#: lib/boncoin_web/templates/announce/public_index.html.haml:31
+#: lib/boncoin_web/templates/announce/public_index.html.haml:39
+#: lib/boncoin_web/templates/announce/public_index.html.haml:43
 msgid "More offers"
 msgstr "ေနာက္ထပ္ေရာင္းရန္ေၾကာ္ျငာမ်ား"
 
@@ -785,7 +785,7 @@ msgid "Save"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:104
+#: lib/boncoin_web/controllers/announce_controller.ex:114
 msgid "Your offer has been removed."
 msgstr ""
 
@@ -862,12 +862,22 @@ msgstr "%{place_searched}တြင္ေရာင္းေနသည့္ပစ�
 msgid "Sold by%{seller_name}in %{township}, %{division}"
 msgstr "ေရာင္းသူ %{seller_name}၊%{township}၊%{division}"
 
-#, elixir-format, fuzzy
-#: lib/boncoin_web/templates/announce/_display_big.html.haml:14
+#, elixir-format
+#: lib/boncoin_web/templates/announce/_display_big.html.haml:13
 msgid "Sold by%{seller_name}"
 msgstr "ေရာင္းသူ %{seller_name}"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_display_big.html.haml:17
+#: lib/boncoin_web/templates/announce/_display_big.html.haml:14
 msgid "in %{township}, %{division}"
 msgstr "%{township}၊%{division}"
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/public_index.html.haml:27
+msgid "Please change your filters or search in another city !"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/public_index.html.haml:25
+msgid "Sorry, we don't have any offer for your search."
+msgstr ""
