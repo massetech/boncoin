@@ -209,7 +209,7 @@ defmodule Boncoin.CustomModules.ViberBot do
 
   defp welcome_msg() do
     uni = "ပေါချောင်ကောင်းမှကြိုဆိုပါတယ်။ ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပါ"
-    "#{Rabbit.uni2zg(uni)}\nWelcome to Pawchaungkaung, please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [၁]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [၂]\n  -> For English send [3]"
+    "#{Rabbit.uni2zg(uni)}\nWelcome to Pawchaungkaung, please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [1]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [2]\n  -> For English send [3]"
   end
 
   defp change_language_msg(language, nickname) do
@@ -221,14 +221,8 @@ defmodule Boncoin.CustomModules.ViberBot do
     end
   end
 
-  # defp change_phone_msg(language, nickname) do
-  #   case language do
-  #     _ -> "Please choose your language\n  -> ျမမ္မားစာအတြက္ [1] ႏွိပ္ပါ \n  -> မြမ်မားစာအတွက် [2] နှိပ်ပါ \n  -> For English send [3]"
-  #   end
-  # end
-
   defp welcome_back_msg(language, nickname) do
-    uni = "ပေါချောင်ကေင်းမှတစ်ဖန်ကြိုဆိုပါတယ် #{nickname} ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပါ။\n\n"
+    uni = "ပေါချောင်ကေင်းမှတစ်ဖန်ကြိုဆိုပါတယ် #{nickname}။\n\nကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။\n\nအကူအညီရယူရန် [0] ဟုရိုက်ထည့်ပါ။"
     case language do
       "en" -> "Welcome back to Pawchaungkaung #{nickname} !\n\nPlease visit us on #{@website_url}\n\nFor help please send [0]"
       "my" -> uni
@@ -237,7 +231,7 @@ defmodule Boncoin.CustomModules.ViberBot do
   end
 
   defp nothing_to_say_msg(language, nickname) do
-    uni = "မင်္ဂလာပါ #{nickname}။\n\nကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။\n\n"
+    uni = "မင်္ဂလာပါ #{nickname}။\n\nကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။\n\nအကူအညီရယူရန် [0] ဟုရိုက်ထည့်ပါ။"
     case language do
       "en" -> "Hi #{nickname} ! #{say_something_neutral(language)}\n\nPlease visit us on #{@website_url}\n\nFor help please send [0]"
       "my" -> uni
@@ -354,7 +348,7 @@ defmodule Boncoin.CustomModules.ViberBot do
   end
 
   defp tell_offer_refused(language, nickname, title, cause) do
-    uni = "မင်္ဂလာပါ #{nickname}၊ စိတ်မကောင်းပါဘူး သင့်ရဲ့ #{title} ကြော်ငြာဟာ #{cause} ကြောင့်ငြင်းပယ်ခြင်းခံရပါတယ်။ ကျေးဇူးပြု၍ #{@website_url_form} တွင်အသစ်တစ်ဖန်ပြန်လုပ်ပါ။"
+    uni = "မင်္ဂလာပါ #{nickname}၊ စိတ်မကောင်းပါဘူး သင့်ရဲ့ #{title} ကြော်ငြာဟာ #{cause} ကြောင့်ငြင်းပယ်ခြင်းခံရပါတယ်။ \nကျေးဇူးပြု၍ #{@website_url_form} တွင်အသစ်တစ်ဖန်ပြန်လုပ်ပါ။"
     case language do
       "en" -> "Hi #{nickname}, we are sorry but your offer #{title} was refused because #{cause}. \nPlease create a new one on #{@website_url_form}"
       "my" -> uni
@@ -363,10 +357,10 @@ defmodule Boncoin.CustomModules.ViberBot do
   end
 
   defp tell_offer_closed(language, nickname, title, cause) do
-    # uni = "မင်္ဂလာပါ #{nickname}၊ သင့်ရဲ့ #{title} ကြော်ငြာဟာ #{cause} ကြောင့်ငြင်းပယ်ခြင်းခံရပါတယ်။ ကျေးဇူးပြု၍ #{@website_url_form} တွင်အသစ်တစ်ဖန်ပြန်လုပ်ပါ။"
+    uni = "မင်္ဂလာပါ #{nickname}၊ သင့်ရဲ့ #{title} ကြော်ငြာကို#{cause}။ \nကျေးဇူးပြု၍ #{@website_url_form} တွင်အသစ်တစ်ဖန်ပြန်လုပ်ပါ။"
     uni = ""
     case language do
-      "en" -> "Hi #{nickname}, your offer #{title}has been closed #{cause}. \nPlease come back to #{@website_url_form}"
+      "en" -> "Hi #{nickname}, your offer #{title} has been closed #{cause}. \nPlease come back to #{@website_url_form}"
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end

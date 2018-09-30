@@ -7,7 +7,7 @@
     %ol.carousel-indicators
       - for i <- 1..length(@announce.images) do
         %li{data-target: "#caroussel_img", data-slide-to: "#{i}"}
-    %a.expand-photo{href: "#{BoncoinWeb.AnnounceView.image_url(List.first(@announce.images), :original)}", data-toggle: "lightbox", data-gallery: "gallery_announce_#{@announce.id}", data-type: "image"}
-      %i.fa.fa-search-plus.text-secondary
-      - for image <- List.delete_at(@announce.images, 0) do
-        %div{data-toggle: "lightbox", data-gallery: "gallery_announce_#{@announce.id}", data-remote: "#{BoncoinWeb.AnnounceView.image_url(image, :original)}"}
+    -# %a.expand-photo{href: "#{BoncoinWeb.AnnounceView.image_url(List.first(@announce.images), :original)}", data-toggle: "lightbox", data-gallery: "gallery_announce_#{@announce.id}", data-type: "image"}
+    -#   %i.fa.fa-search-plus.text-secondary
+    -#   - for image <- List.delete_at(@announce.images, 0) do
+    -#     %div{data-toggle: "lightbox", data-gallery: "gallery_announce_#{@announce.id}", data-remote: "#{BoncoinWeb.AnnounceView.image_url(image, :original)}"}

@@ -2,17 +2,17 @@
   .col-4.m-0.p-0
     -# .d-flex.justify-content-between.align-items-center
     -# Button see number
-    %button.btn.btn-block.d-flex.flex-column.justify-content-center.align-items-center.btn-success.btn-show-number{id: "btn_show_number_#{@announce.id}", data-offer-id: "#{@announce.id}"}
+    %button.btn.btn-sm.btn-block.d-flex.flex-column.justify-content-center.align-items-center.btn-success.btn-show-number{id: "btn_show_number_#{@announce.id}", data-offer-id: "#{@announce.id}"}
       %i.fa.fa-phone.btn-icon
       %span.font-s-8= gettext "Number"
   .col-4.m-0.p-0
     -# Button report abuse
-    %button.btn.btn-block.d-flex.flex-column.justify-content-center.align-items-center.btn-warning.btn-offer-alert{id: "btn_alert_#{@announce.id}", data-offer-id: "#{@announce.id}"}
+    %button.btn.btn-sm.btn-block.d-flex.flex-column.justify-content-center.align-items-center.btn-warning.btn-offer-alert{id: "btn_alert_#{@announce.id}", data-offer-id: "#{@announce.id}"}
       %i.fas.fa-exclamation-triangle.btn-icon
       %span.font-s-8= gettext "Report"
   .col-4.m-0.p-0
     -# Button like
-    %button.btn.btn-block.d-flex.flex-column.justify-content-center.align-items-center.btn-secondary.btn-offer-like{id: "btn_like_#{@announce.id}", data-offer-id: "#{@announce.id}"}
+    %button.btn.btn-sm.btn-block.d-flex.flex-column.justify-content-center.align-items-center.btn-secondary.btn-offer-like{id: "btn_like_#{@announce.id}", data-offer-id: "#{@announce.id}"}
       %i.fa.fa-heart.btn-icon
       %span.font-s-8= gettext "Save"
 

@@ -285,9 +285,8 @@ a[data-toggle="collapse"] {
   img.img-small {width: 140px;border-radius: 10px;}
   .title{margin-bottom: 1em;}
   .text-area{
-    // background-color: $primary-light;
     border-radius: 10px;
-    p {white-space: pre-wrap;width: 100%;}
+    p {width: 100%;} // white-space: pre-wrap;
   }
   .btn-close{
     i {font-size: 30px !important;background-color: white;border-radius: 50%;}

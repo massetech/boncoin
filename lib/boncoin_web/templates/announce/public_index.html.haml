@@ -9,12 +9,19 @@
           - else
             -# Search by place and arbo
             = gettext("%{nb_offers}offers found for%{arbo_searched}in%{place_searched}", nb_offers: @conn.assigns.nb_offers_found, arbo_searched: LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_arbo, "title"), place_searched: LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_place, "title"))
-        %p.text-primary.mb-0= gettext "Please meet the seller and try the product before giving any money"
+        %h6.text-primary.font-italic.mb-0= gettext "Please meet the seller and try the product before giving any money"
 
 .row{id: "offers-results"}
   - for announce <- @announces do
     = render BoncoinWeb.AnnounceView, "_display_small.html", announce: announce
     = render BoncoinWeb.AnnounceView, "_display_big.html", announce: announce
+  - if @announces == [] do
+    .col-xs-12.col-sm-8.offset-sm-2.mt-5
+      .card
+        .card-body
+          %h4.text-secondary= gettext "Sorry, we don't have any offer for your search."
+          .btn.bg-secondary.my-3
+            %span.text-white= gettext "Please change your filters or search in another city !"
 
 - unless @conn.assigns.cursor_after == nil do
   .row
