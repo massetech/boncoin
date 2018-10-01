@@ -534,9 +534,21 @@ defmodule Boncoin.Contents do
   def create_announce(attrs \\ %{}, user_id) do
     params = attrs
       |> Map.merge(%{"status" => "PENDING", "user_id" => user_id}) # Make sure the offer is on pending
-    %Announce{}
+    offer = %Announce{}
       |> Announce.changeset(params)
       |> Repo.insert()
+    case offer do
+      {:ok, announce} ->
+        # Loop on the 3 photo fields of the form params
+        for i <- ["image_file_1", "image_file_2", "image_file_3"] do
+          unless attrs[i] == "" do
+            create_announce_image(announce.id, attrs[i])
+          end
+        end
+        # Encrypt announce ID and generate a safe_link
+        update_announce(announce, %{"safe_link" => build_safe_link(announce.id)})
+      error_offer -> error_offer
+    end
   end
 
   # def create_announce(attrs \\ %{}) do
@@ -566,9 +578,9 @@ defmodule Boncoin.Contents do
   #   end
   # end
   #
-  # defp build_safe_link(announce_id) do
-  #   Cipher.encrypt(Integer.to_string(announce_id))
-  # end
+  defp build_safe_link(announce_id) do
+    Cipher.encrypt(Integer.to_string(announce_id))
+  end
 
   def treat_announce(admin_user, %{"announce_id" => announce_id, "validate" => validate, "cause" => cause, "category_id" => category_id}) do
     announce = get_announce!(announce_id)

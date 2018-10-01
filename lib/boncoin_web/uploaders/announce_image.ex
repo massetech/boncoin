@@ -34,7 +34,13 @@ defmodule Boncoin.AnnounceImage do
 
   # Override the storage directory:
   def storage_dir(version, {file, scope}) do
-    "offers/#{Timex.now().year()}#{Timex.now().month()}"
+    # "offers/#{Timex.now().year()}#{Timex.now().month()}"
+    # IO.inspect(scope)
+    {year, month} = case scope.inserted_at do
+      nil -> {Timex.now().year(), Timex.now().month()} # We use the date now
+      insertion_date -> {insertion_date.year, insertion_date.month} # We use the image insertion_date
+    end
+    "offers/#{year}#{month}"
   end
 
   # https://elixirforum.com/t/how-can-i-use-unique-filename-generator-function-with-arc-ecto/4476/4

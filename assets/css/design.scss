@@ -74,6 +74,8 @@ i {font-size: 20px!important;}
 /* ------------------------------ ICONS & BUTTONS  ------------------------------ */
 // Fix the color or boostrap a dropdown not changing COLOURS
 a.btn:hover, a.slide-menu:hover {i, span {@extend .text-white;}}
+// Go to line in button if too large
+.btn:not(.dropdown-toggle) {white-space:normal !important; word-wrap: break-word; word-break: normal;}
 
 div > i, .btn > i:not(.btn-icon) {
   display: flex; align-items: center; justify-content: center;

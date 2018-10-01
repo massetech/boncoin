@@ -20,8 +20,8 @@
       .card
         .card-body
           %h4.text-secondary= gettext "Sorry, we don't have any offer for your search."
-          .btn.bg-secondary.my-3
-            %span.text-white= gettext "Please change your filters or search in another city !"
+          .btn.bg-secondary.my-3.mw-100.text-white
+            = gettext "Please change your filters or search in another city !"
 
 - unless @conn.assigns.cursor_after == nil do
   .row
