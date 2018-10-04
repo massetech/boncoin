@@ -1,7 +1,6 @@
 defmodule Boncoin.ViberApi do
   @api_url "https://chatapi.viber.com/pa/"
-  @token System.get_env("VIBER_SECRET")
-
+  @token Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:viber_secret]
 
   # Usage examples
   # ==============
