@@ -1,6 +1,6 @@
 defmodule Boncoin.ViberApi do
   @api_url "https://chatapi.viber.com/pa/"
-  @token Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:viber_secret]
+  # @token Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:viber_secret]
   # @token System.get_env("VIBER_SECRET")
 
   # Usage examples
@@ -68,19 +68,25 @@ defmodule Boncoin.ViberApi do
   #   }
 
   def get(path) do
-    IO.puts("token: #{@token}")
+    token = get_viber_token()
+    IO.puts("token: #{token}")
     uri = URI.merge(@api_url, path) |> to_string
-    resp = HTTPotion.get uri, headers: prepare_headers(@token)
+    resp = HTTPotion.get uri, headers: prepare_headers(token)
     resp.body |> Poison.decode |> handle_response
   end
 
   def post(path, payload \\ %{}) do
-    IO.puts("token: #{@token}")
+    token = get_viber_token()
+    IO.puts("token: #{token}")
     uri = URI.merge(@api_url, path) |> to_string
-    resp = HTTPotion.post uri, body: Poison.encode!(payload), headers: prepare_headers(@token)
+    resp = HTTPotion.post uri, body: Poison.encode!(payload), headers: prepare_headers(token)
     resp.body
       |> Poison.decode
       |> handle_response
+  end
+
+  defp get_viber_token() do
+    Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:viber_secret]
   end
 
   defp prepare_headers(access_token) do
