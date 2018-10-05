@@ -1,4 +1,4 @@
-defmodule Boncoin.CustomModules.ViberBot do
+defmodule Boncoin.CustomModules.BotDecisions do
   alias BoncoinWeb.LayoutView
   alias Boncoin.{Members, Contents}
   @website_url "https://www.pawchaungkaung.com"
@@ -6,7 +6,9 @@ defmodule Boncoin.CustomModules.ViberBot do
 
   # -------------------- DECISION  -------------------------------
 
-  def call_bot_algorythm(%{scope: scope, user: user, announce: announce, viber: %{viber_id: viber_id, viber_name: viber_name, user_msg: user_msg}}) do
+  def call_bot_algorythm(%{scope: scope, user: user, announce: announce, bot: %{provider: provider, bot_user_id: bot_user_id, bot_user_name: bot_user_name, user_msg: user_msg}} = params) do
+    # IO.puts("--- bot params---")
+    # IO.inspect(params)
     cond do
 
       # We are welcoming the user
@@ -31,6 +33,8 @@ defmodule Boncoin.CustomModules.ViberBot do
                 {:error, _user} -> [treat_msg("nothing_to_say", user)]
                 {:ok, new_user} -> [treat_msg("nothing_to_say", new_user)]
               end
+            else
+              [treat_msg("nothing_to_say", user)]
             end
         end
 
@@ -44,11 +48,11 @@ defmodule Boncoin.CustomModules.ViberBot do
             other_user = Members.get_other_user_by_phone_number(phone_number)
             case other_user do
               nil -> # The phone number is not used yet : create the user with this phone number
-                case Members.create_user(%{phone_number: phone_number, viber_active: true, viber_id: viber_id, nickname: viber_name, language: language}) do
+                case Members.create_user(%{phone_number: phone_number, viber_active: true, bot_user_id: bot_user_id, nickname: bot_user_name, language: language}) do
                   {:ok, new_user} -> [treat_msg("new_user_created", new_user)]
                   _ -> [treat_msg("technical problem", language)]
                 end
-              other_user -> manage_phone_number_conflicts(nil, other_user, phone_number, viber_id, viber_name, language, "link_phone") # The phone number is already used : check the rights
+              other_user -> manage_phone_number_conflicts(nil, other_user, phone_number, bot_user_id, bot_user_name, language, "link_phone") # The phone number is already used : check the rights
             end
         end
 
@@ -62,11 +66,11 @@ defmodule Boncoin.CustomModules.ViberBot do
               other_user = Members.get_other_user_by_phone_number(phone_number)
               case other_user do
                 nil -> # The phone number is not used yet : create the user with this phone number
-                  case Members.create_user(%{phone_number: phone_number, viber_active: true, viber_id: viber_id, nickname: viber_name, language: language}) do
+                  case Members.create_user(%{phone_number: phone_number, viber_active: true, bot_user_id: bot_user_id, nickname: bot_user_name, language: language}) do
                     {:ok, new_user} -> [treat_msg("new_user_created", new_user)]
                     _ -> [treat_msg("technical problem", language)]
                   end
-                other_user -> manage_phone_number_conflicts(nil, other_user, phone_number, viber_id, viber_name, language, "link_phone") # The phone number is already used : check the rights
+                other_user -> manage_phone_number_conflicts(nil, other_user, phone_number, bot_user_id, bot_user_name, language, "link_phone") # The phone number is already used : check the rights
               end
           end
 
@@ -133,7 +137,7 @@ defmodule Boncoin.CustomModules.ViberBot do
     end
   end
 
-  def manage_phone_number_conflicts(user, other_user, phone_number, viber_id, user_name, language, scope) do
+  def manage_phone_number_conflicts(user, other_user, phone_number, bot_user_id, user_name, language, scope) do
     # This loop can be used with or without user
     cond do
       other_user.viber_active == true -> [treat_msg("viber_conflict_contact_us", language, user_name)] # 2 Vibers for the same account : contact us
@@ -142,7 +146,7 @@ defmodule Boncoin.CustomModules.ViberBot do
       # other_user.nb_announces == 0 &&
       scope == "link_phone" -> # The phone is not linked to viber and has no announce yet : use it to create new user
         other_user = Members.get_user!(other_user.id)
-        case Members.update_user(other_user, %{viber_active: true, viber_id: viber_id, nickname: user_name, language: language}) do
+        case Members.update_user(other_user, %{viber_active: true, bot_user_id: bot_user_id, nickname: user_name, language: language}) do
           {:ok, user} -> [treat_msg("new_phone_updated", user)]
           _ -> [treat_msg("technical problem", language)]
         end

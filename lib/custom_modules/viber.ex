@@ -85,6 +85,11 @@ defmodule Boncoin.ViberApi do
       |> handle_response
   end
 
+  def send_message(viber_id, scope, message) do
+    data = %{sender: %{name: "PawChaungKaung", avatar: ""}, receiver: viber_id, type: "text", tracking_data: scope, text: message}
+    post("send_message", data)
+  end
+
   defp get_viber_token() do
     Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:viber_secret]
   end

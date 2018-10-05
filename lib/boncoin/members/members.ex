@@ -179,24 +179,4 @@ defmodule Boncoin.Members do
     User.changeset(user, %{})
   end
 
-  # -------------------------------- VIBER ----------------------------------------
-
-  # Send datas to viber API
-  def send_viber_message(viber_id, scope, message) do
-    data = %{
-      sender: build_sender(),
-      receiver: viber_id,
-      type: "text",
-      tracking_data: scope,
-      text: message
-    }
-    ViberApi.post("send_message", data)
-  end
-
-  # Viber msg signature
-  def build_sender() do
-    %{name: "PawChaungKaung", avatar: ""}
-  end
-
-
 end

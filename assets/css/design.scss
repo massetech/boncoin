@@ -10,7 +10,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, a, p {
   @extend .text-dark;
 }
 a:hover, button:hover, i:hover, label:hover {cursor: pointer;text-decoration: none;box-shadow: none;}
-.text-viber{font-family: "Helvetica-Bold"; color: $viber-color;}
+.text-viber{color: $viber-color;}
 i.icon-big{font-size: 30px !important;}
 .font-s-9 {font-size: 0.9rem !important;}
 .font-s-8 {font-size: 0.8rem !important;}

@@ -25,7 +25,7 @@
     .row{id: "field-viber"}
       .col-8.d-flex.align-items-center
         = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
-        %p.m-0.ml-2= gettext "This number is linked to Viber"
+        %p.m-0.ml-2.text-viber= gettext "This number is linked to Viber"
       -# Button to unlink Viber
       .col-4
         %button.btn.btn-secondary.font-s-9.btn-block.m-0= gettext("unlink")
@@ -35,5 +35,5 @@
         .col-2
           = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
         .col-10
-          %span= gettext "Link this number to Viber"
-          %p.m-0= gettext "to receive notifications"
+          %span.text-viber= gettext "Link this number to Viber"
+          %p.m-0.text-viber= gettext "to receive notifications"

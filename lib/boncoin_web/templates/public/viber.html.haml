@@ -18,8 +18,16 @@
           %i.width-40.fa.fa-mobile-alt.mr-3.text-secondary
           %h6.card-title.mb-0= gettext "Please scan the QR code on your Viber app open a conversation."
       .card_body.text-center.p-3
-        .col-xs-12.col-sm-6.offset-sm-3
+        .col-xs-12.col-sm-6.offset-sm-3.flex-column
           = img_tag static_path(@conn, "/images/viber_QR_code.png"), class: "w-50"
+          %a.btn.btn-secondary.text-white.mt-3{href: "viber://pa?chatURI=[pawchaungkaung_en]&text=[Welcome]"}
+            = "Open Viber on my phone"
+          %a.btn.btn-secondary.text-white.mt-3{href: "viber://pa?chatURI=[5198498895350977012]&text=[Welcome]"}
+            = "Open Viber on my phone2"    
+          %a.btn.btn-secondary.text-white.mt-3{href: "viber://contact?id=hPAtCbK9yIaDQumAoQ50sQ=="}
+            = "Open Viber discussion with Thib"
+          %a.btn.btn-secondary.text-white.mt-3{href: "viber://chat?id=hPAtCbK9yIaDQumAoQ50sQ=="}
+            = "Open Viber discussion with Thib"
 
 .accordion{id: "viber"}
   .row

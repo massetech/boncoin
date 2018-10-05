@@ -1,7 +1,7 @@
 defmodule BoncoinWeb.ViberController do
   use BoncoinWeb, :controller
   alias Boncoin.{ViberApi, Members, Contents}
-  alias Boncoin.CustomModules.ViberBot
+  alias Boncoin.CustomModules.BotDecisions
 
 # ---------------------------- CONNECTION -------------------------------------
 
@@ -41,14 +41,13 @@ defmodule BoncoinWeb.ViberController do
   def callback(conn, %{"event" => "conversation_started", "user" => %{"name" => viber_name}} = params) do
     IO.puts("#{viber_name} opened a new conversation")
 
-    %{scope: scope, msg: msg} = %{scope: "welcome", user: conn.assigns.current_user, announce: nil, viber: %{viber_id: nil, viber_name: viber_name, user_msg: nil}}
-      |> ViberBot.call_bot_algorythm()
+    %{scope: scope, msg: msg} = %{scope: "welcome", user: conn.assigns.current_user, announce: nil, bot: %{provider: "viber", bot_user_id: nil, bot_user_name: viber_name, user_msg: nil}}
+      |> BotDecisions.call_bot_algorythm()
       |> List.first()
-    sender = Members.build_sender()
 
     conn
       |> put_status(:ok)
-      |> render("send_message.json", sender: sender, message: msg, tracking_data: scope)
+      |> render("send_message.json", sender: %{name: "PawChaungKaung", avatar: ""}, message: msg, tracking_data: scope)
   end
 
   # Treat a message comming from the user
@@ -56,9 +55,10 @@ defmodule BoncoinWeb.ViberController do
     IO.puts("User #{viber_id} spoke at #{timestamp}")
 
     scope = params["message"]["tracking_data"] || nil # scope is not always there (1st discussion)
-    %{scope: scope, user: conn.assigns.current_user, announce: nil, viber: %{viber_id: viber_id, viber_name: viber_name, user_msg: user_msg}}
-      |> ViberBot.call_bot_algorythm()
-      |> Enum.map(fn result_map -> Members.send_viber_message(viber_id, result_map.scope, result_map.msg) end)
+    %{scope: scope, user: conn.assigns.current_user, announce: nil, bot: %{provider: "viber", bot_user_id: viber_id, bot_user_name: viber_name, user_msg: user_msg}}
+      |> BotDecisions.call_bot_algorythm()
+      |> IO.inspect()
+      |> Enum.map(fn result_map -> ViberApi.send_message(viber_id, result_map.scope, result_map.msg) end)
 
     conn
       |> put_status(:ok)
