@@ -545,7 +545,7 @@ msgid "Describe your offer (size, dimensions, condition, scratches, date of buy,
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:43
+#: lib/boncoin_web/templates/public/viber.html.haml:46
 msgid "How to scan the QR code on Viber ?"
 msgstr ""
 
@@ -656,32 +656,32 @@ msgid "Buyer's and seller's rights"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:101
+#: lib/boncoin_web/templates/public/viber.html.haml:104
 msgid "Explain how to unlink the viber account"
 msgstr "To unlink your phone number and your Viber account, please "
 "go to Viber on your phone and send the message [999#] to PawChaungKaung."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:95
-#: lib/boncoin_web/templates/public/viber.html.haml:101
+#: lib/boncoin_web/templates/public/viber.html.haml:98
+#: lib/boncoin_web/templates/public/viber.html.haml:104
 msgid "How to unlink your Viber account ?"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:86
+#: lib/boncoin_web/templates/public/viber.html.haml:89
 msgid "Explain how to get change phone number from Viber"
 msgstr "To change your phone number from your Viber account, please "
 "go to Viber on your phone and send the message [000#] to PawChaungKaung."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:71
+#: lib/boncoin_web/templates/public/viber.html.haml:74
 msgid "Explain how to get offer list from Viber"
 msgstr "To receive the list of your active offers, please "
 "go to Viber on your phone and send the message [123#] to PawChaungKaung."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:65
-#: lib/boncoin_web/templates/public/viber.html.haml:71
+#: lib/boncoin_web/templates/public/viber.html.haml:68
+#: lib/boncoin_web/templates/public/viber.html.haml:74
 msgid "How to get your offer list ?"
 msgstr ""
 
@@ -827,8 +827,8 @@ msgid "Photo 3"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:80
-#: lib/boncoin_web/templates/public/viber.html.haml:86
+#: lib/boncoin_web/templates/public/viber.html.haml:83
+#: lib/boncoin_web/templates/public/viber.html.haml:89
 msgid "How to change your number ?"
 msgstr ""
 
@@ -901,4 +901,9 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/public/viber.html.haml:6
 msgid "This connection will let you receive notifications..."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/viber.html.haml:31
+msgid "Open Viber on my phone"
 msgstr ""
