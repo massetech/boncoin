@@ -286,12 +286,17 @@ export default class MainView {
     $('#announce_user_id').val(user.id)
     $('#user_nickname').val(user.nickname).focus()
     // $('#announce_user_email').val(user.email)
-    if (user.viber_active == true) {
-      $('#field-viber').show()
-      $('#btn-viber').hide()
+    if (user.bot_active == true) {
+      if (user.bot_provider == "viber") {
+        $('#field-bot').show()
+        $('#btn-bot').hide()
+      } else {
+      }
     } else {
-      $('#field-viber').hide()
-      $('#btn-viber').show()
+      // No bot connected yet to this user
+      $('#field-bot').hide()
+      $('#btn-bot').show()
+      console.log("nok")
     }
     $('.collapsible_form').collapse('show')
   }

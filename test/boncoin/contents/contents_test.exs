@@ -10,8 +10,11 @@ defmodule Boncoin.ContentsTest do
     @invalid_attrs %{active: nil, title_my: nil, title_en: nil}
 
     test "list_familys/0 returns all familys" do
-      family = insert_list(10, :family)
-      assert Contents.list_familys() == family
+      [family_0, family_1, family_2] = insert_list(3, :family)
+      list = Contents.list_familys()
+      assert Enum.count(list, fn x -> x.id == family_0.id end) > 0
+      assert Enum.count(list, fn x -> x.id == family_1.id end) > 0
+      assert Enum.count(list, fn x -> x.id == family_2.id end) > 0
     end
 
     test "get_family!/1 returns the family with given id" do
@@ -69,8 +72,11 @@ defmodule Boncoin.ContentsTest do
     @invalid_attrs %{active: nil, title_my: nil, title_en: nil}
 
     test "list_categorys/0 returns all categorys" do
-      category = insert_list(3, :category) # Preload not included
-      assert Enum.count(Contents.list_categorys()) == Enum.count(category)
+      [category_0, category_1, category_2] = insert_list(3, :category)
+      list = Contents.list_categorys()
+      assert Enum.count(list, fn x -> x.id == category_0.id end) > 0
+      assert Enum.count(list, fn x -> x.id == category_1.id end) > 0
+      assert Enum.count(list, fn x -> x.id == category_2.id end) > 0
     end
 
     test "get_category!/1 returns the category with given id" do
@@ -123,8 +129,11 @@ defmodule Boncoin.ContentsTest do
     @invalid_attrs %{active: nil, latitute: nil, longitude: nil, title_my: nil, title_en: nil}
 
     test "list_townships/0 returns all townships" do
-      township = insert_list(4, :township)
-      assert Enum.count(Contents.list_townships()) == Enum.count(township)
+      [township_0, township_1, township_2] = insert_list(3, :township)
+      list = Contents.list_townships()
+      assert Enum.count(list, fn x -> x.id == township_0.id end) > 0
+      assert Enum.count(list, fn x -> x.id == township_1.id end) > 0
+      assert Enum.count(list, fn x -> x.id == township_2.id end) > 0
     end
 
     test "get_township!/1 returns the township with given id" do
@@ -181,8 +190,11 @@ defmodule Boncoin.ContentsTest do
     @invalid_attrs %{active: nil, latitute: nil, longitude: nil, title_my: nil, title_en: nil}
 
     test "list_divisions/0 returns all divisions" do
-      division = insert_list(5, :division)
-      assert Contents.list_divisions() == division
+      [division_0, division_1, division_2] = insert_list(3, :division)
+      list = Contents.list_divisions()
+      assert Enum.count(list, fn x -> x.id == division_0.id end) > 0
+      assert Enum.count(list, fn x -> x.id == division_1.id end) > 0
+      assert Enum.count(list, fn x -> x.id == division_2.id end) > 0
     end
 
     test "get_division!/1 returns the division with given id" do
@@ -312,12 +324,13 @@ defmodule Boncoin.ContentsTest do
 
     test "list_images/0 returns all images" do
       announce = insert(:announce)
-      {:ok, image} = Contents.create_image(Map.put(@valid_attrs, :announce_id, announce.id))
+      {:ok, image1} = Contents.create_image(Map.put(@valid_attrs, :announce_id, announce.id))
       {:ok, image2} = Contents.create_image(Map.put(@valid_attrs, :announce_id, announce.id))
       {:ok, image3} = Contents.create_image(Map.put(@valid_attrs, :announce_id, announce.id))
-      first_image = List.first(Contents.list_images())
-      assert first_image.id == image.id
-      assert Enum.count(Contents.list_images()) == 3
+      list = Contents.list_images()
+      assert Enum.count(list, fn x -> x.id == image1.id end) > 0
+      assert Enum.count(list, fn x -> x.id == image2.id end) > 0
+      assert Enum.count(list, fn x -> x.id == image3.id end) > 0
     end
 
     test "get_image!/1 returns the image with given id" do

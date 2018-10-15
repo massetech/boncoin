@@ -41,7 +41,7 @@ defmodule BoncoinWeb.ViberController do
   def callback(conn, %{"event" => "conversation_started", "user" => %{"name" => viber_name}} = params) do
     IO.puts("#{viber_name} opened a new conversation")
 
-    %{scope: scope, msg: msg} = %{scope: "welcome", user: conn.assigns.current_user, announce: nil, bot: %{provider: "viber", bot_user_id: nil, bot_user_name: viber_name, user_msg: nil}}
+    %{scope: scope, msg: msg} = %{scope: "welcome", user: conn.assigns.current_user, announce: nil, bot: %{bot_provider: "viber", bot_id: nil, bot_user_name: viber_name, user_msg: nil}}
       |> BotDecisions.call_bot_algorythm()
       |> List.first()
 
@@ -54,10 +54,9 @@ defmodule BoncoinWeb.ViberController do
   def callback(conn, %{"event" => "message", "timestamp" => timestamp, "sender" => %{"id" => viber_id, "name" => viber_name}, "message" => %{"type" => "text", "text" => user_msg}} = params) do
     IO.puts("User #{viber_id} spoke at #{timestamp}")
 
-    scope = params["message"]["tracking_data"] || nil # scope is not always there (1st discussion)
-    %{scope: scope, user: conn.assigns.current_user, announce: nil, bot: %{provider: "viber", bot_user_id: viber_id, bot_user_name: viber_name, user_msg: user_msg}}
+    scope = params["message"]["tracking_data"] || "" # scope is not always there (1st discussion)
+    %{scope: scope, user: conn.assigns.current_user, announce: nil, bot: %{bot_provider: "viber", bot_id: viber_id, bot_user_name: viber_name, user_msg: user_msg}}
       |> BotDecisions.call_bot_algorythm()
-      |> IO.inspect()
       |> Enum.map(fn result_map -> ViberApi.send_message(viber_id, result_map.scope, result_map.msg) end)
 
     conn

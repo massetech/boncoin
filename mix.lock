@@ -4,6 +4,7 @@
   "arc_gcs": {:hex, :arc_gcs, "0.0.8", "27fcfb67ecb4ff7c8d883aee14891acf0673778442fdb8fc62c682d40ff4ba7d", [:mix], [{:arc, "~> 0.8", [hex: :arc, repo: "hexpm", optional: false]}, {:goth, "~> 0.4", [hex: :goth, repo: "hexpm", optional: false]}, {:sweet_xml, "~> 0.6", [hex: :sweet_xml, repo: "hexpm", optional: false]}], "hexpm"},
   "artificery": {:hex, :artificery, "0.2.6", "f602909757263f7897130cbd006b0e40514a541b148d366ad65b89236b93497a", [:mix], [], "hexpm"},
   "base64url": {:hex, :base64url, "0.0.1", "36a90125f5948e3afd7be97662a1504b934dd5dac78451ca6e9abf85a10286be", [:rebar], [], "hexpm"},
+  "browser": {:hex, :browser, "0.1.5", "50670574b1fd78ac3ca44173aef0e3cbf4322e42627dcab351d40d5420f525c1", [:mix], [], "hexpm"},
   "calliope": {:hex, :calliope, "0.4.2", "29d8585331f3c04f95d6e2f7c8367d660cfb6c2dc031bd3d22afb7e7201eb5c6", [:mix], [], "hexpm"},
   "certifi": {:hex, :certifi, "2.3.1", "d0f424232390bf47d82da8478022301c561cf6445b5b5fb6a84d49a9e76d2639", [:rebar3], [{:parse_trans, "3.2.0", [hex: :parse_trans, repo: "hexpm", optional: false]}], "hexpm"},
   "cipher": {:hex, :cipher, "1.4.0", "2e2f45d674902f62bed7b196cec8e7c86bfa86b85031540689b11e1bb6f53d3a", [:mix], [{:plug, ">= 1.1.0", [hex: :plug, repo: "hexpm", optional: false]}, {:poison, "~> 2.0 or ~> 3.0", [hex: :poison, repo: "hexpm", optional: false]}], "hexpm"},

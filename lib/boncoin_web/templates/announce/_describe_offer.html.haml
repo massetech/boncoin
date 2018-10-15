@@ -19,13 +19,29 @@
             - for category <- family.categorys do
               %option{value: "#{category.id}", data-icon: "mr-1 fa fa-#{category.icon}"}= "#{LayoutView.convert_zawgyi(category, "title")}"
   .col-12
+    .form-group.text-left
+      .input-group
+        %span.input-group-prepend
+          .input-group-text.bg-transparent
+            %i.fa.fa-font
+        = text_input @a, :title, class: "form-control", maxlength: "30", autocomplete: "nope", placeholder: gettext("Title")
+
+  .col-12
     .form-group
-      .form-group.text-left
-        .input-group
-          %span.input-group-prepend
-            .input-group-text.bg-transparent
-              %i.fa.fa-font
-          = text_input @a, :title, class: "form-control", maxlength: "30", autocomplete: "nope", placeholder: gettext("Title")
+      .btn-group.w-100{data-toggle: "buttons"}
+        %label.btn.btn-outline-secondary.active.radio-btn.d-inline-flex.justify-content-center.m-0
+          = radio_button @a, :sell_mode, "SELL", autocomplete: "off", class: ""
+          %i.fas.fa-dollar-sign.mx-2
+          %span= gettext("sell")
+        %label.btn.btn-outline-secondary.radio-btn.d-inline-flex.justify-content-center.m-0
+          = radio_button @a, :sell_mode, "RENT", autocomplete: "off", class: ""
+          %i.fas.fa-clock.mx-2
+          %span= gettext("rent")
+        %label.btn.btn-outline-secondary.radio-btn.d-inline-flex.justify-content-center.m-0
+          = radio_button @a, :sell_mode, "GIVE", autocomplete: "off", class: ""
+          %i.fas.fa-gift.mx-2
+          %span= gettext("give")
+
   .col-12
     .form-group
       .input-group

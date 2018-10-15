@@ -521,9 +521,9 @@ defmodule Boncoin.Contents do
       |> Repo.one()
   end
 
-  def get_user_offers(user) do
+  def get_user_active_offers(user) do
     Announce
-      |> Announce.select_user_offers(user)
+      |> Announce.select_user_active_offers(user)
       |> Repo.all()
   end
 
@@ -552,33 +552,6 @@ defmodule Boncoin.Contents do
     end
   end
 
-  # def create_announce(attrs \\ %{}) do
-  #   result_user = Members.create_or_update_user(attrs["user"]) # Create the user or update its params
-  #     |> IO.inspect()
-  #   offer = case result_user do
-  #     {:ok, user} ->
-  #       params = attrs
-  #         |> Map.merge(%{"status" => "PENDING", "user_id" => user.id}) # Make sure the offer is on pending
-  #       %Announce{}
-  #         |> Announce.changeset(params)
-  #         |> Repo.insert()
-  #     error_user -> Announce.changeset(%Announce{}, attrs)
-  #       # error_user # !!!!!! find a way to report user pb in announce changeset
-  #   end
-  #   case offer do
-  #     {:ok, announce} ->
-  #       # Loop on the 3 photo fields of the form params
-  #       for i <- ["image_file_1", "image_file_2", "image_file_3"] do
-  #         unless attrs[i] == "" do
-  #           create_announce_image(announce.id, attrs[i])
-  #         end
-  #       end
-  #       # Encrypt announce ID and generate a safe_link
-  #       update_announce(announce, %{"safe_link" => build_safe_link(announce.id)})
-  #     error_offer -> error_offer
-  #   end
-  # end
-  #
   defp build_safe_link(announce_id) do
     Cipher.encrypt(Integer.to_string(announce_id))
   end
@@ -605,11 +578,11 @@ defmodule Boncoin.Contents do
       {:ok, announce} ->
         bot_params = cond do # No msg sent if user_msg nil
           user.viber_active == true && user_msg != nil && new_offer? == true -> # Viber msg for new offers
-            %{scope: "offer_treated", user: user, announce: announce, bot: %{provider: "viber", bot_user_id: user.viber_id, bot_user_name: user.nickname, user_msg: user_msg}}
+            %{scope: "offer_treated", user: user, announce: announce, bot: %{bot_provider: "viber", bot_id: user.viber_id, bot_user_name: user.nickname, user_msg: user_msg}}
               # |> BotDecisions.call_bot_algorythm()
               # |> Enum.map(fn result_map -> Members.send_viber_message(user.viber_id, result_map.scope, result_map.msg) end)
           user.viber_active == true && user_msg != nil && status == "CLOSED" -> # Viber msg for old offers closed by admin
-            %{scope: "offer_closed", user: user, announce: announce, bot: %{provider: "viber", bot_user_id: user.viber_id, bot_user_name: user.nickname, user_msg: user_msg}}
+            %{scope: "offer_closed", user: user, announce: announce, bot: %{bot_provider: "viber", bot_id: user.viber_id, bot_user_name: user.nickname, user_msg: user_msg}}
               # |> BotDecisions.call_bot_algorythm()
               # |> Enum.map(fn result_map -> Members.send_viber_message(user.viber_id, result_map.scope, result_map.msg) end)
           true -> "" # Do nothing

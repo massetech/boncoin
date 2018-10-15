@@ -5,13 +5,16 @@ defmodule Boncoin.MembersTest do
   import Boncoin.Factory
 
   describe "users" do
-    @valid_attrs %{email: "some_email@gmail.com", language: "en", nickname: "some name", phone_number: "09030303030", viber_active: true, viber_id: "some viber_id"}
-    @update_attrs %{email: "some_other_email@gmail.com", language: "mr", nickname: "some updated name", phone_number: "09726272625", viber_active: false, viber_id: "some updated viber_id"}
-    @invalid_attrs %{email: nil, language: nil, nickname: nil, password: nil, phone_number: nil, viber_active: nil, viber_id: nil}
+    @valid_attrs %{email: "some_email@gmail.com", language: "en", nickname: "some name", phone_number: "09030303030", bot_active: true, bot_id: "some bot_id"}
+    @update_attrs %{email: "some_other_email@gmail.com", language: "mr", nickname: "some updated name", phone_number: "09726272625", bot_active: false, bot_id: "some updated bot_id"}
+    @invalid_attrs %{email: nil, language: nil, nickname: nil, password: nil, phone_number: nil, bot_active: nil, bot_id: nil}
 
     test "list_users/0 returns all users" do
-      user = insert_list(11, :user)
-      assert Enum.count(Members.list_users()) == Enum.count(user)
+      [user_0, user_1, user_2] = insert_list(3, :user)
+      list = Members.list_users()
+      assert Enum.count(list, fn x -> x.id == user_0.id end) > 0
+      assert Enum.count(list, fn x -> x.id == user_1.id end) > 0
+      assert Enum.count(list, fn x -> x.id == user_2.id end) > 0
     end
 
     test "get_user!/1 returns the user with given id" do
@@ -25,8 +28,8 @@ defmodule Boncoin.MembersTest do
       assert user.language == "en"
       assert user.nickname == "some name"
       assert user.phone_number == "09030303030"
-      assert user.viber_active == true
-      assert user.viber_id == "some viber_id"
+      assert user.bot_active == true
+      assert user.bot_id == "some bot_id"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -41,8 +44,8 @@ defmodule Boncoin.MembersTest do
       assert user.language == "mr"
       assert user.nickname == "some updated name"
       assert user.phone_number == "09726272625"
-      assert user.viber_active == false
-      assert user.viber_id == "some updated viber_id"
+      assert user.bot_active == false
+      assert user.bot_id == "some updated bot_id"
     end
 
     test "update_user/2 with invalid data returns error changeset" do

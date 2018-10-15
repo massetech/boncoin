@@ -26,7 +26,7 @@ defmodule Boncoin.Auth.CheckApiAccess do
         end
       auth_viber != nil -> # API call from Viber
         viber_id = conn.params["sender"]["id"] || conn.params["user_id"] || nil
-        user = if viber_id == nil, do: nil, else: Members.get_user_by_viber_id(viber_id)
+        user = if viber_id == nil, do: nil, else: Members.get_user_by_bot_id(viber_id, "viber")
         conn
           |> assign(:current_user, user)
       true -> # Other call = Danger !

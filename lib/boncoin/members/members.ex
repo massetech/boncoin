@@ -67,38 +67,31 @@ defmodule Boncoin.Members do
 
   def get_user!(id), do: Repo.get!(User, id)
 
-  def get_user_by_phone_number(phone_number) do
+  def get_active_user_by_phone_number(phone_number) do
     User
-      |> User.filter_user_by_phone_number(phone_number)
+      |> User.filter_active_user_by_phone_number(phone_number)
       |> Repo.one()
       |> Repo.preload(:announces)
   end
 
-  def get_other_user_by_phone_number(phone_number)do
-    User
-      |> User.search_other_user_for_phone_number(phone_number)
-      |> Repo.one()
-  end
+  # def get_other_user_by_phone_number(phone_number)do
+  #   User
+  #     |> User.search_other_user_for_phone_number(phone_number)
+  #     |> Repo.one()
+  # end
 
-  def get_user_by_viber_id(viber_id) do
+  def get_user_by_bot_id(bot_id, provider) do
     User
-      |> User.filter_user_by_viber_id(viber_id)
+      |> User.filter_user_by_bot_id(bot_id, provider)
       |> Repo.one()
   end
 
   def get_or_initialize_user_by_phone_number(phone_number) do
-    case get_user_by_phone_number(phone_number) do
+    case get_active_user_by_phone_number(phone_number) do
       nil -> {:new_user, %User{}}
       user -> {:ok, user}
     end
   end
-
-  # def create_or_update_user(%{"phone_number" => phone_number} = params) do
-  #   case get_user_by_phone_number(phone_number) do
-  #     nil -> create_user(params)
-  #     user -> update_user(user, params)
-  #   end
-  # end
 
   def create_user(attrs \\ %{}) do
     %User{}
@@ -107,7 +100,7 @@ defmodule Boncoin.Members do
   end
 
   def create_user_announce(%{"phone_number" => phone_number} = params) do
-    user = case get_user_by_phone_number(phone_number) do
+    user = case get_active_user_by_phone_number(phone_number) do
       nil -> create_user(params)
       user -> update_user(user, params) # Guest user pass by here
     end
@@ -123,25 +116,35 @@ defmodule Boncoin.Members do
       |> Repo.update()
   end
 
-  def remove_viber_id(user) do
-    update_user(user, %{viber_id: nil, viber_active: false})
+  def permission_to_quit_bot(user) do
+    case Contents.get_user_active_offers(user) do
+      [] -> {:ok, "User allowed to quit bot"}
+      offers -> {:not_allowed, Enum.count(offers)}
+    end
   end
 
-  def link_viber_id_to_phone_number(viber_id, phone_number, user_name, language) do
-    params = %{phone_number: phone_number, viber_id: viber_id, nickname: user_name, language: language}
-    case get_user_by_phone_number(phone_number) do
+  def remove_bot(user) do
+    case Contents.get_user_active_offers(user) do
+      [] -> update_user(user, %{active: false, bot_active: false})
+      offers -> {:not_allowed, Enum.count(offers)}
+    end
+  end
+
+  def link_bot_id_to_phone_number(bot_id, phone_number, user_name, language) do
+    params = %{phone_number: phone_number, bot_id: bot_id, nickname: user_name, language: language}
+    case get_active_user_by_phone_number(phone_number) do
       nil -> create_user(params) # This phone number is not yet known
       user -> # This phone number is known
         cond do
-          user.viber_active == false -> # This phone number is not yet linked to viber
+          user.bot_active == false -> # This phone number is not yet linked to a bot
             update_user(user, params)
-          user.viber_active == true && user.phone_number == params.phone_number -> # This phone number is linked to this viber and has to be changed
+          user.bot_active == true && user.phone_number == params.phone_number -> # This phone number is linked to this bot and has to be changed
             # Delete
         end
-        case user.viber_active do # This number is already used
-          true -> params = %{viber_id: viber_id, language: language, nickname: user_name}
-          # This number was not yet connected to viber
-          false -> params = %{viber_id: viber_id, language: language, viber_active: true, nickname: user_name}
+        case user.bot_active do # This number is already used
+          true -> params = %{bot_id: bot_id, language: language, nickname: user_name}
+          # This number was not yet connected to a bot
+          false -> params = %{bot_id: bot_id, language: language, bot_active: true, nickname: user_name}
         end
         case update_user(user, params) do
           {:ok, _} -> {:updated, params}

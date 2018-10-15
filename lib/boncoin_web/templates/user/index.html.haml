@@ -23,7 +23,9 @@
         %th= "Email"
         %th= "Language"
         %th= "Password"
-        %th= "Viber ID"
+        %th= "Bot provider"
+        %th= "Bot status"
+        %th= "Bot ID"
         %th= "Nb offers"
         %th= "Actions"
     %tbody
@@ -36,7 +38,9 @@
           %td= user.email
           %td= img_tag static_path(@conn, "/fonts/#{user.language}.svg"), class: "flag-small"
           %td= user.member_psw
-          %td= user.viber_id
+          %td= user.bot_provider
+          %td= user.bot_active
+          %td= user.bot_id
           %td= Kernel.length(user.announces)
           %td
             - unless (@conn.assigns.current_user.id == user.id) || (user.role == "GUEST") do

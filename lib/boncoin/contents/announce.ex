@@ -15,7 +15,8 @@ defmodule Boncoin.Contents.Announce do
     field :latitute, :string
     field :longitude, :string
     field :price, :float
-    field :currency, :string, default: "ကျပ်"
+    field :currency, :string, default: "kyat"
+    field :sell_mode, :string, default: "sell"
     field :status, :string, default: "PENDING"
     field :cause, :string
     field :title, :string
@@ -35,7 +36,7 @@ defmodule Boncoin.Contents.Announce do
     timestamps()
   end
 
-  @required_fields ~w(user_id category_id township_id title price description currency)a
+  @required_fields ~w(user_id category_id township_id title price description currency sell_mode)a
   @optional_fields ~w(status cause safe_link language latitute longitude conditions nb_view nb_clic nb_alert validity_date parution_date closing_date priority zawgyi treated_by_id)a
 
   @doc false
@@ -50,6 +51,7 @@ defmodule Boncoin.Contents.Announce do
       |> assoc_constraint(:township)
       |> validate_inclusion(:status, ["PENDING", "ONLINE", "REFUSED", "OUTDATED", "CLOSED"])
       |> validate_inclusion(:currency, ["Kyats", "Lacks", "USD"])
+      |> validate_inclusion(:sell_mode, ["SELL", "RENT", "GIVE"])
       |> check_offer_has_one_photo_min(params)
   end
 
@@ -171,7 +173,7 @@ defmodule Boncoin.Contents.Announce do
     end
   end
 
-  def select_user_offers(query, user) do
+  def select_user_active_offers(query, user) do
     from a in query,
       where: a.status == "ONLINE" and a.user_id == ^user.id
   end

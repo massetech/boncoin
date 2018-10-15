@@ -56,6 +56,7 @@ defmodule Boncoin.Mixfile do
       {:cipher, ">= 1.4.0"},
       {:paginator, "~> 0.4"},
       {:ex_machina, "~> 2.2"},
+      {:browser, "~> 0.1.0"}
     ]
   end
 

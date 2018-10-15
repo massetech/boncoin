@@ -3,10 +3,11 @@ defmodule Boncoin.CustomModules.BotDecisions do
   alias Boncoin.{Members, Contents}
   @website_url "https://www.pawchaungkaung.com"
   @website_url_form "https://www.pawchaungkaung.com/announces/new"
+  @website_bot_explained "https://www.pawchaungkaung.com/bots"
 
   # -------------------- DECISION  -------------------------------
 
-  def call_bot_algorythm(%{scope: scope, user: user, announce: announce, bot: %{provider: provider, bot_user_id: bot_user_id, bot_user_name: bot_user_name, user_msg: user_msg}} = params) do
+  def call_bot_algorythm(%{scope: scope, user: user, announce: announce, bot: %{bot_provider: bot_provider, bot_id: bot_id, bot_user_name: bot_user_name, user_msg: bot_user_msg}} = params) do
     # IO.puts("--- bot params---")
     # IO.inspect(params)
     cond do
@@ -20,7 +21,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
 
       # We are waiting for a LANGUAGE
       scope == "language" ->
-        language = String.slice(user_msg,0,1) |> convert_language()
+        language = String.slice(bot_user_msg,0,1) |> convert_language()
         case user do
           nil -> # User unknown : we were waiting the user language input
             case language do
@@ -38,58 +39,49 @@ defmodule Boncoin.CustomModules.BotDecisions do
             end
         end
 
-      # We are waiting for a NEW PHONE NUMBER to create the user
-      user == nil && scope == "link_phone_mr" || scope == "link_phone_my" || scope == "link_phone_en" ->
-        language = String.slice(scope, 11..12)
-        case String.match?(user_msg, ~r/^([09]{1})([0-9]{10})$/) do
-          false -> [treat_msg("repeat_phone", language)] # There is no phone number in the message : ask again for it
+      # We are waiting for a PHONE NUMBER for first or second time
+      # (scope == "link_phone_mr" || scope == "link_phone_my" || scope == "link_phone_en" || scope == "2nd_link_phone_mr" || scope == "2nd_link_phone_my" || scope == "2nd_link_phone_en")
+      user == nil && String.contains?(scope, "link_phone") ->
+        len = String.length(scope)
+        language = String.slice(scope, len-2..len)
+        case String.match?(bot_user_msg, ~r/^([09]{1})([0-9]{10})$/) do
+          false ->
+            case String.contains?(scope, "2ndlink_phone") do
+              false -> # There is no phone number in the message : ask again for it
+                [treat_msg("repeat_phone", language)]
+              true -> # There is no phone number in the message for the 2nd time : return to language asking
+                [treat_msg("welcome")]
+            end
           true -> # There is a phone number in the message
-            phone_number = user_msg
-            other_user = Members.get_other_user_by_phone_number(phone_number)
+            user_params = %{phone_number: bot_user_msg, bot_provider: bot_provider, bot_id: bot_id, nickname: bot_user_name, language: language}
+            other_user = Members.get_active_user_by_phone_number(user_params.phone_number)
             case other_user do
               nil -> # The phone number is not used yet : create the user with this phone number
-                case Members.create_user(%{phone_number: phone_number, viber_active: true, bot_user_id: bot_user_id, nickname: bot_user_name, language: language}) do
+                case Members.create_user(user_params) do
                   {:ok, new_user} -> [treat_msg("new_user_created", new_user)]
                   _ -> [treat_msg("technical problem", language)]
                 end
-              other_user -> manage_phone_number_conflicts(nil, other_user, phone_number, bot_user_id, bot_user_name, language, "link_phone") # The phone number is already used : check the rights
+              other_user -> # The phone number is already used : announce conflict
+                [treat_msg("bot_conflict_contact_us", language, bot_user_name)]
             end
         end
-
-        # 2nd chance for a NEW PHONE NUMBER to create the user
-        user == nil && scope == "2nd_link_phone_mr" || scope == "2nd_link_phone_my" || scope == "2nd_link_phone_en" ->
-          language = String.slice(scope, 15..16)
-          case String.match?(user_msg, ~r/^([09]{1})([0-9]{10})$/) do
-            false -> [treat_msg("welcome")] # There is no phone number in the message for the 2nd time : return to language asking
-            true -> # There is a phone number in the message
-              phone_number = user_msg
-              other_user = Members.get_other_user_by_phone_number(phone_number)
-              case other_user do
-                nil -> # The phone number is not used yet : create the user with this phone number
-                  case Members.create_user(%{phone_number: phone_number, viber_active: true, bot_user_id: bot_user_id, nickname: bot_user_name, language: language}) do
-                    {:ok, new_user} -> [treat_msg("new_user_created", new_user)]
-                    _ -> [treat_msg("technical problem", language)]
-                  end
-                other_user -> manage_phone_number_conflicts(nil, other_user, phone_number, bot_user_id, bot_user_name, language, "link_phone") # The phone number is already used : check the rights
-              end
-          end
 
       # We send a NOTIFICATION to user after treating the offer
       scope == "offer_treated" ->
         case announce.status do
           "ONLINE" -> [treat_msg("announce_accepted", user, announce, build_announce_view_link(announce))]
-          "REFUSED" -> [treat_msg("announce_refused", user, announce, user_msg)]
+          "REFUSED" -> [treat_msg("announce_refused", user, announce, bot_user_msg)]
         end
 
       # We send a NOTIFICATION to user after removing his offer
-      scope == "offer_closed" -> [treat_msg("announce_closed", user, announce, user_msg)]
+      scope == "offer_closed" -> [treat_msg("announce_closed", user, announce, bot_user_msg)]
 
       # User wants to CHANGE LANGUAGE
-      user != nil && user_msg == "*123#" -> [treat_msg("change_language", user)]
+      user != nil && bot_user_msg == "*123#" -> [treat_msg("change_language", user)]
 
       # User wants to see his OFFERS LIST
-      user != nil && user_msg == "*111#" ->
-        offers = Contents.get_user_offers(user)
+      user != nil && bot_user_msg == "*111#" ->
+        offers = Contents.get_user_active_offers(user)
         case Kernel.length(offers) do
           0 -> [treat_msg("0_active_offer", user)]
           nb_offers ->
@@ -98,69 +90,52 @@ defmodule Boncoin.CustomModules.BotDecisions do
         end
 
       # User wants to UPDATE PHONE NUMBER
-      user != nil && user_msg == "*888#" -> [treat_msg("change_phone", user)]
+      user != nil && bot_user_msg == "*888#" -> [treat_msg("change_phone", user)]
 
       # User confirms to UPDATE PHONE NUMBER
       user != nil && scope == "update_phone" ->
-        case String.match?(user_msg, ~r/^([09]{1})([0-9]{10})$/) do
-        false -> [treat_msg("wrong_phone_number", user)] # There is no phone number in the message : cancel the update
-        true -> # There is a phone number in the message
-          # IO.puts("Phone number updating from Viber")
-          phone_number = user_msg
-          other_user = Members.get_other_user_by_phone_number(phone_number)
-          cond do
-            user.phone_number == user_msg -> [treat_msg("same_phone_number", user)] # Same phone number then user old one
-            other_user == nil -> # The phone number is not used yet : update the user phone number
-              case Members.update_user(user, %{phone_number: phone_number}) do
-                {:ok, user} -> [treat_msg("new_phone_updated", user)]
-                _ -> [treat_msg("technical problem", user.language)]
-              end
-            true -> manage_phone_number_conflicts(user, other_user, phone_number, nil, nil, nil, "udate_phone") # The phone number is already used : check the rights
-          end
+        case String.match?(bot_user_msg, ~r/^([09]{1})([0-9]{10})$/) do
+          false -> [treat_msg("wrong_phone_number", user)] # There is no phone number in the message : cancel the update
+          true -> # There is a phone number in the message
+            phone_number = bot_user_msg
+            other_user = Members.get_active_user_by_phone_number(phone_number)
+            cond do
+              other_user == nil ->  # The phone number is not used yet
+                case Members.update_user(user, %{phone_number: phone_number}) do
+                  {:ok, user} -> [treat_msg("new_phone_updated", user)]
+                  _ -> [treat_msg("technical problem", user.language)]
+                end
+              user.phone_number == bot_user_msg -> # Same phone number then user old one
+                [treat_msg("same_phone_number", user)]
+              true -> # The phone number is already used : announce conflict
+                [treat_msg("bot_conflict_contact_us", user.language, user.nickname)]
+            end
         end
 
-      # User is quitting Viber
-      user != nil && user_msg == "*999#" ->
-        answer = Members.remove_viber_id(user)
+      # User wants to QUIT BOT
+      user != nil && bot_user_msg == "*999#" ->
+        answer = Members.permission_to_quit_bot(user)
         case answer do
-          {:ok, user} -> [treat_msg("quit_viber", user)]
-          {:error, _msg} -> [treat_msg("cannot_quit_viber", user)]
+          {:ok, _msg} -> [treat_msg("quit_bot", user)]
+          {:not_allowed, nb_offers} -> [treat_msg("not_allowed_to_quit_bot", user, nb_offers)]
+        end
+
+      # User confirms to QUIT BOT
+      user != nil && scope == "quit_bot" && bot_user_msg == "1" ->
+        answer = Members.remove_bot(user)
+        case answer do
+          {:ok, _user} -> [treat_msg("bot_quitted", user)]
+          {:not_allowed, nb_offers} -> [treat_msg("not_allowed_to_quit_bot", user, nb_offers)]
+          {:error, _msg} -> [treat_msg("cannot_quit_bot", user)]
         end
 
       # User asked for help
-      user_msg == "0" -> [treat_msg("propose_help", user)]
+      bot_user_msg == "0" -> [treat_msg("propose_help", user)]
 
-      # Nothing to say (fallback)
+      # Nothing to say (fallbacks)
       user != nil -> [treat_msg("nothing_to_say", user)]
-      true -> [treat_msg("welcome")] # [treat_msg("repeat_phone", "mr")]
+      true -> [treat_msg("welcome")]
 
-    end
-  end
-
-  def manage_phone_number_conflicts(user, other_user, phone_number, bot_user_id, user_name, language, scope) do
-    # This loop can be used with or without user
-    cond do
-      other_user.viber_active == true -> [treat_msg("viber_conflict_contact_us", language, user_name)] # 2 Vibers for the same account : contact us
-      # Rules removed to let a user link to Viber even if there is some announces
-      # other_user.nb_announces > 0 -> treat_msg("wait_for_no_more_offers", language, user_name, other_user.nb_announces) # The new phone number has active offers : wait until there is no more
-      # other_user.nb_announces == 0 &&
-      scope == "link_phone" -> # The phone is not linked to viber and has no announce yet : use it to create new user
-        other_user = Members.get_user!(other_user.id)
-        case Members.update_user(other_user, %{viber_active: true, bot_user_id: bot_user_id, nickname: user_name, language: language}) do
-          {:ok, user} -> [treat_msg("new_phone_updated", user)]
-          _ -> [treat_msg("technical problem", language)]
-        end
-      # other_user.nb_announces == 0 &&
-      scope == "udate_phone" -> # The new phone is not linked to viber and has no announce yet : update the user phone number
-        # Known user phone update
-        case Members.delete_user(other_user) do
-          {:ok, _} ->
-            case Members.update_user(user, %{phone: phone_number}) do
-              {:updated, user} -> [treat_msg("new_phone_updated", user)]
-              _ -> [treat_msg("technical problem", language)]
-            end
-          _ -> [treat_msg("technical problem", language)]
-        end
     end
   end
 
@@ -189,24 +164,26 @@ defmodule Boncoin.CustomModules.BotDecisions do
   def treat_msg("ask_phone", language) do %{scope: "link_phone_#{language}", msg: ask_phone_msg(language)} end
   def treat_msg("repeat_phone", language) do %{scope: "2nd_link_phone_#{language}", msg: ask_again_phone_msg(language)} end
   def treat_msg("technical problem", language) do %{scope: "link_phone_#{language}", msg: announce_technical_error(language)} end
-  def treat_msg("viber_conflict_contact_us", language, user_name) do %{scope: nil, msg: announce_viber_account_conflict(language, user_name)} end
+  def treat_msg("bot_conflict_contact_us", language, user_name) do %{scope: nil, msg: announce_bot_conflict(language, user_name)} end
 
   # User is  known
-  def treat_msg("new_user_created", user) do %{scope: nil, msg: confirm_user_created(user.language, user.nickname)} end
+  def treat_msg("new_user_created", user) do %{scope: nil, msg: confirm_user_created(user.language, user.nickname, user.bot_provider)} end
   def treat_msg("welcome_back", user) do %{scope: nil, msg: welcome_back_msg(user.language, user.nickname)} end
   def treat_msg("nothing_to_say", user) do %{scope: nil, msg: nothing_to_say_msg(user.language, user.nickname)} end
   def treat_msg("announce_accepted", user, announce, link) do %{scope: nil, msg: tell_offer_accepted(user.language, user.nickname, announce.title, LayoutView.format_date(announce.validity_date), link)} end
   def treat_msg("announce_refused", user, announce, reason) do %{scope: nil, msg: tell_offer_refused(user.language, user.nickname, announce.title, reason)} end
   def treat_msg("announce_closed", user, announce, reason) do %{scope: nil, msg: tell_offer_closed(user.language, user.nickname, announce.title, reason)} end
-  def treat_msg("propose_help", user) do %{scope: "help", msg: inform_help(user.language, user.nickname)} end
+  def treat_msg("propose_help", user) do %{scope: "help", msg: inform_help(user.language, user.nickname, user.bot_provider)} end
   def treat_msg("change_language", user) do %{scope: "language", msg: change_language_msg(user.language, user.nickname)} end
   def treat_msg("change_phone", user) do %{scope: "update_phone", msg: alert_before_phone_update(user.language, user.nickname)} end
   def treat_msg("wrong_phone_number", user) do %{scope: nil, msg: inform_wrong_phone_number(user.language, user.nickname)} end
-  def treat_msg("same_phone_number", user) do %{scope: nil, msg: tell_same_phone_number(user.language, user.nickname)} end
+  def treat_msg("same_phone_number", user) do %{scope: nil, msg: tell_same_phone_number(user.language, user.nickname, user.bot_provider)} end
   def treat_msg("new_phone_updated", user) do %{scope: nil, msg: confirm_new_phone_number_updated(user.language, user.nickname)} end
 
-  def treat_msg("quit_viber", user) do %{scope: nil, msg: tell_viber_quitted(user.language, user.nickname)} end
-  def treat_msg("cannot_quit_viber", user) do %{scope: nil, msg: tell_viber_cannot_quit(user.language, user.nickname)} end
+  def treat_msg("not_allowed_to_quit_bot", user, nb_offers) do %{scope: nil, msg: tell_not_allowed_to_quit_bot(user.language, user.nickname, user.bot_provider, nb_offers)} end
+  def treat_msg("quit_bot", user) do %{scope: "quit_bot", msg: alert_before_quit_bot(user.language, user.nickname, user.bot_provider)} end
+  def treat_msg("bot_quitted", user) do %{scope: nil, msg: tell_bot_quitted(user.language, user.nickname, user.bot_provider)} end
+  def treat_msg("cannot_quit_bot", user) do %{scope: nil, msg: tell_bot_cannot_quit(user.language, user.nickname, user.bot_provider)} end
   def treat_msg("0_active_offer", user) do %{scope: nil, msg: tell_no_active_offer(user.language, user.nickname)} end
   def treat_msg("nb_active_offers", user, nb_offers) do %{scope: nil, msg: tell_nb_active_offers(user.language, user.nickname, nb_offers)} end
   def treat_msg("detail_active_offer", user, offer, link) do %{scope: nil, msg: detail_active_offers(user.language, offer.title, LayoutView.format_date(offer.validity_date), link)} end
@@ -279,19 +256,19 @@ defmodule Boncoin.CustomModules.BotDecisions do
     end
   end
 
-  defp confirm_user_created(language, nickname) do
-    uni = "သင်၏ဖုန်းနံပါတ်နှင့်ဗိုင်ဘာနံပါတ်တို့သည် အဆက်အသွယ်ရပြီးပြီဖြစ်သည်။ \nကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။"
+  defp confirm_user_created(language, nickname, bot_provider) do
+    uni = "သင်၏ဖုန်းနံပါတ်နှင် #{String.capitalize(bot_provider)} နံပါတ်တို့သည် အဆက်အသွယ်ရပြီးပြီဖြစ်သည်။ \nကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။"
     case language do
-      "en" -> "Your phone number and viber account are now linked.\nPlease visit us on #{@website_url}"
+      "en" -> "Your phone number and #{String.capitalize(bot_provider)} account are now linked.\nPlease visit us on #{@website_url}"
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
-  defp tell_same_phone_number(language, nickname) do
-    uni = "သင်သိလား သင့်ရဲ့ဖုန်းနံပါတ်က ပေါချောင်ကောင်းရဲ့ဗိုင်ဘာနဲ့ အဆက်အသွယ်ရပြီးသားဖြစ်နေပြီ။ :)"
+  defp tell_same_phone_number(language, nickname, bot_provider) do
+    uni = "သင်သိလား သင့်ရဲ့ဖုန်းနံပါတ်က ပေါချောင်ကောင်းရဲ #{String.capitalize(bot_provider)} နဲ့ အဆက်အသွယ်ရပြီးသားဖြစ်နေပြီ။ :)"
     case language do
-      "en" -> "You know what #{nickname}, your phone number was already linked to this viber account :)"
+      "en" -> "You know what #{nickname}, your phone number was already linked to this #{String.capitalize(bot_provider)} account :)"
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end
@@ -307,9 +284,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp announce_phone_used(language) do
-    uni = "စိတ်မကောင်းပါဘူး ဒီနံဖုန်းပါတ်ကအခြားဗိုင်ဘာအကောင့်နဲ့ ချိတ်ဆက် ပြီးဖြစ်နေပါပြီ။ ကျေးဇူးပြု၍ ချိတ်ဆက်မှုကိုအရင်ဖြုတ်ပြစ်ရန် #{@website_url_form} သို့ဝင်ကြည့်ပါ။ (သို့) ပေါချောင်ကောင်းသို့ဆက်သွယ်ပါ။"
+    uni = "စိတ်မကောင်းပါဘူး ဒီနံဖုန်းပါတ်ကအခြနဲ့ ချိတ်ဆက် ပြီးဖြစ်နေပါပြီ။ ကျေးဇူးပြု၍ ချိတ်ဆက်မှုကိုအရင်ဖြုတ်ပြစ်ရန် #{@website_bot_explained} သို့ဝင်ကြည့်ပါ။ (သို့) ပေါချောင်ကောင်းသို့ဆက်သွယ်ပါ။"
     case language do
-      "en" -> "Sorry but this phone number is linked to another Viber user. Please unlink it first on #{@website_url_form} or contact us."
+      "en" -> "Sorry but this phone number is linked to another user. Please unlink it first on #{@website_bot_explained} or contact us."
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end
@@ -324,19 +301,20 @@ defmodule Boncoin.CustomModules.BotDecisions do
     end
   end
 
-  defp announce_viber_account_conflict(language, nickname) do
-    uni = "စိတ်မကောင်းပါဘူး #{nickname} ဒီဖုန်းနံပါတ်ကိုအခြားဗိုင်ဘာမှအသုံးပြုပြီးဖြစ်ပါတယ်။ ကျေးဇူးပြု၍ နောက်ထပ်တစ်ကြိမ်ပြန် ကြိုးစားကြည့်ပါ။ (သို့) ပေါချောင်ကောင်းသို့ဆက်သွယ်ပါ။"
+  # Dean
+  defp announce_bot_conflict(language, nickname) do
+    uni = "စိတ်မကောင်းပါဘူး #{nickname} ဒီဖုန်းနံပါတ်ကိုအခြာအသုံးပြုပြီးဖြစ်ပါတယ်။ ကျေးဇူးပြု၍ နောက်ထပ်တစ်ကြိမ်ပြန် ကြိုးစားကြည့်ပါ။ (သို့) ပေါချောင်ကောင်းသို့ဆက်သွယ်ပါ။"
     case language do
-      "en" -> "Sorry #{nickname}, this phone number is linked to another Viber user. Please unlink it first on #{@website_url_form} or contact us."
+      "en" -> "Sorry #{nickname}, this phone number is used by another user. Please unlink it first on #{@website_bot_explained} or contact us."
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
-  defp inform_help(language, nickname) do
-    uni = "ကျွန်တော်/မ တို့သည် #{nickname} ကိုကူညီရန်အသင့်ပါ၊ \n\nဘာသာစကားပြောင်းရန် [*123#]\nသင့်ကြော်ငြာကိုကြည့်ရန် [*111#]\nဖုန်းနံပါတ်ပြောင်းရန် [*888#]\nViber မှထွက်ရန် [*999#]"
+  defp inform_help(language, nickname, bot_provider) do
+    uni = "ကျွန်တော်/မ တို့သည် #{nickname} ကိုကူညီရန်အသင့်ပါ၊ \n\nဘာသာစကားပြောင်းရန် [*123#]\nသင့်ကြော်ငြာကိုကြည့်ရန် [*111#]\nဖုန်းနံပါတ်ပြောင်းရန် [*888#]\n#{String.capitalize(bot_provider)} မှထွက်ရန် [*999#]"
     case language do
-      "en" -> "We are happy to help #{nickname},\n\nchange language [*123#]\nsee your offers [*111#]\nchange phone number [*888#]\nquit Viber [*999#]"
+      "en" -> "We are happy to help #{nickname},\n\nchange language [*123#]\nsee your offers [*111#]\nchange phone number [*888#]\nquit #{String.capitalize(bot_provider)} [*999#]"
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end
@@ -370,19 +348,37 @@ defmodule Boncoin.CustomModules.BotDecisions do
     end
   end
 
-  defp tell_viber_quitted(language, nickname) do
-    uni = "မင်္ဂလာပါ #{nickname}၊ သင့်ရဲ့ဗိုင်ဘာချိတ်ဆက်မှုကိုဖြုတ်ပြစ်ပြီးဖြစ်ပါပြီ။ မကြာခင်မှာ #{@website_url} တွင်ပြန်ဆုံကြမယ်နော်။"
+  defp alert_before_quit_bot(language, nickname, bot_provider) do
+    uni = ""
     case language do
-      "en" -> "Your Viber account has been unlinked.\nHope to see you soon on #{@website_url}"
+      "en" -> "Are you sure you want to remove #{String.capitalize(bot_provider)} link ?. If you are sure please type 1\n"
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
-  defp tell_viber_cannot_quit(language, nickname) do
-    uni = "စိတ်မကောင်းပါဘူး#{nickname}၊ သင်ရဲ Viber ကိုဖြုတ်ဂျမရပါ။ ကျေးဇူးပြု၍သင်၏ကျွန်တော်/မတို့ကိုဆက်သွယ်ပါ။"
+  defp tell_bot_quitted(language, nickname, bot_provider) do
+    uni = "မင်္ဂလာပါ #{nickname}၊ သင့်ရဲ #{String.capitalize(bot_provider)} ချိတ်ဆက်မှုကိုဖြုတ်ပြစ်ပြီးဖြစ်ပါပြီ။ မကြာခင်မှာ #{@website_url} တွင်ပြန်ဆုံကြမယ်နော်။"
     case language do
-      "en" -> "Sorry #{nickname} but we cannot unlink your Viber. Please contact us."
+      "en" -> "Your #{String.capitalize(bot_provider)} account has been unlinked.\nHope to see you soon on #{@website_url}"
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
+    end
+  end
+
+  defp tell_not_allowed_to_quit_bot(language, nickname, bot_provider, nb_offers) do
+    uni = ""
+    case language do
+      "en" -> "Sorry #{nickname}, we cannot unlink your #{String.capitalize(bot_provider)} account because you still have #{nb_offers} active offers. \n\nFor help please send [0]"
+      "my" -> uni
+      "mr" -> Rabbit.uni2zg(uni)
+    end
+  end
+
+  defp tell_bot_cannot_quit(language, nickname, bot_provider) do
+    uni = "စိတ်မကောင်းပါဘူး#{nickname}၊ သင်ရဲ #{String.capitalize(bot_provider)} ကိုဖြုတ်ဂျမရပါ။ ကျေးဇူးပြု၍သင်၏ကျွန်တော်/မတို့ကိုဆက်သွယ်ပါ။"
+    case language do
+      "en" -> "Sorry #{nickname} but we cannot unlink your #{String.capitalize(bot_provider)} account. Please contact us."
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end

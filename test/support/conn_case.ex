@@ -16,6 +16,7 @@ defmodule BoncoinWeb.ConnCase do
   use ExUnit.CaseTemplate
   import Boncoin.Factory
   alias Boncoin.Auth.Guardian
+  alias Boncoin.Members
 
   using do
     quote do
@@ -51,14 +52,17 @@ defmodule BoncoinWeb.ConnCase do
           |> Guardian.Plug.sign_in(user, %{"typ" => "user-access"})
         {conn, user}
       true ->
-        user = insert(:guest_user)
+        # user = insert(:guest_user) # User created by the DB seed
+        user = Members.get_guest_user()
         {Phoenix.ConnTest.build_conn(), user}
     end
 
+    final_conn = conn
+      |> Plug.Conn.put_req_header("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36")
     # Fix the language to English
     # conn = %{conn | params: Map.put(conn.params, "locale", "en")}
     # conn |> IO.inspect()
-    {:ok, conn: conn, user: user}
+    {:ok, conn: final_conn, user: user}
   end
 
 end

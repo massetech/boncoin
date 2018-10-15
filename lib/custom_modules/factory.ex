@@ -10,8 +10,9 @@ defmodule Boncoin.Factory do
       role: "ADMIN",
       language: "en",
       member_psw: "e",
-      viber_active: true,
-      viber_id: "e",
+      bot_provider: "viber",
+      bot_active: true,
+      bot_id: "e",
       nickname: "Mr admin",
     }
   end
@@ -23,24 +24,26 @@ defmodule Boncoin.Factory do
       role: "MEMBER",
       language: "en",
       member_psw: "e",
-      viber_active: true,
-      viber_id: "12345671",
+      bot_provider: "viber",
+      bot_active: true,
+      bot_id: "12345671",
       nickname: "Mr member",
     }
   end
 
-  def guest_user_factory do
-    %User{
-      phone_number: "09000000000",
-      email: sequence(:email, &"email-#{&1}@example.com"),
-      role: "GUEST",
-      language: "en",
-      member_psw: "e",
-      viber_active: true,
-      viber_id: "e",
-      nickname: "Mr guest",
-    }
-  end
+  # def guest_user_factory do
+  #   %User{
+  #     phone_number: "09000000000",
+  #     email: sequence(:email, &"email-#{&1}@example.com"),
+  #     role: "GUEST",
+  #     language: "en",
+  #     member_psw: "e",
+  #     bot_provider: "viber",
+  #     bot_active: true,
+  #     bot_id: "e",
+  #     nickname: "Mr guest",
+  #   }
+  # end
 
   def user_factory do
     %User{
@@ -49,8 +52,9 @@ defmodule Boncoin.Factory do
       role: sequence(:role, ["ADMIN", "MEMBER"]),
       language: "en",
       member_psw: "e",
-      viber_active: true,
-      viber_id: "e",
+      bot_provider: "viber",
+      bot_active: true,
+      bot_id: "e",
       nickname: "Mr unknown",
     }
   end

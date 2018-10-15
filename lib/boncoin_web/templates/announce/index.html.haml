@@ -11,7 +11,8 @@
         %th= "ID"
         %th= "User phone"
         %th= "User name"
-        %th= "Viber"
+        %th= "Bot active"
+        %th= "Bot provider"
         %th= "Language"
         %th= "Division"
         %th= "Township"
@@ -31,7 +32,8 @@
           %td= offer.id
           %td= offer.user.phone_number
           %td= offer.user.nickname
-          %td= LayoutView.icon_active(offer.user.viber_active)
+          %td= LayoutView.icon_active(offer.user.bot_active)
+          %td= offer.user.bot_provider
           %td= img_tag static_path(@conn, "/fonts/#{offer.language}.svg"), class: "flag-small"
           %td= offer.township.division.title_en
           %td= offer.township.title_en

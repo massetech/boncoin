@@ -1,39 +1,64 @@
 %hr.d-block.d-sm-none
 %h5.text-left= gettext "1. Fill your details"
-.row.text-left.mt-3.mb-3
-  .col-8
-    .input-group
-      %span.input-group-prepend
-        .input-group-text.bg-white
-          %i.fa.fa-phone
-      = text_input @u, :phone_number, class: "form-control", autocomplete: "nope", placeholder: gettext("Main phone number")
-    %small.form-text.text-muted{id: "phone_helper"}= gettext "Myanmar mobile only (09000000000)"
-  .col-4
-    %button.btn.btn-primary.text-secondary.font-weight-bold.btn-block.m-0{id: "btn_validate_number", drab-click: "read_user_details", data-item-id: ""}= "OK"
-    %button.btn.btn-secondary.font-s-9.btn-block.m-0.d-none{id: "btn_change_number", drab-click: "read_user_details", data-item-id: ""}= gettext("change")
-.row.text-left.collapse.collapsible_form
+
+.row.text-left.mt-3
   .col-12
+    .row.mb-3
+      .col-8
+        .input-group
+          %span.input-group-prepend
+            .input-group-text.bg-white
+              %i.fa.fa-phone
+          = text_input @u, :phone_number, class: "form-control", maxlength: "11", placeholder: gettext("Main phone number")
+        %small.form-text.text-muted{id: "phone_helper"}= gettext "Myanmar mobile only (09000000000)"
+      .col-4
+        %button.btn.btn-primary.text-secondary.font-weight-bold.btn-block.m-0{id: "btn_validate_number", drab-click: "read_user_details", data-item-id: ""}= "OK"
+        %button.h-100.btn.btn-secondary.font-s-9.btn-block.m-0.d-none{id: "btn_change_number", drab-click: "read_user_details", data-item-id: ""}= gettext("change")
+
+  .col-12.collapse.collapsible_form
+    -# Viber number field
+    .form-group{id: "field-viber-number"}
+      .input-group
+        %span.input-group-prepend
+          .input-group-text.bg-transparent
+            %i.fab.fa-viber
+        = text_input @u, :viber_number, class: "form-control", maxlength: "11", autocomplete: "nope", placeholder: gettext("Viber phone number (optional)")
+      -# %small.form-text.text-muted= gettext "If you want people to contact you on Viber"
+
+    -# Username field
     .form-group
       .input-group
         %span.input-group-prepend
           .input-group-text.bg-transparent
             %i.fa.fa-user
         = text_input @u, :nickname, class: "form-control", maxlength: "20",autocomplete: "nope", placeholder: gettext("Name or nickname")
-  .col-12
-    -# .row.text-left.collapse.collapsible_form
-    -#   .col-12
-    .row{id: "field-viber"}
-      .col-8.d-flex.align-items-center
-        = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
-        %p.m-0.ml-2.text-viber= gettext "This number is linked to Viber"
-      -# Button to unlink Viber
-      .col-4
-        %button.btn.btn-secondary.font-s-9.btn-block.m-0= gettext("unlink")
-    -# Button to link Viber
-    - link to: main_path(@conn, :viber), id: "btn-viber", class: "btn btn-block", target: "_blank" do
-      .row.align-items-center
-        .col-2
-          = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon"
-        .col-10
-          %span.text-viber= gettext "Link this number to Viber"
-          %p.m-0.text-viber= gettext "to receive notifications"
+
+    -# Bot description
+    .row.form-group{id: "field-bot"}
+      .input-group.field-bot
+        .col-8.d-flex.align-items-center
+          %p.m-0.ml-2.text-viber= gettext "We send you notifications by Viber"
+          -# = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon width-30 ml-2"
+        .col-4
+          - link to: main_path(@conn, :viber), class: "h-100 btn btn-secondary font-s-9 btn-block m-0 d-inline-flex justify-content-center text-white", target: "_blank" do
+            -# %button.h-100.btn.btn-secondary.font-s-9.btn-block.m-0.d-inline-flex.justify-content-center{id: "btn_unlink_bot"}
+            %i.fab.fa-viber.mx-2
+            %span= gettext("unlink")
+
+    -# Bot options
+    .row.form-group{id: "btn-bot"}
+      .input-group
+        .col-6
+          - if Browser.mobile?(@conn) do
+            %a.btn.btn-block.btn-viber{href: "viber://pa/info?uri=pawchaungkaung_en"}
+              %i.fab.fa-viber
+              %span= gettext "Send me notifications by Viber"
+          - else
+            - link to: main_path(@conn, :viber), class: "btn btn-block btn-viber", target: "_blank" do
+              %i.fab.fa-viber
+              %span= gettext "Send me notifications by Viber"
+              -# %p.text-viber= gettext "Get our notifications by Viber"
+        .col-6
+          - link to: main_path(@conn, :viber), class: "btn btn-block btn-messenger disabled", target: "_blank" do
+            %i.fab.fa-facebook-messenger
+            %span= gettext "Send me notifications by Messenger"
