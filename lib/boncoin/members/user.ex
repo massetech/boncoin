@@ -110,7 +110,7 @@ defmodule Boncoin.Members.User do
 
   def filter_user_by_bot_id(query, bot_id, provider) do
     from u in query,
-      where: u.bot_id == ^bot_id and u.provider == ^provider
+      where: u.bot_id == ^bot_id and u.bot_provider == ^provider
   end
 
   def filter_active_user_by_phone_number(query, phone_number) do
