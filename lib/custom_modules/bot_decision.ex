@@ -10,6 +10,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   def call_bot_algorythm(%{scope: scope, user: user, announce: announce, bot: %{bot_provider: bot_provider, bot_id: bot_id, bot_user_name: bot_user_name, user_msg: bot_user_msg}} = params) do
     # IO.puts("--- bot params---")
     # IO.inspect(params)
+
     cond do
 
       # We are welcoming the user
@@ -44,6 +45,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       user == nil && String.contains?(scope, "link_phone") ->
         len = String.length(scope)
         language = String.slice(scope, len-2..len)
+        user_params = %{active: true, phone_number: bot_user_msg, bot_active: true, bot_provider: bot_provider, bot_id: bot_id, nickname: bot_user_name, language: language}
         case String.match?(bot_user_msg, ~r/^([09]{1})([0-9]{10})$/) do
           false ->
             case String.contains?(scope, "2ndlink_phone") do
@@ -53,7 +55,6 @@ defmodule Boncoin.CustomModules.BotDecisions do
                 [treat_msg("welcome")]
             end
           true -> # There is a phone number in the message
-            user_params = %{phone_number: bot_user_msg, bot_provider: bot_provider, bot_id: bot_id, nickname: bot_user_name, language: language}
             other_user = Members.get_active_user_by_phone_number(user_params.phone_number)
             case other_user do
               nil -> # The phone number is not used yet : create the user with this phone number
@@ -62,7 +63,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
                   _ -> [treat_msg("technical problem", language)]
                 end
               other_user -> # The phone number is already used : announce conflict
-                [treat_msg("bot_conflict_contact_us", language, bot_user_name)]
+                manage_phone_conflict(nil, user_params, other_user)
             end
         end
 
@@ -77,10 +78,10 @@ defmodule Boncoin.CustomModules.BotDecisions do
       scope == "offer_closed" -> [treat_msg("announce_closed", user, announce, bot_user_msg)]
 
       # User wants to CHANGE LANGUAGE
-      user != nil && bot_user_msg == "*123#" -> [treat_msg("change_language", user)]
+      user != nil && user.bot_active == true && bot_user_msg == "*123#" -> [treat_msg("change_language", user)]
 
       # User wants to see his OFFERS LIST
-      user != nil && bot_user_msg == "*111#" ->
+      user != nil && user.bot_active == true && bot_user_msg == "*111#" ->
         offers = Contents.get_user_active_offers(user)
         case Kernel.length(offers) do
           0 -> [treat_msg("0_active_offer", user)]
@@ -90,10 +91,11 @@ defmodule Boncoin.CustomModules.BotDecisions do
         end
 
       # User wants to UPDATE PHONE NUMBER
-      user != nil && bot_user_msg == "*888#" -> [treat_msg("change_phone", user)]
+      user != nil && user.bot_active == true && bot_user_msg == "*888#" -> [treat_msg("change_phone", user)]
 
       # User confirms to UPDATE PHONE NUMBER
-      user != nil && scope == "update_phone" ->
+      user != nil && user.bot_active == true && scope == "update_phone" ->
+        user_params = %{active: true, phone_number: bot_user_msg, bot_active: true, bot_provider: bot_provider, bot_id: bot_id, nickname: bot_user_name, language: user.language}
         case String.match?(bot_user_msg, ~r/^([09]{1})([0-9]{10})$/) do
           false -> [treat_msg("wrong_phone_number", user)] # There is no phone number in the message : cancel the update
           true -> # There is a phone number in the message
@@ -108,12 +110,12 @@ defmodule Boncoin.CustomModules.BotDecisions do
               user.phone_number == bot_user_msg -> # Same phone number then user old one
                 [treat_msg("same_phone_number", user)]
               true -> # The phone number is already used : announce conflict
-                [treat_msg("bot_conflict_contact_us", user.language, user.nickname)]
+                manage_phone_conflict(user, user_params, other_user)
             end
         end
 
       # User wants to QUIT BOT
-      user != nil && bot_user_msg == "*999#" ->
+      user != nil && user.bot_active == true && bot_user_msg == "*999#" ->
         answer = Members.permission_to_quit_bot(user)
         case answer do
           {:ok, _msg} -> [treat_msg("quit_bot", user)]
@@ -121,7 +123,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
         end
 
       # User confirms to QUIT BOT
-      user != nil && scope == "quit_bot" && bot_user_msg == "1" ->
+      user != nil && user.bot_active == true && scope == "quit_bot" && bot_user_msg == "1" ->
         answer = Members.remove_bot(user)
         case answer do
           {:ok, _user} -> [treat_msg("bot_quitted", user)]
@@ -130,12 +132,37 @@ defmodule Boncoin.CustomModules.BotDecisions do
         end
 
       # User asked for help
-      bot_user_msg == "0" -> [treat_msg("propose_help", user)]
+      user != nil && user.bot_active == true && user.bot_active == true && bot_user_msg == "0" ->
+        [treat_msg("propose_help", user)]
 
       # Nothing to say (fallbacks)
       user != nil -> [treat_msg("nothing_to_say", user)]
       true -> [treat_msg("welcome")]
 
+    end
+  end
+
+  defp manage_phone_conflict(user, user_params, other_user) do
+    case other_user.bot_active do
+      true -> [treat_msg("bot_conflict_contact_us", user_params.language, user_params.nickname)]
+      false ->
+        case Contents.get_user_active_offers(other_user) do
+          [] ->
+            Members.update_user(other_user, %{active: false})
+            case user do
+              nil ->
+                case Members.create_user(user_params) do
+                  {:ok, new_user} -> [treat_msg("new_user_created", new_user)]
+                  _ -> [treat_msg("technical problem", user_params.language)]
+                end
+              user ->
+                case Members.update_user(user, user_params) do
+                  {:ok, user} -> [treat_msg("new_phone_updated", user)]
+                  _ -> [treat_msg("technical problem", user_params.language)]
+                end
+            end
+          _ -> [treat_msg("bot_conflict_contact_us", user_params.language, user_params.nickname)]
+        end
     end
   end
 
@@ -286,7 +313,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   defp announce_phone_used(language) do
     uni = "စိတ်မကောင်းပါဘူး ဒီနံဖုန်းပါတ်ကအခြနဲ့ ချိတ်ဆက် ပြီးဖြစ်နေပါပြီ။ ကျေးဇူးပြု၍ ချိတ်ဆက်မှုကိုအရင်ဖြုတ်ပြစ်ရန် #{@website_bot_explained} သို့ဝင်ကြည့်ပါ။ (သို့) ပေါချောင်ကောင်းသို့ဆက်သွယ်ပါ။"
     case language do
-      "en" -> "Sorry but this phone number is linked to another user. Please unlink it first on #{@website_bot_explained} or contact us."
+      "en" -> "Sorry but this phone number is used by another user. Please unlink it first or contact us."
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end
@@ -305,7 +332,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   defp announce_bot_conflict(language, nickname) do
     uni = "စိတ်မကောင်းပါဘူး #{nickname} ဒီဖုန်းနံပါတ်ကိုအခြာအသုံးပြုပြီးဖြစ်ပါတယ်။ ကျေးဇူးပြု၍ နောက်ထပ်တစ်ကြိမ်ပြန် ကြိုးစားကြည့်ပါ။ (သို့) ပေါချောင်ကောင်းသို့ဆက်သွယ်ပါ။"
     case language do
-      "en" -> "Sorry #{nickname}, this phone number is used by another user. Please unlink it first on #{@website_bot_explained} or contact us."
+      "en" -> "Sorry #{nickname}, this phone number is used by another user. Please unlink it first or contact us."
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end

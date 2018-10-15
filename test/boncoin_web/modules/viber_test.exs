@@ -71,7 +71,7 @@ defmodule BoncoinWeb.ViberTest do
       %{scope: scope, msg: msg} = %{scope: "link_phone_en", user: nil, announce: nil, bot: %{bot_provider: "viber", bot_id: nil, bot_user_name: "viber_name", user_msg: "09010101010"}}
         |> call_bot_algorythm()
         |> List.first()
-      assert msg =~ "Please unlink it first on"
+      assert msg =~ "this phone number is used by another user"
     end
     test "phone conflict with old user is accepted", %{conn: conn} do
       other_user = insert(:user, %{active: false, bot_active: false, bot_id: "dededde", bot_provider: "messenger", phone_number: "09010101017"})
@@ -164,11 +164,20 @@ defmodule BoncoinWeb.ViberTest do
       %{scope: scope, msg: msg} = %{scope: "update_phone", user: user, announce: nil, bot: %{bot_provider: "viber", bot_id: nil, bot_user_name: "viber_name", user_msg: "09010101010"}}
         |> call_bot_algorythm()
         |> List.first()
-      assert msg =~ "Please unlink it first on"
+      assert msg =~ "this phone number is used by another user"
     end
-    test "phone conflict without bot is refused", %{conn: conn} do
+    test "phone conflict without offer is accepted", %{conn: conn} do
       user = insert(:user, %{bot_active: true, bot_id: "12345", phone_number: "09020202020"})
       other_user = insert(:user, %{bot_active: false, bot_id: nil, phone_number: "09010101019"})
+      %{scope: scope, msg: msg} = %{scope: "update_phone", user: user, announce: nil, bot: %{bot_provider: "viber", bot_id: nil, bot_user_name: "viber_name", user_msg: "09010101019"}}
+        |> call_bot_algorythm()
+        |> List.first()
+      assert msg =~ "your phone number was updated"
+    end
+    test "phone conflict with offer is refused", %{conn: conn} do
+      user = insert(:user, %{bot_active: true, bot_id: "12345", phone_number: "09020202020"})
+      other_user = insert(:user, %{bot_active: false, bot_id: nil, phone_number: "09010101019"})
+      insert_list(3, :announce, %{user_id: other_user.id})
       %{scope: scope, msg: msg} = %{scope: "update_phone", user: user, announce: nil, bot: %{bot_provider: "viber", bot_id: nil, bot_user_name: "viber_name", user_msg: "09010101019"}}
         |> call_bot_algorythm()
         |> List.first()
