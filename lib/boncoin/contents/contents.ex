@@ -577,20 +577,22 @@ defmodule Boncoin.Contents do
     case update_announce(announce, params) do
       {:ok, announce} ->
         bot_params = cond do # No msg sent if user_msg nil
-          user.viber_active == true && user_msg != nil && new_offer? == true -> # Viber msg for new offers
-            %{scope: "offer_treated", user: user, announce: announce, bot: %{bot_provider: "viber", bot_id: user.viber_id, bot_user_name: user.nickname, user_msg: user_msg}}
-              # |> BotDecisions.call_bot_algorythm()
-              # |> Enum.map(fn result_map -> Members.send_viber_message(user.viber_id, result_map.scope, result_map.msg) end)
-          user.viber_active == true && user_msg != nil && status == "CLOSED" -> # Viber msg for old offers closed by admin
-            %{scope: "offer_closed", user: user, announce: announce, bot: %{bot_provider: "viber", bot_id: user.viber_id, bot_user_name: user.nickname, user_msg: user_msg}}
-              # |> BotDecisions.call_bot_algorythm()
-              # |> Enum.map(fn result_map -> Members.send_viber_message(user.viber_id, result_map.scope, result_map.msg) end)
+          user.bot_active == true && user_msg != nil && new_offer? == true -> # Bot msg for new offers
+            %{scope: "offer_treated", user: user, announce: announce, bot: %{bot_provider: user.bot_provider, bot_id: user.bot_id, bot_user_name: user.nickname, user_msg: user_msg}}
+          user.bot_active == true && user_msg != nil && status == "CLOSED" -> # Bot msg for old offers closed by admin
+            %{scope: "offer_closed", user: user, announce: announce, bot: %{bot_provider: user.bot_provider, bot_id: user.bot_id, bot_user_name: user.nickname, user_msg: user_msg}}
           true -> "" # Do nothing
         end
         if bot_params != "" do
-          bot_params
-            |> BotDecisions.call_bot_algorythm()
-            |> Enum.map(fn result_map -> ViberApi.send_message(user.viber_id, result_map.scope, result_map.msg) end)
+          case user.bot_provider do
+            "viber" ->
+              IO.puts("Viber message sent !")
+              bot_params
+                |> BotDecisions.call_bot_algorythm()
+                |> Enum.map(fn result_map -> ViberApi.send_message(user.bot_id, result_map.scope, result_map.msg) end)
+            "messenger" ->
+              IO.puts("Messenger message sent !")
+          end
         end
         {:ok, announce}
       {:error, msg} -> {:error, msg}

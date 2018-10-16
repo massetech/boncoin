@@ -79,13 +79,6 @@ defmodule BoncoinWeb.AnnounceControllerTest do
     end
   end
 
-  # describe "new announce" do
-  #   test "renders form", %{conn: conn} do
-  #     conn = get conn, announce_path(conn, :new)
-  #     assert html_response(conn, 200) =~ "Fill your details"
-  #   end
-  # end
-
   describe "new user creates announce" do
     test "renders errors when phone number is guest", %{conn: conn} do
       user_params = %{phone_number: "09000000000", nickname: "some_nickname"}

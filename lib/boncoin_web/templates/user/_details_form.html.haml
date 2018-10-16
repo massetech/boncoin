@@ -22,8 +22,8 @@
         %span.input-group-prepend
           .input-group-text.bg-transparent
             %i.fab.fa-viber
-        = text_input @u, :viber_number, class: "form-control", maxlength: "11", autocomplete: "nope", placeholder: gettext("Viber phone number (optional)")
-      %small.form-text.text-muted= gettext "If you want people to contact you on Viber"
+        = text_input @u, :viber_number, class: "form-control", maxlength: "11", autocomplete: "nope", placeholder: gettext("Viber phone number")
+      %small.form-text.text-muted= gettext "If you want people to contact you on Viber (optional)"
 
     -# Username field
     .form-group
@@ -61,7 +61,6 @@
             - link to: main_path(@conn, :viber), class: "btn btn-block btn-viber", target: "_blank" do
               %i.fab.fa-viber
               %span= gettext "Send me notifications by Viber"
-              -# %p.text-viber= gettext "Get our notifications by Viber"
         .col-6
           - link to: main_path(@conn, :viber), class: "btn btn-block btn-messenger disabled", target: "_blank" do
             %i.fab.fa-facebook-messenger

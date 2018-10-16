@@ -120,7 +120,7 @@ defmodule Boncoin.Members.User do
 
   def filter_user_public_data(query) do
     from u in query,
-      select: %{nickname: u.nickname, email: u.email, phone_number: u.phone_number, bot_active: u.bot_active, role: u.role}
+      select: %{nickname: u.nickname, phone_number: u.phone_number, viber_number: u.viber_number}
   end
 
 end

@@ -25,13 +25,6 @@
         %div.collapse{id: "messenger", aria-labelledby: "messenger", data-parent: "#bot"}
           .card_body.text-center.p-3
             %p.my-3= gettext("Please open a conversation with PawChaungKaung on Messenger.")
-            -# .col-xs-12.col-sm-6.offset-sm-3.flex-column
-            -#   - if Browser.mobile?(@conn) do
-            -#     %a.btn.btn-block.btn-viber{href: "viber://pa/info?uri=pawchaungkaung_en"}
-            -#       %i.fab.fa-viber
-            -#       %span= gettext "Open Viber on my phone"
-            -#   - else
-            -#     = img_tag static_path(@conn, "/images/viber_QR_code.png"), class: "w-50"
 
       -# QR link to Viber
       .card.text-left

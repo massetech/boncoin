@@ -13,8 +13,8 @@
 
 .row{id: "offers-results"}
   - for announce <- @announces do
-    = render BoncoinWeb.AnnounceView, "_display_small.html", announce: announce
-    = render BoncoinWeb.AnnounceView, "_display_big.html", announce: announce
+    = render BoncoinWeb.AnnounceView, "_display_small.html", announce: announce, conn: @conn
+    = render BoncoinWeb.AnnounceView, "_display_big.html", announce: announce, conn: @conn
   - if @announces == [] do
     .col-xs-12.col-sm-8.offset-sm-2.mt-5
       .card

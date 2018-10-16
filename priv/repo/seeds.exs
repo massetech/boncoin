@@ -11,7 +11,7 @@ Repo.delete_all(Announce)
 Repo.delete_all(User)
 
 Repo.insert! %User{email: "", role: "GUEST", phone_number: "09000000000", language: "en", member_psw: "", bot_provider: "", bot_active: false, bot_id: "", nickname: "Guest"}
-Repo.insert! %User{email: "bitocreator@gmail.com", auth_provider: "google", role: "SUPER", phone_number: "09000000001", language: "en", member_psw: "fouesnant", bot_provider: "viber", bot_active: true, bot_id: "hPAtCbK9yIaDQumAoQ50sQ==", nickname: "Thib"}
+Repo.insert! %User{email: "bitocreator@gmail.com", auth_provider: "google", role: "SUPER", phone_number: "09000000001", viber_number: "09876543212", language: "en", member_psw: "fouesnant", bot_provider: "viber", bot_active: true, bot_id: "hPAtCbK9yIaDQumAoQ50sQ==", nickname: "Thib"}
 
 Repo.insert! %Division{title_en: "Yangon", title_my: "ရန်ကုံန်", active: true}
 Repo.insert! %Division{title_en: "Dawei", title_my: "ဒာဝေး", active: true}

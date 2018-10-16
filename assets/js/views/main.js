@@ -237,7 +237,7 @@ export default class MainView {
       }
     })
     // Copy phone number to clipboard
-    $('.btn-copy-number').on('click', function() {
+    $('.copy-number').on('click', function() {
       var phone_number = $(this).attr('data-phone-number')
       var $temp = $("<input>")
       $("body").append($temp)
@@ -285,7 +285,7 @@ export default class MainView {
     $('#phone_helper').hide()
     $('#announce_user_id').val(user.id)
     $('#user_nickname').val(user.nickname).focus()
-    // $('#announce_user_email').val(user.email)
+    $('#user_viber_number').val(user.viber_number)
     if (user.bot_active == true) {
       $('#field-bot').show()
       $('#btn-bot').hide()

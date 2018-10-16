@@ -19,11 +19,11 @@ p.one-line{white-space: nowrap;}
 // p {text-align: center;}
 /* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 /* ------------------------------ LOGO  ------------------------------ */
-span.logo {
-  display: flex; align-items: center; justify-content: center;
-  i {font-size: 30px !important;margin-right: 15px;}
-  font-size: 30px !important; font-weight: bold
-}
+// span.logo {
+//   display: flex; align-items: center; justify-content: center;
+//   i {font-size: 30px !important;margin-right: 15px;}
+//   font-size: 30px !important; font-weight: bold
+// }
 img.logo{width: auto;height: 2.5em;}
 /* ------------------------------ HEADER  ------------------------------ */
 .nav-row{height: 3em;}
@@ -79,12 +79,10 @@ a.btn:hover, a.slide-menu:hover {i, span {@extend .text-white;}}
 // Go to line in button if too large
 .btn:not(.dropdown-toggle) {white-space:normal !important; word-wrap: break-word; word-break: normal;}
 
-div > i, .btn > i:not(.btn-icon) {
-  display: flex; align-items: center; justify-content: center;
-}
-.btn > i.btn-icon {
-  display: inline-block;
-}
+div > i, .btn > i:not(.btn-icon) {display: flex; align-items: center; justify-content: center;}
+.btn > i.btn-icon {display: inline-block;}
+.btn-icon-left {position: absolute;left: 20px;}
+.btn-icon-right {position: absolute;right: 10px;}
 i.width-20, img.width-20 {width: 20px;}
 i.width-30, img.width-30 {width: 30px;}
 i.width-40, img.width-40 {width: 40px;}
@@ -340,5 +338,6 @@ a[data-toggle="collapse"] {
 // }
 .btn-copy-number{
   border-radius: 100px;
-  position: absolute;right: 4px;top: 4px;height: 40px;width: 40px;
+  height: 35px;width: 35px;
+  // position: absolute;right: 4px;top: 4px;
 }

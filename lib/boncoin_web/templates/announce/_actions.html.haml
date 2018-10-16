@@ -17,17 +17,24 @@
       %span.font-s-8= gettext "Save"
 
 .row.m-0.mt-3.offer-contact.d-none{id: "offer_contact_#{@announce.id}"}
-  -# Show the sellor's number
-  .col-12.m-0.p-0
-    %button.btn.btn-lg.btn-block.d-flex.justify-content-center.align-items-center.btn-secondary.btn-see-number{id: "show_number_#{@announce.id}"}
-      -# %i.fa.fa-phone.btn-icon
-      %span
-        = String.slice(@announce.user.phone_number, 0..1)
-        = " "
-        = String.slice(@announce.user.phone_number, 2..4)
-        = " "
-        = String.slice(@announce.user.phone_number, 5..7)
-        = " "
-        = String.slice(@announce.user.phone_number, 8..10)
-    %button.btn.bg-white.text-secondary.btn-copy-number{id: "copy_number_#{@announce.id}", data-phone-number: "#{@announce.user.phone_number}"}
-      %i.fa.fa-copy
+
+  .col-12.my-3.p-0
+    -# Show the sellor's number
+    %button.btn.btn-lg.btn-block.btn-secondary.d-flex.justify-content-center.align-items-center.copy-number{data-phone-number: "#{@announce.user.phone_number}"}
+      %i.fa.fa-phone.btn-icon-left
+      = render "_phone_number.html", phone_number: @announce.user.phone_number
+      %i.fa.fa-copy.bg-white.text-secondary.btn-copy-number.btn-icon-right
+
+  - if @announce.user.viber_number != nil do
+    -# Show the button to open Viber conversation
+    .col-12.p-0
+      - if Browser.mobile?(@conn) do
+        %a.btn.btn-lg.btn-block.btn-outline-secondary.d-flex.justify-content-center.align-items-center{href: "viber://chat?number=#{@announce.user.viber_number}"}
+          %i.icon-big.fab.fa-viber.btn-icon-left
+          = render "_phone_number.html", phone_number: @announce.user.viber_number
+          -# %span.font-weight-light= gettext "Contact by Viber"
+      - else
+        %button.btn.btn-lg.btn-block.btn-outline-secondary.d-flex.justify-content-center.align-items-center.copy-number{data-phone-number: "#{@announce.user.viber_number}"}
+          %i.icon-big.fab.fa-viber.btn-icon-left
+          = render "_phone_number.html", phone_number: @announce.user.viber_number
+          %i.fa.fa-copy.bg-secondary.text-white.btn-copy-number.btn-icon-right
