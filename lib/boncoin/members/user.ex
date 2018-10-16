@@ -108,24 +108,15 @@ defmodule Boncoin.Members.User do
       where: u.email == ^email and u.role in ["SUPER", "ADMIN"]
   end
 
-  def filter_user_by_bot_id(query, bot_id, provider) do
+  def filter_active_user_by_bot_id(query, bot_id, provider) do
     from u in query,
-      where: u.bot_id == ^bot_id and u.bot_provider == ^provider
+      where: u.bot_id == ^bot_id and u.bot_provider == ^provider and u.active == true
   end
 
   def filter_active_user_by_phone_number(query, phone_number) do
     from u in query,
       where: u.phone_number == ^phone_number and u.active == true
   end
-
-  # def search_other_user_for_phone_number(query, phone_number) do
-  #   from u in query,
-  #     where: u.phone_number == ^phone_number and u.active == true,
-  #     left_join: a in assoc(u, :announces),
-  #     on: a.status in ["PENDING", "ONLINE"],
-  #     group_by: u.id,
-  #     select: %{id: u.id, bot_active: u.bot_active, nb_announces: count(a.id)}
-  # end
 
   def filter_user_public_data(query) do
     from u in query,

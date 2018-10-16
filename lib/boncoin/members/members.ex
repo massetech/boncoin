@@ -80,9 +80,9 @@ defmodule Boncoin.Members do
   #     |> Repo.one()
   # end
 
-  def get_user_by_bot_id(bot_id, provider) do
+  def get_active_user_by_bot_id(bot_id, provider) do
     User
-      |> User.filter_user_by_bot_id(bot_id, provider)
+      |> User.filter_active_user_by_bot_id(bot_id, provider)
       |> Repo.one()
   end
 
@@ -125,7 +125,7 @@ defmodule Boncoin.Members do
 
   def remove_bot(user) do
     case Contents.get_user_active_offers(user) do
-      [] -> update_user(user, %{active: false, bot_active: false})
+      [] -> update_user(user, %{bot_active: false})
       offers -> {:not_allowed, Enum.count(offers)}
     end
   end

@@ -15,8 +15,13 @@ defmodule Boncoin.Auth.CheckApiAccess do
       auth_internal != nil -> # API call from internal
         case Phoenix.Token.verify(conn, salt, auth_internal, max_age: 60*60*12) do
           {:ok, user_id} -> # API call authorized
-            conn
-              |> assign(:current_user, Members.get_user!(user_id))
+            user  = Members.get_user!(user_id)
+            case user.active do
+              true -> assign(conn, :current_user, user) # Only active user can be current user
+              false -> assign(conn, :current_user, Members.get_guest_user())
+            end
+            # conn
+            #   |> assign(:current_user, Members.get_user!(user_id))
           {:error, _} -> # API call refused token too old (12h)
             message = "Token too old. Reload the page."
             conn
@@ -26,7 +31,7 @@ defmodule Boncoin.Auth.CheckApiAccess do
         end
       auth_viber != nil -> # API call from Viber
         viber_id = conn.params["sender"]["id"] || conn.params["user_id"] || nil
-        user = if viber_id == nil, do: nil, else: Members.get_user_by_bot_id(viber_id, "viber")
+        user = if viber_id == nil, do: nil, else: Members.get_active_user_by_bot_id(viber_id, "viber")
         conn
           |> assign(:current_user, user)
       true -> # Other call = Danger !

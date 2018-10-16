@@ -136,7 +136,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
         [treat_msg("propose_help", user)]
 
       # Nothing to say (fallbacks)
-      user != nil -> [treat_msg("nothing_to_say", user)]
+      user != nil && user.bot_active -> [treat_msg("nothing_to_say", user)]
       true -> [treat_msg("welcome")]
 
     end
@@ -148,7 +148,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       false ->
         case Contents.get_user_active_offers(other_user) do
           [] ->
-            Members.update_user(other_user, %{active: false})
+            Members.update_user(other_user, %{active: false}) # We cancel other user forever (history)
             case user do
               nil ->
                 case Members.create_user(user_params) do
