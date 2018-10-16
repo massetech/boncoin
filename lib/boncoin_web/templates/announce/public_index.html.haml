@@ -2,14 +2,14 @@
   .col-12
     .card.mb-4.bg-secondary
       .card-body
-        %h6.text-white
+        %h5.font-weight-bold.text-white
           - if @conn.assigns.search_titles.searched_arbo.title_en == "" do
             -# Search by place only
             = gettext("%{nb_offers}offers found in%{place_searched}", nb_offers: @conn.assigns.nb_offers_found, place_searched: LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_place, "title"))
           - else
             -# Search by place and arbo
             = gettext("%{nb_offers}offers found for%{arbo_searched}in%{place_searched}", nb_offers: @conn.assigns.nb_offers_found, arbo_searched: LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_arbo, "title"), place_searched: LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_place, "title"))
-        %h6.text-primary.font-italic.mb-0= gettext "Please meet the seller and try the product before giving any money"
+        %h6.text-white.mb-0= gettext "Please meet the seller and try the product before giving any money"
 
 .row{id: "offers-results"}
   - for announce <- @announces do

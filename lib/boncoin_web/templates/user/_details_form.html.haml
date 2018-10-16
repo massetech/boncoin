@@ -23,7 +23,7 @@
           .input-group-text.bg-transparent
             %i.fab.fa-viber
         = text_input @u, :viber_number, class: "form-control", maxlength: "11", autocomplete: "nope", placeholder: gettext("Viber phone number (optional)")
-      -# %small.form-text.text-muted= gettext "If you want people to contact you on Viber"
+      %small.form-text.text-muted= gettext "If you want people to contact you on Viber"
 
     -# Username field
     .form-group
@@ -37,12 +37,16 @@
     .row.form-group{id: "field-bot"}
       .input-group.field-bot
         .col-8.d-flex.align-items-center
-          %p.m-0.ml-2.text-viber= gettext "We send you notifications by Viber"
-          -# = img_tag static_path(@conn, "/images/viber_icon.png"), class: "btn-icon width-30 ml-2"
+          %div{id: "viber-linked"}
+            .d-flex.align-items-center
+              %p.one-line.m-0.text-grey= gettext "You are linked by Viber"
+              %i.ml-2.fab.fa-viber
+          %div{id: "messenger-linked"}
+            .d-flex.align-items-center
+              %p.one-line.m-0.text-grey= gettext "You are linked by Messenger"
+              %i.ml-2.fab.fa-facebook-messenger
         .col-4
-          - link to: main_path(@conn, :viber), class: "h-100 btn btn-secondary font-s-9 btn-block m-0 d-inline-flex justify-content-center text-white", target: "_blank" do
-            -# %button.h-100.btn.btn-secondary.font-s-9.btn-block.m-0.d-inline-flex.justify-content-center{id: "btn_unlink_bot"}
-            %i.fab.fa-viber.mx-2
+          - link to: main_path(@conn, :viber), class: "btn btn-secondary font-s-9 btn-block m-0 d-inline-flex justify-content-center align-items-center text-white" do
             %span= gettext("unlink")
 
     -# Bot options

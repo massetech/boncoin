@@ -11,9 +11,11 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, a, p {
 }
 a:hover, button:hover, i:hover, label:hover {cursor: pointer;text-decoration: none;box-shadow: none;}
 .text-viber{color: $viber-color;}
+.text-grey{color: $form-grey2;}
 i.icon-big{font-size: 30px !important;}
 .font-s-9 {font-size: 0.9rem !important;}
 .font-s-8 {font-size: 0.8rem !important;}
+p.one-line{white-space: nowrap;}
 // p {text-align: center;}
 /* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 /* ------------------------------ LOGO  ------------------------------ */
@@ -22,7 +24,7 @@ span.logo {
   i {font-size: 30px !important;margin-right: 15px;}
   font-size: 30px !important; font-weight: bold
 }
-img.logo{width: 60px;height: 60px;}
+img.logo{width: auto;height: 2.5em;}
 /* ------------------------------ HEADER  ------------------------------ */
 .nav-row{height: 3em;}
 th, td {font-size: 12px; vertical-align: middle !important; padding: 0.5rem 0 !important;}

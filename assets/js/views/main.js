@@ -287,10 +287,15 @@ export default class MainView {
     $('#user_nickname').val(user.nickname).focus()
     // $('#announce_user_email').val(user.email)
     if (user.bot_active == true) {
+      $('#field-bot').show()
+      $('#btn-bot').hide()
       if (user.bot_provider == "viber") {
-        $('#field-bot').show()
-        $('#btn-bot').hide()
+        $('#viber-linked').show()
+        $('#messenger-linked').hide()
+        console.log("coucou")
       } else {
+        $('#viber-linked').hide()
+        $('#messenger-linked').show()
       }
     } else {
       // No bot connected yet to this user

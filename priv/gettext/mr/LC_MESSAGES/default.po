@@ -30,7 +30,7 @@ msgid "Kyats"
 msgstr "က်ပ္"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:41
+#: lib/boncoin_web/templates/user/_details_form.html.haml:42
 msgid "Name or nickname"
 msgstr "အမည္ရင္း(သို႔)အျခားအမည"
 
@@ -38,11 +38,6 @@ msgstr "အမည္ရင္း(သို႔)အျခားအမည"
 #: lib/boncoin_web/templates/announce/_describe_offer.html.haml:74
 msgid "Price"
 msgstr "ေဈးႏႈန္"
-
-#, elixir-format
-#: lib/boncoin_web/templates/user/new_user_announce.html.haml:54
-msgid "Submit this offer"
-msgstr "ဤအေရာင္းကိုတင္ရန"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_describe_offer.html.haml:41
@@ -106,7 +101,7 @@ msgid "Technical"
 msgstr "နည္းပည"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:52
+#: lib/boncoin_web/templates/user/_details_form.html.haml:63
 msgid "unlink"
 msgstr "လိုင္းျဖဳတ္ရန္"
 
@@ -515,7 +510,7 @@ msgid "Describe your offer (size, dimensions, condition, scratches, date of buy,
 msgstr "သင့္ေရာင္းရန္ပစၥည္း၏ (အ႐ြယ္အစား၊ အေျခအေန၊ အနာအစာ၊ ဝယ္ယူသည့္ရက္စြဲ၊ အစရွိသည္ျဖင့္) ေဖၚျပရန္။"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:52
+#: lib/boncoin_web/templates/public/viber.html.haml:68
 msgid "How to scan the QR code on Viber ?"
 msgstr "ဗိုင္ဘာတြင္ QR code scan ကိုဘယ္လိုလုပ္မလ"
 
@@ -629,34 +624,19 @@ msgid "Buyer's and seller's rights"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:110
+#: lib/boncoin_web/templates/public/viber.html.haml:126
 msgid "Explain how to unlink the viber account"
 msgstr "သင္၏ဖုန္းနံပါတ္ကိုသင့္ဗိုင္ဘာမွခ်ိတ္ဆက္ထားမႈကိုျဖဳတ္ရန္အတြက္ သင္၏ဗိုင္ဘာသို႔ ဝင္၍ [999#] ဟု ရိုက္ထည့္ၿပီး ေပါေျခာင္ေကာင္းသို႔ ပို႔ပ"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:104
-msgid "How to unlink your Viber account ?"
-msgstr "သင္၏ဗိုင္ဘာကိုဘယ္လိုအခ်ိတ္အဆက္ျဖဳတ္မလ"
-
-#, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:95
+#: lib/boncoin_web/templates/public/viber.html.haml:111
 msgid "Explain how to get change phone number from Viber"
 msgstr "သင္၏ဗိုင္ဘာနံပါတ္ကိုေျပာင္းရန္ သင္၏လက္ရွိဗိုင္ဘာသို႔ဝင္၍ [*888#] ဟုရိုက္ထည့္ၿပီး ေပါေျခာင္ေကာင္းသို႔ပို႔ပါ။"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:80
+#: lib/boncoin_web/templates/public/viber.html.haml:96
 msgid "Explain how to get offer list from Viber"
 msgstr "သင္တင္ထားသည့္ေရာင္းရန္ပစၥည္းစာရင္းကိုရယူနိုင္ရန္ ဗိုင္ဘာသို႔ဝင္၍ [*111#] ဟုရိုက္ထည့္ၿပီး ေပါေျခာင္ေကာင္းသို႔ပို႔ပါ။"
-
-#, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:74
-msgid "How to get your offer list ?"
-msgstr "သင္၏ေရာင္းရန္ပစၥည္းစာရင္းကိုဘယ္လိုရယူမလဲ"
-
-#, elixir-format
-#: lib/boncoin_web/templates/layout/_sidebar.html.haml:79
-msgid "Viber notifications"
-msgstr "ဗိုင္ဘာသတိေပးခ်က္မ်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/public_index.html.haml:39
@@ -790,11 +770,6 @@ msgid "Photo 3"
 msgstr "ဓာတ္ပုံ ၃"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:89
-msgid "How to change your number ?"
-msgstr "သင္၏ဖုန္းနံပါတ္ကိုဘယ္လိုေျပာင္းမလဲ၊"
-
-#, elixir-format
 #: lib/boncoin_web/templates/user/form.html.haml:24
 msgid "Nickname"
 msgstr ""
@@ -858,54 +833,29 @@ msgid "Sorry, we don't have any offer for your search."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:39
+#: lib/boncoin_web/templates/public/viber.html.haml:55
 msgid "Open Viber on my phone"
 msgstr ""
 
-#, elixir-format, fuzzy
-#: lib/boncoin_web/templates/public/viber.html.haml:5
-msgid "Connect your Viber app with PawChaungKaung !"
-msgstr "ေပါေျခာင္ေကာင္းမွသတိေပးခ်က္မ်ားရယူရန္ သင္၏ဗိုင္ဘာသို႔ခ်ိတ္ဆက္လိုက္ပါ။"
-
-#, elixir-format, fuzzy
-#: lib/boncoin_web/templates/public/viber.html.haml:28
+#, elixir-format
+#: lib/boncoin_web/templates/public/viber.html.haml:44
 msgid "How to receive notifications by Viber ?"
 msgstr "အသိေပးခ်က္မ်ားကိုလက္ခံရရွိနိုင္ရန"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:111
-msgid "Please note that you can't unlink your account if you still have active offers."
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:34
-msgid "Please open a conversation with PawChaungKaung on Viber. This conversation is private between you and PawChaungKaung."
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:74
+#: lib/boncoin_web/templates/user/_details_form.html.haml:85
 msgid "Send me notifications by Messenger"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:63
-#: lib/boncoin_web/templates/user/_details_form.html.haml:68
+#: lib/boncoin_web/templates/user/_details_form.html.haml:74
+#: lib/boncoin_web/templates/user/_details_form.html.haml:79
 msgid "Send me notifications by Viber"
-msgstr ""
-
-#, elixir-format, fuzzy
-#: lib/boncoin_web/templates/public/viber.html.haml:6
-msgid "This connection will let you receive our notifications."
 msgstr ""
 
 #, elixir-format
 #: lib/boncoin_web/templates/user/_details_form.html.haml:31
 msgid "Viber phone number (optional)"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:47
-msgid "We send you notifications by Viber"
 msgstr ""
 
 #, elixir-format
@@ -921,4 +871,74 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_describe_offer.html.haml:51
 msgid "sell"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/viber.html.haml:5
+msgid "Connect to PawChaungKaung by Viber or Messenger !"
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/public/viber.html.haml:105
+msgid "How to change your phone number ?"
+msgstr "သင္၏ဖုန္းနံပါတ္ကိုဘယ္လိုေျပာင္းမလဲ၊"
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/public/viber.html.haml:90
+msgid "How to get your offers list ?"
+msgstr "သင္၏ေရာင္းရန္ပစၥည္းစာရင္းကိုဘယ္လိုရယူမလဲ"
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/public/viber.html.haml:29
+msgid "How to receive notifications by Messenger ?"
+msgstr "အသိေပးခ်က္မ်ားကိုလက္ခံရရွိနိုင္ရန"
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/public/viber.html.haml:120
+msgid "How to unlink your Viber or Messenger account ?"
+msgstr "သင္၏ဗိုင္ဘာကိုဘယ္လိုအခ်ိတ္အဆက္ျဖဳတ္မလ"
+
+#, elixir-format
+#: lib/boncoin_web/templates/user/_details_form.html.haml:33
+msgid "If you want people to contact you on Viber"
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/public/viber.html.haml:127
+msgid "Please note that you can't unlink your phone number if you still have active offers."
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/public/viber.html.haml:35
+msgid "Please open a conversation with PawChaungKaung on Messenger."
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/public/viber.html.haml:50
+msgid "Please open a conversation with PawChaungKaung on Viber."
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/layout/_sidebar.html.haml:79
+msgid "Receive notifications"
+msgstr "ဗိုင္ဘာသတိေပးခ်က္မ်"
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/user/new_user_announce.html.haml:54
+msgid "Submit your offer"
+msgstr "ဤအေရာင္းကိုတင္ရန"
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/viber.html.haml:6
+msgid "We will send you notifications (this conversation is private between you and PawChaungKaung)."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/user/_details_form.html.haml:56
+msgid "You are linked by Messenger"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/user/_details_form.html.haml:50
+msgid "You are linked by Viber"
 msgstr ""

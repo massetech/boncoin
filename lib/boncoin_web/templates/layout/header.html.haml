@@ -4,7 +4,7 @@
       %button.btn.bg-primary.text-secondary{type: "button", id: "sidebarCollapse"}
         %i.fa.fa-bars
     .col.col-xs-8.text-center.p-0
-      = render "_logo_white.html", assigns
+      = img_tag static_path(@conn, "/images/logo.png"), class: "logo"
     .col.col-xs-1.text-right.p-0
       %button.btn.bg-primary.text-secondary{type: "button", data-toggle: "collapse", data-target: "#searchBar", aria-expanded: "false"}
         %i.fa.fa-search
@@ -14,7 +14,7 @@
     -# Search field
     -# .col-xs-12.col-sm-10.offset-sm-1.col-lg-8.offset-lg-2.align-middle
       =# render "_search_text_form.html", assigns
-      
+
     -# Family buttons
     .col-xs-12.my-3.w-100
       = render "_search_btn_form.html", assigns

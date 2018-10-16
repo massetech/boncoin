@@ -1,29 +1,48 @@
 .row.about
   .col-12
     .card
-      .card-header.bg-secondary
-        %h5.font-weight-bold.text-white= gettext "Connect your Viber app with PawChaungKaung !"
-        %h6.text-white= gettext "This connection will let you receive our notifications."
+      .card-header.bg-secondary.text-center
+        %h5.font-weight-bold.text-white= gettext "Connect to PawChaungKaung by Viber or Messenger !"
+        %h6.text-white= gettext "We will send you notifications (this conversation is private between you and PawChaungKaung)."
       .card-body.p-0
         .row
           .col-12.d-flex.justify-content-center.align-items-center.my-2
             = img_tag static_path(@conn, "/images/viber_icon.png"), class: "logo"
+            = img_tag static_path(@conn, "/images/messenger_icon.png"), class: "logo"
             %i.fas.fa-exchange-alt.text-viber.mx-3.icon-big
-            = img_tag static_path(@conn, "/images/logo_color.jpg"), class: "logo"
+            = img_tag static_path(@conn, "/images/logo_white.png"), class: "logo"
 
-.accordion{id: "viber"}
+.accordion{id: "bot"}
   .row
     .col-xs-12.col-sm-8.offset-sm-2.my-3
-      -# QR code
+      -# QR link to Messenger
       .card.text-left
-        %a{data-toggle: "collapse", data-target: "#viber_qr", aria-expanded: "true", aria-controls: "viber_qr", data-parent: "#viber"}
+        %a{data-toggle: "collapse", data-target: "#messenger", aria-expanded: "true", aria-controls: "messenger", data-parent: "#bot"}
+          .card-header
+            .d-flex.align-items-center
+              %i.width-40.fas.fa-comments.mr-3.text-secondary
+              %h6.card-title.mb-0= gettext "How to receive notifications by Messenger ?"
+        %div.collapse{id: "messenger", aria-labelledby: "messenger", data-parent: "#bot"}
+          .card_body.text-center.p-3
+            %p.my-3= gettext("Please open a conversation with PawChaungKaung on Messenger.")
+            -# .col-xs-12.col-sm-6.offset-sm-3.flex-column
+            -#   - if Browser.mobile?(@conn) do
+            -#     %a.btn.btn-block.btn-viber{href: "viber://pa/info?uri=pawchaungkaung_en"}
+            -#       %i.fab.fa-viber
+            -#       %span= gettext "Open Viber on my phone"
+            -#   - else
+            -#     = img_tag static_path(@conn, "/images/viber_QR_code.png"), class: "w-50"
+
+      -# QR link to Viber
+      .card.text-left
+        %a{data-toggle: "collapse", data-target: "#viber", aria-expanded: "true", aria-controls: "viber", data-parent: "#bot"}
           .card-header
             .d-flex.align-items-center
               %i.width-40.fas.fa-comments.mr-3.text-secondary
               %h6.card-title.mb-0= gettext "How to receive notifications by Viber ?"
-        %div.collapse{id: "viber_qr", aria-labelledby: "viber_qr", data-parent: "#viber"}
+        %div.collapse{id: "viber", aria-labelledby: "viber", data-parent: "#bot"}
           .card_body.text-center.p-3
-            %p.my-3= gettext("Please open a conversation with PawChaungKaung on Viber. This conversation is private between you and PawChaungKaung.")
+            %p.my-3= gettext("Please open a conversation with PawChaungKaung on Viber.")
             .col-xs-12.col-sm-6.offset-sm-3.flex-column
               - if Browser.mobile?(@conn) do
                 %a.btn.btn-block.btn-viber{href: "viber://pa/info?uri=pawchaungkaung_en"}
@@ -34,12 +53,12 @@
 
       -# QR code explained
       .card.text-left
-        %a{data-toggle: "collapse", data-target: "#viber_explain", aria-expanded: "true", aria-controls: "viber_explain", data-parent: "#viber"}
+        %a{data-toggle: "collapse", data-target: "#viber_explain", aria-expanded: "true", aria-controls: "viber_explain", data-parent: "#bot"}
           .card-header
             .d-flex.align-items-center
               %i.width-40.fas.fa-qrcode.mr-3.text-secondary
               %h6.card-title.mb-0= gettext "How to scan the QR code on Viber ?"
-        %div.collapse{id: "viber_explain", aria-labelledby: "viber_explain", data-parent: "#viber"}
+        %div.collapse{id: "viber_explain", aria-labelledby: "viber_explain", data-parent: "#bot"}
           .card-body.p-0
             .row
               .col-xs-12.col-sm-6
@@ -48,32 +67,32 @@
                 = img_tag static_path(@conn, "/images/viber_QR_code_explained_2.png"), class: "my-3"
 
       .card.text-left
-        %a{data-toggle: "collapse", data-target: "#offer_list_explain", aria-expanded: "true", aria-controls: "offer_list_explain", data-parent: "#viber"}
+        %a{data-toggle: "collapse", data-target: "#offer_list_explain", aria-expanded: "true", aria-controls: "offer_list_explain", data-parent: "#bot"}
           .card-header
             .d-flex.align-items-center
               %i.width-40.fas.fa-list-alt.mr-3.text-secondary
-              %h6.card-title.mb-0= gettext "How to get your offer list ?"
-        %div.collapse{id: "offer_list_explain", aria-labelledby: "offer_list_explain", data-parent: "#viber"}
+              %h6.card-title.mb-0= gettext "How to get your offers list ?"
+        %div.collapse{id: "offer_list_explain", aria-labelledby: "offer_list_explain", data-parent: "#bot"}
           .card-body
             %p.my-3= gettext("Explain how to get offer list from Viber")
 
       .card.text-left
-        %a{data-toggle: "collapse", data-target: "#change_explain", aria-expanded: "true", aria-controls: "change_explain", data-parent: "#viber"}
+        %a{data-toggle: "collapse", data-target: "#change_explain", aria-expanded: "true", aria-controls: "change_explain", data-parent: "#bot"}
           .card-header
             .d-flex.align-items-center
               %i.width-40.fa.fa-phone.mr-3.text-secondary
-              %h6.card-title.mb-0= gettext "How to change your number ?"
-        %div.collapse{id: "change_explain", aria-labelledby: "change_explain", data-parent: "#viber"}
+              %h6.card-title.mb-0= gettext "How to change your phone number ?"
+        %div.collapse{id: "change_explain", aria-labelledby: "change_explain", data-parent: "#bot"}
           .card-body
             %p.my-3= gettext("Explain how to get change phone number from Viber")
 
       .card.text-left
-        %a{data-toggle: "collapse", data-target: "#unlink_explain", aria-expanded: "true", aria-controls: "unlink_explain", data-parent: "#viber"}
+        %a{data-toggle: "collapse", data-target: "#unlink_explain", aria-expanded: "true", aria-controls: "unlink_explain", data-parent: "#bot"}
           .card-header
             .d-flex.align-items-center
               %i.width-40.fa.fa-unlink.mr-3.text-secondary
-              %h6.card-title.mb-0= gettext "How to unlink your Viber account ?"
-        %div.collapse{id: "unlink_explain", aria-labelledby: "unlink_explain", data-parent: "#viber"}
+              %h6.card-title.mb-0= gettext "How to unlink your Viber or Messenger account ?"
+        %div.collapse{id: "unlink_explain", aria-labelledby: "unlink_explain", data-parent: "#bot"}
           .card-body
             %p.mt-3= gettext("Explain how to unlink the viber account")
-            %p.mb-3= gettext "Please note that you can't unlink your account if you still have active offers."
+            %p.mb-3= gettext "Please note that you can't unlink your phone number if you still have active offers."

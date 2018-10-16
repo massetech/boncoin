@@ -2,8 +2,8 @@
   %i.fas.fa-times-circle.text-white
 %nav.bg-white{id: "sidebar"}
   - link to: root_path(@conn, :welcome), class: "brand-logo text-white" do
-    .sidebar-header.bg-primary.text-secondary.border-bottom.border-dark
-      = render "_logo_white.html", assigns
+    .sidebar-header.bg-primary.text-secondary.border-bottom.border-dark.p-3
+      = img_tag static_path(@conn, "/images/logo.png"), class: ""
   %div{id: "mainMenu"}
     %ul.list-unstyled.components
       %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#menuDivision", data-parent: "#mainMenu", data-toggle: "collapse", aria-expanded: "false"}
@@ -55,8 +55,8 @@
 
       - link to: main_path(@conn, :viber), class: "" do
         %li.slide-menu.text-dark.border-bottom.border-dark
-          %i.width-20.fab.fa-viber
-          %span= gettext "Viber notifications"
+          %i.width-20.fas.fa-comments
+          %span= gettext "Receive notifications"
 
       - link to: main_path(@conn, :conditions), class: "" do
         %li.slide-menu.text-dark.border-bottom.border-dark
