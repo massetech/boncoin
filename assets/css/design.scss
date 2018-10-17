@@ -80,6 +80,7 @@ a.btn:hover, a.slide-menu:hover {i, span {@extend .text-white;}}
 .btn:not(.dropdown-toggle) {white-space:normal !important; word-wrap: break-word; word-break: normal;}
 
 div > i, .btn > i:not(.btn-icon) {display: flex; align-items: center; justify-content: center;}
+i.icon{width: 15px; height: 15px; font-size: 15px !important; border-radius: 100px;}
 .btn > i.btn-icon {display: inline-block;}
 .btn-icon-left {position: absolute;left: 20px;}
 .btn-icon-right {position: absolute;right: 10px;}

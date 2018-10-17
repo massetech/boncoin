@@ -8,7 +8,9 @@
           .col-6.p-0.pl-2.text-left
             .title
               %p.font-weight-bold.font-s-9.text-secondary.m-0.mb-1= LayoutView.convert_zawgyi(@announce.title)
-              %p.font-weight-bold.font-s-9.text-success.m-0= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
+              .d-flex.flex-row.align-items-center
+                %i.icon.fas.btn-success.text-center.text-white.mr-1{class: "#{BoncoinWeb.AnnounceView.show_sell_mode(@announce.sell_mode)}"}
+                %p.font-weight-bold.font-s-9.text-success.m-0= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
             .details
               %p.font-s-8.text-dark.m-0= LayoutView.convert_zawgyi(@announce.township, "title")
               %p.font-s-8.text-dark.m-0= LayoutView.convert_zawgyi(@announce.township.division, "title")

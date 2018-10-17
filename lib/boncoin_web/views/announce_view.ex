@@ -46,6 +46,22 @@ defmodule BoncoinWeb.AnnounceView do
     "#{Kernel.round(price)} #{currency}"
   end
 
+  def show_sell_mode(sell_mode) do
+    case sell_mode do
+      "sell" -> "fa-dollar-sign"
+      "rent" -> "fa-clock"
+      "give" -> "fa-gift"
+    end
+  end
+
+  def announce_sell_mode(sell_mode) do
+    case sell_mode do
+      "sell" -> "fa-dollar-sign"
+      "rent" -> "fa-clock"
+      "give" -> "fa-gift"
+    end
+  end
+
   # def show_location(township, language) do
   #   uni = "#{township.title_my}" #{township.division.title_my},
   #   case language do

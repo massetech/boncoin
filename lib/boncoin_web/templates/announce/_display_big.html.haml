@@ -10,7 +10,8 @@
           -# Offer header
           .d-flex.flex-column.justify-content-center.mb-3
             %h6.font-weight-bold.text-secondary.m-0= @announce.title
-            %h6.font-weight-bold.text-success.mt-1= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
+            %h6.font-weight-bold.text-success.mt-1
+              = BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
             %p.m-0= gettext("Sold by%{seller_name}", seller_name: @announce.user.nickname)
             %p.m-0= gettext("in %{township}, %{division}", township: LayoutView.convert_zawgyi(@announce.township, "title"), division: LayoutView.convert_zawgyi(@announce.township.division, "title"))
           -# Description of offer

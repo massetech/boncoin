@@ -37,7 +37,7 @@
           = radio_button @a, :sell_mode, "RENT", autocomplete: "off", class: ""
           %i.fas.fa-clock.mx-2
           %span= gettext("rent")
-        %label.btn.btn-outline-secondary.radio-btn.d-inline-flex.justify-content-center.m-0
+        %label.btn.btn-outline-secondary.radio-btn.d-inline-flex.justify-content-center.m-0{id: "gift-btn", data-toggle: "popover", tabindex: "0", data-trigger: "focus", data-placement: "bottom", data-content: "#{gettext("I don't want to throw it, so I am ready to offer it at very cheap price.")}"}
           = radio_button @a, :sell_mode, "GIVE", autocomplete: "off", class: ""
           %i.fas.fa-gift.mx-2
           %span= gettext("give")
@@ -53,6 +53,6 @@
           %button.btn.btn-form{id: "choosen_currency_text", type: "button"}= gettext("Kyats")
           %button.btn.btn-form.dropdown-toggle.dropdown-toggle-split{type: "button", data-toggle: "dropdown", aria-haspopup: "true", aria-expanded: "false"}
           .dropdown-menu
-            .dropdown-item.ddown_change_currency= gettext("Kyats")
+            .dropdown-item.ddown_change_currency{id: "ddown-currency-kyats"}= gettext("Kyats")
             .dropdown-item.ddown_change_currency= gettext("Lacks")
             .dropdown-item.ddown_change_currency= gettext("USD")

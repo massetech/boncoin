@@ -140,19 +140,15 @@ export default class MainView {
       event.stopPropagation()
       reset_announce_form_field()
     })
+    $('#gift-btn').on('click', function () {
+      $('#user_announces_0_price').val("100")
+      $('#ddown-currency-kyats').trigger('click');
+    })
     // Currency selector
     $('.ddown_change_currency').on('click', function() {
       $('#choosen_currency_text')[0].innerHTML = this.innerHTML
       $('#announce_currency').val(this.innerHTML)
     })
-    // Checks the email field
-    // $('#announce_email').on('change', function() {
-    //   var email = $(this).val()
-    //   if (validateEmail(email) == false) {
-    //     console.log("wrong email")
-    //     $(this).val('').focus()
-    //   }
-    // })
     // Get the title and check if it looks like Zawgyi
     $('#announce_title').on('change', function() {
       var title = $(this).val()
@@ -176,6 +172,8 @@ export default class MainView {
   }
 
   /* ------------- METHODS  --------------------------------------------------- */
+
+
   // Load the actions on offers display page
   let load_actions_in_offers_display_page = () => {
     // Display big announce on small announce click
@@ -294,7 +292,6 @@ export default class MainView {
       if (user.bot_provider == "viber") {
         $('#viber-linked').show()
         $('#messenger-linked').hide()
-        console.log("coucou")
       } else {
         $('#viber-linked').hide()
         $('#messenger-linked').show()
