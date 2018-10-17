@@ -35,7 +35,7 @@ defmodule BoncoinWeb.MainControllerTest do
     test "arrives on the right page" do
       conn = build_conn()
         |> Plug.Conn.put_req_header("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36")
-        |> get("/viber")
+        |> get("/conversations")
       assert html_response(conn, 200) =~ "Connect to PawChaungKaung by Viber or Messenger !"
     end
   end

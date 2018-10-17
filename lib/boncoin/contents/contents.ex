@@ -527,6 +527,12 @@ defmodule Boncoin.Contents do
       |> Repo.all()
   end
 
+  def get_user_online_offers(user) do
+    Announce
+      |> Announce.select_user_online_offers(user)
+      |> Repo.all()
+  end
+
   def get_announce!(id) do
     Repo.get!(Announce, id)
       |> Repo.preload([:user, :images, township: [:division], category: [:family]])

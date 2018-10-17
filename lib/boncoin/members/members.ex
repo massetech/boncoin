@@ -74,12 +74,6 @@ defmodule Boncoin.Members do
       |> Repo.preload(:announces)
   end
 
-  # def get_other_user_by_phone_number(phone_number)do
-  #   User
-  #     |> User.search_other_user_for_phone_number(phone_number)
-  #     |> Repo.one()
-  # end
-
   def get_active_user_by_bot_id(bot_id, provider) do
     User
       |> User.filter_active_user_by_bot_id(bot_id, provider)

@@ -13,8 +13,6 @@ defmodule Boncoin.CustomModules do
 
   defp convert_field_to_burmese(key, nil, keys_list), do: {key, nil} # Avoid bug if nil is passed
   defp convert_field_to_burmese(key, value, keys_list) do
-    # IO.puts("in da loop")
-    # IO.inspect(value)
     case Enum.member?(keys_list, key) do
       false -> {key, value}
       true -> {key, Rabbit.zg2uni(value)}

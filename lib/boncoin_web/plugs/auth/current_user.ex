@@ -16,7 +16,8 @@ defmodule Boncoin.Auth.CurrentUser do
           true -> assign(conn, :current_user, user) # Only active user can be current user
           false -> assign(conn, :current_user, Members.get_guest_user())
         end
-      true -> assign(conn, :current_user, Members.get_guest_user())
+      true ->
+        assign(conn, :current_user, Members.get_guest_user())
     end
   end
 end

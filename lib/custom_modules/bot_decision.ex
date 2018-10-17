@@ -2,8 +2,8 @@ defmodule Boncoin.CustomModules.BotDecisions do
   alias BoncoinWeb.LayoutView
   alias Boncoin.{Members, Contents}
   @website_url "https://www.pawchaungkaung.com"
-  @website_url_form "https://www.pawchaungkaung.com/announces/new"
-  @website_bot_explained "https://www.pawchaungkaung.com/bots"
+  @website_url_form "https://www.pawchaungkaung.com/user/offer"
+  @website_bot_explained "https://www.pawchaungkaung.com/conversations"
 
   # -------------------- DECISION  -------------------------------
 
@@ -30,7 +30,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
               _ -> [treat_msg("ask_phone", language)] # User gave his language
             end
           _ -> # User known : if different language then update
-            if user.language != language do
+            if user.language != language && language != nil do
               case Members.update_user(user, %{language: language}) do
                 {:error, _user} -> [treat_msg("nothing_to_say", user)]
                 {:ok, new_user} -> [treat_msg("nothing_to_say", new_user)]
@@ -82,7 +82,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
 
       # User wants to see his OFFERS LIST
       user != nil && user.bot_active == true && bot_user_msg == "*111#" ->
-        offers = Contents.get_user_active_offers(user)
+        offers = Contents.get_user_online_offers(user)
         case Kernel.length(offers) do
           0 -> [treat_msg("0_active_offer", user)]
           nb_offers ->
@@ -150,12 +150,20 @@ defmodule Boncoin.CustomModules.BotDecisions do
           [] ->
             Members.update_user(other_user, %{active: false}) # We cancel other user forever (history)
             case user do
-              nil ->
-                case Members.create_user(user_params) do
-                  {:ok, new_user} -> [treat_msg("new_user_created", new_user)]
-                  _ -> [treat_msg("technical problem", user_params.language)]
+              nil -> # It is a user bot inscription
+                case user_params.bot_id == other_user.bot_id do
+                  true -> # other_user is the same user comming back to the same bot
+                    case Members.update_user(other_user, user_params) do
+                      {:ok, user} -> [treat_msg("new_phone_updated", user)]
+                      _ -> [treat_msg("technical problem", user_params.language)]
+                    end
+                  false -> # it is a new user
+                    case Members.create_user(user_params) do
+                      {:ok, new_user} -> [treat_msg("new_user_created", new_user)]
+                      _ -> [treat_msg("technical problem", user_params.language)]
+                    end
                 end
-              user ->
+              user -> # It is a user changing his bot phone
                 case Members.update_user(user, user_params) do
                   {:ok, user} -> [treat_msg("new_phone_updated", user)]
                   _ -> [treat_msg("technical problem", user_params.language)]

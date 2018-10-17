@@ -1,4 +1,5 @@
 - form_for @changeset, @action, fn f ->
+  = hidden_input f, :auth_provider, value: "google"
   .row
     .col-xs-12.col-sm-6.offset-sm-3
       .card

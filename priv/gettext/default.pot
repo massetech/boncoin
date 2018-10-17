@@ -323,7 +323,7 @@ msgid "About PawChaungKaung"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/form.html.haml:34
+#: lib/boncoin_web/templates/user/form.html.haml:35
 msgid "Phone number"
 msgstr ""
 
@@ -436,7 +436,7 @@ msgid "Describe your offer (size, dimensions, condition, scratches, date of buy,
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:68
+#: lib/boncoin_web/templates/public/conversations.html.haml:68
 msgid "How to scan the QR code on Viber ?"
 msgstr ""
 
@@ -547,17 +547,17 @@ msgid "Buyer's and seller's rights"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:126
+#: lib/boncoin_web/templates/public/conversations.html.haml:126
 msgid "Explain how to unlink the viber account"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:111
+#: lib/boncoin_web/templates/public/conversations.html.haml:111
 msgid "Explain how to get change phone number from Viber"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:96
+#: lib/boncoin_web/templates/public/conversations.html.haml:96
 msgid "Explain how to get offer list from Viber"
 msgstr ""
 
@@ -638,12 +638,12 @@ msgid "Find a good-deal in more than %{nb_offers}offers"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/form.html.haml:38
+#: lib/boncoin_web/templates/user/form.html.haml:39
 msgid "Create user"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/form.html.haml:29
+#: lib/boncoin_web/templates/user/form.html.haml:30
 msgid "Email (Gmail only)"
 msgstr ""
 
@@ -693,7 +693,7 @@ msgid "Photo 3"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/form.html.haml:24
+#: lib/boncoin_web/templates/user/form.html.haml:25
 msgid "Nickname"
 msgstr ""
 
@@ -759,12 +759,12 @@ msgid "Sorry, we don't have any offer for your search."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:55
+#: lib/boncoin_web/templates/public/conversations.html.haml:55
 msgid "Open Viber on my phone"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:44
+#: lib/boncoin_web/templates/public/conversations.html.haml:44
 msgid "How to receive notifications by Viber ?"
 msgstr ""
 
@@ -777,11 +777,6 @@ msgstr ""
 #: lib/boncoin_web/templates/user/_details_form.html.haml:74
 #: lib/boncoin_web/templates/user/_details_form.html.haml:79
 msgid "Send me notifications by Viber"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:31
-msgid "Viber phone number (optional)"
 msgstr ""
 
 #, elixir-format
@@ -800,47 +795,42 @@ msgid "sell"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:5
+#: lib/boncoin_web/templates/public/conversations.html.haml:5
 msgid "Connect to PawChaungKaung by Viber or Messenger !"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:105
+#: lib/boncoin_web/templates/public/conversations.html.haml:105
 msgid "How to change your phone number ?"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:90
+#: lib/boncoin_web/templates/public/conversations.html.haml:90
 msgid "How to get your offers list ?"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:29
+#: lib/boncoin_web/templates/public/conversations.html.haml:29
 msgid "How to receive notifications by Messenger ?"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:120
+#: lib/boncoin_web/templates/public/conversations.html.haml:120
 msgid "How to unlink your Viber or Messenger account ?"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:33
-msgid "If you want people to contact you on Viber"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:127
+#: lib/boncoin_web/templates/public/conversations.html.haml:127
 msgid "Please note that you can't unlink your phone number if you still have active offers."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:35
+#: lib/boncoin_web/templates/public/conversations.html.haml:35
 msgid "Please open a conversation with PawChaungKaung on Messenger."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:50
+#: lib/boncoin_web/templates/public/conversations.html.haml:50
 msgid "Please open a conversation with PawChaungKaung on Viber."
 msgstr ""
 
@@ -855,7 +845,7 @@ msgid "Submit your offer"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/viber.html.haml:6
+#: lib/boncoin_web/templates/public/conversations.html.haml:6
 msgid "We will send you notifications (this conversation is private between you and PawChaungKaung)."
 msgstr ""
 
@@ -867,4 +857,14 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/user/_details_form.html.haml:50
 msgid "You are linked by Viber"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/user/_details_form.html.haml:33
+msgid "If you want people to contact you on Viber (optional)"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/user/_details_form.html.haml:31
+msgid "Viber phone number"
 msgstr ""

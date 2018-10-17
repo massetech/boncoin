@@ -193,13 +193,30 @@ defmodule BoncoinWeb.ViberTest do
         |> List.first()
       assert msg =~ "Are you sure you want to remove Viber link ?"
     end
-    test "user asks to quit but has active announces", %{conn: conn} do
+    test "user asks to quit but has PENDING announces", %{conn: conn} do
       user = insert(:user)
-      insert_list(3, :announce, %{user_id: user.id})
+      insert_list(3, :announce, %{user_id: user.id, status: "PENDING"})
       %{scope: scope, msg: msg} = %{scope: "", user: user, announce: nil, bot: %{bot_provider: "viber", bot_id: nil, bot_user_name: nil, user_msg: "*999#"}}
         |> call_bot_algorythm()
         |> List.first()
       assert msg =~ "account because you still have 3 active offers"
+    end
+    test "user asks to quit but has ONLINE announces", %{conn: conn} do
+      user = insert(:user)
+      insert_list(2, :announce, %{user_id: user.id, treated_by_id: user.id, status: "ONLINE"})
+      %{scope: scope, msg: msg} = %{scope: "", user: user, announce: nil, bot: %{bot_provider: "viber", bot_id: nil, bot_user_name: nil, user_msg: "*999#"}}
+        |> call_bot_algorythm()
+        |> List.first()
+      assert msg =~ "account because you still have 2 active offers"
+    end
+    test "user asks to quit but has ONLINE and PENDING announces", %{conn: conn} do
+      user = insert(:user)
+      insert_list(3, :announce, %{user_id: user.id, status: "PENDING"})
+      insert_list(2, :announce, %{user_id: user.id, treated_by_id: user.id, status: "ONLINE"})
+      %{scope: scope, msg: msg} = %{scope: "", user: user, announce: nil, bot: %{bot_provider: "viber", bot_id: nil, bot_user_name: nil, user_msg: "*999#"}}
+        |> call_bot_algorythm()
+        |> List.first()
+      assert msg =~ "account because you still have 5 active offers"
     end
     test "user confirms to quit with 1", %{conn: conn} do
       user = insert(:user)

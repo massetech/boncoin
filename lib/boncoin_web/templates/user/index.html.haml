@@ -6,7 +6,7 @@
 .row.my-3
   .col-xs-12.col-sm-6.text-left
     %span= "Logged in as"
-    %span.text-primary= "#{@conn.assigns.current_user.email}"
+    %span.text-secondary= "#{@conn.assigns.current_user.email}"
   .col-xs-12.col-sm-6.text-right
     -# = link "View Divisions", to: division_path(@conn, :index), class: "btn btn-outline-info btn-sm"
     = link "New USer", to: user_path(@conn, :new), class: "btn btn-outline-info btn-sm"
@@ -17,31 +17,38 @@
     %thead
       %tr
         %th= "ID"
-        %th= "role"
-        %th= "Phone number"
-        %th= "Nickname"
-        %th= "Email"
+        %th= "Active"
         %th= "Language"
-        %th= "Password"
-        %th= "Bot provider"
-        %th= "Bot status"
-        %th= "Bot ID"
-        %th= "Nb offers"
+        %th= "role"
+        %th= "Nickname"
+        %th= "Phone number"
+        %th= "Viber number"
+        %th= "Email"
+        %th= "Bot"
+        %th= "ID"
+        %th= "Status"
+        %th= "ONLINE"
+        %th= "PENDING"
+        %th= "CLOSED"
         %th= "Actions"
     %tbody
       - for user <- @users do
         %tr
           %td= user.id
-          %td= user.role
-          %td= user.phone_number
-          %td= user.nickname
-          %td= user.email
+          %th= LayoutView.icon_active(user.active)
           %td= img_tag static_path(@conn, "/fonts/#{user.language}.svg"), class: "flag-small"
-          %td= user.member_psw
+          %td= user.role
+          %td= user.nickname
+          %td= user.phone_number
+          %td= user.viber_number
+          %td= user.email
           %td= user.bot_provider
-          %td= user.bot_active
-          %td= user.bot_id
-          %td= Kernel.length(user.announces)
+          %td.text-truncate{style: "max-width: 30px;", data-toggle: "popover", title: "bot_id", data-placement: "top", data-content: "#{user.bot_id}"}
+            = user.bot_id
+          %td= LayoutView.icon_active(user.bot_active)
+          %td= Enum.count(user.announces, &(&1.status == "ONLINE"))
+          %td= Enum.count(user.announces, &(&1.status == "PENDING"))
+          %td= Enum.count(user.announces, &(&1.status == "CLOSED"))
           %td
             - unless (@conn.assigns.current_user.id == user.id) || (user.role == "GUEST") do
               = link "Delete", to: user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

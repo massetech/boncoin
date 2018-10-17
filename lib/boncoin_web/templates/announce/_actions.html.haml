@@ -18,7 +18,7 @@
 
 .row.m-0.mt-3.offer-contact.d-none{id: "offer_contact_#{@announce.id}"}
 
-  .col-12.my-3.p-0
+  .col-xs-12.my-3.p-0
     -# Show the sellor's number
     %button.btn.btn-lg.btn-block.btn-secondary.d-flex.justify-content-center.align-items-center.copy-number{data-phone-number: "#{@announce.user.phone_number}"}
       %i.fa.fa-phone.btn-icon-left
@@ -27,14 +27,16 @@
 
   - if @announce.user.viber_number != nil do
     -# Show the button to open Viber conversation
-    .col-12.p-0
+    .col-xs-12.p-0
       - if Browser.mobile?(@conn) do
-        %a.btn.btn-lg.btn-block.btn-outline-secondary.d-flex.justify-content-center.align-items-center{href: "viber://chat?number=#{@announce.user.viber_number}"}
+        %a.btn.btn-lg.btn-block.btn-outline-secondary.d-flex.justify-content-center.align-items-center{href: "viber://contact?number=%2B95#{String.slice(@announce.user.viber_number, 1..-1)}"}
           %i.icon-big.fab.fa-viber.btn-icon-left
           = render "_phone_number.html", phone_number: @announce.user.viber_number
-          -# %span.font-weight-light= gettext "Contact by Viber"
+        %a.btn.btn-lg.btn-block.btn-outline-secondary.d-flex.justify-content-center.align-items-center{href: "viber://chat/?number=%2B95#{String.slice(@announce.user.viber_number, 1..-1)}"}
+          %i.icon-big.fab.fa-viber.btn-icon-left
+          = render "_phone_number.html", phone_number: @announce.user.viber_number
       - else
-        %button.btn.btn-lg.btn-block.btn-outline-secondary.d-flex.justify-content-center.align-items-center.copy-number{data-phone-number: "#{@announce.user.viber_number}"}
+        %button.btn.btn-lg.btn-block.btn-outline-secondary.d-flex.justify-content-center.align-items-center.copy-number{data-phone-number: "95#{String.slice(@announce.user.viber_number, 1..-1)}"}
           %i.icon-big.fab.fa-viber.btn-icon-left
-          = render "_phone_number.html", phone_number: @announce.user.viber_number
+          = render "_phone_number.html", phone_number: "95#{String.slice(@announce.user.viber_number, 1..-1)}"
           %i.fa.fa-copy.bg-secondary.text-white.btn-copy-number.btn-icon-right

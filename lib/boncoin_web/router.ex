@@ -50,7 +50,7 @@ defmodule BoncoinWeb.Router do
     get "/", MainController, :welcome, as: :root
     get "/conditions", MainController, :conditions
     get "/about", MainController, :about
-    get "/viber", MainController, :viber
+    get "/conversations", MainController, :conversations
     get "/offers", AnnounceController, :public_index, as: :public_offers
     scope "/user" do
       get "/offer", UserController, :new_user_announce

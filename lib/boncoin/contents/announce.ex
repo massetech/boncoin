@@ -175,6 +175,11 @@ defmodule Boncoin.Contents.Announce do
 
   def select_user_active_offers(query, user) do
     from a in query,
+      where: a.status in ["PENDING", "ONLINE"] and a.user_id == ^user.id
+  end
+
+  def select_user_online_offers(query, user) do
+    from a in query,
       where: a.status == "ONLINE" and a.user_id == ^user.id
   end
 

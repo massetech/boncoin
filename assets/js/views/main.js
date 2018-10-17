@@ -52,6 +52,8 @@ export default class MainView {
     $('.alert').on('click', function () {
       $(this).alert('close')
     })
+    // Activate Boostrap plugins
+    $('[data-toggle="popover"]').popover()
     // Set up CustomScroller - http://manos.malihu.gr/jquery-custom-content-scroller/
     // $("#sidebar").mCustomScrollbar({
     //   theme: "minimal"

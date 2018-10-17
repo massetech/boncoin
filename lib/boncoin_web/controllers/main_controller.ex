@@ -4,6 +4,7 @@ defmodule BoncoinWeb.MainController do
 
   def welcome(conn, _params) do
     nb_announces = Contents.count_announces_public()
+    IO.puts("welcome")
     conn
       |> render(BoncoinWeb.PublicView, "welcome.html", nb_announces: nb_announces)
   end
@@ -18,9 +19,9 @@ defmodule BoncoinWeb.MainController do
       |> render(BoncoinWeb.PublicView, "about.html")
   end
 
-  def viber(conn, _params) do
+  def conversations(conn, _params) do
     conn
-      |> render(BoncoinWeb.PublicView, "viber.html")
+      |> render(BoncoinWeb.PublicView, "conversations.html")
   end
 
   def dashboard(conn, _params) do
