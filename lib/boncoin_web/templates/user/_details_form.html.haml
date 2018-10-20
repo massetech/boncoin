@@ -54,7 +54,7 @@
       .input-group
         .col-6
           - if Browser.mobile?(@conn) do
-            %a.btn.btn-block.btn-viber{href: "viber://pa/info?uri=pawchaungkaung_en"}
+            %a.btn.btn-block.btn-viber-outline{href: "viber://pa/info?uri=pawchaungkaung_en"}
               %i.fab.fa-viber
               %span= gettext "Send me notifications by Viber"
           - else

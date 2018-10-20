@@ -4,7 +4,6 @@ defmodule BoncoinWeb.MainController do
 
   def welcome(conn, _params) do
     nb_announces = Contents.count_announces_public()
-    IO.puts("welcome")
     conn
       |> render(BoncoinWeb.PublicView, "welcome.html", nb_announces: nb_announces)
   end

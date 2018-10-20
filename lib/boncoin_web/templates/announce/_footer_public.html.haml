@@ -1,0 +1,21 @@
+.col-xs-12.col-sm-6.p-0.mb-3.px-sm-3
+  .w-100
+    -# Show the sellor's number
+    %button.btn.btn-lg.btn-block.btn-secondary.d-flex.justify-content-center.align-items-center.copy-number{data-phone-number: "#{@announce.user.phone_number}"}
+      %i.fa.fa-phone.btn-icon-left
+      = render "_phone_number.html", phone_number: @announce.user.phone_number
+      %i.fa.fa-copy.bg-success.text-white.btn-copy-number.btn-icon-right
+
+- if @announce.user.viber_number != nil do
+  .col-xs-12.col-sm-6.p-0.px-sm-3
+    .w-100.bg-white
+      -# Show the button to open Viber conversation
+      - if Browser.mobile?(@conn) do
+        %a.btn.btn-lg.btn-block.btn-outline-secondary.d-flex.justify-content-center.align-items-center{href: "viber://contact?number=%2B95#{String.slice(@announce.user.viber_number, 1..-1)}"}
+          %i.icon-big.fab.fa-viber.btn-icon-left
+          = render "_phone_number.html", phone_number: @announce.user.viber_number
+      - else
+        %button.btn.btn-lg.btn-block.btn-outline-secondary.d-flex.justify-content-center.align-items-center.copy-number{data-phone-number: "95#{String.slice(@announce.user.viber_number, 1..-1)}"}
+          %i.icon-big.fab.fa-viber.btn-icon-left
+          = render "_phone_number.html", phone_number: "95#{String.slice(@announce.user.viber_number, 1..-1)}"
+          %i.fa.fa-copy.bg-success.text-white.btn-copy-number.btn-icon-right

@@ -16,8 +16,11 @@ defmodule BoncoinWeb.AnnounceController do
   # API to be called if user wants to load more offers on public page
   def add_offers_to_public_index(conn, %{"scope" => scope, "params" => %{"cursor_after" => cursor_after, "search_params" => search_params}} = params) do
     paginator_results = Contents.list_announces_public(cursor_after, search_params)
+    conn
+      |> assign(:refusal_causes, Announce.refusal_causes())
+      |> assign(:closing_causes, Announce.admin_closing_causes())
     offers = paginator_results.entries
-      |> Enum.map(fn announce -> build_offer_html(announce) end)
+      |> Enum.map(fn announce -> build_offer_html(conn, announce) end)
     results = case paginator_results.metadata.after do
       nil -> # There are no more records after
         %{scope: scope, data: %{offers: offers, new_cursor_after: nil}, error: ""}
@@ -31,9 +34,9 @@ defmodule BoncoinWeb.AnnounceController do
     render(conn, "offer_api.json", results: results)
   end
 
-  defp build_offer_html(announce) do
-    %{display_small: Phoenix.View.render_to_string(BoncoinWeb.AnnounceView, "_display_small.html", announce: announce),
-      display_big: Phoenix.View.render_to_string(BoncoinWeb.AnnounceView, "_display_big.html", announce: announce)}
+  defp build_offer_html(conn, announce) do
+    %{display_small: Phoenix.View.render_to_string(BoncoinWeb.AnnounceView, "_display_small.html", announce: announce, conn: conn),
+      display_big: Phoenix.View.render_to_string(BoncoinWeb.AnnounceView, "_display_big.html", announce: announce, conn: conn)}
   end
 
   # API to be called if user wants to declare an alert on the offer

@@ -2,6 +2,7 @@
 .main-wrapper{background-color: white;}
 .full-height {min-height: 100vh;}
 .flex-grow {flex: 1;}
+.welcome_container{height: calc(100vh - 3em - 1em);position: relative;overflow-x: hidden;}
 img {width: 100%;}
 /* ------------------------------ TYPOGRAPHY  ------------------------------ */
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, a, p {
@@ -16,14 +17,8 @@ i.icon-big{font-size: 30px !important;}
 .font-s-9 {font-size: 0.9rem !important;}
 .font-s-8 {font-size: 0.8rem !important;}
 p.one-line{white-space: nowrap;}
-// p {text-align: center;}
 /* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 /* ------------------------------ LOGO  ------------------------------ */
-// span.logo {
-//   display: flex; align-items: center; justify-content: center;
-//   i {font-size: 30px !important;margin-right: 15px;}
-//   font-size: 30px !important; font-weight: bold
-// }
 img.logo{width: auto;height: 2.5em;}
 /* ------------------------------ HEADER  ------------------------------ */
 .nav-row{height: 3em;}
@@ -56,6 +51,7 @@ i {font-size: 20px!important;}
 .add{
   img {font-size: 30px!important;}
 }
+img.welcome_img{width: auto;position: absolute; bottom: 0;}
 /* ------------------------------ SEARCHBAR  ------------------------------ */
 #searchBar{
   z-index: 1000;
@@ -82,13 +78,14 @@ a.btn:hover, a.slide-menu:hover {i, span {@extend .text-white;}}
 div > i, .btn > i:not(.btn-icon) {display: flex; align-items: center; justify-content: center;}
 i.icon{width: 15px; height: 15px; font-size: 15px !important; border-radius: 100px;}
 .btn > i.btn-icon {display: inline-block;}
-.btn-icon-left {position: absolute;left: 20px;}
-.btn-icon-right {position: absolute;right: 10px;}
+.btn-icon-left {position: absolute;left: 30px;}
+.btn-icon-right {position: absolute;right: 20px;}
 i.width-20, img.width-20 {width: 20px;}
 i.width-30, img.width-30 {width: 30px;}
 i.width-40, img.width-40 {width: 40px;}
 .btn.h-100, i.h-100 {height: 100%;}
-
+.btn-copy-number{opacity: 0;}
+.btn-copy-number.show {opacity: 1; transition: opacity 500ms ease 0ms;}
 .radio-btn{
   input {display: none;}
   width: 33.333%;//border-radius: 10px;
@@ -268,16 +265,17 @@ a[data-toggle="collapse"] {
   p{color: $viber-color;}
   text-align: left;
 }
-.btn-viber{
+.btn-viber-outline{
   background: white;
   border: 2px solid $viber-color;
   border-radius: 5px;
   color: $viber-color;
 }
-.btn-viber:hover{
+.btn-viber-outline:hover{
   background: $viber-color;
   color: white;
 }
+.btn-viber{background: $viber-color;color: white}
 .btn-messenger{
   background: white;
   border: 2px solid $messenger-color;
@@ -330,9 +328,7 @@ a[data-toggle="collapse"] {
 //   margin-left: auto;
 //   margin-right: auto;
 // }
-// .offer-actions{
-//   button {width: 33%;}
-// }
+// .offer-actions{position: absolute;width: 100%;bottom: 1em;left: 0;}
 // .offer-contact{
 //   position: absolute;
 //   bottom: 0;width: 90%; // 90% since padding in card

@@ -11,13 +11,13 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_cities_list.html.haml:15
+#: lib/boncoin_web/templates/layout/_cities_list.html.haml:14
 #: lib/boncoin_web/templates/layout/_sidebar.html.haml:32
 msgid "All %{division_title}"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_cities_list.html.haml:7
+#: lib/boncoin_web/templates/layout/_cities_list.html.haml:6
 #: lib/boncoin_web/templates/layout/_sidebar.html.haml:20
 msgid "All Myanmar"
 msgstr ""
@@ -90,7 +90,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/boncoin_web/templates/layout/_sidebar.html.haml:49
-#: lib/boncoin_web/templates/public/welcome.html.haml:16
+#: lib/boncoin_web/templates/public/welcome.html.haml:15
 msgid "Sell something"
 msgstr ""
 
@@ -246,7 +246,7 @@ msgid "introduction to terms of use"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/welcome.html.haml:25
+#: lib/boncoin_web/templates/public/welcome.html.haml:24
 msgid "Presenting website"
 msgstr ""
 
@@ -421,7 +421,7 @@ msgid "Become a partner"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_cities_list.html.haml:4
+#: lib/boncoin_web/templates/layout/_cities_list.html.haml:3
 msgid "Search arround you"
 msgstr ""
 
@@ -633,7 +633,7 @@ msgid "Who are we ?"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/welcome.html.haml:6
+#: lib/boncoin_web/templates/public/welcome.html.haml:7
 msgid "Find a good-deal in more than %{nb_offers}offers"
 msgstr ""
 
@@ -648,22 +648,22 @@ msgid "Email (Gmail only)"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_actions.html.haml:5
+#: lib/boncoin_web/templates/announce/_actions_public.html.haml:5
 msgid "Number"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_actions.html.haml:11
+#: lib/boncoin_web/templates/announce/_actions_public.html.haml:11
 msgid "Report"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_actions.html.haml:17
+#: lib/boncoin_web/templates/announce/_actions_public.html.haml:17
 msgid "Save"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:114
+#: lib/boncoin_web/controllers/announce_controller.ex:117
 msgid "Your offer has been removed."
 msgstr ""
 
@@ -734,17 +734,12 @@ msgid "%{nb_offers}offers found in%{place_searched}"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/show.html.haml:40
-msgid "Sold by%{seller_name}in %{township}, %{division}"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/_display_big.html.haml:13
+#: lib/boncoin_web/templates/announce/_description.html.haml:4
 msgid "Sold by%{seller_name}"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_display_big.html.haml:14
+#: lib/boncoin_web/templates/announce/_description.html.haml:5
 msgid "in %{township}, %{division}"
 msgstr ""
 
@@ -867,4 +862,19 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/user/_details_form.html.haml:31
 msgid "Viber phone number"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/_footer_user.html.haml:15
+msgid "I cancel this offer"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:58
+msgid "I don't want to throw it, so I am ready to offer it at very cheap price."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/_footer_user.html.haml:5
+msgid "I sold this item"
 msgstr ""

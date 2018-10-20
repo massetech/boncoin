@@ -1,15 +1,16 @@
-.row
-  .col-12
-    .card.mb-4.bg-secondary
+.row.welcome_container.justify-content-center.align-items-start
+  = img_tag(static_path(@conn, "/images/background1.png"), class: "welcome_img")
+  .col-xs-12.col-sm-8.d-flex.flex-column.justify-content-center.my-3
+    .card.bg-secondary
       .card-body.p-2
         %h5.text-white.m-0
           = gettext "Find a good-deal in more than %{nb_offers}offers", nb_offers: @nb_announces
-.row.justify-content-center.my-4
-  .col-xs-12.col-sm-6
-    - link to: user_path(@conn, :new_user_announce), class: "btn btn-lg btn-outline-secondary text-secondary mb-4 btn-block" do
-      %i.width-30.fa.fa-edit.btn-icon{}
-      %span= gettext "Sell something"
-    = render BoncoinWeb.LayoutView, "_cities_list.html", assigns
+
+    .col-xs-12.col-sm-8.offset-sm-2.my-4.p-0
+      = render BoncoinWeb.LayoutView, "_cities_list.html", assigns
+      - link to: user_path(@conn, :new_user_announce), class: "btn btn-lg btn-outline-secondary text-secondary btn-block" do
+        %i.width-30.fa.fa-edit.btn-icon{}
+        %span= gettext "Sell something"
 
 .row.justify-content-center
   .col-xs-12.col-sm-8.my-4

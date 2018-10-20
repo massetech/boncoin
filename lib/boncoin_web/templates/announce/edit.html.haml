@@ -1,10 +1,2 @@
 .row
-  .col.d-flex.justify-content-center
-    .card.admin.my-3{id: "show_user_offer_#{@announce.id}"}
-      = render "_show_details.html", assigns
-      .card-footer
-        .row
-          .col-xs-12.col-sm-3
-            = link "I sold this item", to: announce_path(@conn, :close, announce_id: "#{@announce.id}", cause: "SOLD"), class: "btn btn-lg btn-block btn-success m-2"
-          .col-xs-12.col-sm-3
-            = link "I cancel this offer", to: announce_path(@conn, :close, announce_id: "#{@announce.id}", cause: "CANCELLED"), class: "btn btn-lg btn-block btn-info m-2"
+  = render BoncoinWeb.AnnounceView, "_display_big.html", announce: @announce, conn: @conn

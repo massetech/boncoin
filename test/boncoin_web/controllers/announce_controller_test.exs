@@ -209,9 +209,9 @@ defmodule BoncoinWeb.AnnounceControllerTest do
   describe "show announce" do
     @tag :admin_authenticated
     test "to admin", %{conn: conn} do
-      offer = insert(:announce)
+      offer = insert(:announce, %{title: "dede"})
       conn = get conn, announce_path(conn, :show, offer.id)
-      assert html_response(conn, 200) =~ "show_admin_offer_#{offer.id}"
+      assert html_response(conn, 200) =~ "dede"
     end
 
     @tag :member_authenticated
@@ -232,11 +232,11 @@ defmodule BoncoinWeb.AnnounceControllerTest do
 
   describe "edit announce" do
     test "ONLINE for owner user member", %{conn: conn} do
-      offer = insert(:announce)
+      offer = insert(:announce, %{title: "dede"})
       safe_link = Cipher.encrypt(Integer.to_string(offer.id))
       {:ok, offer} = Contents.update_announce(offer, %{safe_link: safe_link})
       conn = get conn, announce_path(conn, :edit, offer.safe_link)
-      assert html_response(conn, 200) =~ "show_user_offer_#{offer.id}"
+      assert html_response(conn, 200) =~ "dede"
     end
     test "CLOSED for owner user member", %{conn: conn} do
       offer = insert(:announce, %{status: "CLOSED"})

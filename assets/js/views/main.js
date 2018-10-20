@@ -201,9 +201,10 @@ export default class MainView {
     })
     // Show the sellor's number
     $('.btn-show-number').on('click', function() {
-      $(this).closest('div.offer-actions').addClass('d-none').next('div.offer-contact').removeClass('d-none')
+      $(this).closest('div.offer-actions').addClass('d-none')
       var offer_id = $(this).attr('data-offer-id')
-      $(this).removeAttr('data-offer-id')
+      $(this).removeAttr('data-offer-id') // We can click only 1 time
+      $(`#offer_contact_${offer_id}`).removeClass('d-none')
       if (offer_id != undefined) {
         call_internal_api("/api/count_clic", "count_clic_number", offer_id)
       }
@@ -244,6 +245,8 @@ export default class MainView {
       $temp.val(phone_number).select()
       document.execCommand("copy")
       $temp.remove()
+      $(".btn-copy-number").removeClass('show')
+      $(this).find('.btn-copy-number').addClass('show')
     })
     // Boostrap 4 caroussel select active and swipe
     $('.carousel-inner').each(function(){
