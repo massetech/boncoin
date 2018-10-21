@@ -1,0 +1,20 @@
+.row.m-0.mt-3.offer-actions{id: "offer_actions_#{@announce.id}"}
+  .col-4.m-0.p-0
+    -# Phone number
+    %button.btn.btn-sm.btn-block.d-flex.flex-column.justify-content-center.align-items-center.btn-success.btn-show-number{id: "btn_show_number_#{@announce.id}", data-offer-id: "#{@announce.id}"}
+      %i.fa.fa-phone.btn-icon
+      %span.font-s-8= render "_phone_number.html", phone_number: @announce.user.phone_number
+  .col-4.m-0.p-0
+    -# Viber number
+    %button.btn.btn-sm.btn-block.d-flex.flex-column.justify-content-center.align-items-center.btn-viber.btn-show-number{id: "btn_show_number_#{@announce.id}", data-offer-id: "#{@announce.id}"}
+      %i.fab.fa-viber.btn-icon
+      - if @announce.user.viber_number != nil do
+        %span.font-s-8= render "_phone_number.html", phone_number: @announce.user.viber_number
+      - else
+        %span= "-"
+
+  .col-4.m-0.p-0
+    -# Nb clic
+    %button.btn.btn-sm.btn-block.d-flex.flex-column.justify-content-center.align-items-center.btn-secondary.btn-offer-like{id: "btn_like_#{@announce.id}", data-offer-id: "#{@announce.id}"}
+      %i.fas.fa-eye.btn-icon
+      %span.font-s-8= @announce.nb_view

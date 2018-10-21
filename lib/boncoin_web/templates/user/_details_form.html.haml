@@ -50,18 +50,19 @@
             %span= gettext("unlink")
 
     -# Bot options
-    .row.form-group{id: "btn-bot"}
-      .input-group
-        .col-6
+    .form-group{id: "btn-bot"}
+      %small.form-text.text-muted= gettext "Please choose how PawChaungKaung can contact you (this conversation will be private)"
+      .input-group.mt-2
+        .col-6.pl-0
           - if Browser.mobile?(@conn) do
             %a.btn.btn-block.btn-viber-outline{href: "viber://pa/info?uri=pawchaungkaung_en"}
               %i.fab.fa-viber
               %span= gettext "Send me notifications by Viber"
           - else
-            - link to: main_path(@conn, :conversations), class: "btn btn-block btn-viber", target: "_blank" do
+            - link to: main_path(@conn, :conversations), class: "btn btn-block btn-viber-outline", target: "_blank" do
               %i.fab.fa-viber
               %span= gettext "Send me notifications by Viber"
-        .col-6
+        .col-6.pr-0
           - link to: main_path(@conn, :conversations), class: "btn btn-block btn-messenger disabled", target: "_blank" do
             %i.fab.fa-facebook-messenger
             %span= gettext "Send me notifications by Messenger"

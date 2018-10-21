@@ -57,7 +57,7 @@ defmodule BoncoinWeb.Router do
       post "/create", UserController, :create_announce
     end
     # resources "/offers", AnnounceController, only: [:new, :create]
-    get "/offers/:link", AnnounceController, :edit
+    get "/offer/:link", AnnounceController, :edit
     get "/close", AnnounceController, :close
   end
 

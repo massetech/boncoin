@@ -1,37 +1,42 @@
-.col-12.big-announce.p-0.p-sm-3{id: "big_announce_#{@announce.id}", name: "big_announce_#{@announce.id}", class: "#{if @conn.request_path =~ "search" do "d-none" end}"}
-  .card.card-offer.shadow.bg-white.rounded.mb-3
-    - if @conn.request_path =~ "search" do
-      %a.btn-close.m-2{data-announce-id: "#{@announce.id}", href: "#"}
-        %i.far.fa-times-circle.text-secondary
-    .card-body.pb-0
-      .row
-        -# Images carousel (on left for big devices)
-        .col-xs-12.col-sm-6
-          - if @conn.request_path =~ "admin" do
-            = render "_carousel_admin.html", assigns
-          - else
-            = render "_carousel.html", assigns
-        .col-xs-12.col-sm-6.mt-3.mt-sm-0
-          = render "_description.html", assigns
-          -# Offer actions (big devices)
-          .d-none.d-sm-block.mb-3
-            - if @conn.request_path =~ "search" do
-              = render "_actions_public.html", assigns
-            - else
-              = render "_actions_internal.html", assigns
-        -# Offer actions (small devices)
-        .col-xs-12.d-sm-none.w-100.mb-3
-          - if @conn.request_path =~ "search" do
+.card.card-offer.shadow.bg-white.rounded.mb-3
+  - if @conn.request_path =~ "offers" do
+    %a.btn-close.m-2{data-announce-id: "#{@announce.id}", href: "#"}
+      %i.far.fa-times-circle.text-secondary
+  .card-body.pb-0
+    .row
+      -# Images carousel (on left for big devices)
+      .col-xs-12.col-sm-6
+        - if @conn.request_path =~ "admin" do
+          = render "_carousel_admin.html", assigns
+        - else
+          = render "_carousel.html", assigns
+      .col-xs-12.col-sm-6.mt-3.mt-sm-0.d-flex.flex-column
+        = render "_description.html", assigns
+        -# Offer actions (big devices)
+        .d-none.d-sm-block.mb-3
+          - if @conn.request_path =~ "offers" do
             = render "_actions_public.html", assigns
           - else
-            = render "_actions_internal.html", assigns
-
-    .card-footer{id: "offer_contact_#{@announce.id}"}
-      .row.m-3
-        - if @conn.request_path =~ "admin" do
-          = render "_footer_admin.html", assigns
+            - if @conn.request_path =~ "admin" do
+              = render "_actions_admin.html", assigns
+            - else
+              = render "_actions_user.html", assigns
+      -# Offer actions (small devices)
+      .col-xs-12.d-sm-none.w-100.mb-3
+        - if @conn.request_path =~ "offers" do
+          = render "_actions_public.html", assigns
         - else
-          - if @conn.request_path =~ "search" do
-            = render "_footer_public.html", assigns
+          - if @conn.request_path =~ "admin" do
+            = render "_actions_admin.html", assigns
           - else
-            = render "_footer_user.html", assigns
+            = render "_actions_user.html", assigns
+
+  - if @conn.request_path =~ "offers" do
+    .card-footer.d-none{id: "offer_contact_#{@announce.id}"}
+      = render "_footer_public.html", assigns
+  - else
+    .card-footer{id: "offer_contact_#{@announce.id}"}
+      - if @conn.request_path =~ "admin" do
+        = render "_footer_admin.html", assigns
+      - else
+        = render "_footer_user.html", assigns

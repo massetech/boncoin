@@ -2,7 +2,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   alias BoncoinWeb.LayoutView
   alias Boncoin.{Members, Contents}
   @website_url "https://www.pawchaungkaung.com"
-  @website_url_form "https://www.pawchaungkaung.com/user/offer"
+  @website_url_form "https://www.pawchaungkaung.com/offer"
   @website_bot_explained "https://www.pawchaungkaung.com/conversations"
 
   # -------------------- DECISION  -------------------------------

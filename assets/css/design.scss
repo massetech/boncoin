@@ -1,12 +1,16 @@
 /* ------------------------------ LAYOUT  ------------------------------ */
 .main-wrapper{background-color: white;}
 .full-height {min-height: 100vh;}
-.flex-grow {flex: 1;}
-.welcome_container{height: calc(100vh - 3em - 1em);position: relative;overflow-x: hidden;}
+.welcome_container{
+  // Fix for Chrome adding bar on android ; see https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+  height: calc(100vh - 3em - 1em); /* Fallback for browsers that do not support Custom Properties */
+  height: calc(var(--vh, 1vh) * 100 - 3em - 1em);
+  position: relative;overflow-x: hidden;
+}
 img {width: 100%;}
 /* ------------------------------ TYPOGRAPHY  ------------------------------ */
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, a, p {
-  font-family: 'Roboto', sans-serif;
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, a, p {font-family: 'Roboto', sans-serif;}
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, p {
   @extend .font-weight-light;
   @extend .text-dark;
 }

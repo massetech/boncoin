@@ -639,8 +639,8 @@ msgid "Explain how to get offer list from Viber"
 msgstr "သင်တင်ထားသည့်ရောင်းရန်ပစ္စည်းစာရင်းကိုရယူနိုင်ရန် ဗိုင်ဘာသို့ဝင်၍ [*111#] ဟုရိုက်ထည့်ပြီး ပေါခြောင်ကောင်းသို့ပို့ပါ။"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/public_index.html.haml:39
-#: lib/boncoin_web/templates/announce/public_index.html.haml:43
+#: lib/boncoin_web/templates/announce/public_index.html.haml:41
+#: lib/boncoin_web/templates/announce/public_index.html.haml:45
 msgid "More offers"
 msgstr "နောက်ထပ်ရောင်းရန်ကြော်ငြာများ"
 
@@ -818,12 +818,12 @@ msgid "in %{township}, %{division}"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/public_index.html.haml:27
+#: lib/boncoin_web/templates/announce/public_index.html.haml:29
 msgid "Please change your filters or search in another city !"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/public_index.html.haml:25
+#: lib/boncoin_web/templates/announce/public_index.html.haml:27
 msgid "Sorry, we don't have any offer for your search."
 msgstr ""
 
@@ -838,13 +838,13 @@ msgid "How to receive notifications by Viber ?"
 msgstr "အသိပေးချက်များကိုလက်ခံရရှိနိုင်ရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:85
+#: lib/boncoin_web/templates/user/_details_form.html.haml:86
 msgid "Send me notifications by Messenger"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:74
-#: lib/boncoin_web/templates/user/_details_form.html.haml:79
+#: lib/boncoin_web/templates/user/_details_form.html.haml:75
+#: lib/boncoin_web/templates/user/_details_form.html.haml:80
 msgid "Send me notifications by Viber"
 msgstr ""
 
@@ -939,16 +939,21 @@ msgid "Viber phone number"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_footer_user.html.haml:15
+#: lib/boncoin_web/templates/announce/_footer_user.html.haml:16
 msgid "I cancel this offer"
 msgstr ""
 
 #, elixir-format
+#: lib/boncoin_web/templates/announce/_footer_user.html.haml:6
+msgid "I sold this item"
+msgstr ""
+
+#, elixir-format, fuzzy
 #: lib/boncoin_web/templates/announce/_describe_offer.html.haml:58
-msgid "I don't want to throw it, so I am ready to offer it at very cheap price."
+msgid "I don't want to throw it, so I sell it for very cheap price."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_footer_user.html.haml:5
-msgid "I sold this item"
+#: lib/boncoin_web/templates/user/_details_form.html.haml:69
+msgid "Please choose how PawChaungKaung can contact you (this conversation will be private)"
 msgstr ""
