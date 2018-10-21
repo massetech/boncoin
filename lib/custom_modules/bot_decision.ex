@@ -192,6 +192,10 @@ defmodule Boncoin.CustomModules.BotDecisions do
     end
   end
 
+  defp offer_form_link(user_phone) do
+    "#{@website_url_form}/#{user_phone}"
+  end
+
   # -------------------- MESSAGES   -------------------------------
 
   # User is not known
@@ -202,12 +206,12 @@ defmodule Boncoin.CustomModules.BotDecisions do
   def treat_msg("bot_conflict_contact_us", language, user_name) do %{scope: nil, msg: announce_bot_conflict(language, user_name)} end
 
   # User is  known
-  def treat_msg("new_user_created", user) do %{scope: nil, msg: confirm_user_created(user.language, user.nickname, user.bot_provider)} end
+  def treat_msg("new_user_created", user) do %{scope: nil, msg: confirm_user_created(user.language, user.nickname, user.phone_number, user.bot_provider)} end
   def treat_msg("welcome_back", user) do %{scope: nil, msg: welcome_back_msg(user.language, user.nickname)} end
   def treat_msg("nothing_to_say", user) do %{scope: nil, msg: nothing_to_say_msg(user.language, user.nickname)} end
   def treat_msg("announce_accepted", user, announce, link) do %{scope: nil, msg: tell_offer_accepted(user.language, user.nickname, announce.title, LayoutView.format_date(announce.validity_date), link)} end
-  def treat_msg("announce_refused", user, announce, reason) do %{scope: nil, msg: tell_offer_refused(user.language, user.nickname, announce.title, reason)} end
-  def treat_msg("announce_closed", user, announce, reason) do %{scope: nil, msg: tell_offer_closed(user.language, user.nickname, announce.title, reason)} end
+  def treat_msg("announce_refused", user, announce, reason) do %{scope: nil, msg: tell_offer_refused(user.language, user.nickname, user.phone_number, announce.title, reason)} end
+  def treat_msg("announce_closed", user, announce, reason) do %{scope: nil, msg: tell_offer_closed(user.language, user.nickname, user.phone_number, announce.title, reason)} end
   def treat_msg("propose_help", user) do %{scope: "help", msg: inform_help(user.language, user.nickname, user.bot_provider)} end
   def treat_msg("change_language", user) do %{scope: "language", msg: change_language_msg(user.language, user.nickname)} end
   def treat_msg("change_phone", user) do %{scope: "update_phone", msg: alert_before_phone_update(user.language, user.nickname)} end
@@ -219,7 +223,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   def treat_msg("quit_bot", user) do %{scope: "quit_bot", msg: alert_before_quit_bot(user.language, user.nickname, user.bot_provider)} end
   def treat_msg("bot_quitted", user) do %{scope: nil, msg: tell_bot_quitted(user.language, user.nickname, user.bot_provider)} end
   def treat_msg("cannot_quit_bot", user) do %{scope: nil, msg: tell_bot_cannot_quit(user.language, user.nickname, user.bot_provider)} end
-  def treat_msg("0_active_offer", user) do %{scope: nil, msg: tell_no_active_offer(user.language, user.nickname)} end
+  def treat_msg("0_active_offer", user) do %{scope: nil, msg: tell_no_active_offer(user.language, user.nickname, user.phone_number)} end
   def treat_msg("nb_active_offers", user, nb_offers) do %{scope: nil, msg: tell_nb_active_offers(user.language, user.nickname, nb_offers)} end
   def treat_msg("detail_active_offer", user, offer, link) do %{scope: nil, msg: detail_active_offers(user.language, offer.title, LayoutView.format_date(offer.validity_date), link)} end
 
@@ -291,10 +295,10 @@ defmodule Boncoin.CustomModules.BotDecisions do
     end
   end
 
-  defp confirm_user_created(language, nickname, bot_provider) do
-    uni = "သင်၏ဖုန်းနံပါတ်နှင် #{String.capitalize(bot_provider)} နံပါတ်တို့သည် အဆက်အသွယ်ရပြီးပြီဖြစ်သည်။ \nကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။"
+  defp confirm_user_created(language, nickname, user_phone, bot_provider) do
+    uni = "သင်၏ဖုန်းနံပါတ်နှင် #{String.capitalize(bot_provider)} နံပါတ်တို့သည် အဆက်အသွယ်ရပြီးပြီဖြစ်သည်။ \nကျေးဇူးပြု၍ #{offer_form_link(user_phone)} သို့ဝင်ကြည့်ပါ။"
     case language do
-      "en" -> "Your phone number and #{String.capitalize(bot_provider)} account are now linked.\nPlease visit us on #{@website_url}"
+      "en" -> "Your phone number and #{String.capitalize(bot_provider)} account are now linked.\nPlease visit us on #{offer_form_link(user_phone)}"
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end
@@ -364,20 +368,20 @@ defmodule Boncoin.CustomModules.BotDecisions do
     end
   end
 
-  defp tell_offer_refused(language, nickname, title, cause) do
-    uni = "မင်္ဂလာပါ #{nickname}၊ စိတ်မကောင်းပါဘူး သင့်ရဲ့ #{title} ကြော်ငြာဟာ #{cause} ကြောင့်ငြင်းပယ်ခြင်းခံရပါတယ်။ \nကျေးဇူးပြု၍ #{@website_url_form} တွင်အသစ်တစ်ဖန်ပြန်လုပ်ပါ။"
+  defp tell_offer_refused(language, nickname, user_phone, title, cause) do
+    uni = "မင်္ဂလာပါ #{nickname}၊ စိတ်မကောင်းပါဘူး သင့်ရဲ့ #{title} ကြော်ငြာဟာ #{cause} ကြောင့်ငြင်းပယ်ခြင်းခံရပါတယ်။ \nကျေးဇူးပြု၍ #{offer_form_link(user_phone)} တွင်အသစ်တစ်ဖန်ပြန်လုပ်ပါ။"
     case language do
-      "en" -> "Hi #{nickname}, we are sorry but your offer #{title} was refused because #{cause}. \nPlease create a new one on #{@website_url_form}"
+      "en" -> "Hi #{nickname}, we are sorry but your offer #{title} was refused because #{cause}. \nPlease create a new one on #{offer_form_link(user_phone)}"
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end
   end
 
-  defp tell_offer_closed(language, nickname, title, cause) do
-    uni = "မင်္ဂလာပါ #{nickname}၊ သင့်ရဲ့ #{title} ကြော်ငြာကို#{cause}။ \nကျေးဇူးပြု၍ #{@website_url_form} တွင်အသစ်တစ်ဖန်ပြန်လုပ်ပါ။"
+  defp tell_offer_closed(language, nickname, user_phone, title, cause) do
+    uni = "မင်္ဂလာပါ #{nickname}၊ သင့်ရဲ့ #{title} ကြော်ငြာကို#{cause}။ \nကျေးဇူးပြု၍ #{offer_form_link(user_phone)} တွင်အသစ်တစ်ဖန်ပြန်လုပ်ပါ။"
     uni = ""
     case language do
-      "en" -> "Hi #{nickname}, your offer #{title} has been closed #{cause}. \nPlease come back to #{@website_url_form}"
+      "en" -> "Hi #{nickname}, your offer #{title} has been closed #{cause}. \nPlease come back to #{offer_form_link(user_phone)}"
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end
@@ -419,10 +423,10 @@ defmodule Boncoin.CustomModules.BotDecisions do
     end
   end
 
-  defp tell_no_active_offer(language, nickname) do
+  defp tell_no_active_offer(language, nickname, user_phone) do
     uni = "သင့်တွင်ကြော်ငြာမရှိသေးပါ။ ကျေးဇူးပြု၍သင်၏ပထမကြော်ငြာကိုတင်လိုက်ပါ။"
     case language do
-      "en" -> "You don't have any offer yet #{nickname}. Please create your first offer on #{@website_url_form}"
+      "en" -> "You don't have any offer yet #{nickname}. Please create your first offer on #{offer_form_link(user_phone)}/"
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end

@@ -17,6 +17,3 @@
     .card.shadow.bg-white.rounded
       .card-body.text-left
         %h5.text-secondary.text-center= gettext "Presenting website"
-  - unless Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:google_analytics] == true do
-    .col-xs-12.col-sm-8.my-4
-      = img_tag(static_path(@conn, "/images/video_explain.png"))

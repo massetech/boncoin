@@ -49,7 +49,8 @@ defmodule Boncoin.Members.User do
       # |> unique_constraint(:phone_number, message: "Phone number is already taken") # By security
       # |> unique_constraint(:viber_number, message: "Viber phone number is already taken")
       |> validate_format(:email, email_regex(), message: "This is not a real email")
-      # |> validate_format(:phone_number, phone_regex(), message: "This is not a Myanmar phone number")
+      |> validate_format(:phone_number, phone_regex(), message: "This is not a Myanmar phone number")
+      |> validate_format(:viber_number, viber_regex(), message: "This is not a Viber phone number")
       |> validate_inclusion(:auth_provider, ["google"], message: "Oauth provider not supported")
       |> validate_inclusion(:bot_provider, ["viber", "facebook"], message: "Oauth provider not supported")
       |> validate_inclusion(:language, ["mr", "my", "en"], message: "Language not supported")
@@ -81,13 +82,20 @@ defmodule Boncoin.Members.User do
     end
   end
 
-  def phone_regex() do
-    ~r/@/
+  def check_myanmar_phone_number(phone_number) do
+    String.match?(phone_number, phone_regex())
   end
 
   def email_regex() do
     # ~r/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
     ~r/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  end
+  def phone_regex() do
+    ~r/^[0][9]\d{9}$/
+    # ~r/^([09]{1})([0-9]{10})$/
+  end
+  def viber_regex() do
+    ~r/^\+[1-9]{1,2}\d{5,10}$/
   end
 
   def role_select_btn() do

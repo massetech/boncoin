@@ -1,11 +1,13 @@
-import MainView    from './main';
-// import PublicDashboardView from './public/dashboard';
+import MainView from './main'
+import UserNew_user_announceView from './public/offer_form'
+import AnnouncePublic_indexView from './public/offer_index'
 
-
+// Find them on the body tag of view mounted
 const views = {
-  // PublicDashboardView
+  UserNew_user_announceView,
+  AnnouncePublic_indexView
 };
 
 export default function loadView(viewName) {
-  return views[viewName] || MainView;
+  return views[viewName] || MainView
 }

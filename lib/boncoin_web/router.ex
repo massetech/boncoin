@@ -54,6 +54,7 @@ defmodule BoncoinWeb.Router do
     get "/offers", AnnounceController, :public_index, as: :public_offers
     scope "/user" do
       get "/offer", UserController, :new_user_announce
+      get "/offer/:phone_number", UserController, :new_user_announce_with_phone
       post "/create", UserController, :create_announce
     end
     # resources "/offers", AnnounceController, only: [:new, :create]

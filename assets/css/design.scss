@@ -1,4 +1,5 @@
 /* ------------------------------ LAYOUT  ------------------------------ */
+html{overflow-y: scroll;} // Avoid centering jumps of scrollbar //https://css-tricks.com/snippets/css/force-vertical-scrollbar/
 .main-wrapper{background-color: white;}
 .full-height {min-height: 100vh;}
 .welcome_container{

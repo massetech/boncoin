@@ -42,10 +42,10 @@ defmodule Boncoin.Members do
   end
 
   def read_phone_details(phone_number) do
-    cond do
-      String.match?(phone_number, ~r/^([09]{1})([0-9]{10})$/) -> # The number is a Myanmar mobile number
+    case User.check_myanmar_phone_number(phone_number) do
+      true ->
         get_or_initialize_user_by_phone_number(phone_number)
-      true -> # The number is a NOT a Myanmar mobile number
+      false ->
         {:error, "wrong Myanmar phone number"}
     end
   end

@@ -54,6 +54,15 @@ defmodule BoncoinWeb.UserController do
     render(conn, "new_user_announce.html", changeset: changeset)
   end
 
+  def new_user_announce_with_phone(conn, %{"phone_number" => phone_number}) do
+    case User.check_myanmar_phone_number(phone_number) do
+      true ->
+        changeset = Members.change_user(%User{phone_number: phone_number, announces: [%Announce{}]})
+        render(conn, "new_user_announce.html", changeset: changeset)
+      false -> redirect(conn, to: user_path(conn, :new_user_announce))
+    end
+  end
+
   def create_announce(conn, %{"user" => params}) do
     case Members.create_user_announce(params) do
       {:ok, announce} ->
@@ -75,7 +84,7 @@ defmodule BoncoinWeb.UserController do
     user = Members.get_user!(id)
     {:ok, _user} = Members.delete_user(user)
     conn
-    |> put_flash(:info, "User deleted successfully.")
-    |> redirect(to: user_path(conn, :index))
+      |> put_flash(:info, "User deleted successfully.")
+      |> redirect(to: user_path(conn, :index))
   end
 end

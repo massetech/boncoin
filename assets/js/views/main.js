@@ -9,7 +9,6 @@ export default class MainView {
       // Assign global variable to support functions
       var global = (1,eval)('this')
       init_custom_actions()
-
     });
   }
 
@@ -20,24 +19,51 @@ export default class MainView {
 }
 
 /* ------------- GLOBAL METHODS  --------------------------------------------------- */
-  global.validateMyanmarMobileNumber = (str) => {
-      return /^([09]{1})([0-9]{10})$/.test(str)
-  }
-  global.validateEmail = (str) => {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(str);
-  }
-  global.validatePrice = (str) => {
-      return /^([1-9]{1})([0-9]{1,9})?$/.test(str)
-  }
+// global.validateMyanmarMobileNumber = (str) => {
+//     return /^([09]{1})([0-9]{10})$/.test(str)
+// }
+// global.validateEmail = (str) => {
+//   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+//   return re.test(str);
+// }
+global.validatePrice = (str) => {
+    return /^([1-9]{1})([0-9]{1,9})?$/.test(str)
+}
 
-  global.scrollToAnchor = (aid) => {
-    // var aTag = $("a[name='"+ aid +"']");
-    var aTag = $("[name='"+ aid +"']");
-    $('html,body').animate({scrollTop: aTag.offset().top},'slow');
-  }
+global.scrollToAnchor = (aid) => {
+  // var aTag = $("a[name='"+ aid +"']");
+  var aTag = $("[name='"+ aid +"']");
+  $('html,body').animate({scrollTop: aTag.offset().top},'slow');
+}
 
-/* ------------- DOCUMENT LOAD  --------------------------------------------------- */
+// Call internal user API
+global.call_internal_api = (url, scope, params) => {
+  var token = $('#config').attr('data-api')
+  return fetch(url, {
+    headers: {"accept": "application/json", "content-type": "application/json", "Authorization": token},
+    method: "POST",
+    body: JSON.stringify({scope: scope, params: params})
+  })
+  .then((response) => {
+     if(response.status !== 200) {
+       console.log('There was on API problem. Status Code: ' + response.status)
+     } else {
+       return response.json()
+     }
+  })
+  .then((json) => {
+    if ('results' in json) {
+      return json
+    } else {
+      console.log("Problem in Json response")
+    }
+  })
+  .catch(function(err) {
+    console.log('Fetch Error :-S', err);
+  })
+}
+
+/* ------------- METHODS  --------------------------------------------------- */
   let init_custom_actions = () => {
 
     /* ------------- BOOSTRAP CUSTO  --------------------------------------------------- */
@@ -118,295 +144,4 @@ export default class MainView {
       $(".triangle").addClass('d-none')
     })
 
-  /* ------------- OFFERS DISPLAY  --------------------------------------------------- */
-    load_actions_in_offers_display_page()
-    // Button see more offers
-    $('#btn-more-offers').on('click', function() {
-      event.preventDefault()
-      event.stopPropagation()
-      var cursor_after = $('#config').attr('data-cursor-after')
-      var search_params = JSON.parse($('#config').attr('data-search-params'))
-      console.log(search_params)
-      call_internal_api("/api/add_offers", "get_more_offers", {cursor_after: cursor_after, search_params: search_params})
-    })
-
-    /* ------------- OFFERS FORM  --------------------------------------------------- */
-    // Set up the lightbox - http://ashleydw.github.io/lightbox/#no-wrapping
-    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-        event.preventDefault()
-        $(this).ekkoLightbox()
-    });
-    // Click on number OK or press enter after filling phone number field
-    $('#btn_validate_number').on('click', function (e) {
-      event.preventDefault()
-      event.stopPropagation()
-      var phone_number = $("#user_phone_number").val()
-      call_internal_api("/api/phone", "get_phone_details", phone_number)
-    })
-    // Click on change number
-    $('#btn_change_number').on('click', function (e) {
-      event.preventDefault()
-      event.stopPropagation()
-      reset_announce_form_field()
-    })
-    $('#gift-btn').on('click', function () {
-      $('#user_announces_0_price').val("100")
-      $('#ddown-currency-kyats').trigger('click');
-    })
-    // Currency selector
-    $('.ddown_change_currency').on('click', function() {
-      $('#choosen_currency_text')[0].innerHTML = this.innerHTML
-      $('#announce_currency').val(this.innerHTML)
-    })
-    // Get the title and check if it looks like Zawgyi
-    $('#announce_title').on('change', function() {
-      var title = $(this).val()
-      if (knayi.fontDetect(title) == "zawgyi") {
-        console.log("zawgyi detected")
-        $('#announce_zawgyi').val('true')
-      } else {
-        console.log("unicode detected")
-        $('#announce_zawgyi').val('false')
-      }
-    })
-    // Makes sure to get rounded prices only
-    $('#announce_price').on('change', function() {
-      var price = $(this).val()
-      var rounded_price = Math.round(price)
-      if(isNaN(rounded_price)) {
-        rounded_price = "";
-      }
-      $(this).val(rounded_price).focus()
-    })
-  }
-
-  /* ------------- METHODS  --------------------------------------------------- */
-
-
-  // Load the actions on offers display page
-  let load_actions_in_offers_display_page = () => {
-    // Display big announce on small announce click
-    $('.btn-small-announce').on('click', function() {
-      $(".btn-small-announce").removeClass('d-none')
-      $(".big-announce").addClass('d-none')
-      var announce_id = $(this).attr('data-announce-id')
-      $(`#small_announce_${announce_id}`).addClass('d-none')
-      $(`#big_announce_${announce_id}`).removeClass('d-none')
-      scrollToAnchor(`big_announce_${announce_id}`)
-    })
-    // Close big announce on close btn click
-    $('.btn-close').on('click', function() {
-      var announce_id = $(this).attr('data-announce-id')
-      $(`#big_announce_${announce_id}`).addClass('d-none')
-      $(`#small_announce_${announce_id}`).removeClass('d-none')
-      scrollToAnchor(`small_announce_${announce_id}`)
-    })
-    // Closes the offer display on close btn click
-    $('.btn-close').on('click', function() {
-      var announce_id = $(this).attr('data-announce-id')
-      $(`#small_announce_${announce_id}`).removeClass('d-none')
-      $(`#big_announce_${announce_id}`).addClass('d-none')
-      scrollToAnchor(`small_announce_${announce_id}`)
-    })
-    // Show the sellor's number
-    $('.btn-show-number').on('click', function() {
-      $(this).closest('div.offer-actions').addClass('d-none')
-      var offer_id = $(this).attr('data-offer-id')
-      $(this).removeAttr('data-offer-id') // We can click only 1 time
-      $(`#offer_contact_${offer_id}`).removeClass('d-none')
-      if (offer_id != undefined) {
-        call_internal_api("/api/count_clic", "count_clic_number", offer_id)
-      }
-    })
-    // Hide the sellor's number
-    $('.btn-see-number').on('click', function() {
-      $(this).closest('div.offer-contact').addClass('d-none').prev('div.offer-actions').removeClass('d-none')
-    })
-    // Send an alert on the offer
-    $('.btn-offer-alert').on('click', function() {
-      var offer_id = $(this).attr('data-offer-id')
-      $(this).removeAttr('data-offer-id')
-      if (offer_id != undefined) {
-        call_internal_api("/api/alert", "alert_on_offer", offer_id)
-      }
-    })
-    // Keep the offer in likes cookie
-    $('.btn-offer-like').on('click', function() {
-      var offer_id = $(this).attr('data-offer-id')
-      if (document.cookie.indexOf('likes') == -1 ) { // Cookie doesnt exist yet
-        var arr = new Array(0)
-        var cookie = JSON.stringify(arr)
-      } else { // Cookie exist already
-        var cookie = document.cookie.replace(/(?:(?:^|.*;\s*)likes\s*\=\s*([^;]*).*$)|^.*$/, "$1")
-      }
-      var likes = JSON.parse(cookie)
-      console.log(likes)
-      if (likes.includes(offer_id)){} else {
-        likes.push(offer_id)
-        document.cookie = "likes=" + JSON.stringify(likes)
-      }
-    })
-    // Copy phone number to clipboard
-    $('.copy-number').on('click', function() {
-      var phone_number = $(this).attr('data-phone-number')
-      var $temp = $("<input>")
-      $("body").append($temp)
-      $temp.val(phone_number).select()
-      document.execCommand("copy")
-      $temp.remove()
-      $(".btn-copy-number").removeClass('show')
-      $(this).find('.btn-copy-number').addClass('show')
-    })
-    // Boostrap 4 caroussel select active and swipe
-    $('.carousel-inner').each(function(){
-      $(this).children(":first").addClass('active');
-    })
-    $('.carousel-indicators').each(function(){
-      $(this).children(":first").addClass('active');
-    })
-    $('.carousel').carousel({interval: false})
-    $(".carousel-inner").swipe({
-      swipeLeft:function(event, direction, distance, duration, fingerCount) {
-          $(this).parent().carousel('next')
-      },
-      swipeRight: function() {
-          $(this).parent().carousel('prev')
-      },
-      threshold:75
-    })
-  }
-
-  // Empty form when the phone_number is not accepted
-  let reset_announce_form_field = () => {
-    // console.log("wrong phone number : form reseted")
-    $('.collapsible_form').collapse('hide')
-    $('#user_phone_number').removeAttr('readonly')
-    $('#btn_validate_number').show()
-    $('#btn_change_number').hide()
-    $('#phone_helper').show()
-    $('#user_phone_number').val('').focus()//.removeClass("field-success").addClass("field-danger")
-    // $('#announce_user_id').val('')
-    $('#user_nickname').val('')
-    // $('#user_nickname').val('')
-  }
-  // Populate form when the phone_number is accepted
-  let validate_phone_number_pop_field = (user) => {
-    $('#user_phone_number').attr('readonly', 'readonly')  //.removeClass("field-danger").addClass("field-success")
-    $('#btn_validate_number').hide()
-    $('#btn_change_number').removeClass('d-none').show()
-    $('#phone_helper').hide()
-    $('#announce_user_id').val(user.id)
-    $('#user_nickname').val(user.nickname).focus()
-    $('#user_viber_number').val(user.viber_number)
-    if (user.bot_active == true) {
-      $('#field-bot').show()
-      $('#btn-bot').hide()
-      if (user.bot_provider == "viber") {
-        $('#viber-linked').show()
-        $('#messenger-linked').hide()
-      } else {
-        $('#viber-linked').hide()
-        $('#messenger-linked').show()
-      }
-    } else {
-      // No bot connected yet to this user
-      $('#field-bot').hide()
-      $('#btn-bot').show()
-      console.log("nok")
-    }
-    $('.collapsible_form').collapse('show')
-  }
-
-  // Disable an alert button after getting back a response
-  let disable_alert_button = (offer_id) => {
-    $(`#btn_alert_${offer_id}`).addClass("disabled").removeClass('btn-offer-alert')
-  }
-
-  // Add new offers received by the button load more
-  let add_new_offers_to_page = (offers, new_cursor_after) => {
-    var new_cursor_after = new_cursor_after
-    $('#config').attr('data-cursor-after', new_cursor_after)
-    if (new_cursor_after == null) {
-      $("#btn-more-offers-wait").addClass("d-none")
-    } else {
-      $("#btn-more-offers-wait").addClass("d-none")
-      $("#btn-more-offers").removeClass("d-none")
-    }
-    for (const offer of offers) {
-      var small = offer.display_small
-      $("#offers-results").append(small)
-      var big = offer.display_big
-      $("#offers-results").append(big)
-    }
-    // Reload the JS functions on the new DOM
-    load_actions_in_offers_display_page()
-  }
-
-  // Call internal phone API to check phone number
-  let call_internal_api = (url, scope, params) => {
-    // console.log(params)
-    if (scope == "get_more_offers"){
-      $("#btn-more-offers").addClass("d-none")
-      $("#btn-more-offers-wait").removeClass("d-none")
-    }
-    var token = $('#config').attr('data-api')
-    fetch(url, {
-      headers: {
-        "accept": "application/json",
-        "content-type": "application/json",
-        "Authorization": token,
-      },
-      method: "POST",
-      body: JSON.stringify({scope: scope, params: params})
-    })
-    .then(function(response) {
-      if (response.status !== 200) {
-        console.log('There was on API problem. Status Code: ' + response.status);
-        console.log(response)
-        $("#btn-more-offers-wait").addClass("d-none")
-        $("#btn-more-offers").removeClass("d-none")
-        return;
-      }
-      // Examine the text in the response
-      response.json().then(function(response) {
-        if ('results' in response) {
-          // console.log(response)
-          var scope = response.results.scope
-          var data = response.results.data
-          var error = response.results.error
-          if (scope == "get_phone_details") {
-            if ('user' in data) {
-              console.log("received phone details")
-              validate_phone_number_pop_field(data.user)
-            } else {
-              console.log(error)
-              reset_announce_form_field()
-            }
-          } else if (scope == "get_more_offers"){
-            console.log("received new offers to show")
-            add_new_offers_to_page(data.offers, data.new_cursor_after)
-          } else if (scope == "alert_on_offer"){
-            if ('offer_id' in data) {
-              console.log("alert posted on offer")
-              disable_alert_button(data.offer_id)
-            } else {
-              console.log(error)
-            }
-          } else if (scope == "count_clic_number"){
-            if ('offer_id' in data) {
-              console.log("clic posted on offer")
-            } else {
-              console.log(error)
-            }
-          } else {
-          console.log("API response not understood")
-          }
-        } else {
-          console.log("Problem in Json response")
-        }
-      })
-    })
-    .catch(function(err) {
-      console.log('Fetch Error :-S', err);
-    })
   }
