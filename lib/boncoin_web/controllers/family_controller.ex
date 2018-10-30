@@ -16,7 +16,7 @@ defmodule BoncoinWeb.FamilyController do
 
   def create(conn, %{"family" => family_params}) do
     case Contents.create_family(family_params) do
-      {:ok, family} ->
+      {:ok, _family} ->
         conn
         |> put_flash(:info, "Family created successfully.")
         |> redirect(to: family_path(conn, :index))
@@ -41,7 +41,7 @@ defmodule BoncoinWeb.FamilyController do
   def update(conn, %{"id" => id, "family" => family_params}) do
     family = Contents.get_family!(id)
     case Contents.update_family(family, family_params) do
-      {:ok, family} ->
+      {:ok, _family} ->
         conn
         |> put_flash(:info, "Family updated successfully.")
         |> redirect(to: family_path(conn, :index))

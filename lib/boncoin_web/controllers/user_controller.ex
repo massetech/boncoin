@@ -3,7 +3,7 @@ defmodule BoncoinWeb.UserController do
   alias Boncoin.{Members, Contents}
   alias Boncoin.Members.User
   alias Boncoin.Contents.Announce
-  import Boncoin.CustomModules
+  # import Boncoin.CustomModules
 
   def index(conn, _params) do
     users = Members.list_users()
@@ -11,7 +11,7 @@ defmodule BoncoinWeb.UserController do
   end
 
   # API to ba called for a phone number on announce page
-  def check_phone(conn, %{"scope" => scope, "params" => phone_number} = params) do
+  def check_phone(conn, %{"scope" => scope, "params" => phone_number}) do
     answer = Members.read_phone_details(phone_number)
     case answer do
       {:ok, user} ->
@@ -36,7 +36,7 @@ defmodule BoncoinWeb.UserController do
 
   def create(conn, %{"user" => user_params}) do
     case Members.create_user(user_params) do
-      {:ok, user} ->
+      {:ok, _user} ->
         conn
           |> put_flash(:info, "User created successfully.")
           |> redirect(to: user_path(conn, :index))

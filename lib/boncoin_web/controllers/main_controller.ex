@@ -1,6 +1,6 @@
 defmodule BoncoinWeb.MainController do
   use BoncoinWeb, :controller
-  alias Boncoin.{ViberApi, Contents, Members}
+  alias Boncoin.{ViberApi, Contents}
 
   def welcome(conn, _params) do
     nb_announces = Contents.count_announces_public()
@@ -24,17 +24,7 @@ defmodule BoncoinWeb.MainController do
   end
 
   def dashboard(conn, _params) do
-    # Test the Viber webhook
-    IO.puts("Webhook tested at #{Timex.now()}")
-    params = %{ids: ["01234567890="]}
-    answer = ViberApi.post("get_online", params)
-    viber_status = case answer do
-      {:ok, resp} -> "online"
-      {:error, resp} ->
-        IO.puts("Problems on Viber Webhook not set")
-        IO.inspect(resp)
-        "offline"
-    end
+    viber_status = ViberApi.check_online()
     conn
       |> assign(:viber_status, viber_status)
       |> render(BoncoinWeb.PublicView, "dashboard.html")

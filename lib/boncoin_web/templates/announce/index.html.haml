@@ -9,46 +9,67 @@
     %thead
       %tr
         %th= "ID"
-        %th= "User phone"
-        %th= "User name"
-        %th= "Bot active"
-        %th= "Bot provider"
-        %th= "Language"
-        %th= "Division"
+        %th
+          .d-none.d-sm-block= "Phone"
+        %th
+          .d-none.d-sm-block= "Nickname"
+        %th
+          .d-none.d-sm-block= "Bot"
+        %th
+          .d-none.d-sm-block= "Provider"
+        %th
+          .d-none.d-sm-block= "Language"
+        %th
+          .d-none.d-sm-block= "Division"
         %th= "Township"
         %th= "Category"
-        %th= "Title"
         %th= "Price"
-        %th= "Currency"
         %th= "Status"
-        %th= "Nb view, clic, alert"
-        %th= "Creation"
-        %th= "Parution"
-        %th= "Validity"
-        %th= "Actions"
+        %th
+          .d-none.d-sm-block= "Nb view, clic, alert"
+        %th
+          .d-none.d-sm-block= "Creation"
+        %th
+          .d-none.d-sm-block= "Parution"
+        %th
+          .d-none.d-sm-block= "Validity"
+        %th
+          .d-none.d-sm-block= "Admin"
     %tbody
       - for offer <- @announces do
+        = render BoncoinWeb.AnnounceView, "_admin_modal_offer.html", announce: offer, conn: @conn
         %tr
           %td= offer.id
-          %td= offer.user.phone_number
-          %td= offer.user.nickname
-          %td= LayoutView.icon_active(offer.user.bot_active)
-          %td= offer.user.bot_provider
-          %td= img_tag static_path(@conn, "/fonts/#{offer.language}.svg"), class: "flag-small"
-          %td= offer.township.division.title_en
+          %td
+            .d-none.d-sm-block= offer.user.phone_number
+          %td
+            .d-none.d-sm-block= offer.user.nickname
+          %td
+            = LayoutView.icon_active(offer.user.bot_active)
+          %td
+            .d-none.d-sm-block= offer.user.bot_provider
+          %td
+            .d-none.d-sm-block= img_tag static_path(@conn, "/fonts/#{offer.language}.svg"), class: "flag-small"
+          %td
+            .d-none.d-sm-block= offer.township.division.title_en
           %td= offer.township.title_en
           %td
             %i.fa{class: "fa-#{offer.category.icon}"}
-          %td= offer.title
-          %td= Kernel.round(offer.price)
-          %td= offer.currency
           %td
-            - link to: announce_path(@conn, :show, offer) do
-              = btn_status(offer.status)
-          %td= "#{offer.nb_view}, #{offer.nb_clic}, #{offer.nb_alert}"
-          %td= "#{offer.inserted_at.year}/#{offer.inserted_at.day}/#{offer.inserted_at.hour}-#{offer.inserted_at.month}:#{offer.inserted_at.minute}"
-          %td= LayoutView.format_datehour(offer.parution_date)
-          %td= LayoutView.format_date(offer.validity_date)
+            .d-flex.flex-row.align-items-center.my-1
+              = render "_show_price.html", announce: offer
           %td
-            - if @conn.assigns.current_user.role == "SUPER" do
-              = link "Delete", to: announce_path(@conn, :delete, offer), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"
+            %button{class: "#{btn_status(offer.status)}", type: "button", data-toggle: "modal", data-target: "#admin_modal_offer_#{offer.id}"}
+              = offer.status
+          %td
+            .d-none.d-sm-block= "#{offer.nb_view}, #{offer.nb_clic}, #{offer.nb_alert}"
+          %td
+            .d-none.d-sm-block= "#{offer.inserted_at.year}/#{offer.inserted_at.day}/#{offer.inserted_at.month}"
+          %td
+            .d-none.d-sm-block= LayoutView.format_date(offer.parution_date)
+          %td
+            .d-none.d-sm-block= LayoutView.format_date(offer.validity_date)
+          %td
+            .d-none.d-sm-block
+              - if @conn.assigns.current_user.role == "SUPER" do
+                = link "Delete", to: announce_path(@conn, :delete, offer), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

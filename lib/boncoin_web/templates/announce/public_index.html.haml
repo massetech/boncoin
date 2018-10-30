@@ -4,18 +4,14 @@
       .card-body
         %h5.font-weight-bold.text-white
           - if @conn.assigns.search_titles.searched_arbo.title_en == "" do
-            -# Search by place only
             = gettext("%{nb_offers}offers found in%{place_searched}", nb_offers: @conn.assigns.nb_offers_found, place_searched: LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_place, "title"))
           - else
-            -# Search by place and arbo
             = gettext("%{nb_offers}offers found for%{arbo_searched}in%{place_searched}", nb_offers: @conn.assigns.nb_offers_found, arbo_searched: LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_arbo, "title"), place_searched: LayoutView.convert_zawgyi(@conn.assigns.search_titles.searched_place, "title"))
         %h6.text-white.mb-0= gettext "Please meet the seller and try the product before giving any money"
 
 .row{id: "offers-results"}
-  - for announce <- @announces do
-    = render BoncoinWeb.AnnounceView, "_display_small.html", announce: announce, conn: @conn
-    .col-12.big-announce.p-0.p-sm-3.d-none{id: "big_announce_#{announce.id}", name: "big_announce_#{announce.id}"}
-      = render BoncoinWeb.AnnounceView, "_display_big.html", announce: announce, conn: @conn
+  = render "_public_list_offers.html", announces: @announces, conn: @conn
+
   - if @announces == [] do
     .col-xs-12.col-sm-8.offset-sm-2.mt-5
       .card

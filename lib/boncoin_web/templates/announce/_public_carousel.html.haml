@@ -1,4 +1,4 @@
-.carousel.slide.carousel-fade.mb-sm-3{id: "images_carousel", data-ride: "carousel"}
+.carousel.slide.w-100{id: "images_carousel", data-ride: "carousel"}
   .carousel-inner
     - for image <- @announce.images do
       .carousel-item
@@ -6,6 +6,14 @@
   %ol.carousel-indicators
     - for i <- 1..length(@announce.images) do
       %li{data-target: "#caroussel_img", data-slide-to: "#{i}"}
+
+  %a.carousel-control-prev{href: "#images_carousel", role: "button", data-slide: "prev"}
+    %span.carousel-control-prev-icon{aria-hidden: "true"}
+    %span.sr-only= "Previous"
+  %a.carousel-control-next{href: "#images_carousel", role: "button", data-slide: "next"}
+    %span.carousel-control-next-icon{aria-hidden: "true"}
+    %span.sr-only= "Next"
+
     -# %a.expand-photo{href: "#{BoncoinWeb.AnnounceView.image_url(List.first(@announce.images), :original)}", data-toggle: "lightbox", data-gallery: "gallery_announce_#{@announce.id}", data-type: "image"}
     -#   %i.fa.fa-search-plus.text-secondary
     -#   - for image <- List.delete_at(@announce.images, 0) do

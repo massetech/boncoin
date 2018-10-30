@@ -5,6 +5,7 @@ defmodule Boncoin.Contents do
   alias Boncoin.Members.{User}
   alias Boncoin.CustomModules.BotDecisions
   alias Boncoin.ViberApi
+  alias Boncoin.MessengerApi
 
   # -------------------------------- TRAFFIC KPI ----------------------------------------
 
@@ -17,8 +18,7 @@ defmodule Boncoin.Contents do
     kpi = TrafficKpi
       |> TrafficKpi.select_township_traffic_kpi_by_date(township_id, {date_now.year, date_now.month, date_now.day})
       |> Repo.one()
-      # |> IO.inspect()
-    results = case kpi do
+    case kpi do
       nil -> %TrafficKpi{} # Not yet any record for this township / date
         |> TrafficKpi.changeset(
           %{township_id: township_id, date: date_now,
@@ -37,7 +37,6 @@ defmodule Boncoin.Contents do
         )
     end
     |> Repo.insert_or_update
-    # |> IO.inspect()
 
   end
 
@@ -494,10 +493,10 @@ defmodule Boncoin.Contents do
     Announce
       |> Announce.list_admin_announces()
       |> Repo.all()
-      |> Repo.preload([:user, :category, township: [:division]])
+      |> Repo.preload([:user, :images, :category, township: [:division]])
   end
 
-  def list_announces_public(cursor_after, %{"category_id" => category_id, "division_id" => division_id, "family_id" => family_id, "township_id" => township_id} = params) do
+  def list_announces_public(cursor_after, %{"category_id" => category_id, "division_id" => division_id, "family_id" => family_id, "township_id" => township_id}) do
     user_query = User
       |> User.filter_user_public_data()
     offer_query = Announce
@@ -507,11 +506,11 @@ defmodule Boncoin.Contents do
       |> Announce.sort_announces_for_pagination()
       |> Announce.select_announces_datas(user_query)
     # Process.sleep(3000)
-    case cursor_after do
+    case cursor_after do # Format %{entries: entries, metadata: metadata}
       nil -> # Call the first time
-        %{entries: entries, metadata: metadata} = Repo.paginate(offer_query, cursor_fields: [:priority, :parution_date], sort_direction: :desc)
+        Repo.paginate(offer_query, cursor_fields: [:priority, :parution_date], sort_direction: :desc)
       _ -> # load more entries
-        %{entries: entries, metadata: metadata} = Repo.paginate(offer_query, after: cursor_after, cursor_fields: [:priority, :parution_date], sort_direction: :desc)
+        Repo.paginate(offer_query, after: cursor_after, cursor_fields: [:priority, :parution_date], sort_direction: :desc)
     end
   end
 
@@ -577,7 +576,8 @@ defmodule Boncoin.Contents do
           {"CLOSED", convert_zawgyi(msg_map, user.language)}
         end
     end
-    if category_id == nil, do: category_id = announce.category_id, else: category_id
+    # Check if we can remove that
+    category_id = if category_id == nil, do: announce.category_id, else: category_id
     dates = calc_announce_validity_date()
     params = %{treated_by_id: admin_user.id, status: status, cause: cause, category_id: category_id, parution_date: dates.parution_date, validity_date: dates.validity_date}
     case update_announce(announce, params) do
@@ -590,14 +590,14 @@ defmodule Boncoin.Contents do
           true -> "" # Do nothing
         end
         if bot_params != "" do
+          results = BotDecisions.call_bot_algorythm(bot_params)
           case user.bot_provider do
             "viber" ->
-              IO.puts("Viber message sent !")
-              bot_params
-                |> BotDecisions.call_bot_algorythm()
-                |> Enum.map(fn result_map -> ViberApi.send_message(user.bot_id, result_map.scope, result_map.msg) end)
+              IO.puts("Offer message sent by Viber")
+              Enum.map(results.messages, fn msg -> ViberApi.send_message(user.bot_id, msg) end)
             "messenger" ->
-              IO.puts("Messenger message sent !")
+              IO.puts("Offer message sent by  Messenger")
+              Enum.map(results.messages, fn msg -> MessengerApi.send_message(user.bot_id, msg) end)
           end
         end
         {:ok, announce}
@@ -666,54 +666,12 @@ defmodule Boncoin.Contents do
 
   # -------------------------------- IMAGE ----------------------------------------
 
-  @doc """
-  Returns the list of images.
-
-  ## Examples
-
-      iex> list_images()
-      [%Image{}, ...]
-
-  """
   def list_images do
     Repo.all(Image)
   end
 
-  @doc """
-  Gets a single image.
-
-  Raises `Ecto.NoResultsError` if the Image does not exist.
-
-  ## Examples
-
-      iex> get_image!(123)
-      %Image{}
-
-      iex> get_image!(456)
-      ** (Ecto.NoResultsError)
-
-  """
   def get_image!(id), do: Repo.get!(Image, id)
 
-  @doc """
-  Creates a image.
-  Can receive binary datas from the form :
-      announce_id: announce.id,
-      file: %{
-        content_type: img_params["output"]["type"],
-        filename: img_params["output"]["name"],
-        binary: Base.decode64!(clean_up_picture_file (img_params))
-      }
-
-  ## Examples
-
-      iex> create_image(%{field: value})
-      {:ok, %Image{}}
-
-      iex> create_image(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
   def create_announce_image(announce_id, file) do
     image_params = %{announce_id: announce_id, file: file}
     %Image{}
@@ -727,49 +685,10 @@ defmodule Boncoin.Contents do
       |> Repo.insert()
   end
 
-  @doc """
-  Updates a image.
-
-  ## Examples
-
-      iex> update_image(image, %{field: new_value})
-      {:ok, %Image{}}
-
-      iex> update_image(image, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  # def update_image(%Image{} = image, attrs) do
-  #   image
-  #   |> Image.changeset(attrs)
-  #   |> Repo.update()
-  # end
-
-  @doc """
-  Deletes a Image.
-
-  ## Examples
-
-      iex> delete_image(image)
-      {:ok, %Image{}}
-
-      iex> delete_image(image)
-      {:error, %Ecto.Changeset{}}
-
-  """
   def delete_image(%Image{} = image) do
     Repo.delete(image)
   end
 
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking image changes.
-
-  ## Examples
-
-      iex> change_image(image)
-      %Ecto.Changeset{source: %Image{}}
-
-  """
   def change_image(%Image{} = image) do
     Image.changeset(image, %{})
   end

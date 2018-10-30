@@ -1,3 +1,10 @@
-.row
-  .col-12.big-announce.p-0.p-sm-3{id: "big_announce_#{@announce.id}", name: "big_announce_#{@announce.id}"}
-    = render BoncoinWeb.AnnounceView, "_display_big.html", announce: @announce, conn: @conn
+.card
+  .card-header
+    = render "_public_carousel.html", assigns
+    = render "_titles.html", assigns
+  .card-body.p-3
+    = render "_description.html", assigns
+  .card-footer
+    = render "_user_footer_infos.html", assigns
+  .card-footer
+    = render "_user_footer_actions.html", assigns

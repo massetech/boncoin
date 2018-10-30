@@ -67,27 +67,38 @@ defmodule Boncoin.ViberApi do
   #     }
   #   }
 
+  def check_online() do
+    IO.puts("Webhook tested at #{Timex.now()}")
+    case post("get_online", %{ids: ["01234567890="]}) do
+      {:ok, _resp} -> "online"
+      {:error, resp} ->
+        IO.puts("Problems on Viber Webhook not set")
+        IO.inspect(resp)
+        "offline"
+    end
+  end
+
   def get(path) do
     token = get_viber_token()
-    IO.puts("token: #{token}")
+    # IO.puts("token: #{token}")
     uri = URI.merge(@api_url, path) |> to_string
     resp = HTTPotion.get uri, headers: prepare_headers(token)
     resp.body |> Poison.decode |> handle_response
+  end
+
+  def send_message(viber_id, message) do
+    data = %{sender: %{name: "PawChaungKaung", avatar: ""}, receiver: viber_id, type: "text", tracking_data: "", text: message}
+    post("send_message", data)
   end
 
   def post(path, payload \\ %{}) do
     token = get_viber_token()
     IO.puts("token: #{token}")
     uri = URI.merge(@api_url, path) |> to_string
-    resp = HTTPotion.post uri, body: Poison.encode!(payload), headers: prepare_headers(token)
+    resp = HTTPotion.post uri, headers: prepare_headers(token), body: Poison.encode!(payload)
     resp.body
       |> Poison.decode
       |> handle_response
-  end
-
-  def send_message(viber_id, scope, message) do
-    data = %{sender: %{name: "PawChaungKaung", avatar: ""}, receiver: viber_id, type: "text", tracking_data: scope, text: message}
-    post("send_message", data)
   end
 
   defp get_viber_token() do
@@ -99,6 +110,6 @@ defmodule Boncoin.ViberApi do
   end
 
   defp handle_response({:ok, resp}), do: if resp["status"] > 0, do: {:error, resp}, else: {:ok, resp}
-  defp handle_response(_), do: {:error, "Unexpected response"}
+  defp handle_response(_), do: {:error, "Unexpected response from Viber"}
 
 end

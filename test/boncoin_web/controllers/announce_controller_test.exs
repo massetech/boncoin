@@ -37,24 +37,24 @@ defmodule BoncoinWeb.AnnounceControllerTest do
 
   describe "public" do
     test "list announces in public view", %{conn: conn} do
-      list = insert_list(11, :announce)
+      list = insert_list(21, :announce)
         |> Enum.reverse() # Reverse since the sorting order will be in date decreasing
       first_offer_shown = List.first(list)
-      last_offer_shown = Enum.at(list, 9)
+      last_offer_shown = Enum.at(list, 19)
       last_offer = List.last(list)
       conn = get conn, public_offers_path(conn, :public_index)
       assert html_response(conn, 200) =~ "offers-results", "wrong page"
-      assert html_response(conn, 200) =~ "big_announce_#{first_offer_shown.id}", "First offer is missing"
-      assert html_response(conn, 200) =~ "big_announce_#{last_offer_shown.id}", "Last offer shown is missing"
-      refute html_response(conn, 200) =~ "big_announce_#{last_offer.id}", "Last offer should not be published"
-      assert html_response(conn, 200) =~ "11 offers found", "wrong counting of total offers"
+      assert html_response(conn, 200) =~ "offer_#{first_offer_shown.id}", "First offer is missing"
+      assert html_response(conn, 200) =~ "offer_#{last_offer_shown.id}", "Last offer shown is missing"
+      refute html_response(conn, 200) =~ "offer_#{last_offer.id}", "Last offer should not be published"
+      assert html_response(conn, 200) =~ "21 offers found", "wrong counting of total offers"
     end
 
     test "load more offers from the API load more", %{conn: conn} do
-      list = insert_list(21, :announce)
+      list = insert_list(41, :announce)
         |> Enum.reverse() # Reverse since the sorting order will be in date decreasing
-      first_offer_shown = Enum.at(list, 10)
-      last_offer_shown = Enum.at(list, 19)
+      first_offer_shown = Enum.at(list, 20)
+      last_offer_shown = Enum.at(list, 39)
       last_offer = List.last(list)
       # First call for loading page
       conn1 = get conn, public_offers_path(conn, :public_index)
@@ -68,14 +68,14 @@ defmodule BoncoinWeb.AnnounceControllerTest do
         |> post("/api/add_offers", data)
       resp_body = result.resp_body
         |> Poison.decode!()
-      resp_html = resp_body["results"]["data"]["offers"]
-        |> Stream.map(fn %{"display_big" => big, "display_small" => small} -> small end)
-        |> Enum.join()
+      resp_html = resp_body["results"]["data"]["offers"]["inline_html"]
+        # |> Stream.map(fn %{"display_big" => big, "display_small" => small} -> small end)
+        # |> Enum.join()
         # |> IO.inspect(limit: :infinity, printable_limit: :infinity)
       assert result.status == 200, "wrong status code returned"
-      assert resp_html =~ "small_announce_#{first_offer_shown.id}", "First offer is missing in 2nd call"
-      assert resp_html =~ "small_announce_#{last_offer_shown.id}", "Last offer shown is missing in 2nd call"
-      refute resp_html =~ "small_announce_#{last_offer.id}", "Last offer should not be published in 2nd call"
+      assert resp_html =~ "offer_#{first_offer_shown.id}", "First offer is missing in loading more call"
+      assert resp_html =~ "offer_#{last_offer_shown.id}", "Last offer shown is missing in loading more call"
+      refute resp_html =~ "offer_#{last_offer.id}", "Last offer should not be published in loading more call"
     end
   end
 
@@ -103,7 +103,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
-      assert html_response(conn, 302) =~ "/offers?search[township_id]"
+      assert html_response(conn, 302) =~ "/offer/index?search[township_id]"
       assert get_flash(conn, :info) == "Announce created successfully."
     end
 
@@ -161,7 +161,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
-      assert html_response(conn, 302) =~ "/offers?search[township_id]"
+      assert html_response(conn, 302) =~ "/offer/index?search[township_id]"
       assert get_flash(conn, :info) == "Announce created successfully."
     end
 
@@ -206,49 +206,49 @@ defmodule BoncoinWeb.AnnounceControllerTest do
     end
   end
 
-  describe "show announce" do
-    @tag :admin_authenticated
-    test "to admin", %{conn: conn} do
-      offer = insert(:announce, %{title: "dede"})
-      conn = get conn, announce_path(conn, :show, offer.id)
-      assert html_response(conn, 200) =~ "dede"
-    end
+  # describe "show announce" do
+  #   @tag :admin_authenticated
+  #   test "to admin", %{conn: conn} do
+  #     offer = insert(:announce, %{title: "dede"})
+  #     conn = get conn, announce_path(conn, :show, offer.id)
+  #     assert html_response(conn, 200) =~ "dede"
+  #   end
 
-    @tag :member_authenticated
-    test "returns on landing page for non admin user", %{conn: conn} do
-      offer = insert(:announce)
-      conn = get conn, announce_path(conn, :show, offer.id)
-      assert html_response(conn, 308)
-      assert get_flash(conn, :alert) == "You must be admin to access that part."
-    end
+    # @tag :member_authenticated
+    # test "returns on landing page for non admin user", %{conn: conn} do
+    #   offer = insert(:announce)
+    #   conn = get conn, announce_path(conn, :show, offer.id)
+    #   assert html_response(conn, 308)
+    #   assert get_flash(conn, :alert) == "You must be admin to access that part."
+    # end
 
-    test "returns on landing page for non authenticated user", %{conn: conn} do
-      offer = insert(:announce)
-      conn = get conn, announce_path(conn, :show, offer.id)
-      assert html_response(conn, 308)
-      assert get_flash(conn, :alert) == "You must be logged in to access that part."
-    end
-  end
+    # test "returns on landing page for non authenticated user", %{conn: conn} do
+    #   offer = insert(:announce)
+    #   conn = get conn, announce_path(conn, :show, offer.id)
+    #   assert html_response(conn, 308)
+    #   assert get_flash(conn, :alert) == "You must be logged in to access that part."
+    # end
+  # end
 
-  describe "edit announce" do
+  describe "show user announce" do
     test "ONLINE for owner user member", %{conn: conn} do
       offer = insert(:announce, %{title: "dede"})
       safe_link = Cipher.encrypt(Integer.to_string(offer.id))
       {:ok, offer} = Contents.update_announce(offer, %{safe_link: safe_link})
-      conn = get conn, announce_path(conn, :edit, offer.safe_link)
+      conn = get conn, announce_path(conn, :show, offer.safe_link)
       assert html_response(conn, 200) =~ "dede"
     end
     test "CLOSED for owner user member", %{conn: conn} do
       offer = insert(:announce, %{status: "CLOSED"})
       safe_link = Cipher.encrypt(Integer.to_string(offer.id))
       {:ok, offer} = Contents.update_announce(offer, %{safe_link: safe_link})
-      conn = get conn, announce_path(conn, :edit, offer.safe_link)
+      conn = get conn, announce_path(conn, :show, offer.safe_link)
       assert html_response(conn, 302)
       assert get_flash(conn, :info) == "This announce is now closed."
     end
     test "with broken link", %{conn: conn} do
       offer = insert(:announce, %{safe_link: "whatever_wrong_link"})
-      conn = get conn, announce_path(conn, :edit, offer.safe_link)
+      conn = get conn, announce_path(conn, :show, offer.safe_link)
       assert html_response(conn, 302)
       assert get_flash(conn, :alert) == "Sorry this link is broken."
     end

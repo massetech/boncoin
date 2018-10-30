@@ -16,7 +16,7 @@ defmodule BoncoinWeb.DivisionController do
 
   def create(conn, %{"division" => division_params}) do
     case Contents.create_division(division_params) do
-      {:ok, division} ->
+      {:ok, _division} ->
         conn
         |> put_flash(:info, "Division created successfully.")
         |> redirect(to: division_path(conn, :index))
@@ -42,7 +42,7 @@ defmodule BoncoinWeb.DivisionController do
     division = Contents.get_division!(id)
 
     case Contents.update_division(division, division_params) do
-      {:ok, division} ->
+      {:ok, _division} ->
         conn
         |> put_flash(:info, "Division updated successfully.")
         |> redirect(to: division_path(conn, :index))

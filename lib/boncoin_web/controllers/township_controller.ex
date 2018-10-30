@@ -17,7 +17,7 @@ defmodule BoncoinWeb.TownshipController do
 
   def create(conn, %{"township" => township_params}) do
     case Contents.create_township(township_params) do
-      {:ok, township} ->
+      {:ok, _township} ->
         conn
         |> put_flash(:info, "Township created successfully.")
         |> redirect(to: township_path(conn, :index))
@@ -45,15 +45,15 @@ defmodule BoncoinWeb.TownshipController do
     township = Contents.get_township!(id)
 
     case Contents.update_township(township, township_params) do
-      {:ok, township} ->
+      {:ok, _township} ->
         conn
-        |> put_flash(:info, "Township updated successfully.")
-        |> redirect(to: township_path(conn, :index))
+          |> put_flash(:info, "Township updated successfully.")
+          |> redirect(to: township_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         divisions = Contents.list_divisions_for_select()
         conn
-        |> put_flash(:info, "Errors, please check.")
-        |> render("edit.html", township: township, changeset: changeset, divisions: divisions)
+          |> put_flash(:info, "Errors, please check.")
+          |> render("edit.html", township: township, changeset: changeset, divisions: divisions)
     end
   end
 

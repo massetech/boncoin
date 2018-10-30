@@ -1,0 +1,12 @@
+- for {announce, i} <- Enum.with_index(@announces) do
+  - if Browser.mobile?(@conn) do
+    .col-12.my-1{class: "offer_#{announce.id}"}
+      = render BoncoinWeb.AnnounceView, "_public_show_offer.html", announce: announce, conn: @conn
+    = render BoncoinWeb.AnnounceView, "_public_modal_offer.html", announce: announce, conn: @conn
+  - else
+    .col-6.my-1{class: "offer_#{announce.id}"}
+      = render BoncoinWeb.AnnounceView, "_public_show_offer.html", announce: announce, conn: @conn
+    = render BoncoinWeb.AnnounceView, "_public_modal_offer.html", announce: announce, conn: @conn
+
+  = check_pub_small(@conn, i)
+  = check_pub_big(@conn, i)

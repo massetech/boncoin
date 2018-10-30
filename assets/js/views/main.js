@@ -72,6 +72,23 @@ global.call_internal_api = (url, scope, params) => {
       $(this).mouseenter()
       event.stopPropagation()
     })
+    // Boostrap 4 caroussel select active and swipe
+    $('.carousel-inner').each(function(){
+      $(this).children(":first").addClass('active');
+    })
+    $('.carousel-indicators').each(function(){
+      $(this).children(":first").addClass('active');
+    })
+    $('.carousel').carousel({interval: false})
+    $(".carousel-inner").swipe({
+      swipeLeft:function(event, direction, distance, duration, fingerCount) {
+          $(this).parent().carousel('next')
+      },
+      swipeRight: function() {
+          $(this).parent().carousel('prev')
+      },
+      threshold:75
+    })
 
     /* ------------- CHROME ANDROID FIX  --------------------------------------------------- */
     // see https://css-tricks.com/the-trick-to-viewport-units-on-mobile/

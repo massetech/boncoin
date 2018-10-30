@@ -6,6 +6,14 @@ defmodule BoncoinWeb.AnnounceView do
     %{results: results}
   end
 
+  def check_pub_small(conn, i) do
+    if (rem(i+1, 5) == 0) && i != 0, do: render BoncoinWeb.PubView, "_display_pub_small.html", conn: conn
+  end
+
+  def check_pub_big(conn, i) do
+    if (rem(i+1, 10) == 0) && i != 0, do: render BoncoinWeb.PubView, "_display_pub_big.html", conn: conn
+  end
+
   def image_url(image, type) do
     case image do
       nil -> "default_url" # We allow nil image for test only
@@ -14,23 +22,29 @@ defmodule BoncoinWeb.AnnounceView do
   end
 
   def btn_status(status) do
+    # case status do
+    #   "PENDING" -> "<div class='btn btn-secondary btn-sm'>PENDING</div>" |> raw
+    #   "ONLINE" -> "<div class='btn btn-success btn-sm'>ONLINE</div>" |> raw
+    #   "REFUSED" -> "<div class='btn btn-danger btn-sm'>REFUSED</div>" |> raw
+    #   "OUTDATED" -> "<div class='btn btn-warning btn-sm'>OUTDATED</div>" |> raw
+    #   "CLOSED" -> "<div class='btn btn-info btn-sm'>CLOSED</div>" |> raw
+    # end
     case status do
-      "PENDING" -> "<div class='btn btn-secondary btn-sm'>PENDING</div>" |> raw
-      "ONLINE" -> "<div class='btn btn-success btn-sm'>ONLINE</div>" |> raw
-      "REFUSED" -> "<div class='btn btn-danger btn-sm'>REFUSED</div>" |> raw
-      "OUTDATED" -> "<div class='btn btn-warning btn-sm'>OUTDATED</div>" |> raw
-      "CLOSED" -> "<div class='btn btn-info btn-sm'>CLOSED</div>" |> raw
+      "PENDING" -> "btn btn-secondary btn-sm"
+      "ONLINE" -> "btn btn-success btn-sm"
+      "REFUSED" -> "btn btn-danger btn-sm"
+      "OUTDATED" -> "btn btn-warning btn-sm"
+      "CLOSED" -> "btn btn-info btn-sm"
     end
   end
 
-  def show_date(announce, language) do
+  def show_date(announce, _language) do
     day_now = Timex.now()
     datetime = if announce.parution_date != nil, do: announce.parution_date, else: announce.inserted_at
-    year = datetime.year
-    month = datetime.month
+    # year = datetime.year
+    # month = datetime.month
+    # minute = datetime.minute
     day = datetime.day
-    minute = datetime.minute
-    # {hour, label} = Timex.Time.to_12hour_clock(datetime.hour) # {2, :pm}
     duration_day = Timex.diff(day_now, datetime, :days)
     duration_hour = Timex.diff(day_now, datetime, :hours)
     duration_min = Timex.diff(day_now, datetime, :minutes)
@@ -48,17 +62,25 @@ defmodule BoncoinWeb.AnnounceView do
 
   def show_sell_mode(sell_mode) do
     case sell_mode do
-      "sell" -> "fa-dollar-sign"
-      "rent" -> "fa-clock"
-      "give" -> "fa-gift"
+      "SELL" -> "fa-dollar-sign"
+      "RENT" -> "fa-clock"
+      "GIVE" -> "fa-gift"
     end
   end
 
-  def announce_sell_mode(sell_mode) do
+  # def announce_sell_mode(sell_mode) do
+  #   case sell_mode do
+  #     "sell" -> "fa-dollar-sign"
+  #     "rent" -> "fa-clock"
+  #     "give" -> "fa-gift"
+  #   end
+  # end
+
+  def explain_sell_mode(sell_mode) do
     case sell_mode do
-      "sell" -> "fa-dollar-sign"
-      "rent" -> "fa-clock"
-      "give" -> "fa-gift"
+      "SELL" -> gettext("The owner is selling the product")
+      "RENT" -> gettext("The owner is renting the product")
+      "GIVE" -> gettext("The owner gives the product, you can propose your price")
     end
   end
 

@@ -1,0 +1,48 @@
+.row.m-0.w-100
+  - if @announce.status == "PENDING" do
+    .col-xs-12.col-sm-4.p-1
+      - link to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: true, cause: "ACCEPTED", category_id: "#{@announce.category_id}"), class: "btn btn-block btn-success my-0" do
+        = "Accept"
+    .col-xs-12.col-sm-4.p-1
+      - link to: "#moveMenu", class: "btn btn-block btn-info my-0", data: [toggle: "collapse"] do
+        = "Move"
+    .col-xs-12.col-sm-4.p-1
+      - link to: "#refuseMenu", class: "btn btn-block btn-danger my-0", data: [toggle: "collapse"] do
+        = "Refuse"
+
+  - if @announce.status == "ONLINE"  do
+    .col-xs-12.col-sm-4.p-1
+      - link to: root_path(@conn, :welcome), class: "btn btn-block btn-warning disabled my-0" do
+        = "Remove alerts"
+    .col-xs-12.col-sm-4.p-1
+      - link to: "#moveMenu", class: "btn btn-block btn-info my-0", data: [toggle: "collapse"] do
+        = "Move"
+    .col-xs-12.col-sm-4.p-1
+      - link to: "#closeMenu", class: "btn btn-block btn-danger my-0", data: [toggle: "collapse"] do
+        = "Close"
+
+  .col-12.my-3.p-0.accordion{id: "reasons"}
+    .collapse{id: "moveMenu", data-parent: "#reasons"}
+      - for family <- @conn.assigns.select_menus.familys do
+        .card.border
+          .card-header
+            %h6.card-title= "Move to #{family.title_en}"
+          .row.card-body
+            - for category <- family.categorys do
+              .col-xs-12.col-sm-4.p-1
+                - link to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: true, cause: "MOVED", category_id: "#{category.id}"), class: "btn btn-block btn-outline-info my-0" do
+                  = "#{category.title_en}"
+
+    .collapse{id: "refuseMenu", data-parent: "#reasons"}
+      .card.border
+        .row.card-body
+          - for cause <- @conn.assigns.refusal_causes do
+            .col-xs-12.col-sm-4.p-1
+              = link "#{cause.title_en}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: false, cause: "#{cause.label}", category_id: "#{@announce.category_id}"), class: "btn btn-block my-0 #{cause.btn_color}"
+
+    .collapse{id: "closeMenu", data-parent: "#reasons"}
+      .card.border
+        .row.card-body
+          - for cause <- @conn.assigns.closing_causes do
+            .col-xs-12.col-sm-6.p-1
+              = link "#{cause.title_en}", to: announce_path(@conn, :treat, announce_id: "#{@announce.id}", validate: false, cause: "#{cause.label}", category_id: "#{@announce.category_id}"), class: "btn btn-block my-0 #{cause.btn_color}"

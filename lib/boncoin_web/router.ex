@@ -39,6 +39,8 @@ defmodule BoncoinWeb.Router do
   scope "/api", BoncoinWeb do
     pipe_through [:api]
     post "/viber", ViberController, :callback
+    get "/messenger", MessengerController, :callback
+    post "/messenger", MessengerController, :incoming_message
     post "/phone", UserController, :check_phone
     post "/add_offers", AnnounceController, :add_offers_to_public_index
     post "/alert", AnnounceController, :add_alert_to_offer
@@ -51,15 +53,17 @@ defmodule BoncoinWeb.Router do
     get "/conditions", MainController, :conditions
     get "/about", MainController, :about
     get "/conversations", MainController, :conversations
-    get "/offers", AnnounceController, :public_index, as: :public_offers
+    scope "/offer" do
+      get "/index", AnnounceController, :public_index, as: :public_offers
+      get "/new", UserController, :new_user_announce
+      get "/new/:phone_number", UserController, :new_user_announce_with_phone
+    end
     scope "/user" do
-      get "/offer", UserController, :new_user_announce
-      get "/offer/:phone_number", UserController, :new_user_announce_with_phone
+      get "/close", AnnounceController, :close
+      get "/offer/:link", AnnounceController, :show
       post "/create", UserController, :create_announce
     end
-    # resources "/offers", AnnounceController, only: [:new, :create]
-    get "/offer/:link", AnnounceController, :edit
-    get "/close", AnnounceController, :close
+
   end
 
   scope "/admin", BoncoinWeb do

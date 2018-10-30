@@ -14,7 +14,7 @@ defmodule BoncoinWeb.ImageController do
     render(conn, "new.html", changeset: changeset)
   end
 
-  def create(conn, %{"image" => image_params} = params) do
+  def create(conn, %{"image" => image_params}) do
     case Contents.create_image(image_params) do
       {:ok, image} ->
         conn

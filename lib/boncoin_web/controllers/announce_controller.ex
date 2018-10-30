@@ -3,7 +3,6 @@ defmodule BoncoinWeb.AnnounceController do
   use Drab.Controller, commanders: [BoncoinWeb.AnnounceCommander]
   alias Boncoin.{Contents, Members}
   alias Boncoin.Contents.Announce
-  alias Boncoin.Members.User
 
   def public_index(conn, _params) do
     paginator_results = Contents.list_announces_public(nil, conn.assigns.search_params)
@@ -14,17 +13,18 @@ defmodule BoncoinWeb.AnnounceController do
   end
 
   # API to be called if user wants to load more offers on public page
-  def add_offers_to_public_index(conn, %{"scope" => scope, "params" => %{"cursor_after" => cursor_after, "search_params" => search_params}} = params) do
+  def add_offers_to_public_index(conn, %{"scope" => scope, "params" => %{"cursor_after" => cursor_after, "search_params" => search_params}}) do
     paginator_results = Contents.list_announces_public(cursor_after, search_params)
     conn
       |> assign(:refusal_causes, Announce.refusal_causes())
       |> assign(:closing_causes, Announce.admin_closing_causes())
     offers = paginator_results.entries
-      |> Enum.map(fn announce -> build_offer_html(conn, announce) end)
+      |> build_offers_html(conn)
+      # |> Enum.map(fn announce -> build_offers_html(conn, announce) end)
     results = case paginator_results.metadata.after do
       nil -> # There are no more records after
         %{scope: scope, data: %{offers: offers, new_cursor_after: nil}, error: ""}
-      new_cursor_after -> # There are still records after
+      _new_cursor_after -> # There are still records after
         %{scope: scope, data: %{offers: offers, new_cursor_after: paginator_results.metadata.after}, error: ""}
     end
     # Count KPI add_more by township
@@ -34,13 +34,12 @@ defmodule BoncoinWeb.AnnounceController do
     render(conn, "offer_api.json", results: results)
   end
 
-  defp build_offer_html(conn, announce) do
-    %{display_small: Phoenix.View.render_to_string(BoncoinWeb.AnnounceView, "_display_small.html", announce: announce, conn: conn),
-      display_big: Phoenix.View.render_to_string(BoncoinWeb.AnnounceView, "_display_big.html", announce: announce, conn: conn)}
+  defp build_offers_html(announces, conn) do
+    %{inline_html: Phoenix.View.render_to_string(BoncoinWeb.AnnounceView, "_public_list_offers.html", announces: announces, conn: conn)}
   end
 
   # API to be called if user wants to declare an alert on the offer
-  def add_alert_to_offer(conn, %{"params" => offer_id, "scope" => scope} = params) do
+  def add_alert_to_offer(conn, %{"params" => offer_id, "scope" => scope}) do
     case Contents.add_alert_to_announce(offer_id) do
       {:ok, _} ->
         results = %{scope: scope, data: %{offer_id: offer_id}, error: ""}
@@ -51,7 +50,7 @@ defmodule BoncoinWeb.AnnounceController do
     end
   end
 
-  def add_click_on_offer(conn, %{"params" => offer_id, "scope" => scope} = params) do
+  def add_click_on_offer(conn, %{"params" => offer_id, "scope" => scope}) do
     case Contents.add_clic_to_announce(offer_id) do
       {:ok, _} ->
         results = %{scope: scope, data: %{offer_id: offer_id}, error: ""}
@@ -64,13 +63,15 @@ defmodule BoncoinWeb.AnnounceController do
 
   def index(conn, _params) do
     announces = Contents.list_announces()
-    render(conn, "index.html", announces: announces)
+    refusal = Announce.refusal_causes()
+    closing = Announce.admin_closing_causes()
+    render(conn, "index.html", announces: announces, refusal_causes: refusal, closing_causes: closing)
   end
 
   def treat(conn, params) do
     admin_user = Members.get_user!(conn.assigns.current_user.id)
     case Contents.treat_announce(admin_user, params) do
-      {:ok, announce} ->
+      {:ok, _announce} ->
         conn
         |> put_flash(:info, "Announce treated successfully.")
         |> redirect(to: announce_path(conn, :index))
@@ -81,17 +82,17 @@ defmodule BoncoinWeb.AnnounceController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    announce = Contents.get_announce!(id)
-    refusal = Announce.refusal_causes()
-    closing = Announce.admin_closing_causes()
-    render(conn, "show.html", announce: announce, refusal_causes: refusal, closing_causes: closing)
-  end
+  # def show(conn, %{"id" => id}) do
+  #   announce = Contents.get_announce!(id)
+  #   refusal = Announce.refusal_causes()
+  #   closing = Announce.admin_closing_causes()
+  #   render(conn, "show.html", announce: announce, refusal_causes: refusal, closing_causes: closing)
+  # end
 
-  def edit(conn, %{"link" => link}) do
+  def show(conn, %{"link" => link}) do
     announce_id = Cipher.decrypt(link)
     case announce_id do
-      {:error, msg} ->
+      {:error, _msg} ->
         conn
           |> put_flash(:alert, "Sorry this link is broken.")
           |> redirect(to: root_path(conn, :welcome))
@@ -103,7 +104,7 @@ defmodule BoncoinWeb.AnnounceController do
               |> put_flash(:info, "This announce is now closed.")
               |> redirect(to: root_path(conn, :welcome))
           _ ->
-            render(conn, "edit.html", announce: announce)
+            render(conn, "show.html", announce: announce)
         end
     end
   end
@@ -112,11 +113,11 @@ defmodule BoncoinWeb.AnnounceController do
     announce = Contents.get_announce!(id)
     params = %{status: "CLOSED", closing_date: Timex.now(), cause: cause}
     case Contents.update_announce(announce, params) do
-      {:ok, announce} ->
+      {:ok, _announce} ->
         conn
           |> put_flash(:info, gettext("Your offer has been removed."))
           |> redirect(to: root_path(conn, :welcome))
-      {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, _changeset} ->
         render(conn, "edit.html", announce: announce)
     end
   end

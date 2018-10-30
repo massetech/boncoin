@@ -41,10 +41,10 @@ let add_new_offers_to_page = (offers, new_cursor_after) => {
     $("#btn-more-offers").removeClass("d-none")
   }
   for (const offer of offers) {
-    var small = offer.display_small
+    var html = offer.inline_html
     $("#offers-results").append(small)
-    var big = offer.display_big
-    $("#offers-results").append(big)
+    // var big = offer.display_big
+    // $("#offers-results").append(big)
   }
   // Reload the JS functions on the new DOM
   load_actions_in_offers_display_page()
@@ -80,12 +80,21 @@ let load_actions_in_offers_display_page = () => {
     $(`#big_announce_${announce_id}`).addClass('d-none')
     scrollToAnchor(`small_announce_${announce_id}`)
   })
-  // Show the sellor's number
-  $('.btn-show-number').on('click', function() {
-    $(this).closest('div.offer-actions').addClass('d-none')
+  // Scroll back to small card on modal closing
+  $('.modal').on('hidden.bs.modal', function () {
     var offer_id = $(this).attr('data-offer-id')
-    $(this).removeAttr('data-offer-id') // We can click only 1 time
-    $(`#offer_contact_${offer_id}`).removeClass('d-none')
+    $('html, body').animate({
+      scrollTop: ($(`#card_small_${offer_id}`).offset().top)
+    },500);
+  });
+  // Show the sellor's number
+  $('.btn-show-contact').on('click', function() {
+    // $(this).closest('div.offer-actions').addClass('d-none')
+    console.log("clicked")
+    var offer_id = $(this).attr('data-offer-id')
+    $(this).removeClass('btn-show-number') // We can click only 1 time
+    $(`#footer_btn_${offer_id}`).addClass('d-none')
+    $(`#footer_contact_${offer_id}`).removeClass('d-none')
     if (offer_id != undefined) {
       call_internal_api("/api/count_clic", "count_clic_number", offer_id).then(function (response) {
         var data = response.results.data
@@ -98,9 +107,9 @@ let load_actions_in_offers_display_page = () => {
     }
   })
   // Hide the sellor's number
-  $('.btn-see-number').on('click', function() {
-    $(this).closest('div.offer-contact').addClass('d-none').prev('div.offer-actions').removeClass('d-none')
-  })
+  // $('.btn-see-number').on('click', function() {
+  //   $(this).closest('div.offer-contact').addClass('d-none').prev('div.offer-actions').removeClass('d-none')
+  // })
   // Send an alert on the offer
   $('.btn-offer-alert').on('click', function() {
     var offer_id = $(this).attr('data-offer-id')
@@ -134,31 +143,15 @@ let load_actions_in_offers_display_page = () => {
     }
   })
   // Copy phone number to clipboard
-  $('.copy-number').on('click', function() {
+  $('button.copy-number').on('click', function() {
+    console.log("clicked")
     var phone_number = $(this).attr('data-phone-number')
     var $temp = $("<input>")
     $("body").append($temp)
     $temp.val(phone_number).select()
     document.execCommand("copy")
     $temp.remove()
-    $(".btn-copy-number").removeClass('show')
-    $(this).find('.btn-copy-number').addClass('show')
-  })
-  // Boostrap 4 caroussel select active and swipe
-  $('.carousel-inner').each(function(){
-    $(this).children(":first").addClass('active');
-  })
-  $('.carousel-indicators').each(function(){
-    $(this).children(":first").addClass('active');
-  })
-  $('.carousel').carousel({interval: false})
-  $(".carousel-inner").swipe({
-    swipeLeft:function(event, direction, distance, duration, fingerCount) {
-        $(this).parent().carousel('next')
-    },
-    swipeRight: function() {
-        $(this).parent().carousel('prev')
-    },
-    threshold:75
+    // $(".btn-copy-number").removeClass('show') // Hide last copy
+    // $(this).find('.btn-copy-number').addClass('show')
   })
 }

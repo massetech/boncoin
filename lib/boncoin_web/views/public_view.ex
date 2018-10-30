@@ -1,4 +1,4 @@
 defmodule BoncoinWeb.PublicView do
   use BoncoinWeb, :view
-  alias BoncoinWeb.LayoutView
+  # alias BoncoinWeb.LayoutView
 end

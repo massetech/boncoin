@@ -52,7 +52,7 @@ defmodule Boncoin.Members.User do
       |> validate_format(:phone_number, phone_regex(), message: "This is not a Myanmar phone number")
       |> validate_format(:viber_number, viber_regex(), message: "This is not a Viber phone number")
       |> validate_inclusion(:auth_provider, ["google"], message: "Oauth provider not supported")
-      |> validate_inclusion(:bot_provider, ["viber", "facebook"], message: "Oauth provider not supported")
+      |> validate_inclusion(:bot_provider, ["viber", "messenger"], message: "Bot provider not supported")
       |> validate_inclusion(:language, ["mr", "my", "en"], message: "Language not supported")
       |> validate_inclusion(:role, ["GUEST", "MEMBER", "ADMIN", "PARTNER", "SUPER"], message: "Role not supported")
       |> check_guest_phone_number(params)
@@ -118,7 +118,7 @@ defmodule Boncoin.Members.User do
 
   def filter_active_user_by_bot_id(query, bot_id, provider) do
     from u in query,
-      where: u.bot_id == ^bot_id and u.bot_provider == ^provider and u.active == true
+      where: u.bot_id == ^bot_id and u.bot_provider == ^provider and u.active == true and u.bot_active == true
   end
 
   def filter_active_user_by_phone_number(query, phone_number) do

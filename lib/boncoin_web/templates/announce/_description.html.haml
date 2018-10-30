@@ -1,9 +1,10 @@
--# Offer titles
-.d-flex.flex-column.justify-content-center.mb-3
-  %h6.font-weight-bold.text-secondary.m-0= @announce.title
-  %h6.font-weight-bold.text-success.mt-1= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
-  %p.m-0= gettext("Sold by%{seller_name}", seller_name: @announce.user.nickname)
-  %p.m-0= gettext("in %{township}, %{division}", township: LayoutView.convert_zawgyi(@announce.township, "title"), division: LayoutView.convert_zawgyi(@announce.township.division, "title"))
--# Offer description
 .justify-content-top.flex-grow-1.text-area.text-left
-  %p= @announce.description
+  %p.m-0= gettext("Sold by%{seller_name}", seller_name: @announce.user.nickname)
+  %p.m-0
+    = LayoutView.convert_zawgyi(@announce.township, "title")
+    = "|"
+    = LayoutView.convert_zawgyi(@announce.township.division, "title")
+  .d-flex.flex-row.align-items-center.my-1
+    %i.icon.fas.text-center.text-success.mr-1{class: "#{BoncoinWeb.AnnounceView.show_sell_mode(@announce.sell_mode)}"}
+    %h6.m-0= BoncoinWeb.AnnounceView.explain_sell_mode(@announce.sell_mode)
+  %p.mt-3= @announce.description

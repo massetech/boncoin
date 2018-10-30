@@ -5,12 +5,11 @@ defmodule BoncoinWeb.ViberView do
     %{status: status}
   end
 
-  def render("send_message.json", %{sender: sender, message: message, tracking_data: tracking_data}) do
+  def render("send_message.json", %{sender: sender, message: message}) do
     %{
       sender: sender,
       type: "text",
-      text: message,
-      tracking_data: tracking_data
+      text: message
     }
   end
 

@@ -639,8 +639,8 @@ msgid "Explain how to get offer list from Viber"
 msgstr "သင်တင်ထားသည့်ရောင်းရန်ပစ္စည်းစာရင်းကိုရယူနိုင်ရန် ဗိုင်ဘာသို့ဝင်၍ [*111#] ဟုရိုက်ထည့်ပြီး ပေါခြောင်ကောင်းသို့ပို့ပါ။"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/public_index.html.haml:41
-#: lib/boncoin_web/templates/announce/public_index.html.haml:45
+#: lib/boncoin_web/templates/announce/public_index.html.haml:36
+#: lib/boncoin_web/templates/announce/public_index.html.haml:40
 msgid "More offers"
 msgstr "နောက်ထပ်ရောင်းရန်ကြော်ငြာများ"
 
@@ -665,7 +665,7 @@ msgid "2. Describe your offer"
 msgstr "၂. သင်ရောင်းမည့်ပစ္စည်းကိုဖေါ်ပြပါ"
 
 #, elixir-format
-#: lib/boncoin_web/controllers/user_controller.ex:62
+#: lib/boncoin_web/controllers/user_controller.ex:71
 msgid "Announce created successfully."
 msgstr "ကြော်ငြာကိုအောင်မြင်စွာပြုလုပ်ပြီးပါပြီ"
 
@@ -725,22 +725,7 @@ msgid "Email (Gmail only)"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_actions_public.html.haml:5
-msgid "Number"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/_actions_public.html.haml:11
-msgid "Report"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/_actions_public.html.haml:17
-msgid "Save"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:117
+#: lib/boncoin_web/controllers/announce_controller.ex:118
 msgid "Your offer has been removed."
 msgstr ""
 
@@ -775,24 +760,24 @@ msgid "Nickname"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:40
+#: lib/boncoin_web/views/announce_view.ex:54
 msgid "yesterday"
 msgstr "မနေ့က"
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:41
+#: lib/boncoin_web/views/announce_view.ex:55
 msgid "one day ago"
 msgid_plural "%{count} days ago"
 msgstr[0] "လွန်ခဲ့တဲ့(%{count})ရယ်တုံးက"
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:39
+#: lib/boncoin_web/views/announce_view.ex:53
 msgid "one hour ago"
 msgid_plural "%{count} hours ago"
 msgstr[0] "လွန်ခဲ့တဲ့(%{count})နာရီတုံးက"
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:38
+#: lib/boncoin_web/views/announce_view.ex:52
 msgid "one minute ago"
 msgid_plural "%{count} minutes ago"
 msgstr[0] "လွန်ခဲ့တဲ့(%{count})မိနစ်တုံးက"
@@ -808,22 +793,17 @@ msgid "%{nb_offers}offers found in%{place_searched}"
 msgstr "%{place_searched}တွင်ရောင်းနေသည့်ပစ္စည်းအမျိုးအစားပေါင်း (%{nb_offers}) မျိုးတွေ့ပြီ"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_description.html.haml:4
+#: lib/boncoin_web/templates/announce/_description.html.haml:2
 msgid "Sold by%{seller_name}"
 msgstr "ရောင်းသူ %{seller_name}"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_description.html.haml:5
-msgid "in %{township}, %{division}"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/public_index.html.haml:29
+#: lib/boncoin_web/templates/announce/public_index.html.haml:24
 msgid "Please change your filters or search in another city !"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/public_index.html.haml:27
+#: lib/boncoin_web/templates/announce/public_index.html.haml:22
 msgid "Sorry, we don't have any offer for your search."
 msgstr ""
 
@@ -929,26 +909,11 @@ msgid "You are linked by Viber"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:33
-msgid "If you want people to contact you on Viber (optional)"
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/templates/user/_details_form.html.haml:31
 msgid "Viber phone number"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_footer_user.html.haml:16
-msgid "I cancel this offer"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/_footer_user.html.haml:6
-msgid "I sold this item"
-msgstr ""
-
-#, elixir-format, fuzzy
 #: lib/boncoin_web/templates/announce/_describe_offer.html.haml:58
 msgid "I don't want to throw it, so I sell it for very cheap price."
 msgstr ""
@@ -956,4 +921,49 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/user/_details_form.html.haml:69
 msgid "Please choose how PawChaungKaung can contact you (this conversation will be private)"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/_user_footer_infos.html.haml:5
+msgid "%{nb_times}people saw it"
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/announce/_user_footer_actions.html.haml:9
+msgid "Cancel this offer"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/_user_footer_actions.html.haml:4
+msgid "I already sold it"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/user/_details_form.html.haml:33
+msgid "If you want, your Viber phone number (+95xxxxxxxxxx)"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/_public_modal_offer.html.haml:21
+msgid "Save offer"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/_public_modal_offer.html.haml:17
+msgid "See contact"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/views/announce_view.ex:83
+msgid "The owner gives the product, you can propose your price"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/views/announce_view.ex:82
+msgid "The owner is renting the product"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/views/announce_view.ex:81
+msgid "The owner is selling the product"
 msgstr ""

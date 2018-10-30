@@ -1,0 +1,17 @@
+.modal{id: "admin_modal_offer_#{@announce.id}", data-offer-id: "#{@announce.id}", tabindex: "-1", role: "dialog", aria-hidden: "true"}
+  .modal-dialog.modal-full{role: "document"}
+    .modal-content.border-0
+      .modal-header.flex-column.p-0
+        %button.close{type: "button", data-dismiss: "modal", aria-label: "Close"}
+          %span{aria-hidden: "true"}= "X"
+        = render "_admin_carousel.html", assigns
+        = render "_titles.html", assigns
+
+      .modal-body.p-3
+        = render "_description.html", assigns
+
+      .modal-footer
+        = render "_admin_footer_infos.html", assigns
+
+      .modal-footer
+        = render "_admin_footer_actions.html", assigns

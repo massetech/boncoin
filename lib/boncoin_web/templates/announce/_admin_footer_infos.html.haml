@@ -1,0 +1,20 @@
+.row.m-0.w-100
+  .col-xs-12.col-sm-4.p-1
+    %button.btn.btn-block.btn-success.d-flex.flex-column.justify-content-center.align-items-center.my-0{}
+      %i.fa.fa-phone
+      %span.font-s-8= render "_phone_number.html", phone_number: @announce.user.phone_number
+  .col-xs-12.col-sm-4.p-1
+    %button.btn.btn-block.btn-viber.d-flex.flex-column.justify-content-center.align-items-center.my-0{}
+      %i.fab.fa-viber
+      - if @announce.user.viber_number != nil do
+        %span.font-s-8= render "_phone_number.html", phone_number: @announce.user.viber_number
+      - else
+        %span= "-"
+  .col-xs-12.col-sm-2.p-1
+    %button.btn.btn-block.btn-warning.d-flex.flex-column.justify-content-center.align-items-center.my-0.btn-offer-alert{id: "btn_alert_#{@announce.id}", data-offer-id: "#{@announce.id}"}
+      %i.fas.fa-exclamation-triangle
+      %span.font-s-8= @announce.nb_alert
+  .col-xs-12.col-sm-2.p-1
+    %button.btn.btn-block.btn-secondary.d-flex.flex-column.justify-content-center.align-items-center.my-0{}
+      %i.fas.fa-eye
+      %span.font-s-8= @announce.nb_view

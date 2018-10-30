@@ -16,7 +16,7 @@ defmodule Boncoin.Contents.Announce do
     field :longitude, :string
     field :price, :float
     field :currency, :string, default: "kyat"
-    field :sell_mode, :string, default: "sell"
+    field :sell_mode, :string, default: "SELL"
     field :status, :string, default: "PENDING"
     field :cause, :string
     field :title, :string
@@ -89,10 +89,10 @@ defmodule Boncoin.Contents.Announce do
 
   def refusal_causes() do
     [
-      %{label: "NOT_ALLOWED", title_my: "ဥပဒေအရခွင့်မပြုသော", title_en: "the offer is not allowed", btn_color: "btn-outline-danger"},
-      %{label: "UNCLEAR", title_my: "ရှင်လင်းစွာမဖေါ်ပြနိုင်သော", title_en: "the description is unclear", btn_color: "btn-outline-danger"},
-      %{label: "BAD_PHOTOS", title_my: "ဓါတ်ပုံများသည်မကောင်းသော", title_en: "the photos are not good", btn_color: "btn-outline-danger"},
-      %{label: "SHOCKING", title_my: "စိတ်မသက်မသာဖြစ်စေသော", title_en: "it can shock people", btn_color: "btn-outline-danger"}
+      %{label: "NOT_ALLOWED", title_my: "ဥပဒေအရခွင့်မပြုသော", title_en: "content not allowed", btn_color: "btn-outline-danger"},
+      %{label: "UNCLEAR", title_my: "ရှင်လင်းစွာမဖေါ်ပြနိုင်သော", title_en: "description unclear", btn_color: "btn-outline-danger"},
+      %{label: "BAD_PHOTOS", title_my: "ဓါတ်ပုံများသည်မကောင်းသော", title_en: "photos not good", btn_color: "btn-outline-danger"}
+      # %{label: "SHOCKING", title_my: "စိတ်မသက်မသာဖြစ်စေသော", title_en: "shocking", btn_color: "btn-outline-danger"}
     ]
   end
 
@@ -105,10 +105,10 @@ defmodule Boncoin.Contents.Announce do
 
   def admin_closing_causes() do
     [
-      %{label: "ADMIN_SOLD", title_my: nil, title_en: nil, btn_color: "btn-outline-info"},
-      %{label: "ADMIN_CANCELLED", title_my: nil, title_en: nil, btn_color: "btn-outline-info"},
-      %{label: "ADMIN_REMOVED", title_my: "စီစစ်ရေး၏ဆုံးဖြတ်ချက်အရပိတ်လိုက်ပါပြီ။", title_en: "after an admin decision", btn_color: "btn-outline-danger"},
-      %{label: "ADMIN_CLOSED", title_my: "တင်ထားသည့်ရက် (၁) လကြော်သွားသောကြောင့်ပိတ်လိုက်ပါပြီ။", title_en: "after 1 month of parution", btn_color: "btn-outline-danger"}
+      # %{label: "ADMIN_SOLD", title_my: nil, title_en: nil, btn_color: "btn-outline-info"},
+      # %{label: "ADMIN_CANCELLED", title_my: nil, title_en: nil, btn_color: "btn-outline-info"},
+      %{label: "ADMIN_REMOVED", title_my: "စီစစ်ရေး၏ဆုံးဖြတ်ချက်အရပိတ်လိုက်ပါပြီ။", title_en: "admin decision", btn_color: "btn-outline-danger"},
+      %{label: "ADMIN_CLOSED", title_my: "တင်ထားသည့်ရက် (၁) လကြော်သွားသောကြောင့်ပိတ်လိုက်ပါပြီ။", title_en: "offer too old", btn_color: "btn-outline-danger"}
     ]
   end
 

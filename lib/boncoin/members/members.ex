@@ -1,9 +1,8 @@
 defmodule Boncoin.Members do
   import Ecto.Query, warn: false
-  alias Boncoin.{Repo, ViberApi, Contents}
-  alias Boncoin.Members.User
+  alias Boncoin.{Repo, Contents}
+  alias Boncoin.Members.{User, Conversation}
   alias Ueberauth.Auth
-  alias BoncoinWeb.ViberController
 
   # -------------------------------- UEBERAUTH ----------------------------------------
 
@@ -75,9 +74,13 @@ defmodule Boncoin.Members do
   end
 
   def get_active_user_by_bot_id(bot_id, provider) do
-    User
-      |> User.filter_active_user_by_bot_id(bot_id, provider)
-      |> Repo.one()
+    case bot_id do
+      nil -> nil
+      bot_id ->
+        User
+          |> User.filter_active_user_by_bot_id(bot_id, provider)
+          |> Repo.one()
+    end
   end
 
   def get_or_initialize_user_by_phone_number(phone_number) do
@@ -119,7 +122,9 @@ defmodule Boncoin.Members do
 
   def remove_bot(user) do
     case Contents.get_user_active_offers(user) do
-      [] -> update_user(user, %{bot_active: false})
+      [] ->
+        delete_user_conversation(user.bot_provider, user.bot_id)
+        update_user(user, %{bot_active: false})
       offers -> {:not_allowed, Enum.count(offers)}
     end
   end
@@ -133,12 +138,12 @@ defmodule Boncoin.Members do
           user.bot_active == false -> # This phone number is not yet linked to a bot
             update_user(user, params)
           user.bot_active == true && user.phone_number == params.phone_number -> # This phone number is linked to this bot and has to be changed
-            # Delete
+            {:error, params} # Might be a problem here
         end
-        case user.bot_active do # This number is already used
-          true -> params = %{bot_id: bot_id, language: language, nickname: user_name}
+        params = case user.bot_active do # This number is already used
+          true -> %{bot_id: bot_id, language: language, nickname: user_name}
           # This number was not yet connected to a bot
-          false -> params = %{bot_id: bot_id, language: language, bot_active: true, nickname: user_name}
+          false -> %{bot_id: bot_id, language: language, bot_active: true, nickname: user_name}
         end
         case update_user(user, params) do
           {:ok, _} -> {:updated, params}
@@ -176,4 +181,157 @@ defmodule Boncoin.Members do
     User.changeset(user, %{})
   end
 
+  # -------------------------------- CONVERSATION ----------------------------------------
+
+  def get_conversation_by_provider_psid(bot_provider, psid) do
+    case Repo.get_by(Conversation, psid: psid) do
+      nil -> nil
+      conversation ->
+        # Check if PSID is the same for Viber and Messenger
+        if conversation.bot_provider == bot_provider do
+          conversation
+        else
+          nil
+        end
+    end
+  end
+
+  def get_actual_conversation_by_provider_psid(bot_provider, psid) do
+    case get_conversation_by_provider_psid(bot_provider, psid) do
+      nil -> %{scope: "welcome", nickname: ""} # Fallback if no conversation found
+      conversation -> conversation
+    end
+  end
+
+  def create_or_update_conversation(%{bot_provider: bot_provider, psid: psid} = params) do
+    case get_conversation_by_provider_psid(bot_provider, psid) do
+      nil -> create_conversation(params)
+      conversation -> update_conversation(conversation, params) |> IO.inspect()
+    end
+  end
+
+  def get_conversation!(id), do: Repo.get!(Conversation, id)
+
+  def create_conversation(attrs \\ %{}) do
+    %Conversation{}
+    |> Conversation.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_conversation(%Conversation{} = conversation, attrs) do
+    conversation
+    |> Conversation.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete_user_conversation(bot_provider, bot_id) do
+    case get_conversation_by_provider_psid(bot_provider, bot_id) do
+      nil -> nil
+      conversation -> delete_conversation(conversation)
+    end
+  end
+
+  def delete_conversation(%Conversation{} = conversation) do
+    Repo.delete(conversation)
+  end
+
+  def change_conversation(%Conversation{} = conversation) do
+    Conversation.changeset(conversation, %{})
+  end
+
+  alias Boncoin.Members.Pub
+
+  @doc """
+  Returns the list of pubs.
+
+  ## Examples
+
+      iex> list_pubs()
+      [%Pub{}, ...]
+
+  """
+  def list_pubs do
+    Repo.all(Pub)
+  end
+
+  @doc """
+  Gets a single pub.
+
+  Raises `Ecto.NoResultsError` if the Pub does not exist.
+
+  ## Examples
+
+      iex> get_pub!(123)
+      %Pub{}
+
+      iex> get_pub!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_pub!(id), do: Repo.get!(Pub, id)
+
+  @doc """
+  Creates a pub.
+
+  ## Examples
+
+      iex> create_pub(%{field: value})
+      {:ok, %Pub{}}
+
+      iex> create_pub(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_pub(attrs \\ %{}) do
+    %Pub{}
+    |> Pub.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a pub.
+
+  ## Examples
+
+      iex> update_pub(pub, %{field: new_value})
+      {:ok, %Pub{}}
+
+      iex> update_pub(pub, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_pub(%Pub{} = pub, attrs) do
+    pub
+    |> Pub.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Pub.
+
+  ## Examples
+
+      iex> delete_pub(pub)
+      {:ok, %Pub{}}
+
+      iex> delete_pub(pub)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_pub(%Pub{} = pub) do
+    Repo.delete(pub)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking pub changes.
+
+  ## Examples
+
+      iex> change_pub(pub)
+      %Ecto.Changeset{source: %Pub{}}
+
+  """
+  def change_pub(%Pub{} = pub) do
+    Pub.changeset(pub, %{})
+  end
 end

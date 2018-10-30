@@ -17,7 +17,7 @@ defmodule BoncoinWeb.CategoryController do
 
   def create(conn, %{"category" => category_params}) do
     case Contents.create_category(category_params) do
-      {:ok, category} ->
+      {:ok, _category} ->
         conn
         |> put_flash(:info, "Category created successfully.")
         |> redirect(to: category_path(conn, :index))
@@ -45,7 +45,7 @@ defmodule BoncoinWeb.CategoryController do
     category = Contents.get_category!(id)
 
     case Contents.update_category(category, category_params) do
-      {:ok, category} ->
+      {:ok, _category} ->
         conn
         |> put_flash(:info, "Category updated successfully.")
         |> redirect(to: category_path(conn, :index))

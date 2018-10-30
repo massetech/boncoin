@@ -1,6 +1,6 @@
 defmodule Boncoin.Factory do
   use ExMachina.Ecto, repo: Boncoin.Repo
-  alias Boncoin.Members.{User}
+  alias Boncoin.Members.{User, Conversation}
   alias Boncoin.Contents.{Family, Category, Township, Division, Announce, Image, TrafficKpi}
 
   def admin_user_factory do
@@ -56,6 +56,14 @@ defmodule Boncoin.Factory do
       bot_active: true,
       bot_id: "e",
       nickname: "Mr unknown",
+    }
+  end
+
+  def conversation_factory do
+    %Conversation {
+      bot_provider: "viber",
+      psid: "some psid",
+      scope: "some scope"
     }
   end
 

@@ -21,8 +21,8 @@ defmodule BoncoinWeb.LayoutView do
 
   def icon_active(status) do
     case status do
-      true -> "<i class='fa fa-check-circle text-success'></>" |> raw
-      false -> "<i class='fa fa-times-circle text-warning'></>" |> raw
+      true -> "<i class='fa fa-check-circle text-success d-none d-sm-block'></>" |> raw
+      false -> "<i class='fa fa-times-circle text-warning d-none d-sm-block'></>" |> raw
     end
   end
 

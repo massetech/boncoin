@@ -1,6 +1,6 @@
 defmodule BoncoinWeb.ViberController do
   use BoncoinWeb, :controller
-  alias Boncoin.{ViberApi, Members, Contents}
+  alias Boncoin.{ViberApi, Members}
   alias Boncoin.CustomModules.BotDecisions
 
 # ---------------------------- CONNECTION -------------------------------------
@@ -30,54 +30,64 @@ defmodule BoncoinWeb.ViberController do
   # ---------------------------- CALLBACKS -------------------------------------
 
   # Answer to Viber to confirm the Webhook connection
-  def callback(conn, %{"event" => "webhook", "timestamp" => timestamp, } = params) do
+  def callback(conn, %{"event" => "webhook", "timestamp" => timestamp, }) do
     IO.puts("Webhook confirmed at #{timestamp}")
-    conn
-      |> put_status(:ok)
-      |> render("confirm_answer.json", status: "ok")
+    send_resp(conn, 200, "ok")
+    # conn
+    #   |> put_status(:ok)
+    #   |> render("confirm_answer.json", status: "ok")
   end
 
   # Welcome message when a user opens a new conversation
-  def callback(conn, %{"event" => "conversation_started", "user" => %{"name" => viber_name}} = params) do
-    IO.puts("#{viber_name} opened a new conversation")
+  def callback(conn, %{"event" => "conversation_started", "user" => %{"name" => viber_name}}) do
+    IO.puts("#{viber_name} opened a new conversation at #{Timex.now()}")
 
-    %{scope: scope, msg: msg} = %{scope: "welcome", user: conn.assigns.current_user, announce: nil, bot: %{bot_provider: "viber", bot_id: nil, bot_user_name: viber_name, user_msg: nil}}
+    results = %{scope: "welcome", user: conn.assigns.current_user, announce: nil, bot: %{bot_provider: "viber", bot_id: nil, bot_user_name: viber_name, user_msg: nil}}
       |> BotDecisions.call_bot_algorythm()
-      |> List.first()
 
     conn
       |> put_status(:ok)
-      |> render("send_message.json", sender: %{name: "PawChaungKaung", avatar: ""}, message: msg, tracking_data: scope)
+      |> render("send_message.json", sender: %{name: "PawChaungKaung", avatar: ""}, message: List.first(results.messages), tracking_data: results.scope)
   end
 
   # Treat a message comming from the user
   def callback(conn, %{"event" => "message", "timestamp" => timestamp, "sender" => %{"id" => viber_id, "name" => viber_name}, "message" => %{"type" => "text", "text" => user_msg}} = params) do
     IO.puts("User #{viber_id} spoke at #{timestamp}")
-
-    scope = params["message"]["tracking_data"] || "" # scope is not always there (1st discussion)
-    %{scope: scope, user: conn.assigns.current_user, announce: nil, bot: %{bot_provider: "viber", bot_id: viber_id, bot_user_name: viber_name, user_msg: user_msg}}
+    actual_conv = Members.get_actual_conversation_by_provider_psid("viber", viber_id)
+    scope = params["message"]["tracking_data"] || actual_conv.scope
+    results = %{scope: scope, user: conn.assigns.current_user, announce: nil, bot: %{bot_provider: "viber", bot_id: viber_id, bot_user_name: viber_name, user_msg: user_msg}}
       |> BotDecisions.call_bot_algorythm()
-      |> Enum.map(fn result_map -> ViberApi.send_message(viber_id, result_map.scope, result_map.msg) end)
+    #   |> Enum.map(fn result_map -> ViberApi.send_message(viber_id, result_map.scope, result_map.msg) end)
 
-    conn
-      |> put_status(:ok)
-      |> render("confirm_answer.json", status: "ok")
+      # Send message to the visitor
+      conv_params = %{bot_provider: "viber", psid: viber_id, scope: results.scope, nickname: viber_name}
+      case Members.create_or_update_conversation(conv_params) do
+        {:ok, _} -> Enum.map(results.messages, fn message -> ViberApi.send_message(viber_id, message) end)
+        {:error, _changeset} -> IO.puts("Viber error : can't update conversation")
+      end
+
+    send_resp(conn, 200, "ok")
+    # conn
+    #   |> put_status(:ok)
+    #   |> render("confirm_answer.json", status: "ok")
   end
 
   # Notification that a message was delivered to user
-  def callback(conn, %{"event" => "delivered", "timestamp" => timestamp, "user_id" => user_id} = params) do
+  def callback(conn, %{"event" => "delivered", "timestamp" => timestamp, "user_id" => user_id}) do
     IO.puts("Message delivered to #{user_id} at #{timestamp}")
-    conn
-      |> put_status(:ok)
-      |> render("confirm_answer.json", status: "ok")
+    send_resp(conn, 200, "ok")
+    # conn
+    #   |> put_status(:ok)
+    #   |> render("confirm_answer.json", status: "ok")
   end
 
   # The user left
-  def callback(conn, %{"event" => "unsubscribed", "timestamp" => timestamp, "user_id" => user_id} = params) do
+  def callback(conn, %{"event" => "unsubscribed", "timestamp" => timestamp, "user_id" => user_id}) do
     IO.puts("The user #{user_id} left at #{timestamp}")
-    conn
-      |> put_status(:ok)
-      |> render("confirm_answer.json", status: "ok")
+    send_resp(conn, 200, "ok")
+    # conn
+    #   |> put_status(:ok)
+    #   |> render("confirm_answer.json", status: "ok")
   end
 
 end
