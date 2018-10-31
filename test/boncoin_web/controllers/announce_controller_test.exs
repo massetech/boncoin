@@ -1,8 +1,11 @@
 defmodule BoncoinWeb.AnnounceControllerTest do
   use BoncoinWeb.ConnCase
-  alias Boncoin.Contents
+  alias Boncoin.{Contents, ViberApi, MessengerApi}
   alias Boncoin.Contents.Announce
+  alias BoncoinWeb.LayoutView
   import Boncoin.Factory
+  import Mockery.Assertions
+  use Mockery # Mockery.History.enable_history()
 
   @create_attrs %{conditions: true, description: "some description", language: "some language", image_file_1: Announce.image_param_example(), image_file_2: "", image_file_3: "", price: 120.5, title: "some title"}
   @update_attrs %{conditions: false, description: "some updated description", language: "some updated language", image_file_1: Announce.image_param_example(), image_file_2: "", image_file_3: "", price: 456.7, title: "some updated title"}
@@ -24,8 +27,82 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       conn = get conn, announce_path(conn, :index)
       assert html_response(conn, 200) =~ "Offers"
     end
-    test "treats offer sends a notification to the user" do
-      # See what to do
+    test "treats offer : ACCEPTED / ONLINE and send Viber msg", %{conn: conn} do
+      user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE"})
+      offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
+      conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: true, cause: "ACCEPTED", category_id: offer.category_id})
+      new_offer = Contents.get_announce!(offer.id)
+      msg = "Hi Mr unknown, your offer an offer title is now published !\nIt will be online for 1 month until #{LayoutView.format_date(new_offer.validity_date)}.\nYou can manage your offer on https://www.pawchaungkaung.com/user/offer/"
+      assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
+      assert new_offer.status == "ONLINE"
+      assert new_offer.cause == "ACCEPTED"
+      assert_called ViberApi, :send_message, ["123RENE", ^msg], 1
+    end
+    test "treats offer : ACCEPTED / ONLINE and send Messenger msg", %{conn: conn} do
+      user = insert(:user, %{bot_provider: "messenger", bot_id: "123RENE2"})
+      offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
+      conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: true, cause: "ACCEPTED", category_id: offer.category_id})
+      new_offer = Contents.get_announce!(offer.id)
+      msg = "Hi Mr unknown, your offer an offer title is now published !\nIt will be online for 1 month until #{LayoutView.format_date(new_offer.validity_date)}.\nYou can manage your offer on https://www.pawchaungkaung.com/user/offer/"
+      assert get_flash(conn, :info) == "Offer treated and message sent to user by Messenger"
+      assert new_offer.status == "ONLINE"
+      assert new_offer.cause == "ACCEPTED"
+      assert_called MessengerApi, :send_message, ["123RENE2", ^msg], 1
+    end
+    test "treats offer : NOT_ALLOWED / REFUSED and send Viber msg", %{conn: conn} do
+      user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE3"})
+      offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
+      conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "NOT_ALLOWED", category_id: offer.category_id})
+      new_offer = Contents.get_announce!(offer.id)
+      msg = "Hi Mr unknown, we are sorry but your offer an offer title was refused because its content is not allowed.. \nPlease create a new one on https://www.pawchaungkaung.com/offer/new/09000000000"
+      assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
+      assert new_offer.status == "REFUSED"
+      assert new_offer.cause == "NOT_ALLOWED"
+      assert_called ViberApi, :send_message, ["123RENE3", ^msg], 1
+    end
+    test "treats offer : UNCLEAR / REFUSED and send Viber msg", %{conn: conn} do
+      user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE4"})
+      offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
+      conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "UNCLEAR", category_id: offer.category_id})
+      new_offer = Contents.get_announce!(offer.id)
+      msg = "Hi Mr unknown, we are sorry but your offer an offer title was refused because its description is not clear.. \nPlease create a new one on https://www.pawchaungkaung.com/offer/new/09000000000"
+      assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
+      assert new_offer.status == "REFUSED"
+      assert new_offer.cause == "UNCLEAR"
+      assert_called ViberApi, :send_message, ["123RENE4", ^msg], 1
+    end
+    test "treats offer : BAD_PHOTOS / REFUSED and send Viber msg", %{conn: conn} do
+      user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE5"})
+      offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
+      conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "BAD_PHOTOS", category_id: offer.category_id})
+      new_offer = Contents.get_announce!(offer.id)
+      msg = "Hi Mr unknown, we are sorry but your offer an offer title was refused because the photos are not good.. \nPlease create a new one on https://www.pawchaungkaung.com/offer/new/09000000000"
+      assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
+      assert new_offer.status == "REFUSED"
+      assert new_offer.cause == "BAD_PHOTOS"
+      assert_called ViberApi, :send_message, ["123RENE5", ^msg], 1
+    end
+    test "treats offer : ADMIN_DECISION / CLOSED and send Viber msg", %{conn: conn} do
+      user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE6"})
+      offer = insert(:announce, %{user_id: user.id, status: "ONLINE"})
+      conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "ADMIN_DECISION", category_id: offer.category_id})
+      new_offer = Contents.get_announce!(offer.id)
+      msg = "Hi Mr unknown, your offer an offer title has been closed following an admin decision.. \nPlease come back to https://www.pawchaungkaung.com/offer/new/09000000000"
+      assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
+      assert new_offer.status == "CLOSED"
+      assert new_offer.cause == "ADMIN_DECISION"
+      assert_called ViberApi, :send_message, ["123RENE6", ^msg], 1
+    end
+    test "treats offer : TIME_PASSED / CLOSED and send Viber msg", %{conn: conn} do
+      user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE7"})
+      offer = insert(:announce, %{user_id: user.id, status: "ONLINE"})
+      conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "TIME_PASSED", category_id: offer.category_id})
+      new_offer = Contents.get_announce!(offer.id)
+      msg = "Hi Mr unknown, your offer an offer title has been closed after its publication time.. \nPlease come back to https://www.pawchaungkaung.com/offer/new/09000000000"
+      assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
+      assert new_offer.status == "CLOSED"
+      assert new_offer.cause == "TIME_PASSED"
+      assert_called ViberApi, :send_message, ["123RENE7", ^msg], 1
     end
     test "deletes chosen announce from dashboard", %{conn: conn} do
       announce = insert(:announce)
@@ -104,7 +181,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
       assert html_response(conn, 302) =~ "/offer/index?search[township_id]"
-      assert get_flash(conn, :info) == "Announce created successfully."
+      assert get_flash(conn, :info) == "Your offer was created. We will treat it soon."
     end
 
     test "renders errors when title is empty", %{conn: conn} do
@@ -162,7 +239,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
       assert html_response(conn, 302) =~ "/offer/index?search[township_id]"
-      assert get_flash(conn, :info) == "Announce created successfully."
+      assert get_flash(conn, :info) == "Your offer was created. We will treat it soon."
     end
 
     test "renders errors when title is empty", %{conn: conn} do
@@ -231,32 +308,32 @@ defmodule BoncoinWeb.AnnounceControllerTest do
   # end
 
   describe "show user announce" do
-    test "ONLINE for owner user member", %{conn: conn} do
+    test "shows the offer when it is ONLINE", %{conn: conn} do
       offer = insert(:announce, %{title: "dede"})
       safe_link = Cipher.encrypt(Integer.to_string(offer.id))
       {:ok, offer} = Contents.update_announce(offer, %{safe_link: safe_link})
       conn = get conn, announce_path(conn, :show, offer.safe_link)
       assert html_response(conn, 200) =~ "dede"
     end
-    test "CLOSED for owner user member", %{conn: conn} do
+    test "redirects when the offer is CLOSED", %{conn: conn} do
       offer = insert(:announce, %{status: "CLOSED"})
       safe_link = Cipher.encrypt(Integer.to_string(offer.id))
       {:ok, offer} = Contents.update_announce(offer, %{safe_link: safe_link})
       conn = get conn, announce_path(conn, :show, offer.safe_link)
       assert html_response(conn, 302)
-      assert get_flash(conn, :info) == "This announce is now closed."
+      assert get_flash(conn, :info) == "This offer is no more published."
     end
-    test "with broken link", %{conn: conn} do
+    test "redirects with broken link", %{conn: conn} do
       offer = insert(:announce, %{safe_link: "whatever_wrong_link"})
       conn = get conn, announce_path(conn, :show, offer.safe_link)
       assert html_response(conn, 302)
-      assert get_flash(conn, :alert) == "Sorry this link is broken."
+      assert get_flash(conn, :alert) == "Sorry, this offer doesn't exist."
     end
     test "remove offer by user", %{conn: conn} do
       offer = insert(:announce)
       conn = get conn, announce_path(conn, :close, announce_id: offer.id, cause: "SOLD")
       assert html_response(conn, 302)
-      assert get_flash(conn, :info) == "Your offer has been removed."
+      assert get_flash(conn, :info) == "Your offer has been closed and is no more online."
     end
   end
 

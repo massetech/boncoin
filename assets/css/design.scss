@@ -9,6 +9,15 @@ html{overflow-y: scroll;} // Avoid centering jumps of scrollbar //https://css-tr
   position: relative;overflow-x: hidden;
 }
 img {width: 100%;}
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+::-webkit-scrollbar:vertical {
+    width: 0px;
+}
+::-webkit-scrollbar:horizontal {
+    height: 0px;
+}
 /* ------------------------------ TYPOGRAPHY  ------------------------------ */
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, a, p {font-family: 'Roboto', sans-serif;}
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, p {
@@ -98,6 +107,7 @@ i.width-40, img.width-40 {width: 40px;}
   input {display: none;}
   width: 33.333%;//border-radius: 10px;
 }
+.icon-like {position: absolute;right: 10px;bottom: 10px;}
 /* ------------------------------ SIDEBAR  ------------------------------ */
 span.language-active{
   font-weight: 600;
@@ -311,7 +321,7 @@ a[data-toggle="collapse"] {
   .modal-full .modal-content {min-height: 100vh;}
 }
 
-.icon_nb_pict {
+.icon-nb-pict {
   position: absolute;bottom: 0;right: 0;width: 30px;height: 30px;
   i {color: $dark;position: relative;opacity: 0.6;}
   span {font-size: 12px;font-weight: bold;background-color: rgba(74,74,74,0.6);

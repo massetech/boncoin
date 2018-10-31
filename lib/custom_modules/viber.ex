@@ -93,7 +93,7 @@ defmodule Boncoin.ViberApi do
 
   def post(path, payload \\ %{}) do
     token = get_viber_token()
-    IO.puts("token: #{token}")
+    # IO.puts("token: #{token}")
     uri = URI.merge(@api_url, path) |> to_string
     resp = HTTPotion.post uri, headers: prepare_headers(token), body: Poison.encode!(payload)
     resp.body

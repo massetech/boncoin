@@ -646,6 +646,7 @@ msgstr "ေနာက္ထပ္ေရာင္းရန္ေၾကာ္ျင
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/public_index.html.haml:11
+#: lib/boncoin_web/templates/announce/public_likes.html.haml:8
 msgid "Please meet the seller and try the product before giving any money"
 msgstr "ေက်းဇူးျပဳ၍ ေရာင္းသူႏွင့္ေတြ႕ၿပီးဝယ္မည့္ပစၥည္းအတြက္ေငြမေပးမီ စစ္ေဆးၾကည့္ပါ။"
 
@@ -663,11 +664,6 @@ msgstr "၁. သင့္ရဲ႕အခ်က္အလက္မ်ားကိ�
 #: lib/boncoin_web/templates/announce/_describe_offer.html.haml:5
 msgid "2. Describe your offer"
 msgstr "၂. သင္ေရာင္းမည့္ပစၥည္းကိုေဖၚျပပ"
-
-#, elixir-format
-#: lib/boncoin_web/controllers/user_controller.ex:71
-msgid "Announce created successfully."
-msgstr "ေၾကာ္ျငာကိုေအာင္ျမင္စြာျပဳလုပ္ၿပီးပါၿပီ"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:39
@@ -725,11 +721,6 @@ msgid "Email (Gmail only)"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:118
-msgid "Your offer has been removed."
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/templates/user/new_user_announce.html.haml:9
 msgid "For more details... (burmese end)"
 msgstr " "
@@ -760,24 +751,24 @@ msgid "Nickname"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:54
+#: lib/boncoin_web/views/announce_view.ex:47
 msgid "yesterday"
 msgstr "မေန႕က"
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:55
+#: lib/boncoin_web/views/announce_view.ex:48
 msgid "one day ago"
 msgid_plural "%{count} days ago"
 msgstr[0] "လြန္ခဲ့တဲ့(%{count})ရယ္တုံးက"
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:53
+#: lib/boncoin_web/views/announce_view.ex:46
 msgid "one hour ago"
 msgid_plural "%{count} hours ago"
 msgstr[0] "လြန္ခဲ့တဲ့(%{count})နာရီတုံးက"
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:52
+#: lib/boncoin_web/views/announce_view.ex:45
 msgid "one minute ago"
 msgid_plural "%{count} minutes ago"
 msgstr[0] "လြန္ခဲ့တဲ့(%{count})မိနစ္တုံးက"
@@ -928,7 +919,7 @@ msgstr ""
 msgid "%{nb_times}people saw it"
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/boncoin_web/templates/announce/_user_footer_actions.html.haml:9
 msgid "Cancel this offer"
 msgstr ""
@@ -944,26 +935,61 @@ msgid "If you want, your Viber phone number (+95xxxxxxxxxx)"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_public_modal_offer.html.haml:21
-msgid "Save offer"
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/templates/announce/_public_modal_offer.html.haml:17
 msgid "See contact"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:83
+#: lib/boncoin_web/views/announce_view.ex:76
 msgid "The owner gives the product, you can propose your price"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:82
+#: lib/boncoin_web/views/announce_view.ex:75
 msgid "The owner is renting the product"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:81
+#: lib/boncoin_web/views/announce_view.ex:74
 msgid "The owner is selling the product"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/public_likes.html.haml:21
+msgid "Please search again !"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/controllers/announce_controller.ex:107
+msgid "This offer is no more published."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/public_likes.html.haml:19
+msgid "You didn't save any offer yet or these offers are not online anymore."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/announce/public_likes.html.haml:6
+msgid "You saved {nb_offers}offers}"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/controllers/user_controller.ex:71
+msgid "Your offer was created. We will treat it soon."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/controllers/announce_controller.ex:100
+msgid "Sorry, this offer doesn't exist."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/controllers/announce_controller.ex:90
+msgid "Technical problem, cannot treat this offer."
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/controllers/announce_controller.ex:121
+msgid "Your offer has been closed and is no more online."
 msgstr ""

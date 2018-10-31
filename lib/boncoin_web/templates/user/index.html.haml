@@ -19,36 +19,54 @@
         %th= "ID"
         %th= "Active"
         %th= "Language"
-        %th= "role"
+        %th
+          .d-none.d-sm-block= "role"
         %th= "Nickname"
         %th= "Phone number"
-        %th= "Viber number"
-        %th= "Email"
-        %th= "Bot"
-        %th= "ID"
-        %th= "Status"
+        %th
+          .d-none.d-sm-block= "Viber number"
+        %th
+          .d-none.d-sm-block= "Email"
+        %th
+          .d-none.d-sm-block= "Bot"
+        %th
+          .d-none.d-sm-block= "ID"
+        %th
+          .d-none.d-sm-block= "Status"
         %th= "ONLINE"
         %th= "PENDING"
         %th= "CLOSED"
-        %th= "Actions"
+        %th
+          .d-none.d-sm-block= "Actions"
     %tbody
       - for user <- @users do
         %tr
           %td= user.id
           %th= LayoutView.icon_active(user.active)
           %td= img_tag static_path(@conn, "/fonts/#{user.language}.svg"), class: "flag-small"
-          %td= user.role
+          %td
+            .d-none.d-sm-block
+              = user.role
           %td= user.nickname
           %td= user.phone_number
-          %td= user.viber_number
-          %td= user.email
-          %td= user.bot_provider
+          %td
+            .d-none.d-sm-block
+              = user.viber_number
+          %td
+            .d-none.d-sm-block
+              = user.email
+          %td
+            .d-none.d-sm-block
+              = user.bot_provider
           %td.text-truncate{style: "max-width: 30px;", data-toggle: "popover", title: "bot_id", data-placement: "top", data-content: "#{user.bot_id}"}
             = user.bot_id
-          %td= LayoutView.icon_active(user.bot_active)
+          %td
+            .d-none.d-sm-block
+              = LayoutView.icon_active(user.bot_active)
           %td= Enum.count(user.announces, &(&1.status == "ONLINE"))
           %td= Enum.count(user.announces, &(&1.status == "PENDING"))
           %td= Enum.count(user.announces, &(&1.status == "CLOSED"))
           %td
-            - unless (@conn.assigns.current_user.id == user.id) || (user.role == "GUEST") do
-              = link "Delete", to: user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"
+            .d-none.d-sm-block
+              - unless (@conn.assigns.current_user.id == user.id) || (user.role == "GUEST") do
+                = link "Delete", to: user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

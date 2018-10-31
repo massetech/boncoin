@@ -7,6 +7,7 @@ defmodule Boncoin.Plug.SearchParams do
   def call(conn, _opts) do
     # IO.puts("search_params IN")
     # IO.inspect(conn.params)
+    # IO.inspect(conn)
 
     new_search_map = case Map.has_key?(conn.params, "search") do
       true -> conn.params["search"]
@@ -33,9 +34,17 @@ defmodule Boncoin.Plug.SearchParams do
       Contents.add_kpi_township_traffic(search_params["township_id"], "new_search")
     end
 
+    # Update the list of likes
+    # initial_list = conn.cookies["likes"] || Poison.encode!([])
+    # likes_list = initial_list
+    #   |> Poison.decode!()
+    #   |> Enum.map(&Kernel.inspect/1) # Convert anything to string
+    #   |> Contents.filter_announces_liked_online()
+
     conn
       |> assign(:search_params, search_params)
       |> assign(:search_titles, search_titles)
+      # |> assign(:likes_list, Poison.encode!(likes_list)) # Resp cookie not accessible by js
   end
 
   defp build_searched_arbo(family_id, category_id) do

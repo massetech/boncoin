@@ -1,6 +1,7 @@
 defmodule Boncoin.CustomModules.BotDecisions do
   alias Boncoin.{Members, Contents}
   alias Boncoin.Members.User
+  alias BoncoinWeb.LayoutView
   @website_url "https://www.pawchaungkaung.com"
 
   # -------------------- DECISION  -------------------------------
@@ -203,6 +204,10 @@ defmodule Boncoin.CustomModules.BotDecisions do
     "#{@website_url}/user/offer/#{safe_link}"
   end
 
+  # defp show_date(validity_date) do
+  #
+  # end
+
   # -------------------- MESSAGES   -------------------------------
   #
   # # User is not known
@@ -232,7 +237,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   # def treat_msg("cannot_quit_bot", user) do %{scope: "no_scope", msg: tell_bot_cannot_quit(user.language, user.nickname, user.bot_provider)} end
   # def treat_msg("0_active_offer", user) do %{scope: "no_scope", msg: tell_no_active_offer(user.language, user.nickname, user.phone_number)} end
   # def treat_msg("nb_active_offers", user, nb_offers) do %{scope: "no_scope", msg: tell_nb_active_offers(user.language, user.nickname, nb_offers)} end
-  # def treat_msg("detail_active_offer", user, offer, link) do %{scope: "no_scope", msg: detail_active_offers(user.language, offer.title, LayoutView.format_date(offer.validity_date), link)} end
+  # def treat_msg("detail_active_offer", user, offer, link) do %{scope: "no_scope", msg: detail_active_offers(user.language, offer.title, LayoutView.format_date(LayoutView.format_date(offer.validity_date)), link)} end
 
   defp welcome_msg() do
     uni = "ပေါချောင်ကောင်းမှကြိုဆိုပါတယ်။ ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပါ"
@@ -375,9 +380,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp tell_offer_accepted(user, offer) do
-    uni = "မင်္ဂလာပါ #{user.nickname} သင်၏ရောင်းရန်ပစ္စည်း သည်ကြော်ငြာတင်လိုက်ပြီဖြစ်ပါသည်။ ၎င်းကို #{offer.validity_date} အထိ (၁)လအကြာ ကြော်ငြာတင်ထားမည် ဖြစ်သည်။ သင်၏ကြော်ငြာကိုသင့်အလိုကျစီမံနိုင်ရန် #{offer_view_link(offer.safe_link)} သို့ဝင်ပါ။"
+    uni = "မင်္ဂလာပါ #{user.nickname} သင်၏ရောင်းရန်ပစ္စည်း သည်ကြော်ငြာတင်လိုက်ပြီဖြစ်ပါသည်။ ၎င်းကို #{LayoutView.format_date(offer.validity_date)} အထိ (၁)လအကြာ ကြော်ငြာတင်ထားမည် ဖြစ်သည်။ သင်၏ကြော်ငြာကိုသင့်အလိုကျစီမံနိုင်ရန် #{offer_view_link(offer.safe_link)} သို့ဝင်ပါ။"
     case user.language do
-      "en" -> "Hi #{user.nickname}, your offer #{offer.title} is now published !\nIt will be online for 1 month until #{offer.validity_date}.\nYou can manage your offer on #{offer_view_link(offer.safe_link)}"
+      "en" -> "Hi #{user.nickname}, your offer #{offer.title} is now published !\nIt will be online for 1 month until #{LayoutView.format_date(offer.validity_date)}.\nYou can manage your offer on #{offer_view_link(offer.safe_link)}"
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end
@@ -456,9 +461,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp detail_active_offers(user, offer) do
-    uni = "#{offer.title}\n#{offer.validity_date} အထိ\n#{offer_view_link(offer.safe_link)} တွင်လုပ်ဆောင်ရန်"
+    uni = "#{offer.title}\n#{LayoutView.format_date(offer.validity_date)} အထိ\n#{offer_view_link(offer.safe_link)} တွင်လုပ်ဆောင်ရန်"
     case user.language do
-      "en" -> "#{offer.title}\nActive until #{offer.validity_date}.\nManage it on #{offer_view_link(offer.safe_link)}"
+      "en" -> "#{offer.title}\nActive until #{LayoutView.format_date(offer.validity_date)}.\nManage it on #{offer_view_link(offer.safe_link)}"
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end

@@ -7,11 +7,11 @@ defmodule BoncoinWeb.AnnounceView do
   end
 
   def check_pub_small(conn, i) do
-    if (rem(i+1, 5) == 0) && i != 0, do: render BoncoinWeb.PubView, "_display_pub_small.html", conn: conn
+    if (rem(i+1, 2) == 0) && i != 0, do: render BoncoinWeb.PubView, "_display_pub_small.html", conn: conn
   end
 
   def check_pub_big(conn, i) do
-    if (rem(i+1, 10) == 0) && i != 0, do: render BoncoinWeb.PubView, "_display_pub_big.html", conn: conn
+    if (rem(i+1, 4) == 0) && i != 0, do: render BoncoinWeb.PubView, "_display_pub_big.html", conn: conn
   end
 
   def image_url(image, type) do
@@ -22,13 +22,6 @@ defmodule BoncoinWeb.AnnounceView do
   end
 
   def btn_status(status) do
-    # case status do
-    #   "PENDING" -> "<div class='btn btn-secondary btn-sm'>PENDING</div>" |> raw
-    #   "ONLINE" -> "<div class='btn btn-success btn-sm'>ONLINE</div>" |> raw
-    #   "REFUSED" -> "<div class='btn btn-danger btn-sm'>REFUSED</div>" |> raw
-    #   "OUTDATED" -> "<div class='btn btn-warning btn-sm'>OUTDATED</div>" |> raw
-    #   "CLOSED" -> "<div class='btn btn-info btn-sm'>CLOSED</div>" |> raw
-    # end
     case status do
       "PENDING" -> "btn btn-secondary btn-sm"
       "ONLINE" -> "btn btn-success btn-sm"

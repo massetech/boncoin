@@ -1,6 +1,7 @@
 defmodule Boncoin.Members do
   import Ecto.Query, warn: false
-  alias Boncoin.{Repo, Contents}
+  import Mockery.Macro
+  alias Boncoin.{Repo, Contents, ViberApi, MessengerApi}
   alias Boncoin.Members.{User, Conversation}
   alias Ueberauth.Auth
 
@@ -27,6 +28,20 @@ defmodule Boncoin.Members do
   defp email_from_auth(%{info: %{email: email}}), do: email
 
   # -------------------------------- USER ----------------------------------------
+
+  def send_bot_message_to_user(bot_results, user) do
+    case user.bot_provider do
+      "viber" ->
+        # IO.puts("Message sent to user by Viber")
+        Enum.map(bot_results.messages, fn msg -> mockable(ViberApi).send_message(user.bot_id, msg) end)
+        {:ok, "message sent to user by Viber", bot_results.messages}
+      "messenger" ->
+        # IO.puts("Message sent to user by Messenger")
+        Enum.map(bot_results.messages, fn msg -> mockable(MessengerApi).send_message(user.bot_id, msg) end)
+        {:ok, "message sent to user by Messenger", bot_results.messages}
+      _ -> {:error, "message not sent, bot not recognized", bot_results.messages}
+    end
+  end
 
   defp check_admin_email(email) do
     User

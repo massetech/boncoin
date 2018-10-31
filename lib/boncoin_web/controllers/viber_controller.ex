@@ -39,16 +39,25 @@ defmodule BoncoinWeb.ViberController do
   end
 
   # Welcome message when a user opens a new conversation
-  def callback(conn, %{"event" => "conversation_started", "user" => %{"name" => viber_name}}) do
-    IO.puts("#{viber_name} opened a new conversation at #{Timex.now()}")
-
-    results = %{scope: "welcome", user: conn.assigns.current_user, announce: nil, bot: %{bot_provider: "viber", bot_id: nil, bot_user_name: viber_name, user_msg: nil}}
+  def callback(conn, %{"event" => "conversation_started", "user" => %{"id" => viber_id, "name" => viber_name}}) do
+    IO.puts("#{viber_name} opened a new conversation on Viber at #{Timex.now()}")
+    actual_conv = Members.get_actual_conversation_by_provider_psid("viber", viber_id)
+    results = %{scope: actual_conv.scope, user: conn.assigns.current_user, announce: nil, bot: %{bot_provider: "viber", bot_id: viber_id, bot_user_name: viber_name, user_msg: nil}}
       |> BotDecisions.call_bot_algorythm()
 
-    conn
-      |> put_status(:ok)
-      |> render("send_message.json", sender: %{name: "PawChaungKaung", avatar: ""}, message: List.first(results.messages), tracking_data: results.scope)
+    # Send message to the visitor
+    conv_params = %{bot_provider: "viber", psid: viber_id, scope: results.scope, nickname: viber_name}
+    case Members.create_or_update_conversation(conv_params) do
+      {:ok, _} ->
+        conn
+          |> put_status(:ok)
+          |> render("send_message.json", sender: %{name: "PawChaungKaung", avatar: ""}, message: List.first(results.messages), tracking_data: results.scope)
+      {:error, _changeset} ->
+        send_resp(conn, 200, "ok")
+        IO.puts("Viber error : can't initiate conversation")
+    end
   end
+
 
   # Treat a message comming from the user
   def callback(conn, %{"event" => "message", "timestamp" => timestamp, "sender" => %{"id" => viber_id, "name" => viber_name}, "message" => %{"type" => "text", "text" => user_msg}} = params) do

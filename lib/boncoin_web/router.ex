@@ -55,6 +55,7 @@ defmodule BoncoinWeb.Router do
     get "/conversations", MainController, :conversations
     scope "/offer" do
       get "/index", AnnounceController, :public_index, as: :public_offers
+      get "/liked", AnnounceController, :likes_index, as: :liked_offers
       get "/new", UserController, :new_user_announce
       get "/new/:phone_number", UserController, :new_user_announce_with_phone
     end

@@ -4,8 +4,6 @@ defmodule Boncoin.Contents do
   alias Boncoin.Contents.{Family, Category, Township, Division, Announce, Image, TrafficKpi}
   alias Boncoin.Members.{User}
   alias Boncoin.CustomModules.BotDecisions
-  alias Boncoin.ViberApi
-  alias Boncoin.MessengerApi
 
   # -------------------------------- TRAFFIC KPI ----------------------------------------
 
@@ -496,6 +494,22 @@ defmodule Boncoin.Contents do
       |> Repo.preload([:user, :images, :category, township: [:division]])
   end
 
+  def filter_announces_liked_online(id_list) do
+    Announce
+      |> Announce.filter_announces_id_list_online(id_list)
+      |> Announce.select_announce_id()
+      |> Repo.all()
+  end
+
+  def list_announces_public_liked(id_list) do
+    user_query = User
+      |> User.filter_user_public_data()
+    Announce
+      |> Announce.filter_announces_id_list_online(id_list)
+      |> Announce.select_announces_datas(user_query)
+      |> Repo.all()
+  end
+
   def list_announces_public(cursor_after, %{"category_id" => category_id, "division_id" => division_id, "family_id" => family_id, "township_id" => township_id}) do
     user_query = User
       |> User.filter_user_public_data()
@@ -561,54 +575,52 @@ defmodule Boncoin.Contents do
     Cipher.encrypt(Integer.to_string(announce_id))
   end
 
-  def treat_announce(admin_user, %{"announce_id" => announce_id, "validate" => validate, "cause" => cause, "category_id" => category_id}) do
+  def treat_announce(admin_user, %{"announce_id" => announce_id, "validate" => validate, "cause" => cause_label, "category_id" => category_id}) do
     announce = get_announce!(announce_id)
-    new_offer? = if announce.status == "PENDING", do: true, else: false
     user = Members.get_user!(announce.user_id)
-    {status, user_msg} = case validate do
-      "true" -> {"ONLINE", ""}
-      "false" ->
-        if new_offer? == true do
-          msg_map = Enum.find(Announce.refusal_causes(), &(&1.label == cause))
-          {"REFUSED", convert_zawgyi(msg_map, user.language)}
-        else
-          msg_map = Enum.find(Announce.admin_closing_causes(), &(&1.label == cause))
-          {"CLOSED", convert_zawgyi(msg_map, user.language)}
-        end
-    end
+    user_msg = if validate == "true", do: "", else: select_user_msg_for_offer_treatment(announce, user, cause_label)
+    status = if validate == "true", do: "ONLINE", else: select_status_for_offer_treatment(announce)
     # Check if we can remove that
-    category_id = if category_id == nil, do: announce.category_id, else: category_id
+    # category_id = if category_id == nil, do: announce.category_id, else: category_id
     dates = calc_announce_validity_date()
-    params = %{treated_by_id: admin_user.id, status: status, cause: cause, category_id: category_id, parution_date: dates.parution_date, validity_date: dates.validity_date}
+    params = %{treated_by_id: admin_user.id, status: status, cause: cause_label, category_id: category_id, parution_date: dates.parution_date, validity_date: dates.validity_date}
     case update_announce(announce, params) do
-      {:ok, announce} ->
-        bot_params = cond do # No msg sent if user_msg nil
-          user.bot_active == true && user_msg != nil && new_offer? == true -> # Bot msg for new offers
-            %{scope: "offer_treated", user: user, announce: announce, bot: %{bot_provider: user.bot_provider, bot_id: user.bot_id, bot_user_name: user.nickname, user_msg: user_msg}}
-          user.bot_active == true && user_msg != nil && status == "CLOSED" -> # Bot msg for old offers closed by admin
-            %{scope: "offer_closed", user: user, announce: announce, bot: %{bot_provider: user.bot_provider, bot_id: user.bot_id, bot_user_name: user.nickname, user_msg: user_msg}}
-          true -> "" # Do nothing
+      {:ok, updated_announce} ->
+        cond do # No msg sent if user_msg nil
+          user.bot_active == true && announce.status == "PENDING" -> # Bot msg for new offers
+            %{scope: "offer_treated", user: user, announce: updated_announce, bot: %{bot_provider: user.bot_provider, bot_id: user.bot_id, bot_user_name: user.nickname, user_msg: user_msg}}
+              |> BotDecisions.call_bot_algorythm()
+              |> Members.send_bot_message_to_user(user)
+          user.bot_active == true && status == "CLOSED" -> # Bot msg for old offers closed by admin
+            %{scope: "offer_closed", user: user, announce: updated_announce, bot: %{bot_provider: user.bot_provider, bot_id: user.bot_id, bot_user_name: user.nickname, user_msg: user_msg}}
+              |> BotDecisions.call_bot_algorythm()
+              |> Members.send_bot_message_to_user(user)
+          true -> {:ok, "no message sent (not Bot for this user)", []} # User is not bot active : do nothing
         end
-        if bot_params != "" do
-          results = BotDecisions.call_bot_algorythm(bot_params)
-          case user.bot_provider do
-            "viber" ->
-              IO.puts("Offer message sent by Viber")
-              Enum.map(results.messages, fn msg -> ViberApi.send_message(user.bot_id, msg) end)
-            "messenger" ->
-              IO.puts("Offer message sent by  Messenger")
-              Enum.map(results.messages, fn msg -> MessengerApi.send_message(user.bot_id, msg) end)
-          end
-        end
-        {:ok, announce}
-      {:error, msg} -> {:error, msg}
+      {:error, msg} -> {:error, msg, []}
     end
   end
 
-  defp convert_zawgyi(msg_map, user_lg) do
-    uni = msg_map.title_my
+  defp select_user_msg_for_offer_treatment(announce, user, cause) do
+    if announce.status == "PENDING" do
+      Announce.refusal_causes()
+        |> Enum.find(&(&1.label == cause))
+        |> convert_user_msg_to_zawgyi(user.language)
+    else
+      Announce.admin_closing_causes()
+        |> Enum.find(&(&1.label == cause))
+        |> convert_user_msg_to_zawgyi(user.language)
+    end
+  end
+
+  defp select_status_for_offer_treatment(announce) do
+    if announce.status == "PENDING", do: "REFUSED", else: "CLOSED"
+  end
+
+  defp convert_user_msg_to_zawgyi(msg_map, user_lg) do
+    uni = msg_map.user_msg_my
     case user_lg do
-      "en" -> msg_map.title_en
+      "en" -> msg_map.user_msg_en
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end

@@ -1,10 +1,10 @@
 %a{type: "button", data-toggle: "modal", data-target: "#modal_offer_#{@announce.id}"}
-  .card.shadow.bg-white.rounded{id: "card_small_#{@announce.id}"}
+  .card.shadow.bg-white.rounded-0{id: "card_small_#{@announce.id}"}
     .card-body.p-0
       .row.m-0
         .col-6.p-0
           = img_tag BoncoinWeb.AnnounceView.image_url(List.first(@announce.images), :original)
-          .icon_nb_pict.d-flex.justify-content-center.align-items-center
+          .icon-nb-pict.d-flex.justify-content-center.align-items-center
             %i.fas.fa-camera.d-flex
               %span.text-white= Enum.count(@announce.images)
         .col-6.p-0.pt-3.pl-3.text-left
@@ -17,3 +17,5 @@
               = "|"
               = LayoutView.convert_zawgyi(@announce.township.division, "title")
             %p.font-s-8.text-dark.m-0= BoncoinWeb.AnnounceView.show_date(@announce, "en")
+      -# %i.fas.fa-heart.icon-like.text-danger.btn-like.d-none{data-offer-id: "#{@announce.id}"}
+      -# %i.far.fa-heart.icon-like.text-danger.btn-like{data-offer-id: "#{@announce.id}"}

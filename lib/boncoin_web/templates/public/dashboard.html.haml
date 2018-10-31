@@ -65,13 +65,8 @@
         %h5.card-title.text-left= "Technical"
       .card-body
         .row
-          %h6= "viber_secret: #{Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:viber_secret]}"
           %h6= "google_analytics: #{Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:google_analytics]}"
-          -# .col-xs-12.col-sm-6
-          -#   %li= "nb viber msg / day"
-          -# .col-xs-12.col-sm-6
-          -#   %li= "nb picture in db"
-          -#   %li= "nb offers in db"
+
       .card-footer
         .viber-box.d-flex.justify-content-start.align-items-center
           = img_tag static_path(@conn, "/images/viber_icon.png"), class: "icon_viber"

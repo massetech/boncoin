@@ -68,7 +68,7 @@ defmodule BoncoinWeb.UserController do
       {:ok, announce} ->
         Contents.add_safe_link_to_last_offer(announce)
         conn
-          |> put_flash(:info, gettext("Announce created successfully."))
+          |> put_flash(:info, gettext("Your offer was created. We will treat it soon."))
           |> redirect(to: public_offers_path(conn, :public_index, search: %{township_id: "#{announce.township_id}"}))
       {:error, %Ecto.Changeset{} = changeset} ->
         %{"announces" => %{"0" => offer_params}} = params

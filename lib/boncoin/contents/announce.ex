@@ -1,8 +1,6 @@
 defmodule Boncoin.Contents.Announce do
   use Ecto.Schema
   import Ecto.{Query, Changeset}
-  import Boncoin.Gettext
-  alias Boncoin.Members
   alias Boncoin.Contents.{Category, Township, Image}
   alias Boncoin.Members.{User}
   alias Boncoin.CustomModules # Used to make some Zawgyi conversion
@@ -89,9 +87,9 @@ defmodule Boncoin.Contents.Announce do
 
   def refusal_causes() do
     [
-      %{label: "NOT_ALLOWED", title_my: "ဥပဒေအရခွင့်မပြုသော", title_en: "content not allowed", btn_color: "btn-outline-danger"},
-      %{label: "UNCLEAR", title_my: "ရှင်လင်းစွာမဖေါ်ပြနိုင်သော", title_en: "description unclear", btn_color: "btn-outline-danger"},
-      %{label: "BAD_PHOTOS", title_my: "ဓါတ်ပုံများသည်မကောင်းသော", title_en: "photos not good", btn_color: "btn-outline-danger"}
+      %{label: "NOT_ALLOWED", btn_color: "btn-outline-danger", title_en: "Content not allowed", user_msg_en: "its content is not allowed.", user_msg_my: "ဥပဒေအရခွင့်မပြုသော"},
+      %{label: "UNCLEAR", btn_color: "btn-outline-danger", title_en: "Description unclear", user_msg_en: "its description is not clear.", user_msg_my: "ရှင်လင်းစွာမဖေါ်ပြနိုင်သော"},
+      %{label: "BAD_PHOTOS", btn_color: "btn-outline-danger", title_en: "Photos not good", user_msg_en: "the photos are not good.", user_msg_my: "ဓါတ်ပုံများသည်မကောင်းသော"}
       # %{label: "SHOCKING", title_my: "စိတ်မသက်မသာဖြစ်စေသော", title_en: "shocking", btn_color: "btn-outline-danger"}
     ]
   end
@@ -105,11 +103,19 @@ defmodule Boncoin.Contents.Announce do
 
   def admin_closing_causes() do
     [
-      # %{label: "ADMIN_SOLD", title_my: nil, title_en: nil, btn_color: "btn-outline-info"},
-      # %{label: "ADMIN_CANCELLED", title_my: nil, title_en: nil, btn_color: "btn-outline-info"},
-      %{label: "ADMIN_REMOVED", title_my: "စီစစ်ရေး၏ဆုံးဖြတ်ချက်အရပိတ်လိုက်ပါပြီ။", title_en: "admin decision", btn_color: "btn-outline-danger"},
-      %{label: "ADMIN_CLOSED", title_my: "တင်ထားသည့်ရက် (၁) လကြော်သွားသောကြောင့်ပိတ်လိုက်ပါပြီ။", title_en: "offer too old", btn_color: "btn-outline-danger"}
+      %{label: "ADMIN_DECISION", btn_color: "btn-outline-danger", title_en: "Admin decision", user_msg_en: "following an admin decision.", user_msg_my: "စီစစ်ရေး၏ဆုံးဖြတ်ချက်အရပိတ်လိုက်ပါပြီ။"},
+      %{label: "TIME_PASSED", btn_color: "btn-outline-danger", title_en: "Offer too old", user_msg_en: "after its publication time.", user_msg_my: "တင်ထားသည့်ရက် (၁) လကြော်သွားသောကြောင့်ပိတ်လိုက်ပါပြီ။"}
     ]
+  end
+
+  def filter_announces_id_list_online(query, id_list) do
+    from a in query,
+      where: a.status == "ONLINE" and a.id in ^id_list
+  end
+
+  def select_announce_id(query) do
+    from a in query,
+      select: a.id
   end
 
   def filter_announces_online(query) do

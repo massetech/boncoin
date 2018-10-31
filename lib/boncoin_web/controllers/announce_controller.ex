@@ -12,6 +12,16 @@ defmodule BoncoinWeb.AnnounceController do
       |> render("public_index.html", announces: paginator_results.entries)
   end
 
+  def likes_index(conn, _params) do
+    IO.inspect(conn.assigns)
+    results = conn.assigns.likes_list
+      |> Poison.decode!()
+      |> Contents.list_announces_public_liked()
+    conn
+      |> assign(:nb_offers_found, Enum.count(results))
+      |> render("public_likes.html", announces: results)
+  end
+
   # API to be called if user wants to load more offers on public page
   def add_offers_to_public_index(conn, %{"scope" => scope, "params" => %{"cursor_after" => cursor_after, "search_params" => search_params}}) do
     paginator_results = Contents.list_announces_public(cursor_after, search_params)
@@ -71,37 +81,30 @@ defmodule BoncoinWeb.AnnounceController do
   def treat(conn, params) do
     admin_user = Members.get_user!(conn.assigns.current_user.id)
     case Contents.treat_announce(admin_user, params) do
-      {:ok, _announce} ->
+      {:ok, msg, _user_messages} ->
         conn
-        |> put_flash(:info, "Announce treated successfully.")
+        |> put_flash(:info, "Offer treated and #{msg}")
         |> redirect(to: announce_path(conn, :index))
-      {:error, _} ->
+      {:error, _, _} ->
         conn
-        |> put_flash(:alert, "Announce cannot be treated.")
+        |> put_flash(:alert, gettext("Technical problem, cannot treat this offer."))
         |> redirect(to: announce_path(conn, :index))
     end
   end
-
-  # def show(conn, %{"id" => id}) do
-  #   announce = Contents.get_announce!(id)
-  #   refusal = Announce.refusal_causes()
-  #   closing = Announce.admin_closing_causes()
-  #   render(conn, "show.html", announce: announce, refusal_causes: refusal, closing_causes: closing)
-  # end
 
   def show(conn, %{"link" => link}) do
     announce_id = Cipher.decrypt(link)
     case announce_id do
       {:error, _msg} ->
         conn
-          |> put_flash(:alert, "Sorry this link is broken.")
+          |> put_flash(:alert, gettext("Sorry, this offer doesn't exist."))
           |> redirect(to: root_path(conn, :welcome))
       announce_id ->
         announce = Contents.get_announce!(announce_id)
         case announce.status do
           "CLOSED" ->
             conn
-              |> put_flash(:info, "This announce is now closed.")
+              |> put_flash(:info, gettext("This offer is no more published."))
               |> redirect(to: root_path(conn, :welcome))
           _ ->
             render(conn, "show.html", announce: announce)
@@ -115,7 +118,7 @@ defmodule BoncoinWeb.AnnounceController do
     case Contents.update_announce(announce, params) do
       {:ok, _announce} ->
         conn
-          |> put_flash(:info, gettext("Your offer has been removed."))
+          |> put_flash(:info, gettext("Your offer has been closed and is no more online."))
           |> redirect(to: root_path(conn, :welcome))
       {:error, _changeset} ->
         render(conn, "edit.html", announce: announce)

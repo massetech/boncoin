@@ -57,6 +57,13 @@ let disable_alert_button = (offer_id) => {
 
 // Load the actions on offers display page
 let load_actions_in_offers_display_page = () => {
+  // Disable the scrolling behind modal
+  $('.modal').on('show.bs.modal', function () {
+    bodyScrollLock.disableBodyScroll($(this));
+  })
+  $('.modal').on('hide.bs.modal', function () {
+    bodyScrollLock.enableBodyScroll($(this));
+  })
   // Display big announce on small announce click
   $('.btn-small-announce').on('click', function() {
     $(".btn-small-announce").removeClass('d-none')
@@ -66,31 +73,15 @@ let load_actions_in_offers_display_page = () => {
     $(`#big_announce_${announce_id}`).removeClass('d-none')
     scrollToAnchor(`big_announce_${announce_id}`)
   })
-  // Close big announce on close btn click
-  $('.btn-close').on('click', function() {
-    var announce_id = $(this).attr('data-announce-id')
-    $(`#big_announce_${announce_id}`).addClass('d-none')
-    $(`#small_announce_${announce_id}`).removeClass('d-none')
-    scrollToAnchor(`small_announce_${announce_id}`)
-  })
-  // Closes the offer display on close btn click
-  $('.btn-close').on('click', function() {
-    var announce_id = $(this).attr('data-announce-id')
-    $(`#small_announce_${announce_id}`).removeClass('d-none')
-    $(`#big_announce_${announce_id}`).addClass('d-none')
-    scrollToAnchor(`small_announce_${announce_id}`)
-  })
-  // Scroll back to small card on modal closing
-  $('.modal').on('hidden.bs.modal', function () {
-    var offer_id = $(this).attr('data-offer-id')
-    $('html, body').animate({
-      scrollTop: ($(`#card_small_${offer_id}`).offset().top)
-    },500);
-  });
+  // // Scroll back to small card on modal closing
+  // $('.modal').on('hidden.bs.modal', function () {
+  //   var offer_id = $(this).attr('data-offer-id')
+  //   $('html, body').animate({
+  //     scrollTop: ($(`#card_small_${offer_id}`).offset().top)
+  //   },500);
+  // });
   // Show the sellor's number
   $('.btn-show-contact').on('click', function() {
-    // $(this).closest('div.offer-actions').addClass('d-none')
-    console.log("clicked")
     var offer_id = $(this).attr('data-offer-id')
     $(this).removeClass('btn-show-number') // We can click only 1 time
     $(`#footer_btn_${offer_id}`).addClass('d-none')
@@ -99,7 +90,7 @@ let load_actions_in_offers_display_page = () => {
       call_internal_api("/api/count_clic", "count_clic_number", offer_id).then(function (response) {
         var data = response.results.data
         if ('offer_id' in data) {
-          console.log("clic posted on offer")
+          // console.log("clic posted on offer")
         } else {
           console.log(error)
         }
@@ -127,31 +118,45 @@ let load_actions_in_offers_display_page = () => {
     }
   })
   // Keep the offer in likes cookie
-  $('.btn-offer-like').on('click', function() {
-    var offer_id = $(this).attr('data-offer-id')
-    if (document.cookie.indexOf('likes') == -1 ) { // Cookie doesnt exist yet
-      var arr = new Array(0)
-      var cookie = JSON.stringify(arr)
-    } else { // Cookie exist already
-      var cookie = document.cookie.replace(/(?:(?:^|.*;\s*)likes\s*\=\s*([^;]*).*$)|^.*$/, "$1")
-    }
-    var likes = JSON.parse(cookie)
-    console.log(likes)
-    if (likes.includes(offer_id)){} else {
-      likes.push(offer_id)
-      document.cookie = "likes=" + JSON.stringify(likes)
-    }
-  })
+  // $('.btn-like').on('click', function(e) {
+  //   e.stopPropagation();
+  //   var offer_id = $(this).attr('data-offer-id')
+    // Update the likes list
+    // var id_list = $('#config').attr('data-likes')
+    // console.log(id_list)
+    // var token = $('#config').attr('data-api')
+    // console.log(token)
+    // var ids = JSON.stringify(id_list)
+    // console.log(ids)
+    //
+    // if (likes.includes(offer_id)){} else {
+    //   likes.push(offer_id)
+    //   document.cookie = "likes=" + JSON.stringify(likes)
+    // }
+
+    // $(".btn-like[data-offer-id="${offer_id}"]").toggleClass("d-none")
+    // $(`#footer_contact_${offer_id}`)
+    // .btn-like[data-offer-id="${offer_id}"]
+
+
+    // var id_list = JSON.parse($.cookie("likes"))
+    // console.log(id_list)
+    // if (document.cookie.indexOf('likes') == -1 ) { // Cookie doesnt exist yet
+    //   var arr = new Array(0)
+    //   var cookie = JSON.stringify(arr)
+    // } else { // Cookie exist already
+    //   var cookie = document.cookie.replace(/(?:(?:^|.*;\s*)likes\s*\=\s*([^;]*).*$)|^.*$/, "$1")
+    // }
+    // var likes = JSON.parse(cookie)
+    // console.log(likes)
+    // if (likes.includes(offer_id)){} else {
+    //   likes.push(offer_id)
+    //   document.cookie = "likes=" + JSON.stringify(likes)
+    // }
+  // })
   // Copy phone number to clipboard
   $('button.copy-number').on('click', function() {
-    console.log("clicked")
-    var phone_number = $(this).attr('data-phone-number')
-    var $temp = $("<input>")
-    $("body").append($temp)
-    $temp.val(phone_number).select()
-    document.execCommand("copy")
-    $temp.remove()
-    // $(".btn-copy-number").removeClass('show') // Hide last copy
-    // $(this).find('.btn-copy-number').addClass('show')
+    var number = $(this).attr('data-phone-number')
+    clipboard.writeText(number);
   })
 }
