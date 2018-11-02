@@ -1,6 +1,6 @@
 defmodule BoncoinWeb.AnnounceController do
   use BoncoinWeb, :controller
-  use Drab.Controller, commanders: [BoncoinWeb.AnnounceCommander]
+  # use Drab.Controller, commanders: [BoncoinWeb.AnnounceCommander]
   alias Boncoin.{Contents, Members}
   alias Boncoin.Contents.Announce
 
@@ -92,15 +92,16 @@ defmodule BoncoinWeb.AnnounceController do
     end
   end
 
-  def show(conn, %{"link" => link}) do
-    announce_id = Cipher.decrypt(link)
-    case announce_id do
+  def show(conn, %{"id" => offer_id}) do
+    # announce_id = Cipher.decrypt(link)
+    url = current_url(conn)
+    case Cipher.validate_signed_url(url) do
       {:error, _msg} ->
         conn
-          |> put_flash(:alert, gettext("Sorry, this offer doesn't exist."))
+          |> put_flash(:alert, gettext("Sorry, this offer doesn't exist or the link is broken."))
           |> redirect(to: root_path(conn, :welcome))
-      announce_id ->
-        announce = Contents.get_announce!(announce_id)
+      {:ok, _msg} ->
+        announce = Contents.get_announce!(offer_id)
         case announce.status do
           "CLOSED" ->
             conn

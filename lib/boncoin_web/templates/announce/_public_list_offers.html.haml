@@ -8,5 +8,4 @@
       = render BoncoinWeb.AnnounceView, "_public_show_offer.html", announce: announce, conn: @conn
     = render BoncoinWeb.AnnounceView, "_public_modal_offer.html", announce: announce, conn: @conn
 
-  = check_pub_small(@conn, i)
-  = check_pub_big(@conn, i)
+  = check_and_add_pub(@conn, i)

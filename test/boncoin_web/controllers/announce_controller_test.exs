@@ -27,27 +27,28 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       conn = get conn, announce_path(conn, :index)
       assert html_response(conn, 200) =~ "Offers"
     end
+    @tag :wip
     test "treats offer : ACCEPTED / ONLINE and send Viber msg", %{conn: conn} do
       user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE"})
       offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: true, cause: "ACCEPTED", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      msg = "Hi Mr unknown, your offer an offer title is now published !\nIt will be online for 1 month until #{LayoutView.format_date(new_offer.validity_date)}.\nYou can manage your offer on https://www.pawchaungkaung.com/user/offer/"
+      # msg = "Hi Mr unknown, your offer an offer title is now published !\nIt will be online for 1 month until #{LayoutView.format_date(new_offer.validity_date)}.\nYou can manage your offer on"
       assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
       assert new_offer.status == "ONLINE"
       assert new_offer.cause == "ACCEPTED"
-      assert_called ViberApi, :send_message, ["123RENE", ^msg], 1
+      assert_called ViberApi, :send_message, ["123RENE", _msg], 1
     end
     test "treats offer : ACCEPTED / ONLINE and send Messenger msg", %{conn: conn} do
       user = insert(:user, %{bot_provider: "messenger", bot_id: "123RENE2"})
       offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: true, cause: "ACCEPTED", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      msg = "Hi Mr unknown, your offer an offer title is now published !\nIt will be online for 1 month until #{LayoutView.format_date(new_offer.validity_date)}.\nYou can manage your offer on https://www.pawchaungkaung.com/user/offer/"
+      # msg = "Hi Mr unknown, your offer an offer title is now published !\nIt will be online for 1 month until #{LayoutView.format_date(new_offer.validity_date)}.\nYou can manage your offer on"
       assert get_flash(conn, :info) == "Offer treated and message sent to user by Messenger"
       assert new_offer.status == "ONLINE"
       assert new_offer.cause == "ACCEPTED"
-      assert_called MessengerApi, :send_message, ["123RENE2", ^msg], 1
+      assert_called MessengerApi, :send_message, ["123RENE2", _msg], 1
     end
     test "treats offer : NOT_ALLOWED / REFUSED and send Viber msg", %{conn: conn} do
       user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE3"})
@@ -308,26 +309,36 @@ defmodule BoncoinWeb.AnnounceControllerTest do
   # end
 
   describe "show user announce" do
+    @tag :wip
     test "shows the offer when it is ONLINE", %{conn: conn} do
       offer = insert(:announce, %{title: "dede"})
-      safe_link = Cipher.encrypt(Integer.to_string(offer.id))
-      {:ok, offer} = Contents.update_announce(offer, %{safe_link: safe_link})
-      conn = get conn, announce_path(conn, :show, offer.safe_link)
+      # safe_link = Cipher.encrypt(Integer.to_string(offer.id))
+      # {:ok, offer} = Contents.update_announce(offer, %{safe_link: safe_link})
+      url = Cipher.sign_url("http://localhost:4001/#{announce_path(conn, :show, offer.id)}")
+      conn = get conn, url
       assert html_response(conn, 200) =~ "dede"
     end
     test "redirects when the offer is CLOSED", %{conn: conn} do
       offer = insert(:announce, %{status: "CLOSED"})
-      safe_link = Cipher.encrypt(Integer.to_string(offer.id))
-      {:ok, offer} = Contents.update_announce(offer, %{safe_link: safe_link})
-      conn = get conn, announce_path(conn, :show, offer.safe_link)
+      # safe_link = Cipher.encrypt(Integer.to_string(offer.id))
+      # {:ok, offer} = Contents.update_announce(offer, %{safe_link: safe_link})
+      # conn = get conn, announce_path(conn, :show, offer.safe_link)
+      url = Cipher.sign_url("http://localhost:4001/#{announce_path(conn, :show, offer.id)}")
+      conn = get conn, url
       assert html_response(conn, 302)
       assert get_flash(conn, :info) == "This offer is no more published."
     end
     test "redirects with broken link", %{conn: conn} do
-      offer = insert(:announce, %{safe_link: "whatever_wrong_link"})
-      conn = get conn, announce_path(conn, :show, offer.safe_link)
+      # offer = insert(:announce, %{safe_link: "whatever_wrong_link"})
+      offer = insert(:announce)
+      # conn = get conn, announce_path(conn, :show, offer.safe_link)
+      url = Cipher.sign_url("http://localhost:4001/#{announce_path(conn, :show, offer.id)}")
+        |> String.replace("b", "") # Removes all the "b" from the string
+        |> String.replace("y", "") # Removes all the "b" from the string
+        |> String.replace("z", "") # Removes all the "b" from the string
+      conn = get conn, url
       assert html_response(conn, 302)
-      assert get_flash(conn, :alert) == "Sorry, this offer doesn't exist."
+      assert get_flash(conn, :alert) == "Sorry, this offer doesn't exist or the link is broken."
     end
     test "remove offer by user", %{conn: conn} do
       offer = insert(:announce)

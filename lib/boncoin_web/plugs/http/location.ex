@@ -34,14 +34,14 @@ defmodule Boncoin.Plug.Location do
     end
   end
 
-  defp town_from_cookies(conn) do
-    conn.cookies["town"] |> validate_town()
-  end
   defp town_from_params(conn) do
-    conn.assigns.search_params["township_id"] |> validate_town()
+    conn.assigns.search_params["township_id"] #|> validate_town()
   end
-  defp validate_town(town), do: town
-  defp validate_town(_locale), do: nil
+  defp town_from_cookies(conn) do
+    conn.cookies["town"] #|> validate_town()
+  end
+  # defp validate_town(town), do: town
+  # defp validate_town(_locale), do: nil
 
   defp add_visit_to_conn(conn, township_id) do
     conn

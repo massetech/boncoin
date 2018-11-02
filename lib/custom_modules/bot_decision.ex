@@ -2,7 +2,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   alias Boncoin.{Members, Contents}
   alias Boncoin.Members.User
   alias BoncoinWeb.LayoutView
-  @website_url "https://www.pawchaungkaung.com"
+  @website_url if Mix.env == :dev, do: "http://localhost:4000", else: "https://www.pawchaungkaung.com"
 
   # -------------------- DECISION  -------------------------------
 
@@ -200,13 +200,14 @@ defmodule Boncoin.CustomModules.BotDecisions do
     "#{@website_url}/offer/new/#{phone_number}"
   end
 
-  defp offer_view_link(safe_link) do
-    "#{@website_url}/user/offer/#{safe_link}"
-  end
-
-  # defp show_date(validity_date) do
-  #
+  # defp offer_view_link(safe_link) do
+  #   "#{@website_url}/user/offer/#{safe_link}"
   # end
+
+  def offer_view_link(offer_id) do
+    url = "#{@website_url}/user/offer/#{offer_id}"
+      |> Cipher.sign_url()
+  end
 
   # -------------------- MESSAGES   -------------------------------
   #
@@ -380,9 +381,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp tell_offer_accepted(user, offer) do
-    uni = "မင်္ဂလာပါ #{user.nickname} သင်၏ရောင်းရန်ပစ္စည်း သည်ကြော်ငြာတင်လိုက်ပြီဖြစ်ပါသည်။ ၎င်းကို #{LayoutView.format_date(offer.validity_date)} အထိ (၁)လအကြာ ကြော်ငြာတင်ထားမည် ဖြစ်သည်။ သင်၏ကြော်ငြာကိုသင့်အလိုကျစီမံနိုင်ရန် #{offer_view_link(offer.safe_link)} သို့ဝင်ပါ။"
+    uni = "မင်္ဂလာပါ #{user.nickname} သင်၏ရောင်းရန်ပစ္စည်း သည်ကြော်ငြာတင်လိုက်ပြီဖြစ်ပါသည်။ ၎င်းကို #{LayoutView.format_date(offer.validity_date)} အထိ (၁)လအကြာ ကြော်ငြာတင်ထားမည် ဖြစ်သည်။ သင်၏ကြော်ငြာကိုသင့်အလိုကျစီမံနိုင်ရန် #{offer_view_link(offer.id)} သို့ဝင်ပါ။"
     case user.language do
-      "en" -> "Hi #{user.nickname}, your offer #{offer.title} is now published !\nIt will be online for 1 month until #{LayoutView.format_date(offer.validity_date)}.\nYou can manage your offer on #{offer_view_link(offer.safe_link)}"
+      "en" -> "Hi #{user.nickname}, your offer #{offer.title} is now published !\nIt will be online for 1 month until #{LayoutView.format_date(offer.validity_date)}.\nYou can manage your offer on #{offer_view_link(offer.id)}"
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end
@@ -461,9 +462,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp detail_active_offers(user, offer) do
-    uni = "#{offer.title}\n#{LayoutView.format_date(offer.validity_date)} အထိ\n#{offer_view_link(offer.safe_link)} တွင်လုပ်ဆောင်ရန်"
+    uni = "#{offer.title}\n#{LayoutView.format_date(offer.validity_date)} အထိ\n#{offer_view_link(offer.id)} တွင်လုပ်ဆောင်ရန်"
     case user.language do
-      "en" -> "#{offer.title}\nActive until #{LayoutView.format_date(offer.validity_date)}.\nManage it on #{offer_view_link(offer.safe_link)}"
+      "en" -> "#{offer.title}\nActive until #{LayoutView.format_date(offer.validity_date)}.\nManage it on #{offer_view_link(offer.id)}"
       "my" -> uni
       "mr" -> Rabbit.uni2zg(uni)
     end

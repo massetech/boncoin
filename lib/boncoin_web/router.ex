@@ -61,7 +61,7 @@ defmodule BoncoinWeb.Router do
     end
     scope "/user" do
       get "/close", AnnounceController, :close
-      get "/offer/:link", AnnounceController, :show
+      get "/offer/:id", AnnounceController, :show
       post "/create", UserController, :create_announce
     end
 

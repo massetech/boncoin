@@ -6,12 +6,14 @@ defmodule BoncoinWeb.AnnounceView do
     %{results: results}
   end
 
-  def check_pub_small(conn, i) do
-    if (rem(i+1, 2) == 0) && i != 0, do: render BoncoinWeb.PubView, "_display_pub_small.html", conn: conn
-  end
-
-  def check_pub_big(conn, i) do
-    if (rem(i+1, 4) == 0) && i != 0, do: render BoncoinWeb.PubView, "_display_pub_big.html", conn: conn
+  def check_and_add_pub(conn, i) do
+    if (rem(i+1, 5) == 0) && i != 0 do
+      render BoncoinWeb.PubView, "_display_pub_small.html", conn: conn
+    else
+      if (rem(i+1, 20) == 0) && i != 0 do
+        render BoncoinWeb.PubView, "_display_pub_big.html", conn: conn
+      end
+    end
   end
 
   def image_url(image, type) do
