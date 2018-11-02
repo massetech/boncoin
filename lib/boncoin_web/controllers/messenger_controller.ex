@@ -8,7 +8,7 @@ defmodule BoncoinWeb.MessengerController do
   # Answer to Messenger to confirm the Webhook connection
   def callback(conn, %{"hub.mode" => mode, "hub.verify_token" => token, "hub.challenge" => challenge} = params) do
     IO.inspect(params)
-    verify_token = Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:messenger_secret]
+    verify_token = System.get_env("MESSENGER_SECRET")
     if (mode == "subscribe" and token == verify_token) do
       IO.puts("Messenger webhook confirmed at #{Timex.now()}")
       send_resp(conn, 200, challenge)
