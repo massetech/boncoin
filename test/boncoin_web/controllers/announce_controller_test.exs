@@ -5,7 +5,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
   alias BoncoinWeb.LayoutView
   import Boncoin.Factory
   import Mockery.Assertions
-  use Mockery # Mockery.History.enable_history()
+  use Mockery
 
   @create_attrs %{conditions: true, description: "some description", language: "some language", image_file_1: Announce.image_param_example(), image_file_2: "", image_file_3: "", price: 120.5, title: "some title"}
   @update_attrs %{conditions: false, description: "some updated description", language: "some updated language", image_file_1: Announce.image_param_example(), image_file_2: "", image_file_3: "", price: 456.7, title: "some updated title"}
@@ -27,7 +27,6 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       conn = get conn, announce_path(conn, :index)
       assert html_response(conn, 200) =~ "Offers"
     end
-    @tag :wip
     test "treats offer : ACCEPTED / ONLINE and send Viber msg", %{conn: conn} do
       user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE"})
       offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
@@ -166,59 +165,67 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       assert html_response(conn, 200) =~ "Fill your details"
       assert get_flash(conn, :alert) == "Please check your phone number."
     end
-
-    test "renders errors when user surname is empty", %{conn: conn} do
-      user_params = %{phone_number: "09000000010", nickname: ""}
-      township = insert(:township)
-      category = insert(:category)
-      conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
-      assert html_response(conn, 200) =~ "Fill your details"
-      assert get_flash(conn, :alert) == "Please check your name or nickname."
-    end
-
     test "redirects to public offers when data is valid", %{conn: conn} do
-      user_params = %{phone_number: "09000000001", nickname: "some_nickname"}
+      user = insert(:member_user, %{phone_number: "09000000111"})
+      user_params = %{phone_number: "09000000111", nickname: "some_nickname"}
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
       assert html_response(conn, 302) =~ "/offer/index?search[township_id]"
       assert get_flash(conn, :info) == "Your offer was created. We will treat it soon."
     end
-
     test "renders errors when title is empty", %{conn: conn} do
-      user_params = %{phone_number: "09000000002", nickname: "some_nickname"}
+      user = insert(:member_user, %{phone_number: "09000000112"})
+      user_params = %{phone_number: "09000000112", nickname: "some_nickname"}
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{title: ""}), user_params, township.id, category.id)
       assert html_response(conn, 200) =~ "Fill your details"
       assert get_flash(conn, :alert) == "Please put a title to your offer."
     end
-
     test "renders errors when description is empty", %{conn: conn} do
-      user_params = %{phone_number: "09000000003", nickname: "some_nickname"}
+      user = insert(:member_user, %{phone_number: "09000000113"})
+      user_params = %{phone_number: "09000000113", nickname: "some_nickname"}
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{description: ""}), user_params, township.id, category.id)
       assert html_response(conn, 200) =~ "Fill your details"
       assert get_flash(conn, :alert) == "Please write a description of your offer."
     end
-
     test "renders errors when price is empty", %{conn: conn} do
-      user_params = %{phone_number: "09000000004", nickname: "some_nickname"}
+      user = insert(:member_user, %{phone_number: "09000000114"})
+      user_params = %{phone_number: "09000000114", nickname: "some_nickname"}
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{price: ""}), user_params, township.id, category.id)
       assert html_response(conn, 200) =~ "Fill your details"
       assert get_flash(conn, :alert) == "Please give a price to your offer."
     end
-
     test "renders errors when no photo is given", %{conn: conn} do
-      user_params = %{phone_number: "09000000005", nickname: "some_nickname"}
+      user = insert(:member_user, %{phone_number: "09000000115"})
+      user_params = %{phone_number: "09000000115", nickname: "some_nickname"}
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{image_file_1: ""}), user_params, township.id, category.id)
       assert html_response(conn, 200) =~ "Fill your details"
       assert get_flash(conn, :alert) == "Please post at least one photo."
+    end
+    test "renders errors when user surname is empty", %{conn: conn} do
+      user_params = %{phone_number: "09000000116", nickname: ""}
+      township = insert(:township)
+      category = insert(:category)
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
+      assert html_response(conn, 200) =~ "Fill your details"
+      assert get_flash(conn, :alert) == "Please check your name or nickname."
+    end
+    test "renders errors when user is not linked to bot", %{conn: conn} do
+      user = insert(:member_user, %{phone_number: "09000000117", bot_active: false})
+      user_params = %{phone_number: "09000000117", nickname: "some_nickname"}
+      township = insert(:township)
+      category = insert(:category)
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
+      assert html_response(conn, 200) =~ "Fill your details"
+      assert get_flash(conn, :alert) == "You must link to Viber or Messenger to create an offer."
     end
   end
 
@@ -309,7 +316,6 @@ defmodule BoncoinWeb.AnnounceControllerTest do
   # end
 
   describe "show user announce" do
-    @tag :wip
     test "shows the offer when it is ONLINE", %{conn: conn} do
       offer = insert(:announce, %{title: "dede"})
       # safe_link = Cipher.encrypt(Integer.to_string(offer.id))

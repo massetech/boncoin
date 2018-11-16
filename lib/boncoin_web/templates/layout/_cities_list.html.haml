@@ -2,18 +2,18 @@
   %button.btn.btn-lg.btn-block.btn-outline-secondary.dropdown-toggle{type: "button", data-toggle: "dropdown", aria-haspopup: "true", aria-expanded: "false"}
     -# %i.fa.fa-map-marker-alt.btn-icon
     -# %i.fas.fa-crosshairs.btn-icon
-    %span= gettext "Search arround you"
+    %span= convert_zawgyi(gettext("Search arround you"))
   %ul.dropdown-menu.multi-level{role: "menu", aria-labelledby; "dropdownMenu"}
-    %li= link gettext("All Myanmar"), to: public_offers_path(@conn, :public_index, search: %{division_id: "", township_id: ""}, old_search: @conn.assigns.search_params), class: "dropdown-item"
+    %li= link convert_zawgyi(gettext("All Myanmar")), to: public_offers_path(@conn, :public_index, search: %{division_id: "", township_id: ""}, old_search: @conn.assigns.search_params), class: "dropdown-item"
     %li.divider
     - for division <- @conn.assigns.select_menus.divisions do
       %li.dropdown-submenu
         %a.dropdown-item.submenu-item-hover{tabindex: "-1", href: "#"}
-          = LayoutView.convert_zawgyi(division, "title")
+          = convert_zawgyi(division, "title")
         %ul.dropdown-menu
-          %li= link gettext("All %{division_title}", division_title: LayoutView.convert_zawgyi(division, "title")), to: public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: ""}, old_search: @conn.assigns.search_params), class: "dropdown-item"
+          %li= link convert_zawgyi(gettext("All %{division_title}", division_title: convert_lg_title(division, "title"))), to: public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: ""}, old_search: @conn.assigns.search_params), class: "dropdown-item"
           %li.divider
           - for township <- division.townships do
-            %li= link "#{LayoutView.convert_zawgyi(township, "title")}", to: public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: "#{township.id}"}, old_search: @conn.assigns.search_params), class: "dropdown-item"
+            %li= link convert_zawgyi(convert_lg_title(township, "title")), to: public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: "#{township.id}"}, old_search: @conn.assigns.search_params), class: "dropdown-item"
             %li.divider
       %li.divider

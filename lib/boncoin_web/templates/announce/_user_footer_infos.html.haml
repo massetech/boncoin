@@ -2,7 +2,7 @@
   .col-12.p-1
     %button.btn.btn-block.btn-outline-secondary.d-flex.justify-content-center.align-items-center.my-0
       %i.fas.fa-eye.mr-3
-      %span= gettext("%{nb_times}people saw it", nb_times: @announce.nb_view)
+      %span= LayoutView.convert_zawgyi(gettext("%{nb_times}people saw it", nb_times: @announce.nb_view))
   .col-6.p-1
     %button.btn.btn-block.btn-secondary.d-flex.flex-column.justify-content-center.align-items-center.my-0.copy-number{data-phone-number: "#{@announce.user.phone_number}"}
       %i.fa.fa-phone

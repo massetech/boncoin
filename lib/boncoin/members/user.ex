@@ -3,6 +3,7 @@ defmodule Boncoin.Members.User do
   import Ecto.{Query, Changeset}
   import Boncoin.Gettext
   alias Boncoin.Contents.{Announce}
+  alias Boncoin.Members.{Phone}
   alias Boncoin.CustomModules
 
   # Select only those fields to encode in json the API response
@@ -13,7 +14,7 @@ defmodule Boncoin.Members.User do
     field :auth_provider, :string
     field :email, :string
     field :active, :boolean, default: true
-    field :language, :string, default: "mr"
+    field :language, :string, default: "dz"
     field :nickname, :string
     field :member_psw, :string
     field :phone_number, :string
@@ -26,12 +27,13 @@ defmodule Boncoin.Members.User do
     field :bot_active, :boolean, default: false
     field :bot_id, :string
     has_many :announces, Announce, on_delete: :delete_all
+    has_many :phones, Phone, on_delete: :delete_all
     has_many :treated_offers, Announce, foreign_key: :treated_by_id, on_delete: :nilify_all
     timestamps()
   end
 
-  @required_fields ~w(nickname phone_number)a
-  @optional_fields ~w(language auth_provider email uid role bot_provider bot_active bot_id member_psw viber_number active)a
+  @required_fields ~w(language nickname phone_number role bot_provider bot_active bot_id active)a
+  @optional_fields ~w(auth_provider email uid member_psw viber_number)a
 
   @doc false
   def changeset(user, attrs) do
@@ -41,27 +43,20 @@ defmodule Boncoin.Members.User do
       |> Map.put(:uid, Ecto.UUID.generate)
       |> cast(params, @required_fields ++ @optional_fields)
       |> validate_required(@required_fields)
-      # |> unique_constraint(:email, message: "Email is already taken")
-      # |> unique_constraint(:unic_pack_item, name: :index_pack_item, message: "pack item is already taken")
-      # |> unique_constraint(:unique_active_phone_number, name: :active_phone_number, message: "Phone number is already taken")
-      # |> unique_constraint(:unique_active_viber_number, name: :active_viber_number, message: "Viber phone number is already taken")
-      # |> unique_constraint(:unique_active_messenger_number, name: :active_messenger_number, message: "Messenger number is already taken")
-      # |> unique_constraint(:phone_number, message: "Phone number is already taken") # By security
-      # |> unique_constraint(:viber_number, message: "Viber phone number is already taken")
       |> validate_format(:email, email_regex(), message: "This is not a real email")
       |> validate_format(:phone_number, phone_regex(), message: "This is not a Myanmar phone number")
       |> validate_format(:viber_number, viber_regex(), message: "This is not a Viber phone number")
       |> validate_inclusion(:auth_provider, ["google"], message: "Oauth provider not supported")
       |> validate_inclusion(:bot_provider, ["viber", "messenger"], message: "Bot provider not supported")
-      |> validate_inclusion(:language, ["mr", "my", "en"], message: "Language not supported")
+      |> validate_inclusion(:language, ["dz", "my", "en"], message: "Language not supported")
       |> validate_inclusion(:role, ["GUEST", "MEMBER", "ADMIN", "PARTNER", "SUPER"], message: "Role not supported")
-      |> check_guest_phone_number(params)
+      |> refuse_guest_phone_number(params)
   end
 
-  defp check_guest_phone_number(changeset, %{"phone_number" => "09000000000"}) do
+  defp refuse_guest_phone_number(changeset, %{"phone_number" => "09000000000"}) do
       add_error(changeset, :phone_number, "Guest phone number can't post offer")
   end
-  defp check_guest_phone_number(changeset, _params) do
+  defp refuse_guest_phone_number(changeset, _params) do
       changeset
   end
 
@@ -74,6 +69,7 @@ defmodule Boncoin.Members.User do
       {:title, _msg} -> gettext("Please put a title to your offer.")
       {:price, _msg} -> gettext("Please give a price to your offer.")
       {:description, _msg} -> gettext("Please write a description of your offer.")
+      {:bot_active, _} -> gettext("You must link to Viber or Messenger to create an offer.")
       {:photo, _msg} -> gettext("Please post at least one photo.")
       {:email, {"Email is already taken", _}} -> gettext("This email is already used by another user.")
       {:email, {"This is not a real email", _}} -> gettext("This email not a proper email.")

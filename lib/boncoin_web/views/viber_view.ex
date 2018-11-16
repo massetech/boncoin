@@ -1,5 +1,6 @@
 defmodule BoncoinWeb.ViberView do
   use BoncoinWeb, :view
+  alias BoncoinWeb.LayoutView
 
   def render("confirm_answer.json", %{status: status}) do
     %{status: status}

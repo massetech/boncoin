@@ -1,12 +1,12 @@
 .flashes
   - if get_flash(@conn, :info) != nil do
     .alert.alert-info.m-0{role: "alert"}
-      = get_flash(@conn, :info)
+      = convert_zawgyi(get_flash(@conn, :info))
 
   - if get_flash(@conn, :alert) != nil do
     .alert.alert-danger.m-0{role: "alert"}
-      = get_flash(@conn, :alert)
+      = convert_zawgyi(get_flash(@conn, :alert))
 
   - if get_flash(@conn, :success) != nil do
     .alert.alert-success.m-0{role: "alert"}
-      = get_flash(@conn, :success)
+      = convert_zawgyi(get_flash(@conn, :success))

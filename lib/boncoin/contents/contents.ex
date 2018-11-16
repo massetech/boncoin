@@ -566,16 +566,17 @@ defmodule Boncoin.Contents do
           end
         end
         # Encrypt announce ID and generate a safe_link
-        update_announce(announce, %{"safe_link" => build_safe_link(announce.id)})
+        # update_announce(announce, %{"user_id" => announce.user_id, "safe_link" => build_safe_link(announce.id)})
+        {:ok, announce}
       error_offer -> error_offer
     end
   end
 
-  defp build_safe_link(announce_id) do
-    Cipher.encrypt(Integer.to_string(announce_id))
-  end
+  # defp build_safe_link(announce_id) do
+  #   Cipher.encrypt(Integer.to_string(announce_id))
+  # end
 
-  def treat_announce(admin_user, %{"announce_id" => announce_id, "validate" => validate, "cause" => cause_label, "category_id" => category_id}) do
+  def treat_announce(admin_user, %{"announce_id" => announce_id, "validate" => validate, "cause" => cause_label, "category_id" => category_id} = params) do
     announce = get_announce!(announce_id)
     user = Members.get_user!(announce.user_id)
     user_msg = if validate == "true", do: "", else: select_user_msg_for_offer_treatment(announce, user, cause_label)
@@ -588,11 +589,11 @@ defmodule Boncoin.Contents do
       {:ok, updated_announce} ->
         cond do # No msg sent if user_msg nil
           user.bot_active == true && announce.status == "PENDING" -> # Bot msg for new offers
-            %{scope: "offer_treated", user: user, announce: updated_announce, bot: %{bot_provider: user.bot_provider, bot_id: user.bot_id, bot_user_name: user.nickname, user_msg: user_msg}}
+            %{user: user, conversation: %{scope: "offer_treated"}, announce: updated_announce, user_msg: user_msg}
               |> BotDecisions.call_bot_algorythm()
               |> Members.send_bot_message_to_user(user)
           user.bot_active == true && status == "CLOSED" -> # Bot msg for old offers closed by admin
-            %{scope: "offer_closed", user: user, announce: updated_announce, bot: %{bot_provider: user.bot_provider, bot_id: user.bot_id, bot_user_name: user.nickname, user_msg: user_msg}}
+            %{user: user, conversation: %{scope: "offer_closed"}, announce: updated_announce, user_msg: user_msg}
               |> BotDecisions.call_bot_algorythm()
               |> Members.send_bot_message_to_user(user)
           true -> {:ok, "no message sent (not Bot for this user)", []} # User is not bot active : do nothing
@@ -652,10 +653,10 @@ defmodule Boncoin.Contents do
     |> Repo.update()
   end
 
-  def add_safe_link_to_last_offer(announce) do
-    # Encrypt announce ID and generate a safe_link
-    update_announce(announce, %{"safe_link" => Announce.build_safe_link(announce.id)})
-  end
+  # def add_safe_link_to_last_offer(announce) do
+  #   # Encrypt announce ID and generate a safe_link
+  #   update_announce(announce, %{"safe_link" => Announce.build_safe_link(announce.id)})
+  # end
 
   def delete_announce(%Announce{} = announce) do
     # Remove the link to the images first to delete from socket

@@ -1,5 +1,5 @@
 %hr.d-block.d-sm-none
-%h5.text-left= gettext "1. Fill your details"
+%h5.text-left= LayoutView.convert_zawgyi(gettext("1. Fill your details"))
 
 .row.text-left.mt-3
   .col-12
@@ -9,11 +9,11 @@
           %span.input-group-prepend
             .input-group-text.bg-white
               %i.fa.fa-phone
-          = text_input @u, :phone_number, class: "form-control", maxlength: "11", placeholder: gettext("Main phone number")
-        %small.form-text.text-muted{id: "phone_helper"}= gettext "Myanmar mobile only (09000000000)"
+          = text_input @u, :phone_number, class: "form-control", maxlength: "11", placeholder: LayoutView.convert_zawgyi(gettext("Main phone number"))
+        %small.form-text.text-muted{id: "phone_helper"}= LayoutView.convert_zawgyi(gettext("Myanmar mobile only (09000000000)"))
       .col-4
         %button.btn.btn-primary.text-secondary.font-weight-bold.btn-block.m-0{id: "btn_validate_number", drab-click: "read_user_details", data-item-id: ""}= "OK"
-        %button.h-100.btn.btn-secondary.font-s-9.btn-block.m-0.d-none{id: "btn_change_number", drab-click: "read_user_details", data-item-id: ""}= gettext("change")
+        %button.h-100.btn.btn-secondary.font-s-9.btn-block.m-0.d-none{id: "btn_change_number", drab-click: "read_user_details", data-item-id: ""}= LayoutView.convert_zawgyi(gettext("change"))
 
   .col-12.collapse.collapsible_form
     -# Viber number field
@@ -22,8 +22,8 @@
         %span.input-group-prepend
           .input-group-text.bg-transparent
             %i.fab.fa-viber
-        = text_input @u, :viber_number, class: "form-control", maxlength: "11", autocomplete: "nope", placeholder: gettext("Viber phone number")
-      %small.form-text.text-muted= gettext "If you want, your Viber phone number (+95xxxxxxxxxx)"
+        = text_input @u, :viber_number, class: "form-control", maxlength: "11", autocomplete: "nope", placeholder: LayoutView.convert_zawgyi(gettext("Viber phone number"))
+      %small.form-text.text-muted= LayoutView.convert_zawgyi(gettext("If you want, your Viber phone number (+95xxxxxxxxxx)"))
 
     -# Username field
     .form-group
@@ -31,7 +31,7 @@
         %span.input-group-prepend
           .input-group-text.bg-transparent
             %i.fa.fa-user
-        = text_input @u, :nickname, class: "form-control", maxlength: "20",autocomplete: "nope", placeholder: gettext("Name or nickname")
+        = text_input @u, :nickname, class: "form-control", maxlength: "20",autocomplete: "nope", placeholder: LayoutView.convert_zawgyi(gettext("Name or nickname"))
 
     -# Bot description
     .row.form-group{id: "field-bot"}
@@ -39,30 +39,30 @@
         .col-8.d-flex.align-items-center
           %div{id: "viber-linked"}
             .d-flex.align-items-center
-              %p.one-line.m-0.text-grey= gettext "You are linked by Viber"
+              %p.one-line.m-0.text-grey= LayoutView.convert_zawgyi(gettext("You are linked by Viber"))
               %i.ml-2.fab.fa-viber
           %div{id: "messenger-linked"}
             .d-flex.align-items-center
-              %p.one-line.m-0.text-grey= gettext "You are linked by Messenger"
+              %p.one-line.m-0.text-grey= LayoutView.convert_zawgyi(gettext("You are linked by Messenger"))
               %i.ml-2.fab.fa-facebook-messenger
         .col-4
           - link to: main_path(@conn, :conversations), class: "btn btn-secondary font-s-9 btn-block m-0 d-inline-flex justify-content-center align-items-center text-white" do
-            %span= gettext("unlink")
+            %span= LayoutView.convert_zawgyi(gettext("unlink"))
 
     -# Bot options
     .form-group{id: "btn-bot"}
-      %small.form-text.text-muted= gettext "Please choose how PawChaungKaung can contact you (this conversation will be private)"
+      %small.form-text.text-muted= LayoutView.convert_zawgyi(gettext("Please choose how PawChaungKaung can contact you (this conversation will be private)"))
       .input-group.mt-2
         .col-6.pl-0
           - if Browser.mobile?(@conn) do
             %a.btn.btn-block.btn-viber-outline{href: "viber://pa/info?uri=pawchaungkaung_en"}
               %i.fab.fa-viber
-              %span= gettext "Send me notifications by Viber"
+              %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Viber"))
           - else
             - link to: main_path(@conn, :conversations), class: "btn btn-block btn-viber-outline", target: "_blank" do
               %i.fab.fa-viber
-              %span= gettext "Send me notifications by Viber"
+              %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Viber"))
         .col-6.pr-0
           - link to: main_path(@conn, :conversations), class: "btn btn-block btn-messenger disabled", target: "_blank" do
             %i.fab.fa-facebook-messenger
-            %span= gettext "Send me notifications by Messenger"
+            %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Messenger"))

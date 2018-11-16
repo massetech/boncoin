@@ -1,6 +1,5 @@
 defmodule BoncoinWeb.LayoutView do
   use BoncoinWeb, :view
-  alias BoncoinWeb.LayoutView
   alias Boncoin.Members
 
   def check_admin(user) do
@@ -11,7 +10,7 @@ defmodule BoncoinWeb.LayoutView do
     case nb do
       1 -> if iso2code == "en", do: "language-active", else: ""
       2 -> if iso2code == "my", do: "language-active", else: ""
-      3 -> if iso2code == "mr", do: "language-active", else: ""
+      3 -> if iso2code == "dz", do: "language-active", else: ""
     end
   end
 
@@ -58,15 +57,24 @@ defmodule BoncoinWeb.LayoutView do
     case Gettext.get_locale() do
       "en" -> text
       "my" -> text
-      "mr" -> Rabbit.uni2zg(text)
+      "dz" -> Rabbit.uni2zg(text)
+    end
+  end
+
+  def convert_lg_title(map, key) do
+    case Gettext.get_locale() do
+      "en" -> Map.fetch!(map, String.to_atom("#{key}_en"))
+      _ -> Map.fetch!(map, String.to_atom("#{key}_my"))
     end
   end
 
   def convert_zawgyi(map, key) do
     case Gettext.get_locale() do
       "en" -> Map.fetch!(map, String.to_atom("#{key}_en"))
-      "my" -> Map.fetch!(map, String.to_atom("#{key}_my"))
-      "mr" ->
+      "my" ->
+        Map.fetch!(map, String.to_atom("#{key}_my"))
+        |> Rabbit.zg2uni()
+      "dz" ->
         Map.fetch!(map, String.to_atom("#{key}_my"))
         |> Rabbit.uni2zg()
     end

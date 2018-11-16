@@ -1,19 +1,19 @@
 = hidden_input @a, :currency, value: "Kyats"
 = hidden_input @a, :language, value: Gettext.get_locale()
-= hidden_input @a, :zawgyi, value: false
+-# = hidden_input @a, :zawgyi, value: false
 %hr.d-block.d-sm-none
-%h5.text-left= gettext "2. Describe your offer"
+%h5.text-left= LayoutView.convert_zawgyi(gettext("2. Describe your offer"))
 .row.mt-3
   .col-12
     .form-group
-      %select.form-control.selectpicker{data-style: "btn-outline-form", title: gettext("Select item location"), data-size: "8", id: "user_announces_0_township", name: "user[announces][0][township_id]"}
+      %select.form-control.selectpicker{data-style: "btn-outline-form", title: LayoutView.convert_zawgyi(gettext("Select item location")), data-size: "8", id: "user_announces_0_township", name: "user[announces][0][township_id]"}
         - for division <- @conn.assigns.select_menus.divisions do
           %optgroup{label: "#{LayoutView.convert_zawgyi(division, "title")}"}
             - for township <- division.townships do
               %option{value: "#{township.id}"}= "#{LayoutView.convert_zawgyi(division, "title")}- #{LayoutView.convert_zawgyi(township, "title")}"
   .col-12
     .form-group
-      %select.form-control.selectpicker{data-style: "btn-outline-form", title: gettext("Select a category"), data-size: "8", id: "user_announces_0_category", name: "user[announces][0][category_id]"}
+      %select.form-control.selectpicker{data-style: "btn-outline-form", title: LayoutView.convert_zawgyi(gettext("Select a category")), data-size: "8", id: "user_announces_0_category", name: "user[announces][0][category_id]"}
         - for family <- @conn.assigns.select_menus.familys do
           %optgroup{label: "#{LayoutView.convert_zawgyi(family, "title")}", data-icon: "mr-1 fa fa-#{family.icon}"}
             - for category <- family.categorys do
@@ -24,7 +24,7 @@
         %span.input-group-prepend
           .input-group-text.bg-transparent
             %i.fa.fa-font
-        = text_input @a, :title, class: "form-control", maxlength: "30", autocomplete: "nope", placeholder: gettext("Title")
+        = text_input @a, :title, class: "form-control", maxlength: "30", autocomplete: "nope", placeholder: LayoutView.convert_zawgyi(gettext("Title"))
 
   .col-12
     .form-group
@@ -32,15 +32,15 @@
         %label.btn.btn-outline-secondary.active.radio-btn.d-inline-flex.justify-content-center.m-0
           = radio_button @a, :sell_mode, "SELL", autocomplete: "off", class: ""
           %i.fas.fa-dollar-sign.mx-2
-          %span= gettext("sell")
+          %span= LayoutView.convert_zawgyi(gettext("sell"))
         %label.btn.btn-outline-secondary.radio-btn.d-inline-flex.justify-content-center.m-0
           = radio_button @a, :sell_mode, "RENT", autocomplete: "off", class: ""
           %i.fas.fa-clock.mx-2
-          %span= gettext("rent")
-        %label.btn.btn-outline-secondary.radio-btn.d-inline-flex.justify-content-center.m-0{id: "gift-btn", data-toggle: "popover", tabindex: "0", data-trigger: "focus", data-placement: "bottom", data-content: "#{gettext("I don't want to throw it, so I sell it for very cheap price.")}"}
+          %span= LayoutView.convert_zawgyi(gettext("rent"))
+        %label.btn.btn-outline-secondary.radio-btn.d-inline-flex.justify-content-center.m-0{id: "gift-btn", data-toggle: "popover", tabindex: "0", data-trigger: "focus", data-placement: "bottom", data-content: "#{LayoutView.convert_zawgyi(gettext("I don't want to throw it, so I sell it for very cheap price."))}"}
           = radio_button @a, :sell_mode, "GIVE", autocomplete: "off", class: ""
           %i.fas.fa-gift.mx-2
-          %span= gettext("give")
+          %span= LayoutView.convert_zawgyi(gettext("give"))
 
   .col-12
     .form-group
@@ -48,11 +48,11 @@
         .input-group-prepend
           .input-group-text.bg-transparent
             %i.fa.fa-tag
-        = text_input @a, :price, class: "form-control", maxlength: "10", autocomplete: "nope", placeholder: gettext("Price")
+        = text_input @a, :price, class: "form-control", maxlength: "10", autocomplete: "nope", placeholder: LayoutView.convert_zawgyi(gettext("Price"))
         .input-group-append
-          %button.btn.btn-form{id: "choosen_currency_text", type: "button"}= gettext("Kyats")
+          %button.btn.btn-form{id: "choosen_currency_text", type: "button"}= LayoutView.convert_zawgyi(gettext("Kyats"))
           %button.btn.btn-form.dropdown-toggle.dropdown-toggle-split{type: "button", data-toggle: "dropdown", aria-haspopup: "true", aria-expanded: "false"}
           .dropdown-menu
-            .dropdown-item.ddown_change_currency{id: "ddown-currency-kyats"}= gettext("Kyats")
-            .dropdown-item.ddown_change_currency= gettext("Lacks")
-            .dropdown-item.ddown_change_currency= gettext("USD")
+            .dropdown-item.ddown_change_currency{id: "ddown-currency-kyats"}= LayoutView.convert_zawgyi(gettext("Kyats"))
+            .dropdown-item.ddown_change_currency= LayoutView.convert_zawgyi(gettext("Lacks"))
+            .dropdown-item.ddown_change_currency= LayoutView.convert_zawgyi(gettext("USD"))

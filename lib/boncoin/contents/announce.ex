@@ -3,7 +3,7 @@ defmodule Boncoin.Contents.Announce do
   import Ecto.{Query, Changeset}
   alias Boncoin.Contents.{Category, Township, Image}
   alias Boncoin.Members.{User}
-  alias Boncoin.CustomModules # Used to make some Zawgyi conversion
+  alias Boncoin.{CustomModules, Members} # Used to make some Zawgyi conversion
 
   schema "announces" do
     field :conditions, :boolean, default: false
@@ -35,7 +35,7 @@ defmodule Boncoin.Contents.Announce do
   end
 
   @required_fields ~w(user_id category_id township_id title price description currency sell_mode)a
-  @optional_fields ~w(status cause safe_link language latitute longitude conditions nb_view nb_clic nb_alert validity_date parution_date closing_date priority zawgyi treated_by_id)a
+  @optional_fields ~w(status cause language latitute longitude conditions nb_view nb_clic nb_alert validity_date parution_date closing_date priority zawgyi treated_by_id)a
 
   @doc false
   def changeset(announce, attrs) do
@@ -51,6 +51,18 @@ defmodule Boncoin.Contents.Announce do
       |> validate_inclusion(:currency, ["Kyats", "Lacks", "USD"])
       |> validate_inclusion(:sell_mode, ["SELL", "RENT", "GIVE"])
       |> check_offer_has_one_photo_min(params)
+      |> refuse_users_without_active_bot(params)
+  end
+
+  defp refuse_users_without_active_bot(changeset, %{"user_id" => user_id}) do
+    user = Members.get_user!(user_id)
+    case user.bot_active do
+      true -> changeset
+      false -> add_error(changeset, :bot_active, "this user has no bot active and cant post offer")
+    end
+  end
+  defp refuse_users_without_active_bot(changeset, _) do
+    changeset
   end
 
   defp check_offer_has_one_photo_min(changeset, %{"image_file_1" => picture_1, "image_file_2" => picture_2, "image_file_3" => picture_3}) do

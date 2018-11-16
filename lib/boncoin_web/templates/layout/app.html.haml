@@ -21,7 +21,7 @@
     = render "_sidebar.html", assigns
     - if @conn.request_path =~ "/admin/" == false do
       .add.add-full.col-12.d-none.d-lg-block.p-0
-        = img_tag(static_path(@conn, "/images/backgrounds/myanmar_#{@conn.assigns.background_id}.jpg"))
+        = img_tag(static_path(@conn, "/images/backgrounds/myanmar_#{@conn.assigns.background_id}.jpg"), class: "full-img")
       .add.add-left.col-lg-2.d-none.p-0
       .add.add-right.col-lg-2.d-none.p-0
       .content.container-fluid.px-0

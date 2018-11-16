@@ -296,7 +296,6 @@ msgid "explaining site responsability"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/about.html.haml:72
 #: lib/boncoin_web/templates/public/conditions.html.haml:54
 #: lib/boncoin_web/templates/public/conditions.html.haml:79
 msgid "Please note"
@@ -411,7 +410,8 @@ msgid "introduce the contact us"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/about.html.haml:72
+#: lib/boncoin_web/templates/public/about.html.haml:77
+#: lib/boncoin_web/templates/public/about.html.haml:84
 msgid "we wont answer to offers messages"
 msgstr ""
 
@@ -517,11 +517,6 @@ msgid "Informations that we collect"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:58
-msgid "Link a number to a Viber"
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:106
 msgid "PawChaungKaung responsability"
 msgstr ""
@@ -594,11 +589,6 @@ msgid "How it works"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/about.html.haml:70
-msgid "How to contact us"
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:35
 msgid "Our activity"
 msgstr ""
@@ -611,21 +601,6 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/layout/_sidebar.html.haml:91
 msgid "The company"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/public/about.html.haml:40
-msgid "What can we offer ?"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/public/about.html.haml:55
-msgid "You want to join us ?"
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/public/about.html.haml:25
-msgid "Who are we ?"
 msgstr ""
 
 #, elixir-format
@@ -806,7 +781,7 @@ msgid "Receive notifications"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/new_user_announce.html.haml:54
+#: lib/boncoin_web/templates/user/new_user_announce.html.haml:55
 msgid "Submit your offer"
 msgstr ""
 
@@ -918,4 +893,19 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/controllers/announce_controller.ex:101
 msgid "Sorry, this offer doesn't exist or the link is broken."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/conditions.html.haml:58
+msgid "Link a number to Viber or Messenger"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/about.html.haml:86
+msgid "terms and conditions"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/about.html.haml:88
+msgid "we wont answer to offers messages (burmese end)"
 msgstr ""

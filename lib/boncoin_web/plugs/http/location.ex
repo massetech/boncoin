@@ -14,7 +14,7 @@ defmodule Boncoin.Plug.Location do
     case township do
       nil ->  # First time that we see this visitor
         conn
-          |> Phoenix.Controller.put_flash(:info, gettext("Info that we are using cookies."))
+          # |> Phoenix.Controller.put_flash(:info, gettext("Info that we are using cookies."))
           |> put_resp_cookie("town", "", max_age: 60 * 60 * 24 * 365)
       "" -> # No indication on the visitor's township
         # IO.puts("township unknown")

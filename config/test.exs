@@ -7,6 +7,7 @@ config :boncoin, BoncoinWeb.Endpoint,
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
   secret_salt: System.get_env("SECRET_SALT"),
   google_analytics: false,
+  environment: :test,
   server: false
 
 # Print only warnings and errors during test

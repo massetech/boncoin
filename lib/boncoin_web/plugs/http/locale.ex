@@ -6,12 +6,12 @@ defmodule Boncoin.Plug.Locale do
   @locales Gettext.known_locales(BoncoinWeb.Gettext)
 
   def call(conn, _opts) do
-    case locale_from_params(conn) || locale_from_cookies(conn) do
-      nil ->
-        Gettext.put_locale("en") # Language by default not handled by Gettext
+    case locale_from_test(conn) || locale_from_params(conn) || locale_from_cookies(conn) do
+      nil -> # Language DZ by default (not handled by Gettext)
+        Gettext.put_locale("dz")
         conn
-          |> persist_locale("en")
-          |> assign(:flag, "en")
+          |> persist_locale("dz")
+          |> assign(:flag, "dz")
       locale ->
         Gettext.put_locale(locale)
         conn
@@ -20,8 +20,8 @@ defmodule Boncoin.Plug.Locale do
     end
   end
 
-  defp persist_locale(conn, new_locale) do
-    conn |> put_resp_cookie("locale", new_locale, max_age: 10 * 24 * 60 * 60)
+  defp locale_from_test(conn) do
+    conn.assigns[:locale] |> validate_locale
   end
   defp locale_from_params(conn) do
     conn.params["locale"] |> validate_locale
@@ -31,7 +31,9 @@ defmodule Boncoin.Plug.Locale do
   end
   defp validate_locale(locale) when locale in @locales, do: locale
   defp validate_locale(_locale), do: nil
-
+  defp persist_locale(conn, new_locale) do
+    conn |> put_resp_cookie("locale", new_locale, max_age: 10 * 24 * 60 * 60)
+  end
   # Taken from set_locale plug written by Gerard de Brieder
   # https://github.com/smeevil/set_locale/blob/fd35624e25d79d61e70742e42ade955e5ff857b8/lib/headers.ex
   # defp locale_from_header(conn) do

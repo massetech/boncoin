@@ -2,16 +2,16 @@
   .col-12
     .card.mb-4.bg-secondary
       .card-body
-        %h5.font-weight-bold.text-white.mb-3= gettext "Our terms of use"
-        %h6.text-white.m-0= gettext "Your access to PawChaungKaung implies your fully agreement to these terms of use."
+        %h5.font-weight-bold.text-white.mb-3= LayoutView.convert_zawgyi(gettext("Our terms of use"))
+        %h6.text-white.m-0= LayoutView.convert_zawgyi(gettext("Your access to PawChaungKaung implies your fully agreement to these terms of use."))
 
   .col-xs-12.col-sm-8.offset-sm-2.my-3
     .d-flex.align-items-center
       %i.fa.fa-exclamation-circle.mr-3.text-secondary.d-none.d-sm-block
-      %p.m-0.text-left= gettext "introduction to terms of use"
+      %p.m-0.text-left= LayoutView.convert_zawgyi(gettext("introduction to terms of use"))
     .d-flex.align-items-center.my-4
       %i.fa.fa-award.mr-3.text-secondary.d-none.d-sm-block
-      %p.m-0.text-left= gettext "introduction to trademark"
+      %p.m-0.text-left= LayoutView.convert_zawgyi(gettext("introduction to trademark"))
 
 .accordion{id: "conditions"}
   .row
@@ -21,85 +21,85 @@
           .card-header
             .d-flex.align-items-center
               %i.width-40.fa.fa-desktop.mr-3.text-secondary
-              %h6.card-title.mb-0= gettext "Object of PawChaungKaung"
+              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("Object of PawChaungKaung"))
         %div.collapse{id: "object", aria-labelledby: "object", data-parent: "#conditions"}
           .card-body
-            = render "_card_body.html", title: gettext("Our activity"), text: gettext("introduce the website"), icon: "fa fa-question-circle"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Our activity")), text: LayoutView.convert_zawgyi(gettext("introduce the website")), icon: "fa fa-question-circle"
             %hr
-            = render "_card_body.html", title: gettext("Our users"), text: gettext("introduce who are the customers"), icon: "fa fa-users"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Our users")), text: LayoutView.convert_zawgyi(gettext("introduce who are the customers")), icon: "fa fa-users"
             %hr
-            = render "_card_body.html", title: gettext("How it works"), text: gettext("introduce the process"), icon: "fa fa-cog"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("How it works")), text: LayoutView.convert_zawgyi(gettext("introduce the process")), icon: "fa fa-cog"
 
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#submission", aria-expanded: "true", aria-controls: "submission"}
           .card-header
             .d-flex.align-items-center
               %i.width-40.fa.fa-edit.mr-3.text-secondary
-              %h6.card-title.mb-0= gettext "Manage an offer"
+              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("Manage an offer"))
         %div.collapse{id: "submission", aria-labelledby: "submission", data-parent: "#conditions"}
           .card-body
-            = render "_card_body.html", title: gettext("Please note"), text: gettext("introduce add submission rule"), icon: "fa fa-hand-point-up"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Please note")), text: LayoutView.convert_zawgyi(gettext("introduce add submission rule")), icon: "fa fa-hand-point-up"
             %hr
-            = render "_card_body.html", title: gettext("Decide to sell something"), text: gettext("criteria to sell something"), icon: "fa fa-hand-holding-usd"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Decide to sell something")), text: LayoutView.convert_zawgyi(gettext("criteria to sell something")), icon: "fa fa-hand-holding-usd"
             %hr
-            = render "_card_body.html", title: gettext("Link a number to a Viber"), text: gettext("explain viber process"), icon: "fab fa-viber"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Link a number to Viber or Messenger")), text: LayoutView.convert_zawgyi(gettext("explain viber process")), icon: "fab fa-viber"
             %hr
-            = render "_card_body.html", title: gettext("Describe an offer"), text: gettext("explaining how to describe your offer"), icon: "fa fa-align-left"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Describe an offer")), text: LayoutView.convert_zawgyi(gettext("explaining how to describe your offer")), icon: "fa fa-align-left"
             %hr
-            = render "_card_body.html", title: gettext("Choose the photos"), text: gettext("explaining how to use photographs"), icon: "fa fa-camera"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Choose the photos")), text: LayoutView.convert_zawgyi(gettext("explaining how to use photographs")), icon: "fa fa-camera"
             %hr
-            = render "_card_body.html", title: gettext("Remove an offer"), text: gettext("explaining removing offer"), icon: "fa fa-trash-alt"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Remove an offer")), text: LayoutView.convert_zawgyi(gettext("explaining removing offer")), icon: "fa fa-trash-alt"
 
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#prohibited", aria-expanded: "true", aria-controls: "prohibited"}
           .card-header
             .d-flex.align-items-center
               %i.width-40.fa.fa-ban.mr-3.text-secondary
-              %h6.card-title.mb-0= gettext "Prohibited items"
+              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("Prohibited items"))
         %div.collapse{id: "prohibited", aria-labelledby: "prohibited", data-parent: "#conditions"}
           .card-body
-            = render "_card_body.html", title: gettext("Please note"), text: gettext("introduce prohibition list"), icon: "fa fa-exclamation-triangle"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Please note")), text: LayoutView.convert_zawgyi(gettext("introduce prohibition list")), icon: "fa fa-exclamation-triangle"
             %hr
-            = render "_card_body.html", title: gettext("Private or protected contents"), text: gettext("detail on private"), icon: "fa fa-user-secret"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Private or protected contents")), text: LayoutView.convert_zawgyi(gettext("detail on private")), icon: "fa fa-user-secret"
             %hr
-            = render "_card_body.html", title: gettext("Alcohol, cigarettes and drugs"), text: gettext("detail on drugs"), icon: "fa fa-smoking-ban"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Alcohol, cigarettes and drugs")), text: LayoutView.convert_zawgyi(gettext("detail on drugs")), icon: "fa fa-smoking-ban"
             %hr
-            = render "_card_body.html", title: gettext("Arms and explosives"), text: gettext("detail on arms"), icon: "fa fa-bomb"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Arms and explosives")), text: LayoutView.convert_zawgyi(gettext("detail on arms")), icon: "fa fa-bomb"
             %hr
-            = render "_card_body.html", title: gettext("Humans and animals"), text: gettext("detail on humans"), icon: "fa fa-child"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Humans and animals")), text: LayoutView.convert_zawgyi(gettext("detail on humans")), icon: "fa fa-child"
             %hr
-            = render "_card_body.html", title: gettext("Medicine and chemicals"), text: gettext("detail on medicines"), icon: "fa fa-tablets"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Medicine and chemicals")), text: LayoutView.convert_zawgyi(gettext("detail on medicines")), icon: "fa fa-tablets"
             %hr
-            = render "_card_body.html", title: gettext("Sexual and shocking contents"), text: gettext("detail on shocking"), icon: "fa fa-surprise"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Sexual and shocking contents")), text: LayoutView.convert_zawgyi(gettext("detail on shocking")), icon: "fa fa-surprise"
 
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#terms", aria-expanded: "true", aria-controls: "terms"}
           .card-header
             .d-flex.align-items-center
               %i.width-40.fa.fa-handshake.mr-3.text-secondary
-              %h6.card-title.mb-0= gettext "The contract between us"
+              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("The contract between us"))
         %div.collapse{id: "terms", aria-labelledby: "terms", data-parent: "#conditions"}
           .card-body
-            = render "_card_body.html", title: gettext("PawChaungKaung responsability"), text: gettext("explaining site responsability"), icon: "fa fa-desktop"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("PawChaungKaung responsability")), text: LayoutView.convert_zawgyi(gettext("explaining site responsability")), icon: "fa fa-desktop"
             %hr
-            = render "_card_body.html", title: gettext("Sellers responsibilities"), text: gettext("explaining seller responsibilities"), icon: "fa fa-user-tie"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Sellers responsibilities")), text: LayoutView.convert_zawgyi(gettext("explaining seller responsibilities")), icon: "fa fa-user-tie"
             %hr
-            = render "_card_body.html", title: gettext("Buyers responsibilities"), text: gettext("explaining buyers responsibilities"), icon: "fa fa-users"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Buyers responsibilities")), text: LayoutView.convert_zawgyi(gettext("explaining buyers responsibilities")), icon: "fa fa-users"
             %hr
-            = render "_card_body.html", title: gettext("Buyer's and seller's rights"), text: gettext("explaining buyers rights"), icon: "fa fa-users"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Buyer's and seller's rights")), text: LayoutView.convert_zawgyi(gettext("explaining buyers rights")), icon: "fa fa-users"
 
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#privacy", aria-expanded: "true", aria-controls: "privacy"}
           .card-header
             .d-flex.align-items-center
               %i.width-40.fa.fa-user-secret.mr-3.text-secondary
-              %h6.card-title.mb-0= gettext "Your privacy"
+              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("Your privacy"))
         %div.collapse{id: "privacy", aria-labelledby: "privacy", data-parent: "#conditions"}
           .card-body
-            = render "_card_body.html", title: gettext("Informations that we collect"), text: gettext("explaining informations collected"), icon: "fa fa-database"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Informations that we collect")), text: LayoutView.convert_zawgyi(gettext("explaining informations collected")), icon: "fa fa-database"
             %hr
-            = render "_card_body.html", title: gettext("How we use these datas"), text: gettext("explaining informations using"), icon: "fa fa-user-cog"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("How we use these datas")), text: LayoutView.convert_zawgyi(gettext("explaining informations using")), icon: "fa fa-user-cog"
             %hr
-            = render "_card_body.html", title: gettext("Privacy and datas protection"), text: gettext("explaining privacy protection"), icon: "fa fa-user-shield"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Privacy and datas protection")), text: LayoutView.convert_zawgyi(gettext("explaining privacy protection")), icon: "fa fa-user-shield"
             %hr
-            = render "_card_body.html", title: gettext("Explaining cookies"), text: gettext("explaining cookies"), icon: "fa fa-fingerprint"
+            = render "_card_body.html", title: LayoutView.convert_zawgyi(gettext("Explaining cookies")), text: LayoutView.convert_zawgyi(gettext("explaining cookies")), icon: "fa fa-fingerprint"

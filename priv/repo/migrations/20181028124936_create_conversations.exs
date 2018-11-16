@@ -7,8 +7,8 @@ defmodule Boncoin.Repo.Migrations.CreateConversations do
       add :bot_provider, :string
       add :scope, :string
       add :nickname, :string
+      add :language, :string
       timestamps()
     end
-
   end
 end

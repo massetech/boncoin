@@ -2,8 +2,8 @@
   .col-12
     .card.mb-4.bg-secondary
       .card-body
-        %h5.font-weight-bold.text-white.mb-3= gettext "About PawChaungKaung"
-        %h6.text-white.m-0= gettext "Please let us know if you have any question on our activity."
+        %h5.font-weight-bold.text-white.mb-3= LayoutView.convert_zawgyi(gettext("About PawChaungKaung"))
+        %h6.text-white.m-0= LayoutView.convert_zawgyi(gettext("Please let us know if you have any question on our activity."))
 
 .accordion{id: "about"}
   .row
@@ -14,39 +14,51 @@
           .card-header
             .d-flex.align-items-center
               %i.width-40.fa.fa-desktop.mr-3.text-secondary
-              %h6.card-title.mb-0= gettext "About us"
+              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("About us"))
         %div.collapse{id: "company", aria-labelledby: "compagny", data-parent: "#about"}
           .card-body
-            = render "_card_body.html", title: gettext("Who are we ?"), text: gettext("introduce the compagny"), icon: "fa fa-building"
+            = render "_card_body.html", title: "", text: LayoutView.convert_zawgyi(gettext("introduce the compagny")), icon: "fa fa-building"
 
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#work_with_us", aria-expanded: "true", aria-controls: "work_with_us"}
           .card-header
             .d-flex.align-items-center
               %i.width-40.fa.fa-handshake.mr-3.text-secondary
-              %h6.card-title.mb-0= gettext "Become a partner"
+              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("Become a partner"))
         %div.collapse{id: "work_with_us", aria-labelledby: "work_with_us", data-parent: "#about"}
           .card-body
-            = render "_card_body.html", title: gettext("What can we offer ?"), text: gettext("introduce the work with us"), icon: "fa fa-audio-description"
+            = render "_card_body.html", title: "", text: LayoutView.convert_zawgyi(gettext("introduce the work with us")), icon: "fa fa-audio-description"
 
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#join_us", aria-expanded: "true", aria-controls: "join_us"}
           .card-header
             .d-flex.align-items-center
               %i.width-40.fa.fa-user-tie.mr-3.text-secondary
-              %h6.card-title.mb-0= gettext "Join us"
+              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("Join us"))
         %div.collapse{id: "join_us", aria-labelledby: "join_us", data-parent: "#about"}
           .card-body
-            = render "_card_body.html", title: gettext("You want to join us ?"), text: gettext("introduce the join us"), icon: "fa fa-envelope"
+            = render "_card_body.html", title: "", text: LayoutView.convert_zawgyi(gettext("introduce the join us")), icon: "fa fa-envelope"
 
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#contact_us", aria-expanded: "true", aria-controls: "contact_us"}
           .card-header
             .d-flex.align-items-center
               %i.width-40.fa.fa-comments.mr-3.text-secondary
-              %h6.card-title.mb-0= gettext "Contact us"
+              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("Contact us"))
         %div.collapse{id: "contact_us", aria-labelledby: "contact_us", data-parent: "#about"}
           .card-body
-            = render "_card_body.html", title: gettext("How to contact us"), text: gettext("introduce the contact us"), icon: "fa fa-envelope"
+            = render "_card_body.html", title: "", text: LayoutView.convert_zawgyi(gettext("introduce the contact us")), icon: "fa fa-envelope"
             %hr
-            = render "_card_body.html", title: gettext("Please note"), text: gettext("we wont answer to offers messages"), icon: "fa fa-exclamation-circle"
+            .d-sm-none
+              .flex-column
+                .d-flex.align-items-center
+                  %i.fa.fa-exclamation-circle.width-30.mr-3.text-secondary
+                %p.my-3= LayoutView.convert_zawgyi(gettext("we wont answer to offers messages"))
+            .d-none.d-sm-block
+              .d-flex.align-items-center
+                %i.fa.fa-exclamation-circle.width-30.mr-3.text-secondary
+                %p.m-0
+                  = LayoutView.convert_zawgyi(gettext("we wont answer to offers messages"))
+                  - link to: main_path(@conn, :conditions) do
+                    %span.text-secondary.font-weight-bold= gettext "terms and conditions"
+                  = LayoutView.convert_zawgyi(gettext("we wont answer to offers messages (burmese end)"))

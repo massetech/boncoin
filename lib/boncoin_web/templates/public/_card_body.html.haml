@@ -2,11 +2,11 @@
   .flex-column
     .d-flex.align-items-center
       %i.width-30.mr-3.text-secondary{class: "#{@icon}"}
-      %h6.title.m-0= @title
+      %h6.title.m-0.font-weight-bold.text-secondary= @title
     %p.my-3= @text
 .d-none.d-sm-block
   .d-flex.align-items-center
     %i.width-30.mr-3.text-secondary{class: "#{@icon}"}
     .flex-column
-      %h6.title= @title
+      %h6.title.font-weight-bold.text-secondary= @title
       %p.m-0= @text

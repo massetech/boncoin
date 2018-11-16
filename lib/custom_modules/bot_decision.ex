@@ -2,183 +2,200 @@ defmodule Boncoin.CustomModules.BotDecisions do
   alias Boncoin.{Members, Contents}
   alias Boncoin.Members.User
   alias BoncoinWeb.LayoutView
-  @website_url if Mix.env == :dev, do: "http://localhost:4000", else: "https://www.pawchaungkaung.com"
+  @website_url if Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment] == :dev, do: "http://localhost:4000", else: "https://www.pawchaungkaung.com"
 
   # -------------------- DECISION  -------------------------------
 
-  def call_bot_algorythm(%{scope: scope, user: user, announce: announce, bot: %{bot_provider: bot_provider, bot_id: bot_id, bot_user_name: bot_user_name, user_msg: bot_user_msg}}) do
+  def call_bot_algorythm(%{user: user, conversation: conversation, announce: announce, user_msg: user_msg} = bot_params) do
     # IO.puts("--- bot params---")
-    # IO.inspect(params)
+    # IO.inspect(bot_params)
 
     cond do
 
-      # We are welcoming the user
-      scope == "welcome" ->
+      # We are welcoming the user (no conversation yet)
+      conversation.scope == nil ->
         case user do
-          nil -> %{scope: "language", messages: [welcome_msg()]}
-          user -> %{scope: "no_scope", messages: [welcome_back_msg(user)]}
+          nil -> %{scope: "language", language: nil, messages: [welcome_msg()]}
+          user -> %{scope: "no_scope", language: user.language, messages: [welcome_back_msg(user)]}
         end
 
       # We are waiting for a LANGUAGE
-      scope == "language" ->
-        language = String.slice(bot_user_msg,0,1) |> convert_language()
+      conversation.scope == "language" ->
+        language = String.slice(user_msg,0,1) |> convert_language()
         case user do
           nil -> # User unknown : we were waiting the user language input
             case language do
-              nil -> %{scope: "language", messages: [welcome_msg()]} # User didn't give his language, ask again
-              _ -> %{scope: "link_phone_#{language}", messages: [ask_phone_msg(language)]}
+              nil -> %{scope: "language", language: nil, messages: [welcome_msg()]} # User didn't give his language, ask again
+              language -> %{scope: "link_phone_1", language: language, messages: [ask_phone_msg(language)]}
             end
           _ -> # User known : if different language then update
             if user.language != language && language != nil do
-              case Members.update_user(user, %{language: language}) do
-                {:error, _user} -> %{scope: "no_scope", messages: [nothing_to_say_msg(user)]}
-                {:ok, _new_user} -> %{scope: "no_scope", messages: [nothing_to_say_msg(user)]}
+              case Members.udpate_and_track_user(user, %{language: language}) do
+                {:ok, new_user} -> %{scope: "no_scope", language: language, messages: [nothing_to_say_msg(new_user)]}
+                {:error, _} -> %{scope: "no_scope", language: user.language, messages: [nothing_to_say_msg(user)]}
               end
             else
-              %{scope: "no_scope", messages: [nothing_to_say_msg(user)]}
+              %{scope: "no_scope", language: user.language, messages: [nothing_to_say_msg(user)]}
             end
         end
 
       # We are waiting for a PHONE NUMBER for first or second time
-      # (scope == "link_phone_mr" || scope == "link_phone_my" || scope == "link_phone_en" || scope == "2nd_link_phone_mr" || scope == "2nd_link_phone_my" || scope == "2nd_link_phone_en")
-      user == nil && String.contains?(scope, "link_phone") ->
-        len = String.length(scope)
-        language = String.slice(scope, len-2..len)
-        user_params = %{active: true, phone_number: bot_user_msg, bot_active: true, bot_provider: bot_provider, bot_id: bot_id, nickname: bot_user_name, language: language}
-        case User.check_myanmar_phone_number(bot_user_msg) do
+      user == nil && String.contains?(conversation.scope, "link_phone") ->
+        language = conversation.language
+        phone_number = user_msg
+        # len = String.length(conversation.scope)
+        case User.check_myanmar_phone_number(phone_number) do
           false ->
-            case String.contains?(scope, "2nd_link_phone") do
+            case String.contains?(conversation.scope, "link_phone_2") do
               false -> # There is no phone number in the message : ask again for it
-                %{scope: "2nd_link_phone_#{language}", messages: [ask_again_phone_msg(language)]}
+                %{scope: "link_phone_2", language: language, messages: [ask_again_phone_msg(language)]}
               true -> # There is no phone number in the message for the 2nd time : return to language asking
-                %{scope: "language", messages: [welcome_msg()]}
+                %{scope: "language", language: nil, messages: [welcome_msg()]}
             end
           true -> # There is a phone number in the message
-            other_user = Members.get_active_user_by_phone_number(user_params.phone_number)
+            other_user = Members.get_active_user_by_phone_number(phone_number)
             case other_user do
               nil -> # The phone number is not used yet : create the user with this phone number
-                case Members.create_user(user_params) do
-                  {:ok, new_user} -> %{scope: "no_scope", messages: [confirm_user_created(new_user)]}
-                  {:error, _changeset} -> %{scope: "no_scope", messages: [announce_technical_error(language)]}
+                user_params = %{active: true, phone_number: phone_number, bot_active: true, bot_provider: conversation.bot_provider, bot_id: conversation.psid, nickname: conversation.nickname, language: language}
+                case Members.create_and_track_user(user_params) do
+                  {:ok, new_user} -> %{scope: "no_scope", language: language, messages: [confirm_user_created(new_user)]}
+                  {:error, changeset} -> IO.inspect(changeset)
+                    %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
                 end
               other_user -> # The phone number is already used
-                case user_params.bot_id == other_user.bot_id do
+                case conversation.psid == other_user.bot_id && conversation.bot_provider == other_user.bot_provider do
                   true -> # other_user is the same user comming back with the same bot
-                    case Members.update_user(other_user, user_params) do
-                      {:ok, user} -> %{scope: "no_scope", messages: [confirm_old_phone_number_retrieved(user)]}
-                      _ -> %{scope: "no_scope", messages: [announce_technical_error(user_params.language)]}
+                    case Members.udpate_and_track_user(other_user, %{bot_active: true}) do
+                      {:ok, user} -> %{scope: "no_scope", language: user.language, messages: [confirm_old_phone_number_retrieved(user)]}
+                      _ -> %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
                     end
                   false -> # There is a conflict on the phone number
-                    manage_phone_conflict(nil, user_params, other_user)
+                    case manage_phone_conflict(user, other_user) do
+                      false -> # User creation refused for this phone number
+                        %{scope: "link_phone_1", language: language, messages: [announce_bot_conflict(conversation.language, conversation.nickname)]}
+                      true -> # User creation accepted for this phone number
+                        user_params = %{active: true, phone_number: phone_number, bot_active: true, bot_provider: conversation.bot_provider, bot_id: conversation.psid, nickname: conversation.nickname, language: language}
+                        case Members.create_and_track_user(user_params) do
+                          {:ok, new_user} -> %{scope: "no_scope", language: language, messages: [confirm_user_created(new_user)]}
+                          {:error, _changeset} -> %{scope: "no_scope", language: language, messages: [announce_technical_error(user_params.language)]}
+                        end
+                    end
                 end
             end
         end
 
       # We send a NOTIFICATION to user after treating the offer
-      scope == "offer_treated" ->
+      user != nil && conversation.scope == "offer_treated" ->
+        language = user.language
         case announce.status do
-          "ONLINE" -> %{scope: "no_scope", messages: [tell_offer_accepted(user, announce)]}
-          "REFUSED" -> %{scope: "no_scope", messages: [tell_offer_refused(user, announce, bot_user_msg)]}
+          "ONLINE" -> %{scope: "offer_msg", language: language, messages: [tell_offer_accepted(user, announce)]}
+          "REFUSED" -> %{scope: "offer_msg", language: language, messages: [tell_offer_refused(user, announce, user_msg)]}
         end
 
       # We send a NOTIFICATION to user after removing his offer
-      scope == "offer_closed" -> %{scope: "no_scope", messages: [tell_offer_closed(user, announce, bot_user_msg)]}
+      user != nil && conversation.scope == "offer_closed" ->
+        language = user.language
+        %{scope: "offer_msg", language: language, messages: [tell_offer_closed(user, announce, user_msg)]}
 
       # User wants to CHANGE LANGUAGE
-      user != nil && user.bot_active == true && bot_user_msg == "*123#" -> %{scope: "language", messages: [change_language_msg(user)]}
+      user != nil && user.bot_active == true && user_msg == "*123#" ->
+        language = user.language
+        %{scope: "language", language: language, messages: [change_language_msg(user)]}
 
       # User wants to see his OFFERS LIST
-      user != nil && user.bot_active == true && bot_user_msg == "*111#" ->
+      user != nil && user.bot_active == true && user_msg == "*111#" ->
+        language = user.language
         offers = Contents.get_user_online_offers(user)
         case Kernel.length(offers) do
-          0 -> %{scope: "no_scope", messages: [tell_no_active_offer(user)]}
+          0 -> %{scope: "no_scope", language: language, messages: [tell_no_active_offer(user)]}
           nb_offers ->
             msg = Enum.map(offers, fn offer -> detail_active_offers(user, offer) end)
-            %{scope: "no_scope", messages: [tell_nb_active_offers(user, nb_offers) | msg]}
-
+            %{scope: "no_scope", language: language, messages: [tell_nb_active_offers(user, nb_offers) | msg]}
         end
 
       # User wants to UPDATE PHONE NUMBER
-      user != nil && user.bot_active == true && bot_user_msg == "*888#" -> %{scope: "update_phone", messages: [alert_before_phone_update(user)]}
+      user != nil && user.bot_active == true && user_msg == "*888#" ->
+        language = user.language
+        %{scope: "update_phone", language: language, messages: [alert_before_phone_update(user)]}
 
       # User confirms to UPDATE PHONE NUMBER
-      user != nil && user.bot_active == true && scope == "update_phone" ->
-        user_params = %{active: true, phone_number: bot_user_msg, bot_active: true, bot_provider: bot_provider, bot_id: bot_id, nickname: bot_user_name, language: user.language}
-        case User.check_myanmar_phone_number(bot_user_msg) do
-          false -> %{scope: "no_scope", messages: [inform_wrong_phone_number(user)]} # There is no phone number in the message : cancel the update
+      user != nil && user.bot_active == true && conversation.scope == "update_phone" ->
+        language = user.language
+        phone_number = user_msg
+        case User.check_myanmar_phone_number(phone_number) do
+          false -> %{scope: "no_scope", language: language, messages: [inform_wrong_phone_number(user)]} # There is no phone number in the message : cancel the update
           true -> # There is a phone number in the message
-            phone_number = bot_user_msg
             other_user = Members.get_active_user_by_phone_number(phone_number)
             cond do
               other_user == nil ->  # The phone number is not used yet
-                case Members.update_user(user, %{phone_number: phone_number}) do
-                  {:ok, user} -> %{scope: "no_scope", messages: [confirm_new_phone_number_updated(user)]}
-                  _ -> %{scope: "no_scope", messages: [announce_technical_error(user.language)]}
+                case Members.udpate_and_track_user(user, %{phone_number: phone_number}) do
+                  {:ok, user} -> %{scope: "no_scope", language: language, messages: [confirm_new_phone_number_updated(user)]}
+                  _ -> %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
                 end
-              user.phone_number == bot_user_msg -> # Same phone number then user old one
-                %{scope: "no_scope", messages: [tell_same_phone_number(user)]}
-              true -> # The phone number is already used : announce conflict
-                case user_params.bot_id == other_user.bot_id do
+              user.phone_number == user_msg -> # Same phone number then user old one
+                %{scope: "no_scope", language: language, messages: [tell_same_phone_number(user)]}
+              true -> # The phone number is already used : conflict
+                case user.bot_id == other_user.bot_id && user.bot_provider == other_user.bot_provider do
                   true -> # other_user is the same user comming back with the same bot
-                    case Members.update_user(other_user, user_params) do
-                      {:ok, user} -> %{scope: "no_scope", messages: [confirm_old_phone_number_retrieved(user)]}
-                      _ -> %{scope: "no_scope", messages: [announce_technical_error(user_params.language)]}
+                    case Members.udpate_and_track_user(other_user, %{phone_number: phone_number, bot_active: true}) do
+                      {:ok, user} -> %{scope: "no_scope", language: language, messages: [confirm_old_phone_number_retrieved(user)]}
+                      _ -> %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
                     end
                   false -> # There is a conflict on the phone number
-                    manage_phone_conflict(user, user_params, other_user)
+                    case manage_phone_conflict(user, other_user) do
+                      false -> # User change phone number refused
+                        %{scope: "no_scope", language: language, messages: [announce_bot_conflict(language, user.nickname)]}
+                      true -> # User change phone number accepted
+                        case Members.udpate_and_track_user(user, %{phone_number: phone_number}) do
+                          {:ok, new_user} -> %{scope: "no_scope", language: language, messages: [confirm_new_phone_number_updated(new_user)]}
+                          {:error, _changeset} -> %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
+                        end
+                    end
                 end
             end
         end
 
       # User wants to QUIT BOT
-      user != nil && user.bot_active == true && bot_user_msg == "*999#" ->
+      user != nil && user.bot_active == true && user_msg == "*999#" ->
+        language = user.language
         answer = Members.permission_to_quit_bot(user)
         case answer do
-          {:ok, _msg} -> %{scope: "quit_bot", messages: [alert_before_quit_bot(user)]}
-          {:not_allowed, nb_offers} -> %{scope: "no_scope", messages: [tell_not_allowed_to_quit_bot(user, nb_offers)]}
+          {:ok, _msg} -> %{scope: "quit_bot", language: language, messages: [alert_before_quit_bot(user)]}
+          {:not_allowed, nb_offers} -> %{scope: "no_scope", language: language, messages: [tell_not_allowed_to_quit_bot(user, nb_offers)]}
         end
 
       # User confirms to QUIT BOT
-      user != nil && user.bot_active == true && scope == "quit_bot" && bot_user_msg == "1" ->
+      user != nil && user.bot_active == true && conversation.scope == "quit_bot" && user_msg == "1" ->
+        language = user.language
         answer = Members.remove_bot(user)
         case answer do
-          {:ok, _user} -> %{scope: "no_scope", messages: [tell_bot_quitted(user)]}
-          {:not_allowed, nb_offers} -> %{scope: "no_scope", messages: [tell_not_allowed_to_quit_bot(user, nb_offers)]}
-          {:error, _msg} -> %{scope: "no_scope", messages: [tell_bot_cannot_quit(user)]}
+          {:ok, _user} -> %{scope: "closed", language: language, messages: [tell_bot_quitted(user)]}
+          {:not_allowed, nb_offers} -> %{scope: "no_scope", language: language, messages: [tell_not_allowed_to_quit_bot(user, nb_offers)]}
+          {:error, _msg} -> %{scope: "no_scope", language: language, messages: [tell_bot_cannot_quit(user)]}
         end
 
       # User asked for help
-      user != nil && user.bot_active == true && user.bot_active == true && bot_user_msg == "0" ->
-        %{scope: "help", messages: [inform_help(user)]}
+      user != nil && user.bot_active == true && user.bot_active == true && user_msg == "0" ->
+        language = user.language
+        %{scope: "no_scope", language: language, messages: [inform_help(user)]}
 
       # Nothing to say (fallbacks)
-      user != nil && user.bot_active -> %{scope: "no_scope", messages: [nothing_to_say_msg(user)]}
-      true -> %{scope: "language", messages: [welcome_msg()]}
+      user != nil && user.bot_active ->
+        language = user.language
+        %{scope: "no_scope", language: language, messages: [nothing_to_say_msg(user)]}
+      true ->
+        %{scope: "language", language: nil, messages: [welcome_msg()]}
 
     end
   end
 
-  defp manage_phone_conflict(user, user_params, other_user) do
-    case other_user.bot_active do
-      true -> %{scope: "no_scope", messages: [announce_bot_conflict(user_params)]}
-      false ->
-        case Contents.get_user_active_offers(other_user) do
-          [] ->
-            Members.update_user(other_user, %{active: false}) # We cancel other user forever (history)
-            case user do
-              nil -> # It is a new user bot inscription
-                case Members.create_user(user_params) do
-                  {:ok, new_user} -> %{scope: "no_scope", messages: [confirm_user_created(new_user)]}
-                  {:error, _changeset} -> %{scope: "no_scope", messages: [announce_technical_error(user_params.language)]}
-                end
-              user -> # It is an existing user changing his bot phone
-                case Members.update_user(user, user_params) do
-                  {:ok, new_user} -> %{scope: "no_scope", messages: [confirm_new_phone_number_updated(new_user)]}
-                  {:error, _changeset} -> %{scope: "no_scope", messages: [announce_technical_error(user_params.language)]}
-                end
-            end
-          _ -> %{scope: "no_scope", messages: [announce_bot_conflict(user)]}
-        end
+  defp manage_phone_conflict(user, other_user) do
+    cond do
+      other_user.bot_active == true -> false # Other user bot active = forbidden
+      Contents.get_user_active_offers(other_user) != [] -> false # Other user has active offers = forbidden
+      true ->
+        Members.udpate_and_track_user(other_user, %{active: false}) # We cancel other user forever (history)
+        true # We accept the usage of this phone number
     end
   end
 
@@ -189,7 +206,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
 
   defp convert_language(language_key) do
     case language_key do
-      "1" -> "mr"
+      "1" -> "dz"
       "2" -> "my"
       "3" -> "en"
       _ -> nil
@@ -210,65 +227,36 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   # -------------------- MESSAGES   -------------------------------
-  #
-  # # User is not known
-  # def treat_msg("welcome") do %{scope: "language", msg: welcome_msg()} end
-  # def treat_msg("ask_phone", language) do %{scope: "link_phone_#{language}", msg: ask_phone_msg(language)} end
-  # def treat_msg("repeat_phone", language) do %{scope: "2nd_link_phone_#{language}", msg: ask_again_phone_msg(language)} end
-  # def treat_msg("technical problem", language) do %{scope: "link_phone_#{language}", msg: announce_technical_error(language)} end
-  # def treat_msg("bot_conflict_contact_us", language, user_name) do %{scope: "no_scope", msg: announce_bot_conflict(language, user_name)} end
-  #
-  # # User is  known
-  # def treat_msg("new_user_created", user) do %{scope: "no_scope", msg: confirm_user_created(user.language, user.nickname, user.phone_number, user.bot_provider)} end
-  # def treat_msg("welcome_back", user) do %{scope: "no_scope", msg: welcome_back_msg(user.language, user.nickname)} end
-  # def treat_msg("nothing_to_say", user) do %{scope: "no_scope", msg: nothing_to_say_msg(user.language, user.nickname)} end
-  # def treat_msg("announce_accepted", user, announce, link) do %{scope: "no_scope", msg: tell_offer_accepted(user.language, user.nickname, announce.title, LayoutView.format_date(announce.validity_date), link)} end
-  # def treat_msg("announce_refused", user, announce, reason) do %{scope: "no_scope", msg: tell_offer_refused(user.language, user.nickname, user.phone_number, announce.title, reason)} end
-  # def treat_msg("announce_closed", user, announce, reason) do %{scope: "no_scope", msg: tell_offer_closed(user.language, user.nickname, user.phone_number, announce.title, reason)} end
-  # def treat_msg("propose_help", user) do %{scope: "help", msg: inform_help(user.language, user.nickname, user.bot_provider)} end
-  # def treat_msg("change_language", user) do %{scope: "language", msg: change_language_msg(user.language, user.nickname)} end
-  # def treat_msg("change_phone", user) do %{scope: "update_phone", msg: alert_before_phone_update(user.language, user.nickname)} end
-  # def treat_msg("wrong_phone_number", user) do %{scope: "no_scope", msg: inform_wrong_phone_number(user.language, user.nickname)} end
-  # def treat_msg("same_phone_number", user) do %{scope: "no_scope", msg: tell_same_phone_number(user.language, user.nickname, user.bot_provider)} end
-  # def treat_msg("new_phone_updated", user) do %{scope: "no_scope", msg: confirm_new_phone_number_updated(user.language, user.nickname)} end
-  #
-  # def treat_msg("not_allowed_to_quit_bot", user, nb_offers) do %{scope: "no_scope", msg: tell_not_allowed_to_quit_bot(user.language, user.nickname, user.bot_provider, nb_offers)} end
-  # def treat_msg("quit_bot", user) do %{scope: "quit_bot", msg: alert_before_quit_bot(user.language, user.nickname, user.bot_provider)} end
-  # def treat_msg("bot_quitted", user) do %{scope: "no_scope", msg: tell_bot_quitted(user.language, user.nickname, user.bot_provider)} end
-  # def treat_msg("cannot_quit_bot", user) do %{scope: "no_scope", msg: tell_bot_cannot_quit(user.language, user.nickname, user.bot_provider)} end
-  # def treat_msg("0_active_offer", user) do %{scope: "no_scope", msg: tell_no_active_offer(user.language, user.nickname, user.phone_number)} end
-  # def treat_msg("nb_active_offers", user, nb_offers) do %{scope: "no_scope", msg: tell_nb_active_offers(user.language, user.nickname, nb_offers)} end
-  # def treat_msg("detail_active_offer", user, offer, link) do %{scope: "no_scope", msg: detail_active_offers(user.language, offer.title, LayoutView.format_date(LayoutView.format_date(offer.validity_date)), link)} end
 
   defp welcome_msg() do
     uni = "ပေါချောင်ကောင်းမှကြိုဆိုပါတယ်။ ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပါ"
-    "#{Rabbit.uni2zg(uni)}\n\nWelcome to Pawchaungkaung, please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [1]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [2]\n  -> For English send [3]"
+    "#{Rabbit.uni2zg(uni)}\n\nWelcome to Pawchaungkaung, please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ 1\n  -> မြန်မာ(ယူနီကုတ်)အတွက် 2\n  -> For English send 3"
   end
 
   defp change_language_msg(user) do
     uni = "ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပ"
     case user.language do
-      "en" -> "Please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [1]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [2]\n  -> For English send [3]"
-      "my" -> "#{uni}\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [1]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [2]\n  -> For English send [3]"
-      "mr" -> "#{Rabbit.uni2zg(uni)}\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ [1]\n  -> မြန်မာ(ယူနီကုတ်)အတွက် [2]\n  -> For English send [3]"
+      "en" -> "Please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ 1\n  -> မြန်မာ(ယူနီကုတ်)အတွက် 2\n  -> For English send 3"
+      "my" -> "#{uni}\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ 1\n  -> မြန်မာ(ယူနီကုတ်)အတွက် 2\n  -> For English send 3"
+      "dz" -> "#{Rabbit.uni2zg(uni)}\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ 1\n  -> မြန်မာ(ယူနီကုတ်)အတွက် 2\n  -> For English send 3"
     end
   end
 
   defp welcome_back_msg(user) do
-    uni = "ပေါချောင်ကေင်းမှတစ်ဖန်ကြိုဆိုပါတယ် #{user.nickname}။\n\nကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။\n\nအကူအညီရယူရန် [0] ဟုရိုက်ထည့်ပါ။"
+    uni = "ပေါချောင်ကေင်းမှတစ်ဖန်ကြိုဆိုပါတယ် #{user.nickname}။\n\nကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။\n\nအကူအညီရယူရန် 0 ဟုရိုက်ထည့်ပါ။"
     case user.language do
-      "en" -> "Welcome back to Pawchaungkaung #{user.nickname} !\n\nPlease visit us on #{@website_url}\n\nFor help please send [0]"
+      "en" -> "Welcome back to Pawchaungkaung #{user.nickname} !\n\nPlease visit us on #{@website_url}\n\nFor help please send 0"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp nothing_to_say_msg(user) do
-    uni = "မင်္ဂလာပါ #{user.nickname}။\n\nကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။\n\nအကူအညီရယူရန် [0] ဟုရိုက်ထည့်ပါ။"
+    uni = "မင်္ဂလာပါ #{user.nickname}။\n\nကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။\n\nအကူအညီရယူရန် 0 ဟုရိုက်ထည့်ပါ။"
     case user.language do
-      "en" -> "Hi #{user.nickname} ! #{say_something_neutral(user.language)}\n\nPlease visit us on #{@website_url}\n\nFor help please send [0]"
+      "en" -> "Hi #{user.nickname} ! #{say_something_neutral(user.language)}\n\nPlease visit us on #{@website_url}\n\nFor help please send 0"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -277,7 +265,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     case language do
       "en" -> "Now we can speak! Please also type your mobile phone number."
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -286,25 +274,25 @@ defmodule Boncoin.CustomModules.BotDecisions do
     case language do
       "en" -> "Sorry but we need to identify you. Please type your mobile phone number."
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp inform_wrong_phone_number(user) do
-    uni = "စိတ်မကောင်းပါဘူး#{user.nickname}။ ဒီနံပါတ်မှားနေပါတယ်။ တဖန်ထပ်ကြိုးစားကြည့်ရန် [*888#] ဟုရိုက်ထည့်ပါ။"
+    uni = "စိတ်မကောင်းပါဘူး#{user.nickname}။ ဒီနံပါတ်မှားနေပါတယ်။ တဖန်ထပ်ကြိုးစားကြည့်ရန် *888# ဟုရိုက်ထည့်ပါ။"
     case user.language do
-      "en" -> "Sorry #{user.nickname}, this is not a good phone number. To try again please type [*888#]."
+      "en" -> "Sorry #{user.nickname}, this is not a good phone number. To try again please type *888#"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp alert_before_phone_update(user) do
     uni = "သင့်ကြော်ငြာအားလုံးကိုဖုန်းနံပါတ်အသစ်သို့ရွှေပြောင်းပေးမည်ဖြစ်ပါသည်။ သေကြာမှုရှိပြိဆိုလျင်သင့်ဖုန်းနံပါတ်ကသစ်ကိုရိုက်ထည့်ပါ။"
     case user.language do
-      "en" -> "All your offers will be moved to this new phone number. If you are sure please type your new phone number now.\n"
+      "en" -> "All your offers will be moved to this new phone number. If you are sure please type your new phone number now."
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -313,7 +301,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     case user.language do
       "en" -> "Your phone number and #{String.capitalize(user.bot_provider)} account are now linked.\nPlease visit us on #{offer_form_link(user.phone_number)}"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -322,7 +310,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     case user.language do
       "en" -> "You know what #{user.nickname}, your phone number was already linked to this #{String.capitalize(user.bot_provider)} account :)"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -331,7 +319,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     case user.language do
       "en" -> "Perfect #{user.nickname}, your phone number was updated.\n Please visit us on #{@website_url}"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -340,7 +328,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     case user.language do
       "en" -> "Perfect #{user.nickname}, you get back your phone number.\n Please visit us on #{@website_url}"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -349,7 +337,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   #   case language do
   #     "en" -> "Sorry but this phone number is used by another user. Please unlink it first or contact us."
   #     "my" -> uni
-  #     "mr" -> Rabbit.uni2zg(uni)
+  #     "dz" -> Rabbit.uni2zg(uni)
   #   end
   # end
 
@@ -358,25 +346,25 @@ defmodule Boncoin.CustomModules.BotDecisions do
     case language do
       "en" -> "Sorry we have a technical problem."
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
-  defp announce_bot_conflict(user) do
-    uni = "စိတ်မကောင်းပါဘူး #{user.nickname} ဒီဖုန်းနံပါတ်ကိုအခြာအသုံးပြုပြီးဖြစ်ပါတယ်။ ကျေးဇူးပြု၍ နောက်ထပ်တစ်ကြိမ်ပြန် ကြိုးစားကြည့်ပါ။ (သို့) ပေါချောင်ကောင်းသို့ဆက်သွယ်ပါ။"
-    case user.language do
-      "en" -> "Sorry #{user.nickname}, this phone number is used by another user. Please unlink it first or contact us."
+  defp announce_bot_conflict(language, nickname) do
+    uni = "စိတ်မကောင်းပါဘူး #{nickname} ဒီဖုန်းနံပါတ်ကိုအခြာအသုံးပြုပြီးဖြစ်ပါတယ်။ ကျေးဇူးပြု၍ နောက်ထပ်တစ်ကြိမ်ပြန် ကြိုးစားကြည့်ပါ။ (သို့) ပေါချောင်ကောင်းသို့ဆက်သွယ်ပါ။"
+    case language do
+      "en" -> "Sorry #{nickname}, this phone number is used by another user. Please unlink it first or contact us."
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp inform_help(user) do
-      uni = "ကျွန်တော်/မ တို့သည် #{user.nickname} ကိုကူညီရန်အသင့်ပါ၊ \n\nဘာသာစကားပြောင်းရန် [*123#]\nသင့်ကြော်ငြာကိုကြည့်ရန် [*111#]\nဖုန်းနံပါတ်ပြောင်းရန် [*888#]\n#{String.capitalize(user.bot_provider)} မှထွက်ရန် [*999#]"
+      uni = "ကျွန်တော်/မ တို့သည် #{user.nickname} ကိုကူညီရန်အသင့်ပါ၊ \n\nဘာသာစကားပြောင်းရန် *123#\nသင့်ကြော်ငြာကိုကြည့်ရန် *111#\nဖုန်းနံပါတ်ပြောင်းရန် *888#\n#{String.capitalize(user.bot_provider)} မှထွက်ရန် *999#"
     case user.language do
-      "en" -> "We are happy to help #{user.nickname},\n\nchange language [*123#]\nsee your offers [*111#]\nchange phone number [*888#]\nquit #{String.capitalize(user.bot_provider)} [*999#]"
+      "en" -> "We are happy to help #{user.nickname},\n\nchange language *123#\nsee your offers *111#\nchange phone number *888#\nquit #{String.capitalize(user.bot_provider)} *999#"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -385,7 +373,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     case user.language do
       "en" -> "Hi #{user.nickname}, your offer #{offer.title} is now published !\nIt will be online for 1 month until #{LayoutView.format_date(offer.validity_date)}.\nYou can manage your offer on #{offer_view_link(offer.id)}"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -394,7 +382,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     case user.language do
       "en" -> "Hi #{user.nickname}, we are sorry but your offer #{offer.title} was refused because #{cause}. \nPlease create a new one on #{offer_form_link(user.phone_number)}"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -403,16 +391,16 @@ defmodule Boncoin.CustomModules.BotDecisions do
     case user.language do
       "en" -> "Hi #{user.nickname}, your offer #{offer.title} has been closed #{cause}. \nPlease come back to #{offer_form_link(user.phone_number)}"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp alert_before_quit_bot(user) do
     uni = ""
     case user.language do
-      "en" -> "Are you sure you want to remove #{String.capitalize(user.bot_provider)} link ?. If you are sure please type [1]\n"
+      "en" -> "Are you sure you want to remove #{String.capitalize(user.bot_provider)} link ?. If you are sure please type 1"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -421,16 +409,16 @@ defmodule Boncoin.CustomModules.BotDecisions do
     case user.language do
       "en" -> "Your #{String.capitalize(user.bot_provider)} account has been unlinked.\nHope to see you soon on #{@website_url}"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp tell_not_allowed_to_quit_bot(user, nb_offers) do
     uni = ""
     case user.language do
-      "en" -> "Sorry #{user.nickname}, we cannot unlink your #{String.capitalize(user.bot_provider)} account because you still have #{nb_offers} active offers. \n\nFor help please send [0]"
+      "en" -> "Sorry #{user.nickname}, we cannot unlink your #{String.capitalize(user.bot_provider)} account because you still have #{nb_offers} offers. \n\nFor help please send 0"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -439,16 +427,16 @@ defmodule Boncoin.CustomModules.BotDecisions do
     case user.language do
       "en" -> "Sorry #{user.nickname} but we cannot unlink your #{String.capitalize(user.bot_provider)} account. Please contact us."
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp tell_no_active_offer(user) do
-    uni = "သင့်တွင်ကြော်ငြာမရှိသေးပါ။ ကျေးဇူးပြု၍သင်၏ပထမကြော်ငြာကိုတင်လိုက်ပါ။"
+    uni = "သင့်တွင်ကြော်ငြာမရှိသေးပါ။ ကျေးဇူးပြု၍သင်၏ပထမကြော်ငြာကိုတင်လိုက်ပါ။ #{offer_form_link(user.phone_number)}"
     case user.language do
-      "en" -> "You don't have any offer yet #{user.nickname}. Please create your first offer on #{offer_form_link(user.phone_number)}"
+      "en" -> "You don't have any offer yet. Please create your first offer on #{offer_form_link(user.phone_number)}"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -457,7 +445,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     case user.language do
       "en" -> "Ok #{user.nickname}, you have #{nb_offers} active offers :"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -466,7 +454,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     case user.language do
       "en" -> "#{offer.title}\nActive until #{LayoutView.format_date(offer.validity_date)}.\nManage it on #{offer_view_link(offer.id)}"
       "my" -> uni
-      "mr" -> Rabbit.uni2zg(uni)
+      "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
@@ -482,28 +470,28 @@ defmodule Boncoin.CustomModules.BotDecisions do
         case language do
           "en" -> "Hope you are fine !"
           "my" -> uni
-          "mr" -> Rabbit.uni2zg(uni)
+          "dz" -> Rabbit.uni2zg(uni)
         end
       3 ->
         uni = "ဘာတွေထူးလဲ။"
         case language do
           "en" -> "What's up ?"
           "my" -> uni
-          "mr" -> Rabbit.uni2zg(uni)
+          "dz" -> Rabbit.uni2zg(uni)
         end
       4 ->
         uni = "ဘာအလိုရှိပါသလဲ။"
         case language do
           "en" -> "Searching something ?"
           "my" -> uni
-          "mr" -> Rabbit.uni2zg(uni)
+          "dz" -> Rabbit.uni2zg(uni)
         end
       5 ->
         uni = "တစ်ခုခုရောင်းချင်ပါသလား။"
         case language do
           "en" -> "Selling something ?"
           "my" -> uni
-          "mr" -> Rabbit.uni2zg(uni)
+          "dz" -> Rabbit.uni2zg(uni)
         end
     end
   end

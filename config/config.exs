@@ -4,8 +4,8 @@ config :boncoin,
   ecto_repos: [Boncoin.Repo]
 
 config :boncoin, Boncoin.Gettext,
-  default_locale: "mr",
-  locales: ~w(mr my en)
+  # default_locale: "dz", # Not working correctly, see locale plug
+  locales: ~w(en my dz) # To get same pluralization than MY, https://localization-guide.readthedocs.io/en/latest/l10n/pluralforms.html#f2
 
 config :boncoin, Boncoin.Auth.Guardian,
   issuer: "Boncoin.#{Mix.env}",

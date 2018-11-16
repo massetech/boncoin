@@ -13,7 +13,7 @@
       .modal-footer{id: "footer_btn_#{@announce.id}"}
         %button.btn.btn-block.btn-secondary.d-flex.flex-column.justify-content-center.align-items-center.my-0.btn-show-contact{type: "button", data-offer-id: "#{@announce.id}"}
           %i.fas.fa-user
-          %span= gettext "See contact"
+          %span= LayoutView.convert_zawgyi(gettext("See contact"))
         -# %button.btn.btn-block.btn-secondary.d-flex.flex-column.justify-content-center.align-items-center.my-0.btn-like{type: "button", data-offer-id: "#{@announce.id}"}
         -#   %i.fa.fa-heart
         -#   %span= gettext "Save offer"

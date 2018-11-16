@@ -9,6 +9,7 @@ html{overflow-y: scroll;} // Avoid centering jumps of scrollbar //https://css-tr
   position: relative;overflow-x: hidden;
 }
 img {width: 100%;}
+img.full-img {height: 100%;object-fit: cover;}
 ::-webkit-scrollbar {
     -webkit-appearance: none;
 }
@@ -66,6 +67,12 @@ i {font-size: 20px!important;}
   img {font-size: 30px!important;}
 }
 img.welcome_img{width: auto;position: absolute; bottom: 0;}
+@include media-breakpoint-up(sm) {
+  img.welcome_img{width: 1024px;}
+}
+@include media-breakpoint-up(xl) {
+  img.welcome_img{width: 100vw;}
+}
 /* ------------------------------ SEARCHBAR  ------------------------------ */
 #searchBar{
   z-index: 1000;
@@ -191,6 +198,7 @@ span.language-active{
   background-color: transparent;
   border: 1px solid $form-grey2;
 }
+.btn-outline-secondary:not(:hover){background-color: white;}
 .dropdown-toggle-split{
   width: 30px;
 }
@@ -312,11 +320,6 @@ a[data-toggle="collapse"] {
 
 /* ------------------------------ PAGE : SEE ANNOUNCE  ------------------------------ */
 @include media-breakpoint-down(xs) {
-  .big-announce > .card-offer {
-    // min-height: 100vh;position: fixed;
-    // z-index: 999999;
-    // top: 0;
-  } // To show on full screen on mobile
   .modal-full {min-width: 100%;margin: 0;}
   .modal-full .modal-content {min-height: 100vh;}
 }

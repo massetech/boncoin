@@ -33,7 +33,7 @@ defmodule BoncoinWeb.AnnounceView do
     end
   end
 
-  def show_date(announce, _language) do
+  def show_date(announce) do
     day_now = Timex.now()
     datetime = if announce.parution_date != nil, do: announce.parution_date, else: announce.inserted_at
     # year = datetime.year

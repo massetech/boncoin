@@ -35,7 +35,7 @@ defmodule BoncoinWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    case Members.create_user(user_params) do
+    case Members.create_and_track_user(user_params) do
       {:ok, _user} ->
         conn
           |> put_flash(:info, "User created successfully.")
@@ -43,6 +43,7 @@ defmodule BoncoinWeb.UserController do
       {:error, %Ecto.Changeset{} = changeset} ->
         roles = Members.User.role_select_btn()
         languages = Members.User.language_select_btn()
+        IO.inspect(changeset)
         conn
           |> put_flash(:info, "Errors, please check.")
           |> render("new.html", changeset: changeset, languages: languages, roles: roles)
@@ -66,7 +67,7 @@ defmodule BoncoinWeb.UserController do
   def create_announce(conn, %{"user" => params}) do
     case Members.create_user_announce(params) do
       {:ok, announce} ->
-        Contents.add_safe_link_to_last_offer(announce)
+        # Contents.add_safe_link_to_last_offer(announce)
         conn
           |> put_flash(:info, gettext("Your offer was created. We will treat it soon."))
           |> redirect(to: public_offers_path(conn, :public_index, search: %{township_id: "#{announce.township_id}"}))

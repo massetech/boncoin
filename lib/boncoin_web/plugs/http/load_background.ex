@@ -1,4 +1,4 @@
-defmodule Boncoin.Plug.LoadAdds do
+defmodule Boncoin.Plug.LoadBackground do
   import Plug.Conn
 
   def init(_opts), do: nil

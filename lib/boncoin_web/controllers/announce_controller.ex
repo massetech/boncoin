@@ -13,7 +13,6 @@ defmodule BoncoinWeb.AnnounceController do
   end
 
   def likes_index(conn, _params) do
-    IO.inspect(conn.assigns)
     results = conn.assigns.likes_list
       |> Poison.decode!()
       |> Contents.list_announces_public_liked()

@@ -1,27 +1,12 @@
 defmodule Boncoin.MessengerApi do
   @api_url "https://graph.facebook.com/v2.6/me/messages"
   @api_profile_url "https://graph.facebook.com"
+  @default_nickname if Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment] == :test, do: "mr_X", else: ""
 
   def send_message(messenger_id, user_msg) do
-    # Find options into [] and build the Messenger quick replies buttons
-    # quick_replies = cond do
-    #   scope =~ "phone" -> [%{content_type: "user_phone_number", payload: scope}]
-    #   scope == "" -> []
-    #   true ->
-    #     Regex.scan(~r/\[.*?\]/, user_msg)
-    #       |> List.flatten()
-    #       |> Enum.map(&build_quick_reply(&1, scope))
-    # end
     %{recipient: %{id: messenger_id}, message: %{text: user_msg}}
       |> post()
   end
-
-  # defp build_quick_reply(option_text, scope) do
-  #   text = option_text
-  #     |> String.replace("[", "")
-  #     |> String.replace("]", "")
-  #   %{content_type: "text", title: text, payload: scope}
-  # end
 
   defp post(payload) do
     resp = HTTPotion.post prepare_post_url(), headers: ["Content-Type": "application/json"], body: Poison.encode!(payload)
@@ -36,8 +21,10 @@ defmodule Boncoin.MessengerApi do
       |> Poison.decode
       |> handle_response
     case map do
-      {:ok, map} -> map["first_name"]
-      {:error, _msg} -> ""
+      {:ok, map} -> map["first_name"] || @default_nickname # Rule added to manage tests without Messenger API
+      {:error, _msg} ->
+        IO.puts("Wrong user profile received from Messenger API")
+        @default_nickname
     end
   end
 

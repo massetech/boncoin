@@ -16,6 +16,6 @@
               = LayoutView.convert_zawgyi(@announce.township, "title")
               = "|"
               = LayoutView.convert_zawgyi(@announce.township.division, "title")
-            %p.font-s-8.text-dark.m-0= BoncoinWeb.AnnounceView.show_date(@announce, "en")
+            %p.font-s-8.text-dark.m-0= BoncoinWeb.AnnounceView.show_date(@announce)
       -# %i.fas.fa-heart.icon-like.text-danger.btn-like.d-none{data-offer-id: "#{@announce.id}"}
       -# %i.far.fa-heart.icon-like.text-danger.btn-like{data-offer-id: "#{@announce.id}"}

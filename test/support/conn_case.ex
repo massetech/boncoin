@@ -15,6 +15,7 @@ defmodule BoncoinWeb.ConnCase do
 
   use ExUnit.CaseTemplate
   import Boncoin.Factory
+  import Plug.Conn
   alias Boncoin.Auth.Guardian
   alias Boncoin.Members
 
@@ -58,11 +59,20 @@ defmodule BoncoinWeb.ConnCase do
     end
 
     final_conn = conn
+      |> put_locale_from_assign(tags)
+      # |> assign(:conversation, nil)
       |> Plug.Conn.put_req_header("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36")
-    # Fix the language to English
-    # conn = %{conn | params: Map.put(conn.params, "locale", "en")}
-    # conn |> IO.inspect()
+
     {:ok, conn: final_conn, user: user}
+  end
+
+  defp put_locale_from_assign(conn, tags) do
+    cond do
+      tags[:locale_my] == true -> assign(conn, :locale, "my")
+      tags[:locale_dz] == true -> assign(conn, :locale, "dz")
+      tags[:locale_en] == true -> assign(conn, :locale, "en")
+      true -> assign(conn, :locale, "en") # Tests are run in EN by default
+    end
   end
 
 end
