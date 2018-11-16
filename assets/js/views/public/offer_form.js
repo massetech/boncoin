@@ -78,7 +78,8 @@ let init_functions = () => {
 // Empty form when the phone_number is not accepted
 let reset_announce_form_field = () => {
   // console.log("wrong phone number : form reseted")
-  $('.collapsible_form').collapse('hide')
+  $('.collapsible_form_bot').collapse('hide')
+  $('.collapsible_form_offer').collapse('hide')
   $('#user_phone_number').removeAttr('readonly')
   $('#btn_validate_number').show()
   $('#btn_change_number').hide()
@@ -96,6 +97,7 @@ let validate_phone_number_pop_field = (user) => {
   $('#announce_user_id').val(user.id)
   $('#user_nickname').val(user.nickname).focus()
   $('#user_viber_number').val(user.viber_number)
+  // Select bot buttons to be shown
   if (user.bot_active == true) {
     $('#field-bot').show()
     $('#btn-bot').hide()
@@ -106,10 +108,11 @@ let validate_phone_number_pop_field = (user) => {
       $('#viber-linked').hide()
       $('#messenger-linked').show()
     }
+    $('.collapsible_form_offer').collapse('show')
   } else {
     // No bot connected yet to this user
     $('#field-bot').hide()
     $('#btn-bot').show()
   }
-  $('.collapsible_form').collapse('show')
+  $('.collapsible_form_bot').collapse('show')
 }

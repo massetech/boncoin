@@ -24,8 +24,8 @@ msgid "All Myanmar"
 msgstr "မြန်မာနိုင်ငံအတွင်း"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:76
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:79
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:75
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:78
 msgid "Kyats"
 msgstr "ကျပ်"
 
@@ -35,12 +35,12 @@ msgid "Name or nickname"
 msgstr "အမည်ရင်း(သို့)အခြားအမည်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:74
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:73
 msgid "Price"
 msgstr "ဈေးနှုန်း"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:41
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:40
 msgid "Title"
 msgstr "ခေါင်းစဥ်"
 
@@ -477,7 +477,7 @@ msgid "I understand and agree to "
 msgstr " "
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:80
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:79
 msgid "Lacks"
 msgstr "သိန်း"
 
@@ -492,7 +492,7 @@ msgid "Please select 1, 2, or 3 photos to show the object and its condition."
 msgstr "သင်၏ရောင်းရန်ပစ္စည်းအခြေအနေကိုပြနိုင်ရန် ကျေးဇူးပြု၍ ဓါတ်ပုံ ၁ပုံ၊ ၂ပုံ (သို့) ၃ပုံ ကို ရွေးချယ်ပါ။"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:81
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:80
 msgid "USD"
 msgstr ""
 
@@ -610,7 +610,7 @@ msgid "1. Fill your details"
 msgstr "၁. သင့်ရဲ့အချက်အလက်များကိုဖြည့်ပါ"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:5
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:4
 msgid "2. Describe your offer"
 msgstr "၂. သင်ရောင်းမည့်ပစ္စည်းကိုဖေါ်ပြပါ"
 
@@ -749,17 +749,17 @@ msgid "Send me notifications by Viber"
 msgstr "သတိပေ၊ချက်များကို Viber မှတဆင့်ကျွန်ပ်ထံပိုပေးရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:61
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:60
 msgid "give"
 msgstr "ပေးရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:56
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:55
 msgid "rent"
 msgstr "ငှားရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:51
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:50
 msgid "sell"
 msgstr "ရောင်းရန်"
 
@@ -793,12 +793,12 @@ msgstr "သင်၏ Viber or Messenger ကိုဘယ်လိုအချိ�
 msgid "Please note that you can't unlink your phone number if you still have active offers."
 msgstr "ကျေးဇုးပြု၍မှတ်သားရမ်သင်ကြောင်ငြာသည်လိုင်းပေါ်တွင်တင်ထားသရွေသင်ဖုန်းနံပါတ်ကိုအချိတ်အဆက်ဖြုတ်၍ရမည်မဟုတ်ပါ"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:35
 msgid "Please open a conversation with PawChaungKaung on Messenger."
 msgstr "ကျေးဇုးပြု၍ Messenger မှတဆင့် PawChaungKaung သိုဆက်သွယ်ပါ"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:50
 msgid "Please open a conversation with PawChaungKaung on Viber."
 msgstr "ကျေးဇုးပြု၍ Viber မှတဆင့် PawChaungKaung သိုဆက်သွယ်ပါ"
@@ -834,7 +834,7 @@ msgid "Viber phone number"
 msgstr "သင့် Viber နံပါတ်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:58
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:57
 msgid "I don't want to throw it, so I sell it for very cheap price."
 msgstr "၍ပစ္စည်းကိုမလွှင့်ပစ်ချင်ပါထိုကြောင်စျေးအလွန်သက်သာစွာဖြင့်ရောင်းပါမည်"
 
@@ -889,7 +889,7 @@ msgid "Please search again !"
 msgstr "ကျေးဇုးပြု၍ထပ်ရှာပါ"
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:108
+#: lib/boncoin_web/controllers/announce_controller.ex:107
 msgid "This offer is no more published."
 msgstr "၍ကြော်ငြာသည်မရှိတော့ပါ"
 
@@ -904,22 +904,22 @@ msgid "You saved {nb_offers}offers}"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/controllers/user_controller.ex:71
+#: lib/boncoin_web/controllers/user_controller.ex:72
 msgid "Your offer was created. We will treat it soon."
 msgstr "သင့်၏ကြော်ငြာကိုပြုလုပ်ပြိးပါပြီ။ PawChaungKaung မှမကြာဝင်သုံးသပ်မည်ဖြစ်သည်"
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:90
+#: lib/boncoin_web/controllers/announce_controller.ex:89
 msgid "Technical problem, cannot treat this offer."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:122
+#: lib/boncoin_web/controllers/announce_controller.ex:121
 msgid "Your offer has been closed and is no more online."
 msgstr "သင့်ရဲ့ကြော်ငြာကိုပိထ်လိုက်ပါပြိ။ Online တွင်ဉရှိတော့ပါ။"
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:101
+#: lib/boncoin_web/controllers/announce_controller.ex:100
 msgid "Sorry, this offer doesn't exist or the link is broken."
 msgstr "စတ်မကောင်းပါဘူး၊ သင့်ရဲကြော်ငြာမရှိပါ (သို့) အချိတ်အဆက်ပျက်ပါသည်"
 

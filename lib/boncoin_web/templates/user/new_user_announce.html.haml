@@ -12,19 +12,19 @@
     .row
       .col-xs-12.col-sm-6.order-xs-1.my-3
         = render "_details_form.html", conn: @conn, u: u
-      .col-xs-12.col-sm-6.order-xs-2.my-3.collapse.collapsible_form
+      .col-xs-12.col-sm-6.order-xs-2.my-3.collapse.collapsible_form_offer
         = render BoncoinWeb.AnnounceView, "_describe_offer.html", conn: @conn, a: a
-      .col-xs-12.col-sm-6.order-xs-3.order-sm-4.my-3.collapse.collapsible_form
+      .col-xs-12.col-sm-6.order-xs-3.order-sm-4.my-3.collapse.collapsible_form_offer
         .form-group
           .input-group
             %span.input-group-prepend
               .input-group-text.bg-transparent
                 %i.fa.fa-edit
             = textarea a, :description, class: "form-control", rows: "8", maxlength: "200", autocomplete: "nope", placeholder: gettext("Describe your offer (size, dimensions, condition, scratches, date of buy, ...)")
-      .col-xs-12.col-sm-6.order-xs-4.order-sm-3.my-3.collapse.collapsible_form
+      .col-xs-12.col-sm-6.order-xs-4.order-sm-3.my-3.collapse.collapsible_form_offer
         = render BoncoinWeb.AnnounceView, "_select_photos.html"
 
-    .row.my-3.collapse.collapsible_form
+    .row.my-3.collapse.collapsible_form_offer
       .col-12
         %hr.d-block.d-sm-none
         .form-group.form-check

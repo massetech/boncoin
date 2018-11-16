@@ -24,8 +24,8 @@ msgid "All Myanmar"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:76
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:79
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:75
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:78
 msgid "Kyats"
 msgstr ""
 
@@ -35,12 +35,12 @@ msgid "Name or nickname"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:74
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:73
 msgid "Price"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:41
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:40
 msgid "Title"
 msgstr ""
 
@@ -523,7 +523,7 @@ msgid "I understand and agree to "
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:80
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:79
 msgid "Lacks"
 msgstr ""
 
@@ -538,7 +538,7 @@ msgid "Please select 1, 2, or 3 photos to show the object and its condition."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:81
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:80
 msgid "USD"
 msgstr ""
 
@@ -659,7 +659,7 @@ msgid "1. Fill your details"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:5
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:4
 msgid "2. Describe your offer"
 msgstr ""
 
@@ -801,17 +801,17 @@ msgid "Send me notifications by Viber"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:61
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:60
 msgid "give"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:56
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:55
 msgid "rent"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:51
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:50
 msgid "sell"
 msgstr ""
 
@@ -886,7 +886,7 @@ msgid "Viber phone number"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:58
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:57
 msgid "I don't want to throw it, so I sell it for very cheap price."
 msgstr ""
 
@@ -941,7 +941,7 @@ msgid "Please search again !"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:108
+#: lib/boncoin_web/controllers/announce_controller.ex:107
 msgid "This offer is no more published."
 msgstr ""
 
@@ -956,22 +956,22 @@ msgid "You saved {nb_offers}offers}"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/controllers/user_controller.ex:71
+#: lib/boncoin_web/controllers/user_controller.ex:72
 msgid "Your offer was created. We will treat it soon."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:90
+#: lib/boncoin_web/controllers/announce_controller.ex:89
 msgid "Technical problem, cannot treat this offer."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:122
+#: lib/boncoin_web/controllers/announce_controller.ex:121
 msgid "Your offer has been closed and is no more online."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:101
+#: lib/boncoin_web/controllers/announce_controller.ex:100
 msgid "Sorry, this offer doesn't exist or the link is broken."
 msgstr ""
 
