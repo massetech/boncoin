@@ -1,7 +1,13 @@
 defmodule Boncoin.MessengerApi do
   @api_url "https://graph.facebook.com/v2.6/me/messages"
   @api_profile_url "https://graph.facebook.com"
-  @default_nickname if Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment] == :test, do: "mr_X", else: ""
+
+  defp default_nickname() do
+    case Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment] do
+      :test -> "mr_X"
+      _ -> ""
+    end
+  end
 
   def send_message(messenger_id, user_msg) do
     %{recipient: %{id: messenger_id}, message: %{text: user_msg}}
@@ -21,10 +27,8 @@ defmodule Boncoin.MessengerApi do
       |> Poison.decode
       |> handle_response
     case map do
-      {:ok, map} -> map["first_name"] || @default_nickname # Rule added to manage tests without Messenger API
-      {:error, _msg} ->
-        IO.puts("Wrong user profile received from Messenger API")
-        @default_nickname
+      {:ok, map} -> map["first_name"] || default_nickname() # Rule added to manage tests without Messenger API
+      {:error, _msg} -> IO.puts("Wrong user profile received from Messenger API")
     end
   end
 

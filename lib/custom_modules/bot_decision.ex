@@ -2,7 +2,36 @@ defmodule Boncoin.CustomModules.BotDecisions do
   alias Boncoin.{Members, Contents}
   alias Boncoin.Members.User
   alias BoncoinWeb.LayoutView
-  @website_url Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:website_url]
+
+  # Build link for the user
+  # defp build_detail_offer(user, offer) do
+  #   treat_msg("detail_active_offer", user, offer, build_announce_view_link(offer))
+  # end
+  # defp offer_view_link(safe_link) do
+  #   "#{website_url()}/user/offer/#{safe_link}"
+  # end
+
+  defp convert_language(language_key) do
+    case language_key do
+      "1" -> "dz"
+      "2" -> "my"
+      "3" -> "en"
+      _ -> nil
+    end
+  end
+
+  defp offer_form_link(phone_number) do
+    "#{website_url()}/offer/new/#{phone_number}"
+  end
+
+  def offer_view_link(offer_id) do
+    url = "#{website_url()}/user/offer/#{offer_id}"
+      |> Cipher.sign_url()
+  end
+
+  defp website_url() do
+    Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:website_url]
+  end
 
   # -------------------- DECISION  -------------------------------
 
@@ -208,33 +237,6 @@ defmodule Boncoin.CustomModules.BotDecisions do
     end
   end
 
-  # Build link for the user
-  # defp build_detail_offer(user, offer) do
-  #   treat_msg("detail_active_offer", user, offer, build_announce_view_link(offer))
-  # end
-
-  defp convert_language(language_key) do
-    case language_key do
-      "1" -> "dz"
-      "2" -> "my"
-      "3" -> "en"
-      _ -> nil
-    end
-  end
-
-  defp offer_form_link(phone_number) do
-    "#{@website_url}/offer/new/#{phone_number}"
-  end
-
-  # defp offer_view_link(safe_link) do
-  #   "#{@website_url}/user/offer/#{safe_link}"
-  # end
-
-  def offer_view_link(offer_id) do
-    url = "#{@website_url}/user/offer/#{offer_id}"
-      |> Cipher.sign_url()
-  end
-
   # -------------------- MESSAGES   -------------------------------
 
   defp welcome_msg() do
@@ -248,18 +250,18 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp welcome_back_msg(user) do
-    uni = "ပေါချောင်ကေင်းမှတစ်ဖန်ကြိုဆိုပါတယ် #{user.nickname}။\n\nကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။\n\nအကူအညီရယူရန် 0 ဟုရိုက်ထည့်ပါ။"
+    uni = "ပေါချောင်ကေင်းမှတစ်ဖန်ကြိုဆိုပါတယ် #{user.nickname}။\n\nကျေးဇူးပြု၍ #{website_url()} သို့ဝင်ကြည့်ပါ။\n\nအကူအညီရယူရန် 0 ဟုရိုက်ထည့်ပါ။"
     case user.language do
-      "en" -> "Welcome back to Pawchaungkaung #{user.nickname} !\n\nPlease visit us on #{@website_url}\n\nFor help please send 0"
+      "en" -> "Welcome back to Pawchaungkaung #{user.nickname} !\n\nPlease visit us on #{website_url()}\n\nFor help please send 0"
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp nothing_to_say_msg(user) do
-    uni = "မင်္ဂလာပါ #{user.nickname}။\n\nကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။\n\nအကူအညီရယူရန် 0 ဟုရိုက်ထည့်ပါ။"
+    uni = "မင်္ဂလာပါ #{user.nickname}။\n\nကျေးဇူးပြု၍ #{website_url()} သို့ဝင်ကြည့်ပါ။\n\nအကူအညီရယူရန် 0 ဟုရိုက်ထည့်ပါ။"
     case user.language do
-      "en" -> "Hi #{user.nickname} ! #{say_something_neutral(user.language)}\n\nPlease visit us on #{@website_url}\n\nFor help please send 0"
+      "en" -> "Hi #{user.nickname} ! #{say_something_neutral(user.language)}\n\nPlease visit us on #{website_url()}\n\nFor help please send 0"
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end
@@ -320,9 +322,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp confirm_new_phone_number_updated(user) do
-    uni = "အဆင်ပြေပါပြီ #{user.nickname},  သင့်ဖုန်းနံပါတ်အသစ်ပြန်ပြင်ပြိးဖြစ်သည် \n ကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။"
+    uni = "အဆင်ပြေပါပြီ #{user.nickname},  သင့်ဖုန်းနံပါတ်အသစ်ပြန်ပြင်ပြိးဖြစ်သည် \n ကျေးဇူးပြု၍ #{website_url()} သို့ဝင်ကြည့်ပါ။"
     case user.language do
-      "en" -> "Perfect #{user.nickname}, your phone number was updated.\n Please visit us on #{@website_url}"
+      "en" -> "Perfect #{user.nickname}, your phone number was updated.\n Please visit us on #{website_url()}"
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end
@@ -331,7 +333,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   defp confirm_old_phone_number_retrieved(user) do
     uni = "အဆင်ပြေပါပြီ #{user.nickname}, သင့်ရဲ့ ဖုန်းနံပါတ်ကိုပြန်ရပါပြီ \n ကျေးဇူးပြု၍ #{user.nickname}, သို့ဝင်ကြည့်ပါ။"
     case user.language do
-      "en" -> "Perfect #{user.nickname}, you get back your phone number.\n Please visit us on #{@website_url}"
+      "en" -> "Perfect #{user.nickname}, you get back your phone number.\n Please visit us on #{website_url()}"
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end
@@ -401,9 +403,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp tell_bot_quitted(user) do
-    uni = "မင်္ဂလာပါ #{user.nickname}၊ သင့်ရဲ့ #{String.capitalize(user.bot_provider)} ချိတ်ဆက်မှုကိုဖြုတ်ပြီးပါပြီ။ မကြာခင်မှာ #{@website_url} တွင်ပြန်ဆုံကြမယ်နော်။"
+    uni = "မင်္ဂလာပါ #{user.nickname}၊ သင့်ရဲ့ #{String.capitalize(user.bot_provider)} ချိတ်ဆက်မှုကိုဖြုတ်ပြီးပါပြီ။ မကြာခင်မှာ #{website_url()} တွင်ပြန်ဆုံကြမယ်နော်။"
     case user.language do
-      "en" -> "Your #{String.capitalize(user.bot_provider)} account has been unlinked.\nHope to see you soon on #{@website_url}"
+      "en" -> "Your #{String.capitalize(user.bot_provider)} account has been unlinked.\nHope to see you soon on #{website_url()}"
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end
