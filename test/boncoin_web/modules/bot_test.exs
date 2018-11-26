@@ -42,7 +42,7 @@ defmodule BoncoinWeb.BotTest do
       %{scope: scope, language: language, messages: messages} = %{user: user, conversation: %{scope: "language"}, announce: nil, user_msg: "3"}
         |> call_bot_algorythm()
       msg = List.first(messages)
-      assert msg =~ "https://www.pawchaungkaung.com"
+      assert msg =~ "Please visit us on http://localhost:4001"
     end
   end
 

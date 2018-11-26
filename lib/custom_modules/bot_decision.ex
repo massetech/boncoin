@@ -2,7 +2,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   alias Boncoin.{Members, Contents}
   alias Boncoin.Members.User
   alias BoncoinWeb.LayoutView
-  @website_url if Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment] == :dev, do: "http://localhost:4000", else: "https://www.pawchaungkaung.com"
+  @website_url Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:website_url]
 
   # -------------------- DECISION  -------------------------------
 
@@ -59,14 +59,18 @@ defmodule Boncoin.CustomModules.BotDecisions do
                 user_params = %{active: true, phone_number: phone_number, bot_active: true, bot_provider: conversation.bot_provider, bot_id: conversation.psid, nickname: conversation.nickname, language: language}
                 case Members.create_and_track_user(user_params) do
                   {:ok, new_user} -> %{scope: "no_scope", language: language, messages: [confirm_user_created(new_user)]}
-                  {:error, changeset} -> %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
+                  {:error, changeset} ->
+                    IO.inspect(changeset)
+                    %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
                 end
               other_user -> # The phone number is already used
                 case conversation.psid == other_user.bot_id && conversation.bot_provider == other_user.bot_provider do
                   true -> # other_user is the same user comming back with the same bot
                     case Members.udpate_and_track_user(other_user, %{bot_active: true}) do
                       {:ok, user} -> %{scope: "no_scope", language: user.language, messages: [confirm_old_phone_number_retrieved(user)]}
-                      _ -> %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
+                      {:error, changeset} ->
+                        IO.inspect(changeset)
+                        %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
                     end
                   false -> # There is a conflict on the phone number
                     case manage_phone_conflict(user, other_user) do
@@ -76,7 +80,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
                         user_params = %{active: true, phone_number: phone_number, bot_active: true, bot_provider: conversation.bot_provider, bot_id: conversation.psid, nickname: conversation.nickname, language: language}
                         case Members.create_and_track_user(user_params) do
                           {:ok, new_user} -> %{scope: "no_scope", language: language, messages: [confirm_user_created(new_user)]}
-                          {:error, _changeset} -> %{scope: "no_scope", language: language, messages: [announce_technical_error(user_params.language)]}
+                          {:error, changeset} ->
+                            IO.inspect(changeset)
+                            %{scope: "no_scope", language: language, messages: [announce_technical_error(user_params.language)]}
                         end
                     end
                 end
@@ -129,7 +135,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
               other_user == nil ->  # The phone number is not used yet
                 case Members.udpate_and_track_user(user, %{phone_number: phone_number}) do
                   {:ok, user} -> %{scope: "no_scope", language: language, messages: [confirm_new_phone_number_updated(user)]}
-                  _ -> %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
+                  {:error, changeset} ->
+                    IO.inspect(changeset)
+                    %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
                 end
               user.phone_number == user_msg -> # Same phone number then user old one
                 %{scope: "no_scope", language: language, messages: [tell_same_phone_number(user)]}
@@ -138,7 +146,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
                   true -> # other_user is the same user comming back with the same bot
                     case Members.udpate_and_track_user(other_user, %{phone_number: phone_number, bot_active: true}) do
                       {:ok, user} -> %{scope: "no_scope", language: language, messages: [confirm_old_phone_number_retrieved(user)]}
-                      _ -> %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
+                      {:error, changeset} ->
+                        IO.inspect(changeset)
+                        %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
                     end
                   false -> # There is a conflict on the phone number
                     case manage_phone_conflict(user, other_user) do

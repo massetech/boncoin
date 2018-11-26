@@ -66,6 +66,8 @@
       .card-body
         .row
           %h6= "google_analytics: #{Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:google_analytics]}"
+          %h6= "environment: #{Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment]}"
+          %h6= "website_url: #{Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:website_url]}"
 
       .card-footer
         .viber-box.d-flex.justify-content-start.align-items-center

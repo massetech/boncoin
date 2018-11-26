@@ -95,7 +95,7 @@ defmodule BoncoinWeb.ConversationTest do
         IO.puts("test 8")
         messenger_params = messenger_params(messenger_id, "09110000002")
         receive_messenger_msg(conn, messenger_id, messenger_params)
-        assert_sent_messenger_msg("no_scope", messenger_id, "Your phone number and Messenger account are now linked.\nPlease visit us on https://www.pawchaungkaung.com/offer/new/09110000002")
+        assert_sent_messenger_msg("no_scope", messenger_id, "Your phone number and Messenger account are now linked.\nPlease visit us on http://localhost:4001/offer/new/09110000002")
       # 9) Know user says nothing special
         IO.puts("test 9")
         messenger_params = messenger_params(messenger_id, "blablablabla")
@@ -143,12 +143,12 @@ defmodule BoncoinWeb.ConversationTest do
         assert_sent_messenger_msg("update_phone", messenger_id, "")
         messenger_params = messenger_params(messenger_id, "09110000003")
         receive_messenger_msg(conn, messenger_id, messenger_params)
-        assert_sent_messenger_msg("no_scope", messenger_id, "Perfect mr_X, your phone number was updated.\n Please visit us on https://www.pawchaungkaung.com")
+        assert_sent_messenger_msg("no_scope", messenger_id, "Perfect mr_X, your phone number was updated.\n Please visit us on http://localhost:4001")
       # 15) Known user wants to receive list of his active offers but has no offer yet
         IO.puts("test 15")
         messenger_params = messenger_params(messenger_id, "*111#")
         receive_messenger_msg(conn, messenger_id, messenger_params)
-        assert_sent_messenger_msg("no_scope", messenger_id, "You don't have any offer yet. Please create your first offer on https://www.pawchaungkaung.com/offer/new/09110000003")
+        assert_sent_messenger_msg("no_scope", messenger_id, "You don't have any offer yet. Please create your first offer on http://localhost:4001/offer/new/09110000003")
       # 16) Known user wants to quit messenger but has active offers
         IO.puts("test 16")
         pending_offer = insert(:announce, %{user_id: user_1.id, status: "PENDING", title: "bike"})
@@ -177,7 +177,7 @@ defmodule BoncoinWeb.ConversationTest do
         assert_sent_messenger_msg("quit_bot", messenger_id, "Are you sure you want to remove Messenger link ?. If you are sure please type 1")
         messenger_params = messenger_params(messenger_id, "1")
         receive_messenger_msg(conn, messenger_id, messenger_params)
-        assert_sent_messenger_msg(messenger_id, "Your Messenger account has been unlinked.\nHope to see you soon on https://www.pawchaungkaung.com")
+        assert_sent_messenger_msg(messenger_id, "Your Messenger account has been unlinked.\nHope to see you soon on http://localhost:4001")
         assert Members.get_active_user_by_bot_id(messenger_id, "messenger") == nil
       # 20) Another user takes his phone number, the history is kept in phone number history table
         IO.puts("test 20")
@@ -189,7 +189,7 @@ defmodule BoncoinWeb.ConversationTest do
         # Selects his phone number
         messenger_params = messenger_params(other_messenger_id, "09110000003")
         receive_messenger_msg(conn, other_messenger_id, messenger_params)
-        assert_sent_messenger_msg("no_scope", other_messenger_id, "Your phone number and Messenger account are now linked.\nPlease visit us on https://www.pawchaungkaung.com/offer/new/09110000003")
+        assert_sent_messenger_msg("no_scope", other_messenger_id, "Your phone number and Messenger account are now linked.\nPlease visit us on http://localhost:4001/offer/new/09110000003")
         user_2 = Members.get_active_user_by_bot_id(other_messenger_id, "messenger")
         # Check that the phone number history is kept for security
         # Members.list_phones() |> IO.inspect()

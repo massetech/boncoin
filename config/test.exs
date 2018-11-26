@@ -7,6 +7,7 @@ config :boncoin, BoncoinWeb.Endpoint,
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
   secret_salt: System.get_env("SECRET_SALT"),
   google_analytics: false,
+  website_url: "http://localhost:4001",
   environment: :test,
   server: false
 
