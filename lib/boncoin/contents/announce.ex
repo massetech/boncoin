@@ -87,9 +87,9 @@ defmodule Boncoin.Contents.Announce do
   end
   defp check_offer_has_one_photo_min(changeset, %{}), do: changeset
 
-  def build_safe_link(announce_id) do
-    Cipher.encrypt(Integer.to_string(announce_id))
-  end
+  # def build_safe_link(announce_id) do
+  #   Cipher.encrypt(Integer.to_string(announce_id))
+  # end
 
   # def show_errors_in_msg(changeset) do
   #   case List.first(changeset.errors) do
