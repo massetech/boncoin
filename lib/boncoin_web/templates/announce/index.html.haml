@@ -1,6 +1,6 @@
 %nav{aria-label: "breadcrumb"}
   %ol.breadcrumb
-    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
+    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard), class: "text-secondary"
     %li.breadcrumb-item.active{aria-current: "page"}= "Offers"
 
 .table-responsive

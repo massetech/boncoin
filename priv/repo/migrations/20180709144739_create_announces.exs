@@ -13,7 +13,7 @@ defmodule Boncoin.Repo.Migrations.CreateAnnounces do
       add :treated_by_id, references(:users) #Admin user cannot be deleted if holding announces
       add :validity_date, :utc_datetime
       add :parution_date, :utc_datetime
-      add :price, :float
+      add :price, :string
       add :currency, :string
       add :description, :text
       add :language, :string

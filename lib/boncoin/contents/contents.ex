@@ -649,8 +649,8 @@ defmodule Boncoin.Contents do
 
   def update_announce(%Announce{} = announce, attrs) do
     announce
-    |> Announce.changeset(attrs)
-    |> Repo.update()
+      |> Announce.changeset(attrs)
+      |> Repo.update()
   end
 
   # def add_safe_link_to_last_offer(announce) do

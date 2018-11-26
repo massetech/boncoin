@@ -43,7 +43,6 @@ defmodule BoncoinWeb.UserController do
       {:error, %Ecto.Changeset{} = changeset} ->
         roles = Members.User.role_select_btn()
         languages = Members.User.language_select_btn()
-        IO.inspect(changeset)
         conn
           |> put_flash(:info, "Errors, please check.")
           |> render("new.html", changeset: changeset, languages: languages, roles: roles)
@@ -52,14 +51,18 @@ defmodule BoncoinWeb.UserController do
 
   def new_user_announce(conn, _params) do
     changeset = Members.change_user(%User{announces: [%Announce{}]})
-    render(conn, "new_user_announce.html", changeset: changeset)
+    conn
+      # |> put_flash(:info, convert_zawgyi(gettext("Please check that your township is opened")))
+      |> render("new_user_announce.html", changeset: changeset)
   end
 
   def new_user_announce_with_phone(conn, %{"phone_number" => phone_number}) do
     case User.check_myanmar_phone_number(phone_number) do
       true ->
         changeset = Members.change_user(%User{phone_number: phone_number, announces: [%Announce{}]})
-        render(conn, "new_user_announce.html", changeset: changeset)
+        conn
+          # |> put_flash(:info, "Errors, please check.")
+          |> render("new_user_announce.html", changeset: changeset)
       false -> redirect(conn, to: user_path(conn, :new_user_announce))
     end
   end

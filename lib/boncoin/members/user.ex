@@ -38,7 +38,7 @@ defmodule Boncoin.Members.User do
   @doc false
   def changeset(user, attrs) do
     params = attrs
-      |> CustomModules.convert_fields_to_burmese_uni([:nickname])
+      |> CustomModules.convert_fields_to_burmese_uni(["nickname"])
     user
       |> Map.put(:uid, Ecto.UUID.generate)
       |> cast(params, @required_fields ++ @optional_fields)

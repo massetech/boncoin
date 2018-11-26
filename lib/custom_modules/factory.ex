@@ -126,7 +126,7 @@ defmodule Boncoin.Factory do
     category = insert(:category, %{active: true, family_id: family.id})
     %Announce{
       title: "an offer title",
-      price: 10.0,
+      price: "15",
       description: "an offer description",
       currency: "USD",
       status: "ONLINE",

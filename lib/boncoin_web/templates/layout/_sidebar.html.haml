@@ -43,15 +43,15 @@
         %a{href: "?locale=en"}
           %li.slide-menu.text-dark.border-bottom.border-dark
             = img_tag static_path(@conn, "/fonts/en.svg"), class: "flag"
-            %span{class: "#{test_lg(@conn.assigns.flag, 1)}"}= convert_zawgyi(gettext("English"))
+            %span{class: "#{test_lg(@conn.assigns.flag, 1)}"}= gettext("English")
         %a{href: "?locale=my"}
           %li.slide-menu.text-dark.border-bottom.border-dark{class: ""}
             = img_tag static_path(@conn, "/fonts/my.svg"), class: "flag"
-            %span{class: "#{test_lg(@conn.assigns.flag, 2)}"}= convert_zawgyi(gettext("Myanmar (Unicode)"))
+            %span{class: "#{test_lg(@conn.assigns.flag, 2)}"}= gettext("Myanmar (Unicode)")
         %a{href: "?locale=dz"}
           %li.slide-menu.text-dark.border-bottom.border-dark{class: ""}
             = img_tag static_path(@conn, "/fonts/dz.svg"), class: "flag"
-            %span{class: "#{test_lg(@conn.assigns.flag, 3)}"}= convert_zawgyi(gettext("Myanmar (Zawgyi)"))
+            %span{class: "#{test_lg(@conn.assigns.flag, 3)}"}= gettext("Myanmar (Zawgyi)")
 
       - link to: main_path(@conn, :conversations), class: "" do
         %li.slide-menu.text-dark.border-bottom.border-dark

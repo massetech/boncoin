@@ -59,8 +59,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
                 user_params = %{active: true, phone_number: phone_number, bot_active: true, bot_provider: conversation.bot_provider, bot_id: conversation.psid, nickname: conversation.nickname, language: language}
                 case Members.create_and_track_user(user_params) do
                   {:ok, new_user} -> %{scope: "no_scope", language: language, messages: [confirm_user_created(new_user)]}
-                  {:error, changeset} -> IO.inspect(changeset)
-                    %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
+                  {:error, changeset} -> %{scope: "no_scope", language: language, messages: [announce_technical_error(language)]}
                 end
               other_user -> # The phone number is already used
                 case conversation.psid == other_user.bot_id && conversation.bot_provider == other_user.bot_provider do
@@ -100,7 +99,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       # User wants to CHANGE LANGUAGE
       user != nil && user.bot_active == true && user_msg == "*123#" ->
         language = user.language
-        %{scope: "language", language: language, messages: [change_language_msg(user)]}
+        %{scope: "language", language: language, messages: [change_language_msg()]}
 
       # User wants to see his OFFERS LIST
       user != nil && user.bot_active == true && user_msg == "*111#" ->
@@ -233,13 +232,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
     "#{Rabbit.uni2zg(uni)}\n\nWelcome to Pawchaungkaung, please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ 1\n  -> မြန်မာ(ယူနီကုတ်)အတွက် 2\n  -> For English send 3"
   end
 
-  defp change_language_msg(user) do
-    uni = "ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပ"
-    case user.language do
-      "en" -> "Please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ 1\n  -> မြန်မာ(ယူနီကုတ်)အတွက် 2\n  -> For English send 3"
-      "my" -> "#{uni}\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ 1\n  -> မြန်မာ(ယူနီကုတ်)အတွက် 2\n  -> For English send 3"
-      "dz" -> "#{Rabbit.uni2zg(uni)}\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ 1\n  -> မြန်မာ(ယူနီကုတ်)အတွက် 2\n  -> For English send 3"
-    end
+  def change_language_msg() do
+    uni = "ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပါ"
+    "#{Rabbit.uni2zg(uni)}\n\nPlease choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ 1\n  -> မြန်မာ(ယူနီကုတ်)အတွက် 2\n  -> For English send 3"
   end
 
   defp welcome_back_msg(user) do
@@ -261,7 +256,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp ask_phone_msg(language) do
-    uni = "အခုစကားပြောလို့ရပါပြီ။ သင့်ကိုသတိပြုမိရန်သင်၏ဖုန်းနံပါတ်ကိုနှိပ်ပါ။"
+    uni = "အခုစကားပြောလို့ရပါပြီ။ ကျေးဇူးပြုပြီးသင်၏ဖုန်းနံပါတ်ကိုရိုက်ထည့်ပါ။"
     case language do
       "en" -> "Now we can speak! Please also type your mobile phone number."
       "my" -> uni
@@ -288,7 +283,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp alert_before_phone_update(user) do
-    uni = "သင့်ကြော်ငြာအားလုံးကိုဖုန်းနံပါတ်အသစ်သို့ရွှေပြောင်းပေးမည်ဖြစ်ပါသည်။ သေကြာမှုရှိပြိဆိုလျင်သင့်ဖုန်းနံပါတ်ကသစ်ကိုရိုက်ထည့်ပါ။"
+    uni = "သင့်ကြော်ငြာအားလုံးကိုဖုန်းနံပါတ်အသစ်သို့ရွှေပြောင်းပေးမည်ဖြစ်ပါသည်။ သေချာမှုရှိပြိဆိုလျင်သင့်ဖုန်းနံပါတ်အသစ်ကိုရိုက်ထည့်ပါ။"
     case user.language do
       "en" -> "All your offers will be moved to this new phone number. If you are sure please type your new phone number now."
       "my" -> uni
@@ -297,7 +292,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp confirm_user_created(user) do
-    uni = "သင်၏ဖုန်းနံပါတ်နှင် #{String.capitalize(user.bot_provider)} နံပါတ်တို့သည် အဆက်အသွယ်ရပြီးပြီဖြစ်သည်။ \nကျေးဇူးပြု၍ #{offer_form_link(user.phone_number)} သို့ဝင်ကြည့်ပါ။"
+    uni = "သင်၏ဖုန်းနံပါတ်နှင့် #{String.capitalize(user.bot_provider)} နံပါတ်တို့သည် အဆက်အသွယ်ရပြီးပြီဖြစ်သည်။ \nကျေးဇူးပြု၍ #{offer_form_link(user.phone_number)} သို့ဝင်ကြည့်ပါ။"
     case user.language do
       "en" -> "Your phone number and #{String.capitalize(user.bot_provider)} account are now linked.\nPlease visit us on #{offer_form_link(user.phone_number)}"
       "my" -> uni
@@ -306,7 +301,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp tell_same_phone_number(user) do
-    uni = "သင်သိလား သင့်ရဲ့ဖုန်းနံပါတ်က ပေါချောင်ကောင်းရဲ #{String.capitalize(user.bot_provider)} နဲ့ အဆက်အသွယ်ရပြီးသားဖြစ်နေပြီ။ :)"
+    uni = "သင်သိလား သင့်ရဲ့ဖုန်းနံပါတ်က ပေါချောင်ကောင်းရဲ့ #{String.capitalize(user.bot_provider)} နဲ့ အဆက်အသွယ်ရနေပါပြီ။ :)"
     case user.language do
       "en" -> "You know what #{user.nickname}, your phone number was already linked to this #{String.capitalize(user.bot_provider)} account :)"
       "my" -> uni
@@ -315,7 +310,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp confirm_new_phone_number_updated(user) do
-    uni = "သင့်ဖုန်းနံပါတ်အသစ်သို့ပြေင်းပြိးဖြစ်သည် \nကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။"
+    uni = "အဆင်ပြေပါပြီ #{user.nickname},  သင့်ဖုန်းနံပါတ်အသစ်ပြန်ပြင်ပြိးဖြစ်သည် \n ကျေးဇူးပြု၍ #{@website_url} သို့ဝင်ကြည့်ပါ။"
     case user.language do
       "en" -> "Perfect #{user.nickname}, your phone number was updated.\n Please visit us on #{@website_url}"
       "my" -> uni
@@ -324,22 +319,13 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp confirm_old_phone_number_retrieved(user) do
-    uni = ""
+    uni = "အဆင်ပြေပါပြီ #{user.nickname}, သင့်ရဲ့ ဖုန်းနံပါတ်ကိုပြန်ရပါပြီ \n ကျေးဇူးပြု၍ #{user.nickname}, သို့ဝင်ကြည့်ပါ။"
     case user.language do
       "en" -> "Perfect #{user.nickname}, you get back your phone number.\n Please visit us on #{@website_url}"
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-
-  # defp announce_phone_used(language) do
-  #   uni = "စိတ်မကောင်းပါဘူး ဒီနံဖုန်းပါတ်ကအခြနဲ့ ချိတ်ဆက် ပြီးဖြစ်နေပါပြီ။ ကျေးဇူးပြု၍ ချိတ်ဆက်မှုကိုအရင်ဖြုတ်ပြစ်ရန် #{@website_bot_explained} သို့ဝင်ကြည့်ပါ။ (သို့) ပေါချောင်ကောင်းသို့ဆက်သွယ်ပါ။"
-  #   case language do
-  #     "en" -> "Sorry but this phone number is used by another user. Please unlink it first or contact us."
-  #     "my" -> uni
-  #     "dz" -> Rabbit.uni2zg(uni)
-  #   end
-  # end
 
   defp announce_technical_error(language) do
     uni = "စိတ်မကောင်းပါဘူး website နည်းပညာပိုင်းဆိုင်ရာမှာ ပြဿနာရှိနေပါတယ်။"
@@ -351,7 +337,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp announce_bot_conflict(language, nickname) do
-    uni = "စိတ်မကောင်းပါဘူး #{nickname} ဒီဖုန်းနံပါတ်ကိုအခြာအသုံးပြုပြီးဖြစ်ပါတယ်။ ကျေးဇူးပြု၍ နောက်ထပ်တစ်ကြိမ်ပြန် ကြိုးစားကြည့်ပါ။ (သို့) ပေါချောင်ကောင်းသို့ဆက်သွယ်ပါ။"
+    uni = "စိတ်မကောင်းပါဘူး #{nickname} ဒီဖုန်းနံပါတ်ကိုအခြားသူမှအသုံးပြုပြီးဖြစ်ပါတယ်။ ကျေးဇူးပြု၍ နောက်ထပ်တစ်ကြိမ်ပြန်၍ ကြိုးစားကြည့်ပါ။ (သို့) ပေါချောင်ကောင်းသို့ဆက်သွယ်ပါ။"
     case language do
       "en" -> "Sorry #{nickname}, this phone number is used by another user. Please unlink it first or contact us."
       "my" -> uni
@@ -369,7 +355,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp tell_offer_accepted(user, offer) do
-    uni = "မင်္ဂလာပါ #{user.nickname} သင်၏ရောင်းရန်ပစ္စည်း သည်ကြော်ငြာတင်လိုက်ပြီဖြစ်ပါသည်။ ၎င်းကို #{LayoutView.format_date(offer.validity_date)} အထိ (၁)လအကြာ ကြော်ငြာတင်ထားမည် ဖြစ်သည်။ သင်၏ကြော်ငြာကိုသင့်အလိုကျစီမံနိုင်ရန် #{offer_view_link(offer.id)} သို့ဝင်ပါ။"
+    uni = "မင်္ဂလာပါ #{user.nickname} သင်၏ရောင်းရန်ပစ္စည်းကြော်ငြာကို တင်လိုက်ပြီဖြစ်ပါသည်။ ၎င်းကို #{LayoutView.format_date(offer.validity_date)} အထိ (၁)လအကြာ ကြော်ငြာတင်ထားမည် ဖြစ်သည်။ သင်၏ကြော်ငြာကိုသင့်အလိုကျစီမံနိုင်ရန် #{offer_view_link(offer.id)} သို့ဝင်ပါ။"
     case user.language do
       "en" -> "Hi #{user.nickname}, your offer #{offer.title} is now published !\nIt will be online for 1 month until #{LayoutView.format_date(offer.validity_date)}.\nYou can manage your offer on #{offer_view_link(offer.id)}"
       "my" -> uni
@@ -387,16 +373,16 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp tell_offer_closed(user, offer, cause) do
-    uni = "မင်္ဂလာပါ #{user.nickname}၊ သင့်ရဲ့ #{offer.title} ကြော်ငြာကို#{cause}။ \nကျေးဇူးပြု၍ #{offer_form_link(user.phone_number)} တွင်အသစ်တစ်ဖန်ပြန်လုပ်ပါ။"
+    uni = "မင်္ဂလာပါ #{user.nickname}၊ သင့်ရဲ့ #{offer.title} ကြော်ငြာကို#{cause}ပိတ်လိုက်ပါပြီ။ \nကျေးဇူးပြု၍ #{offer_form_link(user.phone_number)} တွင်အသစ်တစ်ဖန်ပြန်လုပ်ပါ။"
     case user.language do
-      "en" -> "Hi #{user.nickname}, your offer #{offer.title} has been closed #{cause}. \nPlease come back to #{offer_form_link(user.phone_number)}"
+      "en" -> "Hi #{user.nickname}, your offer #{offer.title} has been closed #{cause}. \nPlease create a new one on #{offer_form_link(user.phone_number)}"
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
 
   defp alert_before_quit_bot(user) do
-    uni = ""
+    uni = "သင့်ရဲ့ #{String.capitalize(user.bot_provider)} ချိတ်ဆက်မှုကိုပြန်လည်ဖြုတ်ချင်သည်မှာသေခြာပြီလား။ သေခြာလျှင် (၁)ဟုရိုက်ထည့်ပါ။"
     case user.language do
       "en" -> "Are you sure you want to remove #{String.capitalize(user.bot_provider)} link ?. If you are sure please type 1"
       "my" -> uni
@@ -405,7 +391,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp tell_bot_quitted(user) do
-    uni = "မင်္ဂလာပါ #{user.nickname}၊ သင့်ရဲ #{String.capitalize(user.bot_provider)} ချိတ်ဆက်မှုကိုဖြုတ်ပြစ်ပြီးဖြစ်ပါပြီ။ မကြာခင်မှာ #{@website_url} တွင်ပြန်ဆုံကြမယ်နော်။"
+    uni = "မင်္ဂလာပါ #{user.nickname}၊ သင့်ရဲ့ #{String.capitalize(user.bot_provider)} ချိတ်ဆက်မှုကိုဖြုတ်ပြီးပါပြီ။ မကြာခင်မှာ #{@website_url} တွင်ပြန်ဆုံကြမယ်နော်။"
     case user.language do
       "en" -> "Your #{String.capitalize(user.bot_provider)} account has been unlinked.\nHope to see you soon on #{@website_url}"
       "my" -> uni
@@ -414,7 +400,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp tell_not_allowed_to_quit_bot(user, nb_offers) do
-    uni = ""
+    uni = "စိတ်မကောင်းပါဘူး#{user.nickname}, သင့်ထံမှာ ကြော်ငြာ #{nb_offers} ရှိနေသေးသောကြောင့် သင့်ရဲ့ #{String.capitalize(user.bot_provider)} ကိုအချိတ်အဆက်ဖြုတ်၍မရပါ \n\n အကူအညီရယူရန် ဟုရိုက်ထည့်ပါ။"
     case user.language do
       "en" -> "Sorry #{user.nickname}, we cannot unlink your #{String.capitalize(user.bot_provider)} account because you still have #{nb_offers} offers. \n\nFor help please send 0"
       "my" -> uni
@@ -423,7 +409,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp tell_bot_cannot_quit(user) do
-    uni = "စိတ်မကောင်းပါဘူး#{user.nickname}၊ သင်ရဲ #{String.capitalize(user.bot_provider)} ကိုဖြုတ်ဂျမရပါ။ ကျေးဇူးပြု၍သင်၏ကျွန်တော်/မတို့ကိုဆက်သွယ်ပါ။"
+    uni = "စိတ်မကောင်းပါဘူး#{user.nickname}၊ သင်ရဲ့ #{String.capitalize(user.bot_provider)} ကိုဖြုတ်၍မရပါ။ ကျေးဇူးပြု၍ ကျွန်တော်/မတို့ကိုဆက်သွယ်ပါ။"
     case user.language do
       "en" -> "Sorry #{user.nickname} but we cannot unlink your #{String.capitalize(user.bot_provider)} account. Please contact us."
       "my" -> uni
@@ -432,7 +418,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp tell_no_active_offer(user) do
-    uni = "သင့်တွင်ကြော်ငြာမရှိသေးပါ။ ကျေးဇူးပြု၍သင်၏ပထမကြော်ငြာကိုတင်လိုက်ပါ။ #{offer_form_link(user.phone_number)}"
+    uni = "သင့်မှာမည်သည့်ကြော်ငြာမျှမရှိသေးပါ။ ကျေးဇူးပြု၍သင်၏ပထမဆုံးကြော်ငြာကို #{offer_form_link(user.phone_number)} တွင်တင်လိုက်ပါ။"
     case user.language do
       "en" -> "You don't have any offer yet. Please create your first offer on #{offer_form_link(user.phone_number)}"
       "my" -> uni
@@ -441,7 +427,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp tell_nb_active_offers(user, nb_offers) do
-    uni = "Ok #{user.nickname}၊ သင့်တွင်ကြော်ငြာ #{nb_offers} ခုရှိပါသည်"
+    uni = "Ok #{user.nickname}၊ သင့်တွင်လက်ရှိကြော်ငြာ #{nb_offers} ခုရှိပါသည်"
     case user.language do
       "en" -> "Ok #{user.nickname}, you have #{nb_offers} active offers :"
       "my" -> uni
@@ -450,7 +436,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   defp detail_active_offers(user, offer) do
-    uni = "#{offer.title}\n#{LayoutView.format_date(offer.validity_date)} အထိ\n#{offer_view_link(offer.id)} တွင်လုပ်ဆောင်ရန်"
+    uni = "#{offer.title}\n#{LayoutView.format_date(offer.validity_date)} အထိကြော်ငြာတင်ထားမည်။ \n#{offer_view_link(offer.id)} တွင်လုပ်ဆောင်ရန်"
     case user.language do
       "en" -> "#{offer.title}\nActive until #{LayoutView.format_date(offer.validity_date)}.\nManage it on #{offer_view_link(offer.id)}"
       "my" -> uni

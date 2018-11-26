@@ -227,6 +227,9 @@ a[data-toggle="collapse"] {
     right: 20px;
     transform: translateY(-50%);
 }
+.dropdown-item.active, .dropdown-item:active{
+  background-color: $secondary;
+}
 .modal {
   button.close{position: absolute;right: 15px;top: 15px;z-index: 99999;}
 }
@@ -326,8 +329,8 @@ a[data-toggle="collapse"] {
 
 .icon-nb-pict {
   position: absolute;bottom: 0;right: 0;width: 30px;height: 30px;
-  i {color: $dark;position: relative;opacity: 0.6;}
-  span {font-size: 12px;font-weight: bold;background-color: rgba(74,74,74,0.6);
+  i {color: $dark;position: relative;opacity: 0.8;}
+  span {font-size: 12px;font-weight: bold;background-color: rgba(74,74,74,0.8);
     width: 10px;height: 10px;position: absolute
   }
 }

@@ -47,7 +47,7 @@ msgstr "ခေါင်းစဥ်"
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_select_photos.html.haml:3
 msgid "3. Show some photos"
-msgstr "၃၊ ပံအချို့ကိုပြပါ"
+msgstr "၃၊ ပုံအချို့ကိုပြပါ"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/about.html.haml:19
@@ -62,7 +62,7 @@ msgstr "ဘာသာစကားပြောင်းရန်"
 #, elixir-format
 #: lib/boncoin_web/templates/layout/_sidebar.html.haml:85
 msgid "Conditions"
-msgstr "အခြေအနေ"
+msgstr "စည်းကမ်းချက်များ"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/about.html.haml:49
@@ -355,7 +355,7 @@ msgstr "ပေါချောင်ကောင်းအကြောင်း"
 #, elixir-format
 #: lib/boncoin_web/templates/user/form.html.haml:35
 msgid "Phone number"
-msgstr ""
+msgstr "ဖုန်းနံပါတ်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/about.html.haml:6
@@ -370,12 +370,12 @@ msgstr "ပေါချောင်ကောင်းသည် Akhal Company Lim
 #, elixir-format
 #: lib/boncoin_web/templates/public/about.html.haml:55
 msgid "introduce the join us"
-msgstr "ပေါချောင်ကောင်းအဖွဲ့သည် စိတ်အားထက်သန်ပြီး ပေါချောင်ကောင်း၏စွန့်စားလုပ်ဆောင်များနှင့် ပူးပေါင်းလိုသူများကိုငှားရမ်းလိုပါသည်။ သင်သည်မြန်မာနိုင်ငံသားဖြစ်ပြီးအင်္ဂလိပ်ဘာသာစကားကိုကျွမ်းကျင်ပိုင်နိုင်သူဖြစ်၍ online sales အတွေ့အကြုံရှိပါက သင့် CV ကို candidate@pawchaungkaung.com သို့ပေးပို့နိုင်ပါသည်။"
+msgstr "ပေါချောင်ကောင်းအဖွဲ့သည် စိတ်အားထက်သန်ပြီး ပေါချောင်ကောင်း၏ စွန့်စားလုပ်ဆောင်များနှင့် ပူးပေါင်းလိုသူများကိုငှားရမ်းလိုပါသည်။ သင်သည်မြန်မာနိုင်ငံသားဖြစ်ပြီးအင်္ဂလိပ်ဘာသာစကားကိုကျွမ်းကျင်ပိုင်နိုင်သူဖြစ်၍ online sales အတွေ့အကြုံရှိပါက သင့် CV ကို contact@pawchaungkaung.com သို့ပေးပို့နိုင်ပါသည်။"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/about.html.haml:40
 msgid "introduce the work with us"
-msgstr "သင်ကုန်ပစ္စည်း/လုပ်ငန်းကို အရောင်းမြင့်တင်နိုင်ရန်အတွက် ပေါခြောင်ကောင်းမှကြော်ငြာ လက်ခံခြင်းအားဖြင့်ဝန်ဆောင်မှု ပေးနိုင်ကြာင်းအဆိုပြုလိုပါသည်။ ထိုကြော်ငြာသည် ပေါခြောင်ကောင်း website သို့ဝင်ရောက်ကြည့်ရှုသူ/အသုံးပြုသူအားလုံးသို့တင်ပြနိုင်မည်ဖြစ်သည်။ သင်၏ရည်မှန်းချက်များအောင်မြင်ရန်အတွက်ကျွန်တော်ကျွန်မတို့ထံ၌အဓိကကျသည့် လုပ်ဆောင်ချက်များရှိသည်။ အသေးစိတ်သိရှိလိုပါက ပေါခြောင်ကောင်းသို့  services@pawchaungkaung.com မှတဆင့်ဆက်သွယ်နိုင်ပါသည်။"
+msgstr "သင်ကုန်ပစ္စည်း/လုပ်ငန်းကို အရောင်းမြင့်တင်နိုင်ရန်အတွက် ပေါခြောင်ကောင်းမှကြော်ငြာ လက်ခံခြင်းအားဖြင့်ဝန်ဆောင်မှု ပေးနိုင်ကြာင်းအဆိုပြုပါသည်။ ထိုကြော်ငြာသည် ပေါခြောင်ကောင်း website သို့ဝင်ရောက်ကြည့်ရှုသူ/အသုံးပြုသူအားလုံးသို့တင်ပြနိုင်မည်ဖြစ်သည်။ သင်၏ရည်မှန်းချက်များအောင်မြင်ရန်အတွက်ကျွန်တော်ကျွန်မတို့ထံ၌အဓိကကျသည့် လုပ်ဆောင်ချက်များရှိသည်။ အသေးစိတ်သိရှိလိုပါက ပေါခြောင်ကောင်းသို့  contact@pawchaungkaung.com မှတဆင့်ဆက်သွယ်နိုင်ပါသည်။"
 
 #, elixir-format
 #: lib/boncoin_web/templates/user/new_user_announce.html.haml:5
@@ -444,7 +444,7 @@ msgstr "website အတွက်အကြံဉဏ်ပေးရန် (သိ�
 #: lib/boncoin_web/templates/public/about.html.haml:77
 #: lib/boncoin_web/templates/public/about.html.haml:84
 msgid "we wont answer to offers messages"
-msgstr "ကျေးဇူးပြု၍မှတ်သားရန်မှာ ရောင်းသူနှင့်ဝယ်သူကြားဆက်ဆံရေးနှင့်ပါတ်သက်သည့် မေးခွန်းများ (သို့) ရောင်းမည့်ပစ္စည်းနှင့်ပါတ်သက်သည့်မေးခွန်းများကို ပြန်လည်ဖြေကြားမည် မဟုတ်ပါ။ ကျေးဇူးပြု၍အသေးစိတ်သိရှိလိုပါက စည်းကမ်းချက်နှင့်သတ်မှတ်ချက်များကိုဖတ် ကြည့်ပါ။"
+msgstr "ကျေးဇူးပြု၍မှတ်သားရန်မှာ ရောင်းသူနှင့်ဝယ်သူကြားဆက်ဆံရေးနှင့်ပါတ်သက်သည့် မေးခွန်းများ (သို့) ရောင်းမည့်ပစ္စည်းနှင့်ပါတ်သက်သည့်မေးခွန်းများကို ပြန်လည်ဖြေကြားမည် မဟုတ်ပါ။ ကျေးဇူးပြု၍အသေးစိတ်သိရှိလိုပါက "
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/about.html.haml:34
@@ -459,12 +459,12 @@ msgstr "သင်နှင့်နီးစပ်ရာတွင်ရှာဖ
 #, elixir-format
 #: lib/boncoin_web/templates/user/new_user_announce.html.haml:3
 msgid "Please note that your are acting on your own..."
-msgstr "ကျေးဇူးပြု၍မှတ်သားထားရန်မှာ သင်သည်သင်၏ဆန္ဒအတိုင်းဆောင်ရွက်နေသည်ဖြစ်ပြီး နောက်ဆက်တွဲဖြစ်ပေါ်လာနိုင်သည့် အခြားသူများမှသင်၏နံပါတ်ကို အချိန်မရွေးဆက်သွယ်လာ နိုင်သည့်ကိစ္စကို ပေါခြောင်ကောင်း website မှ တာဝန်ယူလိမ့်မည်မဟုတ်ပါ။ သင်၏ရောင်းရန် ပစ္စည်းကြော်ငြာကို online သို့မရောက်မီ ပေါခြောင်ကောင်းမှ စီစစ်ပြီးနောက် ကြော်ငြာကို online သို့တင်ပေးမည်ဖြစ်သည်။"
+msgstr "ကျေးဇူးပြု၍မှတ်သားထားရန်မှာ သင်သည်သင်၏ဆန္ဒအတိုင်းဆောင်ရွက်နေသည်ဖြစ်ပြီး နောက်ဆက်တွဲဖြစ်ပေါ်လာနိုင်သော အခြားသူများမှသင်၏နံပါတ်ကို အချိန်မရွေးဆက်သွယ်လာ နိုင်သည့်ကိစ္စကို ပေါခြောင်ကောင်း website မှ တာဝန်ယူလိမ့်မည်မဟုတ်ပါ။ သင်၏ရောင်းရန် ပစ္စည်းကြော်ငြာကို online သို့မရောက်မီ ပေါခြောင်ကောင်းမှ စီစစ်ပြီးနောက် ကြော်ငြာကို online သို့တင်ပေးမည်ဖြစ်သည်။"
 
 #, elixir-format
 #: lib/boncoin_web/templates/user/new_user_announce.html.haml:30
 msgid "Describe your offer (size, dimensions, condition, scratches, date of buy, ...)"
-msgstr "သင့်ရောင်းရန်ပစ္စည်း၏ (အရွယ်အစား၊ အခြေအနေ၊ အနာအစာ၊ ဝယ်ယူသည့်ရက်စွဲ၊ အစရှိသည်ဖြင့်) ဖေါ်ပြရန်။"
+msgstr "သင့်ရောင်းရန်ပစ္စည်း၏ (အရွယ်အစား၊ အခြေအနေ၊ အနာအစာ၊ ဝယ်ယူခဲ့သည့်ရက်စွဲ၊ အစရှိသည်ဖြင့်) ဖေါ်ပြရန်။"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:68
@@ -725,12 +725,12 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/announce/public_index.html.haml:22
 msgid "Sorry, we don't have any offer for your search."
-msgstr ""
+msgstr "စိတ်မကေားပါဘူး ကျွန်ပ်တို့တိမှာသင်ရှာဖွေနေိုတောကြောငြာမရှိပါ"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:55
 msgid "Open Viber on my phone"
-msgstr ""
+msgstr "ကျွန်တော်/မ၏ ဖုန်းတွင် Viber ဖွင့်ရန်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:44
@@ -740,33 +740,33 @@ msgstr "အသိပေးချက်များကိုလက်ခံရရ
 #, elixir-format
 #: lib/boncoin_web/templates/user/_details_form.html.haml:86
 msgid "Send me notifications by Messenger"
-msgstr ""
+msgstr "သတိပေ၊ချက်များကို Messenger မှတဆင့်ကျွန်ပ်ထံပိုပေးရန်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/user/_details_form.html.haml:75
 #: lib/boncoin_web/templates/user/_details_form.html.haml:80
 msgid "Send me notifications by Viber"
-msgstr ""
+msgstr "သတိပေ၊ချက်များကို Viber မှတဆင့်ကျွန်ပ်ထံပိုပေးရန်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_describe_offer.html.haml:60
 msgid "give"
-msgstr ""
+msgstr "ပေးရန်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_describe_offer.html.haml:55
 msgid "rent"
-msgstr ""
+msgstr "ငှားရန်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_describe_offer.html.haml:50
 msgid "sell"
-msgstr ""
+msgstr "ရောင်းရန်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:5
 msgid "Connect to PawChaungKaung by Viber or Messenger !"
-msgstr ""
+msgstr "ပေါကြောင်ကောင်သို Viber (သို့) Messenger မှတဆင့်ချိက်ဆက်ရန်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:105
@@ -781,32 +781,32 @@ msgstr "သင်၏ရောင်းရန်ပစ္စည်းစာရင
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:29
 msgid "How to receive notifications by Messenger ?"
-msgstr "အသိပေးချက်များကိုလက်ခံရရှိနိုင်ရန်"
+msgstr "Messenger အားဖြင့်အသိပေးချက်များကိုလက်ခံရရှိနိုင်ရန်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:120
 msgid "How to unlink your Viber or Messenger account ?"
-msgstr "သင်၏ဗိုင်ဘာကိုဘယ်လိုအချိတ်အဆက်ဖြုတ်မလဲ"
+msgstr "သင်၏ Viber or Messenger ကိုဘယ်လိုအချိတ်အဆက်ဖြုတ်မလဲ"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:127
 msgid "Please note that you can't unlink your phone number if you still have active offers."
-msgstr ""
+msgstr "ကျေးဇုးပြု၍မှတ်သားရမ်သင်ကြောင်ငြာသည်လိုင်းပေါ်တွင်တင်ထားသရွေသင်ဖုန်းနံပါတ်ကိုအချိတ်အဆက်ဖြုတ်၍ရမည်မဟုတ်ပါ"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:35
 msgid "Please open a conversation with PawChaungKaung on Messenger."
-msgstr ""
+msgstr "ကျေးဇုးပြု၍ Messenger မှတဆင့် PawChaungKaung သိုဆက်သွယ်ပါ"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:50
 msgid "Please open a conversation with PawChaungKaung on Viber."
-msgstr ""
+msgstr "ကျေးဇုးပြု၍ Viber မှတဆင့် PawChaungKaung သိုဆက်သွယ်ပါ"
 
 #, elixir-format
 #: lib/boncoin_web/templates/layout/_sidebar.html.haml:79
 msgid "Receive notifications"
-msgstr "ဗိုင်ဘာသတိပေးချက်များ"
+msgstr "သတိပေးချက်များရယူရန်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/user/new_user_announce.html.haml:55
@@ -816,82 +816,82 @@ msgstr "ဤအရောင်းကိုတင်ရန်"
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:6
 msgid "We will send you notifications (this conversation is private between you and PawChaungKaung)."
-msgstr ""
+msgstr "ကျန်ပ်တို့သည်သင်ထံသိုအကြောင်ကြာဉချက်များကိုပေးပိုမည် (ထိုဆက်သွယ်မှုသည် PawChaungKaung နှင့်သင့်အကြားသီသန်ဖြစ်သည်)။ "
 
 #, elixir-format
 #: lib/boncoin_web/templates/user/_details_form.html.haml:56
 msgid "You are linked by Messenger"
-msgstr ""
+msgstr "Messenger နှင့်ဆက်သွယ်ပြီးဖြစ်သည်။"
 
 #, elixir-format
 #: lib/boncoin_web/templates/user/_details_form.html.haml:50
 msgid "You are linked by Viber"
-msgstr ""
+msgstr "Viber နှင့်ဆက်သွယ်ပြီးဖြစ်သည်။"
 
 #, elixir-format
 #: lib/boncoin_web/templates/user/_details_form.html.haml:31
 msgid "Viber phone number"
-msgstr ""
+msgstr "သင့် Viber နံပါတ်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_describe_offer.html.haml:57
 msgid "I don't want to throw it, so I sell it for very cheap price."
-msgstr ""
+msgstr "၍ပစ္စည်းကိုမလွှင့်ပစ်ချင်ပါထိုကြောင်စျေးအလွန်သက်သာစွာဖြင့်ရောင်းပါမည်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/user/_details_form.html.haml:69
 msgid "Please choose how PawChaungKaung can contact you (this conversation will be private)"
-msgstr ""
+msgstr "ကျေးဇူးပြု၍ PawChaungKaung မှသင်ထံသိုမည်သို့အဆက်သွယ်ရမည်ကိုရွေးချယ်ပါ။ (၍ဆက်သွယ်မှုသည်သီးသန်ဖြစ်သည်။)"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_user_footer_infos.html.haml:5
 msgid "%{nb_times}people saw it"
-msgstr ""
+msgstr "လူများ (%{nb_times}) ခန်တွေပြိပါပြိ"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_user_footer_actions.html.haml:9
 msgid "Cancel this offer"
-msgstr ""
+msgstr "၍ကြော်ငြာကိုပယ်ဖျက်မည်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_user_footer_actions.html.haml:4
 msgid "I already sold it"
-msgstr ""
+msgstr "၍ပစ္စည်းကိုရောင်းပြိပါပြိ"
 
 #, elixir-format
 #: lib/boncoin_web/templates/user/_details_form.html.haml:33
 msgid "If you want, your Viber phone number (+95xxxxxxxxxx)"
-msgstr ""
+msgstr "ဆန္ဒရှိပါက သင့် Viber နံပါတ် (+95xxxxxxxxxx)"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_public_modal_offer.html.haml:17
 msgid "See contact"
-msgstr ""
+msgstr "အဆက်အသွယ်ကိုကြည့်ပါ"
 
 #, elixir-format
 #: lib/boncoin_web/views/announce_view.ex:78
 msgid "The owner gives the product, you can propose your price"
-msgstr ""
+msgstr "ပိုင်ရှင်သည်ကုန်ပစ္စည်းကိုပေဉသည်၊ သင်သည်စျေနှုန်ကိုအဆိုပြုနိုင်သည်။"
 
 #, elixir-format
 #: lib/boncoin_web/views/announce_view.ex:77
 msgid "The owner is renting the product"
-msgstr ""
+msgstr "ပိုင်ရှင်သည်ကုန်ပစ္စည်းကိငါးရန်းလိုပါသည်"
 
 #, elixir-format
 #: lib/boncoin_web/views/announce_view.ex:76
 msgid "The owner is selling the product"
-msgstr ""
+msgstr "ပိုင်ရှင်သည်ကုန်ပစ္စည်းကိရောင်ရန်းလိုပါသည်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/public_likes.html.haml:21
 msgid "Please search again !"
-msgstr ""
+msgstr "ကျေးဇုးပြု၍ထပ်ရှာပါ"
 
 #, elixir-format
 #: lib/boncoin_web/controllers/announce_controller.ex:107
 msgid "This offer is no more published."
-msgstr ""
+msgstr "၍ကြော်ငြာသည်မရှိတော့ပါ"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/public_likes.html.haml:19
@@ -906,7 +906,7 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/controllers/user_controller.ex:72
 msgid "Your offer was created. We will treat it soon."
-msgstr ""
+msgstr "သင့်၏ကြော်ငြာကိုပြုလုပ်ပြိးပါပြီ။ PawChaungKaung မှမကြာဝင်သုံးသပ်မည်ဖြစ်သည်"
 
 #, elixir-format
 #: lib/boncoin_web/controllers/announce_controller.ex:89
@@ -916,12 +916,12 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/controllers/announce_controller.ex:121
 msgid "Your offer has been closed and is no more online."
-msgstr ""
+msgstr "သင့်ရဲ့ကြော်ငြာကိုပိထ်လိုက်ပါပြိ။ Online တွင်ဉရှိတော့ပါ။"
 
 #, elixir-format
 #: lib/boncoin_web/controllers/announce_controller.ex:100
 msgid "Sorry, this offer doesn't exist or the link is broken."
-msgstr ""
+msgstr "စတ်မကောင်းပါဘူး၊ သင့်ရဲကြော်ငြာမရှိပါ (သို့) အချိတ်အဆက်ပျက်ပါသည်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:58
@@ -936,4 +936,4 @@ msgstr "စည်းကမ်းချက်နှင့်သတ်မှတ်
 #, elixir-format
 #: lib/boncoin_web/templates/public/about.html.haml:88
 msgid "we wont answer to offers messages (burmese end)"
-msgstr "ကျေးဇူးပြု၍မှတ်သားရန်မှာ ရောင်းသူနှင့်ဝယ်သူကြားဆက်ဆံရေးနှင့်ပါတ်သက်သည့် မေးခွန်းများ (သို့) ရောင်းမည့်ပစ္စည်းနှင့်ပါတ်သက်သည့်မေးခွန်းများကို ပြန်လည်ဖြေကြားမည် မဟုတ်ပါ။ ကျေးဇူးပြု၍အသေးစိတ်သိရှိလိုပါက စည်းကမ်းချက်နှင့်သတ်မှတ်ချက်များကိုဖတ် ကြည့်ပါ။"
+msgstr " သို့ဝင်ကြည့်ပါ။"

@@ -51,8 +51,19 @@ defmodule BoncoinWeb.AnnounceView do
     end
   end
 
-  def show_price(price, currency) do
-    "#{Kernel.round(price)} #{currency}"
+  def show_price(price, "USD") do
+    case Gettext.get_locale() do
+      "en" -> "#{price} USD"
+      "my" -> "#{price} USD"
+      "dz" -> "#{Rabbit.uni2zg(price)} USD"
+    end
+  end
+  def show_price(price, "Kyats") do
+    case Gettext.get_locale() do
+      "en" -> "#{price} Kyats"
+      "my" -> "#{price} ကျပ်"
+      "dz" -> "#{Rabbit.uni2zg(price)} #{Rabbit.uni2zg("ကျပ်")}"
+    end
   end
 
   def show_sell_mode(sell_mode) do

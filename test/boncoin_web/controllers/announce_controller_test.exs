@@ -7,8 +7,8 @@ defmodule BoncoinWeb.AnnounceControllerTest do
   import Mockery.Assertions
   use Mockery
 
-  @create_attrs %{conditions: true, description: "some description", language: "some language", image_file_1: Announce.image_param_example(), image_file_2: "", image_file_3: "", price: 120.5, title: "some title"}
-  @update_attrs %{conditions: false, description: "some updated description", language: "some updated language", image_file_1: Announce.image_param_example(), image_file_2: "", image_file_3: "", price: 456.7, title: "some updated title"}
+  @create_attrs %{conditions: true, description: "some description", language: "some language", image_file_1: Announce.image_param_example(), image_file_2: "", image_file_3: "", price: "120", title: "some title"}
+  @update_attrs %{conditions: false, description: "some updated description", language: "some updated language", image_file_1: Announce.image_param_example(), image_file_2: "", image_file_3: "", price: "450", title: "some updated title"}
   @invalid_attrs %{conditions: nil, description: nil, language: nil, photo1: nil, photo2: nil, photo3: nil, price: nil, status: nil, title: nil}
   @moduletag :AnnounceController
   @moduletag :Controller
@@ -87,7 +87,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       offer = insert(:announce, %{user_id: user.id, status: "ONLINE"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "ADMIN_DECISION", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      msg = "Hi Mr unknown, your offer an offer title has been closed following an admin decision.. \nPlease come back to https://www.pawchaungkaung.com/offer/new/09000000000"
+      msg = "Hi Mr unknown, your offer an offer title has been closed following an admin decision.. \nPlease create a new one on https://www.pawchaungkaung.com/offer/new/09000000000"
       assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
       assert new_offer.status == "CLOSED"
       assert new_offer.cause == "ADMIN_DECISION"
@@ -98,7 +98,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       offer = insert(:announce, %{user_id: user.id, status: "ONLINE"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "TIME_PASSED", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      msg = "Hi Mr unknown, your offer an offer title has been closed after its publication time.. \nPlease come back to https://www.pawchaungkaung.com/offer/new/09000000000"
+      msg = "Hi Mr unknown, your offer an offer title has been closed after its publication time.. \nPlease create a new one on https://www.pawchaungkaung.com/offer/new/09000000000"
       assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
       assert new_offer.status == "CLOSED"
       assert new_offer.cause == "TIME_PASSED"
@@ -107,7 +107,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
     test "deletes chosen announce from dashboard", %{conn: conn} do
       announce = insert(:announce)
       conn = delete conn, announce_path(conn, :delete, announce)
-      assert html_response(conn, 308)
+      assert html_response(conn, 302)
       assert get_flash(conn, :info) == "Offer deleted successfully."
     end
   end
@@ -197,7 +197,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       user_params = %{phone_number: "09000000114", nickname: "some_nickname"}
       township = insert(:township)
       category = insert(:category)
-      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{price: ""}), user_params, township.id, category.id)
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{price: "sz"}), user_params, township.id, category.id)
       assert html_response(conn, 200) =~ "Fill your details"
       assert get_flash(conn, :alert) == "Please give a price to your offer."
     end
@@ -275,7 +275,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       user_params = %{phone_number: user.phone_number, nickname: user.nickname}
       township = insert(:township)
       category = insert(:category)
-      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{price: ""}), user_params, township.id, category.id)
+      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{price: "dede"}), user_params, township.id, category.id)
       assert html_response(conn, 200) =~ "Fill your details"
       assert get_flash(conn, :alert) == "Please give a price to your offer."
     end

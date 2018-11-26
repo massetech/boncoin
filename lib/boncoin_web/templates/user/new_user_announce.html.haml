@@ -20,7 +20,7 @@
             %span.input-group-prepend
               .input-group-text.bg-transparent
                 %i.fa.fa-edit
-            = textarea a, :description, class: "form-control", rows: "8", maxlength: "200", autocomplete: "nope", placeholder: gettext("Describe your offer (size, dimensions, condition, scratches, date of buy, ...)")
+            = textarea a, :description, class: "form-control", rows: "8", maxlength: "200", autocomplete: "nope", placeholder: LayoutView.convert_zawgyi(gettext("Describe your offer (size, dimensions, condition, scratches, date of buy, ...)"))
       .col-xs-12.col-sm-6.order-xs-4.order-sm-3.my-3.collapse.collapsible_form_offer
         = render BoncoinWeb.AnnounceView, "_select_photos.html"
 

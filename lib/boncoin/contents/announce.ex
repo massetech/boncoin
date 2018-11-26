@@ -12,7 +12,7 @@ defmodule Boncoin.Contents.Announce do
     field :language, :string
     field :latitute, :string
     field :longitude, :string
-    field :price, :float
+    field :price, :string, default: "0"
     field :currency, :string, default: "kyat"
     field :sell_mode, :string, default: "SELL"
     field :status, :string, default: "PENDING"
@@ -40,7 +40,7 @@ defmodule Boncoin.Contents.Announce do
   @doc false
   def changeset(announce, attrs) do
     params = attrs
-      |> CustomModules.convert_fields_to_burmese_uni([:title, :description])
+      |> CustomModules.convert_fields_to_burmese_uni(["title", "description", "price"])
     announce
       |> cast(params, @required_fields ++ @optional_fields)
       |> validate_required(@required_fields)
@@ -48,10 +48,21 @@ defmodule Boncoin.Contents.Announce do
       |> assoc_constraint(:category)
       |> assoc_constraint(:township)
       |> validate_inclusion(:status, ["PENDING", "ONLINE", "REFUSED", "OUTDATED", "CLOSED"])
-      |> validate_inclusion(:currency, ["Kyats", "Lacks", "USD"])
+      |> validate_inclusion(:currency, ["Kyats", "USD"])
       |> validate_inclusion(:sell_mode, ["SELL", "RENT", "GIVE"])
       |> check_offer_has_one_photo_min(params)
       |> refuse_users_without_active_bot(params)
+      |> refuse_non_numeric_price(params)
+  end
+
+  defp refuse_non_numeric_price(changeset, %{"price" => price}) do
+    case String.match?(price, ~r/[^1234567890၁၂၃၄၅၆၇၈၉၀]/) do
+      false -> changeset
+      true -> add_error(changeset, :price, "this is not a numeric price")
+    end
+  end
+  defp refuse_non_numeric_price(changeset, _) do
+    changeset
   end
 
   defp refuse_users_without_active_bot(changeset, %{"user_id" => user_id}) do

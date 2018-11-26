@@ -110,7 +110,7 @@ defmodule BoncoinWeb.ConversationTest do
         IO.puts("test 11")
         messenger_params = messenger_params(messenger_id, "*123#")
         receive_messenger_msg(conn, messenger_id, messenger_params)
-        assert_sent_messenger_msg("language", messenger_id, "Please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ 1\n  -> မြန်မာ(ယူနီကုတ်)အတွက် 2\n  -> For English send 3")
+        assert_sent_messenger_msg("language", messenger_id, "ေက်းဇူးျပဳ၍သင္၏ဘာသာစကားကိုေ႐ြးခ်ယ္ပါ\n\nPlease choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ 1\n  -> မြန်မာ(ယူနီကုတ်)အတွက် 2\n  -> For English send 3")
         messenger_params = messenger_params(messenger_id, "2")
         receive_messenger_msg(conn, messenger_id, messenger_params)
         assert_sent_messenger_msg("no_scope", messenger_id, "")

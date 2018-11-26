@@ -87,6 +87,8 @@ defmodule Boncoin.ViberApi do
   end
 
   def send_message(viber_id, message) do
+    # IO.inspect(viber_id)
+    # IO.inspect(message)
     data = %{sender: %{name: "PawChaungKaung", avatar: ""}, receiver: viber_id, type: "text", tracking_data: "", text: message}
     post("send_message", data)
   end

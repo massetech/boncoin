@@ -1,6 +1,6 @@
 %nav{aria-label: "breadcrumb"}
   %ol.breadcrumb
-    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard)
+    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard), class: "text-secondary"
     %li.breadcrumb-item.active{aria-current: "page"}= "Users"
 
 .row.my-3
@@ -61,8 +61,7 @@
           %td.text-truncate{style: "max-width: 30px;", data-toggle: "popover", title: "bot_id", data-placement: "top", data-content: "#{user.bot_id}"}
             = user.bot_id
           %td
-            .d-none.d-sm-block
-              = LayoutView.icon_active(user.bot_active)
+            = LayoutView.icon_active(user.bot_active)
           %td= Enum.count(user.announces, &(&1.status == "ONLINE"))
           %td= Enum.count(user.announces, &(&1.status == "PENDING"))
           %td= Enum.count(user.announces, &(&1.status == "CLOSED"))

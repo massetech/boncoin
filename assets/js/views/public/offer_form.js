@@ -45,7 +45,7 @@ let init_functions = () => {
     reset_announce_form_field()
   })
   $('#gift-btn').on('click', function () {
-    $('#user_announces_0_price').val("100")
+    $('#user_announces_0_price').val("0")
     $('#ddown-currency-kyats').trigger('click');
   })
   // Currency selector
@@ -65,14 +65,14 @@ let init_functions = () => {
     }
   })
   // Makes sure to get rounded prices only
-  $('#announce_price').on('change', function() {
-    var price = $(this).val()
-    var rounded_price = Math.round(price)
-    if(isNaN(rounded_price)) {
-      rounded_price = "";
-    }
-    $(this).val(rounded_price).focus()
-  })
+  // $('#announce_price').on('change', function() {
+  //   var price = $(this).val()
+  //   var rounded_price = Math.round(price)
+  //   if(isNaN(rounded_price)) {
+  //     rounded_price = "";
+  //   }
+  //   $(this).val(rounded_price).focus()
+  // })
 }
 
 // Empty form when the phone_number is not accepted

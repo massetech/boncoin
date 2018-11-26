@@ -6,13 +6,18 @@ defmodule Boncoin.CustomModules do
     msg
   end
 
+  def convert_fields_to_burmese_uni(%{"language" => language} = params, keys_list) do
+    case language do
+      "dz" -> Enum.into(params, %{}, fn {k, v} -> convert_field_to_uni(k, v, keys_list) end)
+      _ -> params
+    end
+  end
   def convert_fields_to_burmese_uni(params, keys_list) do
     params
-      |> Enum.into(%{}, fn {k, v} -> convert_field_to_burmese(k, v, keys_list) end)
   end
 
-  defp convert_field_to_burmese(key, nil, keys_list), do: {key, nil} # Avoid bug if nil is passed
-  defp convert_field_to_burmese(key, value, keys_list) do
+  defp convert_field_to_uni(key, nil, keys_list), do: {key, nil}
+  defp convert_field_to_uni(key, value, keys_list) do
     case Enum.member?(keys_list, key) do
       false -> {key, value}
       true -> {key, Rabbit.zg2uni(value)}
