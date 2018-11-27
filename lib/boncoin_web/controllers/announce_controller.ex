@@ -91,14 +91,16 @@ defmodule BoncoinWeb.AnnounceController do
   end
 
   def show(conn, %{"id" => offer_id}) do
-    url = request_url(conn) |> IO.inspect()
-    # url = current_url(conn) |> IO.inspect()
-    case Cipher.validate_signed_url(url) do
+    # url = request_url(conn) |> IO.inspect()
+    # url = current_url(conn)
+    path = current_path(conn)
+    IO.puts("in show")
+    IO.inspect(path)
+    # path = conn.request_path |> IO.inspect()
+    case Cipher.validate_signed_url(path) do
       {:error, msg} ->
         IO.puts("cipher response")
         IO.inspect(msg)
-        IO.inspect(conn)
-        IO.inspect(current_url(conn))
         conn
           |> put_flash(:alert, gettext("Sorry, this offer doesn't exist or the link is broken."))
           |> redirect(to: root_path(conn, :welcome))

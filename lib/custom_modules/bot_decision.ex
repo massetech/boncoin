@@ -25,8 +25,8 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   def offer_view_link(offer_id) do
-    url = "#{website_url()}/user/offer/#{offer_id}"
-      |> Cipher.sign_url()
+    path = "/user/offer/#{offer_id}" |> Cipher.sign_url()
+    "#{website_url()}#{path}"
   end
 
   defp website_url() do

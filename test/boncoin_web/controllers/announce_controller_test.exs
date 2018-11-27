@@ -3,6 +3,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
   alias Boncoin.{Contents, ViberApi, MessengerApi}
   alias Boncoin.Contents.Announce
   alias BoncoinWeb.LayoutView
+  alias Boncoin.CustomModules.BotDecisions
   import Boncoin.Factory
   import Mockery.Assertions
   use Mockery
@@ -327,7 +328,8 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       offer = insert(:announce, %{title: "dede"})
       # safe_link = Cipher.encrypt(Integer.to_string(offer.id))
       # {:ok, offer} = Contents.update_announce(offer, %{safe_link: safe_link})
-      url = Cipher.sign_url("http://localhost:4001/#{announce_path(conn, :show, offer.id)}")
+      url = BotDecisions.offer_view_link(offer.id)
+      #Cipher.sign_url("http://localhost:4001/#{announce_path(conn, :show, offer.id)}")
       conn = get conn, url
       assert html_response(conn, 200) =~ "dede"
     end
@@ -336,7 +338,8 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       # safe_link = Cipher.encrypt(Integer.to_string(offer.id))
       # {:ok, offer} = Contents.update_announce(offer, %{safe_link: safe_link})
       # conn = get conn, announce_path(conn, :show, offer.safe_link)
-      url = Cipher.sign_url("http://localhost:4001/#{announce_path(conn, :show, offer.id)}")
+      url = BotDecisions.offer_view_link(offer.id)
+      # Cipher.sign_url("http://localhost:4001/#{announce_path(conn, :show, offer.id)}")
       conn = get conn, url
       assert html_response(conn, 302)
       assert get_flash(conn, :info) == "This offer is no more published."
@@ -345,7 +348,8 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       # offer = insert(:announce, %{safe_link: "whatever_wrong_link"})
       offer = insert(:announce)
       # conn = get conn, announce_path(conn, :show, offer.safe_link)
-      url = Cipher.sign_url("http://localhost:4001/#{announce_path(conn, :show, offer.id)}")
+      url = BotDecisions.offer_view_link(offer.id)
+        # Cipher.sign_url("http://localhost:4001/#{announce_path(conn, :show, offer.id)}")
         |> String.replace("b", "") # Removes all the "b" from the string
         |> String.replace("y", "") # Removes all the "b" from the string
         |> String.replace("z", "") # Removes all the "b" from the string
