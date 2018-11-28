@@ -52,16 +52,16 @@ defmodule BoncoinWeb.UserController do
   def new_user_announce(conn, _params) do
     changeset = Members.change_user(%User{announces: [%Announce{}]})
     conn
-      # |> put_flash(:info, convert_zawgyi(gettext("Please check that your township is opened")))
       |> render("new_user_announce.html", changeset: changeset)
   end
 
-  def new_user_announce_with_phone(conn, %{"phone_number" => phone_number}) do
+  def new_user_announce_with_phone(conn, %{"phone_number" => phone_number} = params) do
+    offer_params = if Map.has_key?(params, "offer_params"), do: params["offer_params"], else: %{}
     case User.check_myanmar_phone_number(phone_number) do
       true ->
-        changeset = Members.change_user(%User{phone_number: phone_number, announces: [%Announce{}]})
+        offer_changeset = Announce.changeset(%Announce{}, offer_params)
+        changeset = Members.change_user(%User{phone_number: phone_number, announces: [offer_changeset]})
         conn
-          # |> put_flash(:info, "Errors, please check.")
           |> render("new_user_announce.html", changeset: changeset)
       false -> redirect(conn, to: user_path(conn, :new_user_announce))
     end
@@ -70,17 +70,15 @@ defmodule BoncoinWeb.UserController do
   def create_announce(conn, %{"user" => params}) do
     case Members.create_user_announce(params) do
       {:ok, announce} ->
-        # Contents.add_safe_link_to_last_offer(announce)
         conn
           |> put_flash(:info, gettext("Your offer was created. We will treat it soon."))
           |> redirect(to: public_offers_path(conn, :public_index, search: %{township_id: "#{announce.township_id}"}))
       {:error, %Ecto.Changeset{} = changeset} ->
-        %{"announces" => %{"0" => offer_params}} = params
-        new_offer = Announce.changeset(%Announce{}, offer_params)
-        new_changeset = Members.change_user(%User{announces: [new_offer]})
+        %{"phone_number" => phone_number, "announces" => %{"0" => offer_params}} = params
+        offer_params = Map.drop(offer_params, ["image_file_1", "image_file_2", "image_file_3"])
         conn
           |> put_flash(:alert, User.show_errors_in_msg(changeset))
-          |> render("new_user_announce.html", changeset: new_changeset)
+          |> redirect(to: user_path(conn, :new_user_announce_with_phone, phone_number, offer_params: offer_params))
     end
   end
 

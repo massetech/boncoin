@@ -51,6 +51,7 @@ defmodule Boncoin.Contents.Announce do
       |> validate_inclusion(:currency, ["Kyats", "USD"])
       |> validate_inclusion(:sell_mode, ["SELL", "RENT", "GIVE"])
       |> check_offer_has_one_photo_min(params)
+      |> check_offer_has_accepted_conditions(params)
       |> refuse_users_without_active_bot(params)
       |> refuse_non_numeric_price(params)
   end
@@ -86,6 +87,13 @@ defmodule Boncoin.Contents.Announce do
     end
   end
   defp check_offer_has_one_photo_min(changeset, %{}), do: changeset
+
+  defp check_offer_has_accepted_conditions(changeset, %{"conditions" => value}) do
+    if value == true, do: changeset, else: add_error(changeset, :conditions, "please accepte conditions")
+  end
+  defp check_offer_has_accepted_conditions(changeset, %{}) do
+    changeset
+  end
 
   # def build_safe_link(announce_id) do
   #   Cipher.encrypt(Integer.to_string(announce_id))

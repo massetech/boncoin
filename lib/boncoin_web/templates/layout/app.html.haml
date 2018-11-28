@@ -1,29 +1,23 @@
 !!! 5
 %html(lang="en")
   %head
-    -# <!-- Global site tag (gtag.js) - Google Analytics -->
-    - if Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:google_analytics] == true do
-      %script(src="https://www.googletagmanager.com/gtag/js?id=UA-125321228-1" async)
-      %script
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-125321228-1');
     %meta(http-equiv="Content-Type" content="text/html" charset="utf-8")
     %meta(name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no")
     %meta(name="description" content="")
     %meta(name="author" content="PawChaunKaung")
     %title= "PawChaunKaung"
     %link(rel="stylesheet" href='#{static_path(@conn, "/css/app.css")}')
+    %link(rel="shortcut icon" type="image/x-icon" href='#{static_path(@conn, "/images/favicon.ico")}')
 
   %body.bg-light.side-bar-wrapper{data-js-view-name: "#{js_view_name(@conn, @view_template)}"}
     = render "_flashes.html", assigns
     = render "_sidebar.html", assigns
     - if @conn.request_path =~ "/admin/" == false do
-      .add.add-full.col-12.d-none.d-lg-block.p-0
-        = img_tag(static_path(@conn, "/images/backgrounds/myanmar_#{@conn.assigns.background_id}.jpg"), class: "full-img")
-      .add.add-left.col-lg-2.d-none.p-0
-      .add.add-right.col-lg-2.d-none.p-0
+      - unless Browser.mobile?(@conn) do
+        .add.add-full.col-12.d-none.d-lg-block.p-0
+          = img_tag(static_path(@conn, "/images/backgrounds/myanmar_#{@conn.assigns.background_id}.jpg"), class: "full-img")
+        .add.add-left.col-lg-2.d-none.p-0
+        .add.add-right.col-lg-2.d-none.p-0
       .content.container-fluid.px-0
         .row.no-gutters.align-items-center
           .main-wrapper.col-xs-12.col-lg-8.offset-lg-2.text-center.full-height.d-flex.flex.flex-column
@@ -45,4 +39,13 @@
               = render "footer.html", assigns
     .overlay
     %div{id: "config", data-api: "#{@conn.assigns.api_key}"}
+
     %script(src='#{static_path(@conn, "/js/app.js")}')
+    -# <!-- Global site tag (gtag.js) - Google Analytics -->
+    - if Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:google_analytics] == true do
+      %script(src="https://www.googletagmanager.com/gtag/js?id=UA-125321228-1" async)
+      %script
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-125321228-1');

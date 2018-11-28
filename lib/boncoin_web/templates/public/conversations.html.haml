@@ -42,7 +42,7 @@
                   %i.fab.fa-viber
                   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
               - else
-                = img_tag static_path(@conn, "/images/viber_QR_code.png"), class: "w-50"
+                = img_tag static_path(@conn, "/images/viber_QR_code.png")
 
       -# QR code explained
       .card.text-left
@@ -55,9 +55,9 @@
           .card-body.p-0
             .row
               .col-xs-12.col-sm-6
-                = img_tag static_path(@conn, "/images/viber_QR_code_explained_1.png"), class: "my-3"
+                = img_tag static_path(@conn, "/images/viber_QR_code_explained_1.png"), class: "my-3 w-100"
               .col-xs-12.col-sm-6
-                = img_tag static_path(@conn, "/images/viber_QR_code_explained_2.png"), class: "my-3"
+                = img_tag static_path(@conn, "/images/viber_QR_code_explained_2.png"), class: "my-3 w-100"
 
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#offer_list_explain", aria-expanded: "true", aria-controls: "offer_list_explain", data-parent: "#bot"}

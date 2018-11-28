@@ -8,7 +8,7 @@ html{overflow-y: scroll;} // Avoid centering jumps of scrollbar //https://css-tr
   height: calc(var(--vh, 1vh) * 100 - 3em - 1em);
   position: relative;overflow-x: hidden;
 }
-img {width: 100%;}
+// img {width: 100%;}
 img.full-img {height: 100%;object-fit: cover;}
 ::-webkit-scrollbar {
     -webkit-appearance: none;

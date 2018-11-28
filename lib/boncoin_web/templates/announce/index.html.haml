@@ -12,11 +12,9 @@
         %th
           .d-none.d-sm-block= "Phone"
         %th
-          .d-none.d-sm-block= "Nickname"
+          .d-none.d-sm-block= "Name"
         %th
           .d-none.d-sm-block= "Bot"
-        %th
-          .d-none.d-sm-block= "Provider"
         %th
           .d-none.d-sm-block= "Language"
         %th
@@ -25,6 +23,7 @@
         %th= "Category"
         %th= "Price"
         %th= "Status"
+        %th= "Cause"
         %th
           .d-none.d-sm-block= "Nb view, clic, alert"
         %th
@@ -33,6 +32,8 @@
           .d-none.d-sm-block= "Parution"
         %th
           .d-none.d-sm-block= "Validity"
+        %th
+          .d-none.d-sm-block= "Closing"
         %th
           .d-none.d-sm-block= "Admin"
     %tbody
@@ -45,9 +46,11 @@
           %td
             .d-none.d-sm-block= offer.user.nickname
           %td
-            = LayoutView.icon_active(offer.user.bot_active)
-          %td
-            .d-none.d-sm-block= offer.user.bot_provider
+            .d-none.d-sm-block
+              - if offer.user.bot_active == true do
+                = img_tag static_path(@conn, "/images/#{offer.user.bot_provider}_icon.png"), class: "logo"
+              - else
+                = "-"
           %td
             .d-none.d-sm-block= img_tag static_path(@conn, "/fonts/#{offer.language}.svg"), class: "flag-small"
           %td
@@ -62,6 +65,9 @@
             %button{class: "#{btn_status(offer.status)}", type: "button", data-toggle: "modal", data-target: "#admin_modal_offer_#{offer.id}"}
               = offer.status
           %td
+            - if offer.status != "PENDING" do
+              = offer.cause
+          %td
             .d-none.d-sm-block= "#{offer.nb_view}, #{offer.nb_clic}, #{offer.nb_alert}"
           %td
             .d-none.d-sm-block= "#{offer.inserted_at.year}/#{offer.inserted_at.day}/#{offer.inserted_at.month}"
@@ -69,6 +75,8 @@
             .d-none.d-sm-block= LayoutView.format_date(offer.parution_date)
           %td
             .d-none.d-sm-block= LayoutView.format_date(offer.validity_date)
+          %td
+            .d-none.d-sm-block= LayoutView.format_date(offer.closing_date)
           %td
             .d-none.d-sm-block
               - if @conn.assigns.current_user.role == "SUPER" do

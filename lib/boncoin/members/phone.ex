@@ -1,6 +1,7 @@
 defmodule Boncoin.Members.Phone do
   use Ecto.Schema
   import Ecto.{Query, Changeset}
+  alias Boncoin.Members.{User}
 
   schema "phones" do
     field :phone_number, :string

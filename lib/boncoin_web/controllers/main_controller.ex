@@ -1,26 +1,27 @@
 defmodule BoncoinWeb.MainController do
   use BoncoinWeb, :controller
   alias Boncoin.{ViberApi, Contents}
+  alias Boncoin.Etag
 
   def welcome(conn, _params) do
     nb_announces = Contents.count_announces_public()
     conn
-      |> render(BoncoinWeb.PublicView, "welcome.html", nb_announces: nb_announces)
+      |> Etag.render_or_cache(BoncoinWeb.PublicView, "welcome.html", %{nb_announces: nb_announces})
   end
 
   def conditions(conn, _params) do
     conn
-      |> render(BoncoinWeb.PublicView, "conditions.html")
+      |> Etag.render_or_cache(BoncoinWeb.PublicView, "conditions.html", %{})
   end
 
   def about(conn, _params) do
     conn
-      |> render(BoncoinWeb.PublicView, "about.html")
+      |> Etag.render_or_cache(BoncoinWeb.PublicView, "about.html", %{})
   end
 
   def conversations(conn, _params) do
     conn
-      |> render(BoncoinWeb.PublicView, "conversations.html")
+      |> Etag.render_or_cache(BoncoinWeb.PublicView, "conversations.html", %{})
   end
 
   def dashboard(conn, _params) do

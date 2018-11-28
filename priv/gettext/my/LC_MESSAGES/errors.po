@@ -79,3 +79,68 @@ msgstr ""
 
 msgid "must be equal to %{number}"
 msgstr ""
+
+#, elixir-format
+#: lib/boncoin/members/user.ex:67
+msgid "Phone number is already taken."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin/members/user.ex:72
+msgid "Please accept the conditions."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin/members/user.ex:66
+msgid "Please check your phone number."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin/members/user.ex:70
+msgid "Please give a price to your offer."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin/members/user.ex:74
+msgid "Please post at least one photo."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin/members/user.ex:69
+msgid "Please put a title to your offer."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin/members/user.ex:75
+msgid "This email is already used by another user."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin/members/user.ex:76
+msgid "This email not a proper email."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin/members/user.ex:68
+msgid "Viber phone number is already taken."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin/members/user.ex:73
+msgid "You must link to Viber or Messenger to create an offer."
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin/members/user.ex:65
+msgid "Please check your nickname."
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin/members/user.ex:71
+msgid "Please write a description to your offer."
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin/members/user.ex:78
+msgid "Sorry we have a technical problem.."
+msgstr ""

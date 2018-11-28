@@ -62,19 +62,20 @@ defmodule Boncoin.Members.User do
 
   def show_errors_in_msg(changeset) do
     case List.first(changeset.errors) do
-      {:nickname, _msg} -> gettext("Please check your name or nickname.")
-      {:phone_number, {"Guest phone number can't post offer", _}} -> gettext("Please check your phone number.")
-      {:phone_number, _msg} -> gettext("Phone number is already taken.")
-      {:viber_number, _msg} -> gettext("Viber phone number is already taken.")
-      {:title, _msg} -> gettext("Please put a title to your offer.")
-      {:price, _msg} -> gettext("Please give a price to your offer.")
-      {:description, _msg} -> gettext("Please write a description of your offer.")
-      {:bot_active, _} -> gettext("You must link to Viber or Messenger to create an offer.")
-      {:photo, _msg} -> gettext("Please post at least one photo.")
-      {:email, {"Email is already taken", _}} -> gettext("This email is already used by another user.")
-      {:email, {"This is not a real email", _}} -> gettext("This email not a proper email.")
+      {:nickname, _msg} -> dgettext("errors", "Please check your nickname.")
+      {:phone_number, {"Guest phone number can't post offer", _}} -> dgettext("errors", "Please check your phone number.")
+      {:phone_number, _msg} -> dgettext("errors", "Phone number is already taken.")
+      {:viber_number, _msg} -> dgettext("errors", "Viber phone number is already taken.")
+      {:title, _msg} -> dgettext("errors", "Please put a title to your offer.")
+      {:price, _msg} -> dgettext("errors", "Please give a price to your offer.")
+      {:description, _msg} -> dgettext("errors", "Please write a description to your offer.")
+      {:conditions, _msg} -> dgettext("errors", "Please accept the conditions.")
+      {:bot_active, _} -> dgettext("errors", "You must link to Viber or Messenger to create an offer.")
+      {:photo, _msg} -> dgettext("errors", "Please post at least one photo.")
+      {:email, {"Email is already taken", _}} -> dgettext("errors", "This email is already used by another user.")
+      {:email, {"This is not a real email", _}} -> dgettext("errors", "This email not a proper email.")
       _ -> # Something else went wrong
-        gettext("Sorry we have a technical problem. Please check.")
+        dgettext("errors", "Sorry we have a technical problem..")
     end
   end
 

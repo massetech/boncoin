@@ -3,7 +3,7 @@
 %nav.bg-white{id: "sidebar"}
   - link to: root_path(@conn, :welcome), class: "brand-logo text-white" do
     .sidebar-header.bg-primary.text-secondary.border-bottom.border-dark.p-3
-      = img_tag static_path(@conn, "/images/logo_colour.png"), class: ""
+      = img_tag static_path(@conn, "/images/logo_colour.png"), class: "w-100"
   %div{id: "mainMenu"}
     %ul.list-unstyled.components
       %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#menuDivision", data-parent: "#mainMenu", data-toggle: "collapse", aria-expanded: "false"}

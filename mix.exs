@@ -57,7 +57,8 @@ defmodule Boncoin.Mixfile do
       {:paginator, "~> 0.4"},
       {:ex_machina, "~> 2.2"},
       {:browser, "~> 0.1.0"},
-      {:mockery, "~> 2.3.0", runtime: false}
+      {:mockery, "~> 2.3.0", runtime: false},
+      {:phoenix_etag, "~> 0.1"}
     ]
   end
 

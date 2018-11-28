@@ -66,7 +66,7 @@ var common = {
           ]
       },
       {
-        test: /\.(png|jpg|jpeg|gif)$/,
+        test: /\.(png|jpg|jpeg|gif|ico)$/,
         // loader: "file-loader?name=/images/[name].[ext]"
         use: [{
           loader: 'file-loader', options: {

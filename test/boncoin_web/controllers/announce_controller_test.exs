@@ -188,7 +188,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{title: ""}), user_params, township.id, category.id)
-      assert html_response(conn, 200) =~ "Fill your details"
+      assert html_response(conn, 302) =~ "/offer/new/"
       assert get_flash(conn, :alert) == "Please put a title to your offer."
     end
     test "renders errors when description is empty", %{conn: conn} do
@@ -197,7 +197,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{description: ""}), user_params, township.id, category.id)
-      assert html_response(conn, 200) =~ "Fill your details"
+      assert html_response(conn, 302) =~ "/offer/new/"
       assert get_flash(conn, :alert) == "Please write a description of your offer."
     end
     test "renders errors when price is empty", %{conn: conn} do
@@ -206,7 +206,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{price: "sz"}), user_params, township.id, category.id)
-      assert html_response(conn, 200) =~ "Fill your details"
+      assert html_response(conn, 302) =~ "/offer/new/"
       assert get_flash(conn, :alert) == "Please give a price to your offer."
     end
     test "renders errors when no photo is given", %{conn: conn} do
@@ -215,7 +215,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{image_file_1: ""}), user_params, township.id, category.id)
-      assert html_response(conn, 200) =~ "Fill your details"
+      assert html_response(conn, 302) =~ "/offer/new/"
       assert get_flash(conn, :alert) == "Please post at least one photo."
     end
     test "renders errors when user surname is empty", %{conn: conn} do
@@ -223,8 +223,8 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
-      assert html_response(conn, 200) =~ "Fill your details"
-      assert get_flash(conn, :alert) == "Please check your name or nickname."
+      assert html_response(conn, 302) =~ "/offer/new/"
+      assert get_flash(conn, :alert) == "Please check your nickname."
     end
     test "renders errors when user is not linked to bot", %{conn: conn} do
       user = insert(:member_user, %{phone_number: "09000000117", bot_active: false})
@@ -232,7 +232,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
-      assert html_response(conn, 200) =~ "Fill your details"
+      assert html_response(conn, 302) =~ "/offer/new/"
       assert get_flash(conn, :alert) == "You must link to Viber or Messenger to create an offer."
     end
   end
@@ -244,7 +244,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
-      assert html_response(conn, 200) =~ "Fill your details"
+      assert html_response(conn, 302) =~ "/offer/new/"
       assert get_flash(conn, :alert) == "Please check your name or nickname."
     end
 
@@ -264,7 +264,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{title: ""}), user_params, township.id, category.id)
-      assert html_response(conn, 200) =~ "Fill your details"
+      assert html_response(conn, 302) =~ "/offer/new/"
       assert get_flash(conn, :alert) == "Please put a title to your offer."
     end
 
@@ -274,7 +274,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{description: ""}), user_params, township.id, category.id)
-      assert html_response(conn, 200) =~ "Fill your details"
+      assert html_response(conn, 302) =~ "/offer/new/"
       assert get_flash(conn, :alert) == "Please write a description of your offer."
     end
 
@@ -284,7 +284,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{price: "dede"}), user_params, township.id, category.id)
-      assert html_response(conn, 200) =~ "Fill your details"
+      assert html_response(conn, 302) =~ "/offer/new/"
       assert get_flash(conn, :alert) == "Please give a price to your offer."
     end
 
@@ -294,7 +294,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{image_file_1: ""}), user_params, township.id, category.id)
-      assert html_response(conn, 200) =~ "Fill your details"
+      assert html_response(conn, 302) =~ "/offer/new/"
       assert get_flash(conn, :alert) == "Please post at least one photo."
     end
   end
