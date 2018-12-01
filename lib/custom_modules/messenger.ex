@@ -16,19 +16,29 @@ defmodule Boncoin.MessengerApi do
 
   defp post(payload) do
     resp = HTTPotion.post prepare_post_url(), headers: ["Content-Type": "application/json"], body: Poison.encode!(payload)
-    resp.body
-      |> Poison.decode
-      |> handle_response
+    map = if Map.has_key?(resp, "body") do
+      resp.body
+        |> Poison.decode
+        |> handle_response
+      else
+        :error
+      end
   end
 
   def get_user_profile(psid) do
     resp = HTTPotion.get prepare_profile_url(psid)
-    map = resp.body
-      |> Poison.decode
-      |> handle_response
+    map = if Map.has_key?(resp, "body") do
+      resp.body
+        |> Poison.decode
+        |> handle_response
+      else
+        :error
+      end
     case map do
-      {:ok, map} -> map["first_name"] || default_nickname() # Rule added to manage tests without Messenger API
-      {:error, _msg} -> IO.puts("Wrong user profile received from Messenger API")
+      {:ok, map} -> map["first_name"]
+      _ ->
+        IO.puts("No answer received from Messenger user profile API")
+        default_nickname() # Rule added to manage tests without Messenger API
     end
   end
 

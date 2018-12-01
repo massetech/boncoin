@@ -142,21 +142,26 @@ msgid "Viber phone number is already taken."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:73
-msgid "You must link to Viber or Messenger to create an offer."
-msgstr ""
-
-#, elixir-format, fuzzy
 #: lib/boncoin/members/user.ex:65
 msgid "Please check your nickname."
 msgstr ""
 
-#, elixir-format, fuzzy
-#: lib/boncoin/members/user.ex:71
-msgid "Please write a description to your offer."
-msgstr ""
-
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/boncoin/members/user.ex:78
 msgid "Sorry we have a technical problem.."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin/members/user.ex:73
+msgid "Please open a conversation on Viber or Messenger to create an offer."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin/members/user.ex:71
+msgid "Please write a description of your offer."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin/members/members.ex:127
+msgid "You are not registered. Please open a conversation on Viber or Messenger before creating an offer."
 msgstr ""

@@ -16,8 +16,17 @@ config :boncoin, BoncoinWeb.Endpoint,
   check_origin: false,
 
   watchers: [yarn: ["run", "watch", cd: Path.expand("../assets", __DIR__)]]
-  # watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
+  # old : watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
   #                   cd: Path.expand("../assets", __DIR__)]]
+  # watchers: [
+  #   node: [
+  #     "node_modules/webpack/bin/webpack.js",
+  #     "--mode",
+  #     "development",
+  #     "--watch-stdin",
+  #     cd: Path.expand("../assets", __DIR__)
+  #   ]
+  # ]
 
 # Configure your database
 config :boncoin, Boncoin.Repo,

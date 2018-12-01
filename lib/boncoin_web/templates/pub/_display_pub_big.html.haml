@@ -4,7 +4,7 @@
   .card.shadow.bg-white.rounded
     .card-body.p-0
       .col-12.p-0
-        = img_tag(static_path(@conn, "/images/pubs/test_pub_big.png"))
+        = img_tag(Routes.static_path(@conn, "/images/pubs/test_pub_big.png"))
 
 -# Big devices
 .col-12.d-none.d-sm-block.my-1
@@ -12,4 +12,4 @@
   .card.shadow.bg-white.rounded
     .card-body.p-0
       .col-12.p-0
-        = img_tag(static_path(@conn, "/images/pubs/test_pub_xxl.png"))
+        = img_tag(Routes.static_path(@conn, "/images/pubs/test_pub_xxl.png"))

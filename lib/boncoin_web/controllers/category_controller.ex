@@ -20,7 +20,7 @@ defmodule BoncoinWeb.CategoryController do
       {:ok, _category} ->
         conn
         |> put_flash(:info, "Category created successfully.")
-        |> redirect(to: category_path(conn, :index))
+        |> redirect(to: Routes.category_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         familys = Contents.list_familys_for_select()
         conn
@@ -48,7 +48,7 @@ defmodule BoncoinWeb.CategoryController do
       {:ok, _category} ->
         conn
         |> put_flash(:info, "Category updated successfully.")
-        |> redirect(to: category_path(conn, :index))
+        |> redirect(to: Routes.category_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         familys = Contents.list_familys_for_select()
         conn
@@ -62,6 +62,6 @@ defmodule BoncoinWeb.CategoryController do
     {:ok, _category} = Contents.delete_category(category)
     conn
     |> put_flash(:info, "Category deleted successfully.")
-    |> redirect(to: category_path(conn, :index))
+    |> redirect(to: Routes.category_path(conn, :index))
   end
 end

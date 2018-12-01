@@ -1,11 +1,11 @@
 %nav{aria-label: "breadcrumb"}
   %ol.breadcrumb
-    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard), class: "text-secondary"
+    %li.breadcrumb-item= link "Dashboard", to: Routes.main_path(@conn, :dashboard), class: "text-secondary"
     %li.breadcrumb-item.active{aria-current: "page"}= "Categorys"
 
 .text-right
-  = link "View Familys", to: family_path(@conn, :index), class: "btn btn-outline-info btn-sm"
-  = link "New Category", to: category_path(@conn, :new), class: "btn btn-outline-info btn-sm"
+  = link "View Familys", to: Routes.family_path(@conn, :index), class: "btn btn-outline-info btn-sm"
+  = link "New Category", to: Routes.category_path(@conn, :new), class: "btn btn-outline-info btn-sm"
 
 .table-responsive
   %table.table.table-hover
@@ -38,5 +38,5 @@
           %td= "visitors"
           %td= "offers"
           %td
-            = link "Edit", to: category_path(@conn, :edit, category), class: "btn btn-outline-primary btn-sm"
-            = link "Delete", to: category_path(@conn, :delete, category), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"
+            = link "Edit", to: Routes.category_path(@conn, :edit, category), class: "btn btn-outline-primary btn-sm"
+            = link "Delete", to: Routes.category_path(@conn, :delete, category), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

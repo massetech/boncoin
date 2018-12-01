@@ -39,7 +39,7 @@ defmodule BoncoinWeb.UserController do
       {:ok, _user} ->
         conn
           |> put_flash(:info, "User created successfully.")
-          |> redirect(to: user_path(conn, :index))
+          |> redirect(to: Routes.user_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         roles = Members.User.role_select_btn()
         languages = Members.User.language_select_btn()
@@ -63,7 +63,7 @@ defmodule BoncoinWeb.UserController do
         changeset = Members.change_user(%User{phone_number: phone_number, announces: [offer_changeset]})
         conn
           |> render("new_user_announce.html", changeset: changeset)
-      false -> redirect(conn, to: user_path(conn, :new_user_announce))
+      false -> redirect(conn, to: Routes.user_path(conn, :new_user_announce))
     end
   end
 
@@ -72,13 +72,19 @@ defmodule BoncoinWeb.UserController do
       {:ok, announce} ->
         conn
           |> put_flash(:info, gettext("Your offer was created. We will treat it soon."))
-          |> redirect(to: public_offers_path(conn, :public_index, search: %{township_id: "#{announce.township_id}"}))
+          |> redirect(to: Routes.public_offers_path(conn, :public_index, search: %{township_id: "#{announce.township_id}"}))
       {:error, %Ecto.Changeset{} = changeset} ->
         %{"phone_number" => phone_number, "announces" => %{"0" => offer_params}} = params
         offer_params = Map.drop(offer_params, ["image_file_1", "image_file_2", "image_file_3"])
         conn
           |> put_flash(:alert, User.show_errors_in_msg(changeset))
-          |> redirect(to: user_path(conn, :new_user_announce_with_phone, phone_number, offer_params: offer_params))
+          |> redirect(to: Routes.user_path(conn, :new_user_announce_with_phone, phone_number, offer_params: offer_params))
+      {:error, msg} -> # When the user doesnt exist or is not even found
+        %{"phone_number" => phone_number, "announces" => %{"0" => offer_params}} = params
+        offer_params = Map.drop(offer_params, ["image_file_1", "image_file_2", "image_file_3"])
+        conn
+          |> put_flash(:alert, msg)
+          |> redirect(to: Routes.user_path(conn, :new_user_announce_with_phone, phone_number, offer_params: offer_params))
     end
   end
 
@@ -87,6 +93,6 @@ defmodule BoncoinWeb.UserController do
     {:ok, _user} = Members.delete_user(user)
     conn
       |> put_flash(:info, "User deleted successfully.")
-      |> redirect(to: user_path(conn, :index))
+      |> redirect(to: Routes.user_path(conn, :index))
   end
 end

@@ -523,8 +523,10 @@ defmodule Boncoin.Contents do
     case cursor_after do # Format %{entries: entries, metadata: metadata}
       nil -> # Call the first time
         Repo.paginate(offer_query, cursor_fields: [:priority, :parution_date], sort_direction: :desc)
+        # |> IO.inspect()
       _ -> # load more entries
         Repo.paginate(offer_query, after: cursor_after, cursor_fields: [:priority, :parution_date], sort_direction: :desc)
+        # |> IO.inspect()
     end
   end
 
@@ -565,16 +567,10 @@ defmodule Boncoin.Contents do
             create_announce_image(announce.id, attrs[i])
           end
         end
-        # Encrypt announce ID and generate a safe_link
-        # update_announce(announce, %{"user_id" => announce.user_id, "safe_link" => build_safe_link(announce.id)})
         {:ok, announce}
       error_offer -> error_offer
     end
   end
-
-  # defp build_safe_link(announce_id) do
-  #   Cipher.encrypt(Integer.to_string(announce_id))
-  # end
 
   def treat_announce(admin_user, %{"announce_id" => announce_id, "validate" => validate, "cause" => cause_label, "category_id" => category_id} = params) do
     announce = get_announce!(announce_id)

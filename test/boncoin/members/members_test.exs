@@ -156,13 +156,13 @@ defmodule Boncoin.MembersTest do
 
     test "create_pub/1 with valid data creates a pub" do
       assert {:ok, %Pub{} = pub} = Members.create_pub(@valid_attrs)
-      assert pub.end_date == DateTime.from_naive!(~N[2010-04-17 14:00:00.000000Z], "Etc/UTC")
+      assert pub.end_date == DateTime.from_naive!(~N[2010-04-17 14:00:00Z], "Etc/UTC")
       assert pub.language == "some language"
       assert pub.link == "some link"
       assert pub.nb_click == 42
       assert pub.nb_view == 42
       assert pub.priority == 42
-      assert pub.start_date == DateTime.from_naive!(~N[2010-04-17 14:00:00.000000Z], "Etc/UTC")
+      assert pub.start_date == DateTime.from_naive!(~N[2010-04-17 14:00:00Z], "Etc/UTC")
       assert pub.title == "some title"
     end
 
@@ -174,13 +174,13 @@ defmodule Boncoin.MembersTest do
       pub = pub_fixture()
       assert {:ok, pub} = Members.update_pub(pub, @update_attrs)
       assert %Pub{} = pub
-      assert pub.end_date == DateTime.from_naive!(~N[2011-05-18 15:01:01.000000Z], "Etc/UTC")
+      assert pub.end_date == DateTime.from_naive!(~N[2011-05-18 15:01:01Z], "Etc/UTC")
       assert pub.language == "some updated language"
       assert pub.link == "some updated link"
       assert pub.nb_click == 43
       assert pub.nb_view == 43
       assert pub.priority == 43
-      assert pub.start_date == DateTime.from_naive!(~N[2011-05-18 15:01:01.000000Z], "Etc/UTC")
+      assert pub.start_date == DateTime.from_naive!(~N[2011-05-18 15:01:01Z], "Etc/UTC")
       assert pub.title == "some updated title"
     end
 

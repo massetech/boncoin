@@ -45,7 +45,7 @@ defmodule BoncoinWeb.ConversationTest do
     end
   end
 
-  @tag :case1
+  @tag :conversation
   describe "Messenger conversation workflow" do
     @describetag :member_authenticated
     test "case 1", %{conn: conn} do

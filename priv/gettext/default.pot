@@ -559,7 +559,6 @@ msgstr ""
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/public_index.html.haml:11
-#: lib/boncoin_web/templates/announce/public_likes.html.haml:8
 msgid "Please meet the seller and try the product before giving any money"
 msgstr ""
 
@@ -851,23 +850,8 @@ msgid "The owner is selling the product"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/public_likes.html.haml:21
-msgid "Please search again !"
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin_web/controllers/announce_controller.ex:112
 msgid "This offer is no more published."
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/public_likes.html.haml:19
-msgid "You didn't save any offer yet or these offers are not online anymore."
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/public_likes.html.haml:6
-msgid "You saved {nb_offers}offers}"
 msgstr ""
 
 #, elixir-format

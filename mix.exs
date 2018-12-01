@@ -3,7 +3,7 @@ defmodule Boncoin.Mixfile do
 
   def project do
     [ app: :boncoin,
-      version: "1.2.0",
+      version: "1.3.0",
       elixir: "~> 1.7.3",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
@@ -32,22 +32,26 @@ defmodule Boncoin.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.3.3"},
+      {:phoenix, "~> 1.4.0"},
       {:phoenix_pubsub, "~> 1.0"},
-      {:phoenix_ecto, "~> 3.2"},
+      {:ecto_sql, "~> 3.0"},
+      {:phoenix_ecto, "~> 4.0"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.10"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
-      {:cowboy, "~> 1.0"},
+      {:plug_cowboy, "~> 2.0"},
+      {:poison, "~> 3.1"},
+      {:jason, "~> 1.0"},
+
+      {:plug, "~> 1.7"},
       {:ueberauth_google, "~> 0.7"},
       {:guardian, "~> 1.0-beta"},
       {:timex, "~> 3.1"},
-      {:poison, "~> 3.1"},
       {:cors_plug, "~> 1.5", only: :dev},
       {:phoenix_haml, "~> 0.2"},
       {:drab, "~> 0.9.0"},
-      {:arc, "~> 0.10.0"},
+      {:arc, "~> 0.11.0"},
       {:arc_ecto, git: "https://github.com/massetech/arc_ecto.git"},
       {:arc_gcs, "~> 0.0.8"},
       {:rabbitElixir, "~> 1.0.0"},

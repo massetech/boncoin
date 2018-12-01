@@ -21,25 +21,20 @@ defmodule BoncoinWeb do
     quote do
       use Phoenix.Controller, namespace: BoncoinWeb
       import Plug.Conn
-      import BoncoinWeb.Router.Helpers
+      alias BoncoinWeb.Router.Helpers, as: Routes
       import BoncoinWeb.Gettext
     end
   end
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/boncoin_web/templates",
-                        namespace: BoncoinWeb
-
-      # Import convenience functions from controllers
+      use Phoenix.View, root: "lib/boncoin_web/templates", namespace: BoncoinWeb
       import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
-
-      # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
-
-      import BoncoinWeb.Router.Helpers
+      alias BoncoinWeb.Router.Helpers, as: Routes
       import BoncoinWeb.ErrorHelpers
       import BoncoinWeb.Gettext
+      import BoncoinWeb.WebpackHelpers
     end
   end
 

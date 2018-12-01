@@ -46,7 +46,7 @@
               %p.one-line.m-0.text-grey= LayoutView.convert_zawgyi(gettext("You are linked by Messenger"))
               %i.ml-2.fab.fa-facebook-messenger
         .col-4
-          - link to: main_path(@conn, :conversations), class: "btn btn-secondary font-s-9 btn-block m-0 d-inline-flex justify-content-center align-items-center text-white" do
+          - link to: Routes.main_path(@conn, :conversations), class: "btn btn-secondary font-s-9 btn-block m-0 d-inline-flex justify-content-center align-items-center text-white" do
             %span= LayoutView.convert_zawgyi(gettext("unlink"))
 
     -# Bot options
@@ -59,10 +59,10 @@
               %i.fab.fa-viber
               %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Viber"))
           - else
-            - link to: main_path(@conn, :conversations), class: "btn btn-block btn-viber-outline", target: "_blank" do
+            - link to: Routes.main_path(@conn, :conversations), class: "btn btn-block btn-viber-outline", target: "_blank" do
               %i.fab.fa-viber
               %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Viber"))
         .col-6.pr-0
-          - link to: main_path(@conn, :conversations), class: "btn btn-block btn-messenger disabled", target: "_blank" do
+          - link to: Routes.main_path(@conn, :conversations), class: "btn btn-block btn-messenger disabled", target: "_blank" do
             %i.fab.fa-facebook-messenger
             %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Messenger"))

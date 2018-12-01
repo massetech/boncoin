@@ -3,11 +3,11 @@
     %p.font-s-9.text-white= LayoutView.convert_zawgyi(gettext("Please note that your are acting on your own..."))
     %p.font-s-9.text-white.m-0
       = LayoutView.convert_zawgyi(gettext("For more details please read our"))
-      - link to: main_path(@conn, :conditions), target: "_blank" do
+      - link to: Routes.main_path(@conn, :conditions), target: "_blank" do
         %span.text-primary.font-weight-bold= LayoutView.convert_zawgyi(gettext("terms and conditions."))
       = LayoutView.convert_zawgyi(gettext("For more details... (burmese end)"))
 
-- form_for @changeset, user_path(@conn, :create_announce), fn u ->
+- form_for @changeset, Routes.user_path(@conn, :create_announce), fn u ->
   = inputs_for u, :announces, fn a ->
     .row
       .col-xs-12.col-sm-6.order-xs-1.my-3
@@ -31,7 +31,7 @@
           %label.form-check-label
             = checkbox a, :conditions, class: "form-check-input", type: "radio"
             = LayoutView.convert_zawgyi(gettext("I understand and agree to "))
-            - link to: main_path(@conn, :conditions), target: "_blank" do
+            - link to: Routes.main_path(@conn, :conditions), target: "_blank" do
               %span.text-secondary.font-weight-bold= LayoutView.convert_zawgyi(gettext("conditions"))
             = LayoutView.convert_zawgyi(gettext("I understand and agree to (burmese end)"))
       .col-xs-12.col-sm-6.offset-sm-3

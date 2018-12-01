@@ -1,4 +1,4 @@
-import knayi from 'knayi-myscript'
+// import knayi from 'knayi-myscript'
 
 export default class MainView {
   mount() {
@@ -26,9 +26,9 @@ export default class MainView {
 //   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 //   return re.test(str);
 // }
-global.validatePrice = (str) => {
-    return /^([1-9]{1})([0-9]{1,9})?$/.test(str)
-}
+// global.validatePrice = (str) => {
+//     return /^([1-9]{1})([0-9]{1,9})?$/.test(str)
+// }
 
 global.scrollToAnchor = (aid) => {
   // var aTag = $("a[name='"+ aid +"']");

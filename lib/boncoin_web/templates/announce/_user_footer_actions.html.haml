@@ -1,10 +1,10 @@
 .row.m-0.w-100
   .col-xs-12.col-sm-6.p-1
-    - link to: announce_path(@conn, :close, announce_id: "#{@announce.id}", cause: "SOLD"), class: "btn btn-block btn-lg btn-secondary d-flex justify-content-center align-items-center" do
+    - link to: Routes.announce_path(@conn, :close, announce_id: "#{@announce.id}", cause: "SOLD"), class: "btn btn-block btn-lg btn-secondary d-flex justify-content-center align-items-center" do
       = LayoutView.convert_zawgyi(gettext("I already sold it"))
       -# %i.fas.fa-handshake.btn-icon-left
 
   .col-xs-12.col-sm-6.p-1
-    - link to: announce_path(@conn, :close, announce_id: "#{@announce.id}", cause: "CANCELLED"), class: "btn btn-block btn-lg btn-secondary d-flex justify-content-center align-items-center" do
+    - link to: Routes.announce_path(@conn, :close, announce_id: "#{@announce.id}", cause: "CANCELLED"), class: "btn btn-block btn-lg btn-secondary d-flex justify-content-center align-items-center" do
       = LayoutView.convert_zawgyi(gettext("Cancel this offer"))
       -# %i.fas.fa-ban.btn-icon-left

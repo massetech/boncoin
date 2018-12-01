@@ -1,6 +1,7 @@
 defmodule Boncoin.Members do
   import Ecto.Query, warn: false
   import Mockery.Macro
+  import Boncoin.Gettext
   alias Boncoin.{Repo, Contents, ViberApi, MessengerApi}
   alias Boncoin.Members.{User, Conversation, Phone, Pub}
   alias Ueberauth.Auth
@@ -121,12 +122,14 @@ defmodule Boncoin.Members do
 
   def create_user_announce(%{"phone_number" => phone_number} = params) do
     user = case get_active_user_by_phone_number(phone_number) do
-      nil -> create_and_track_user(params)
-      user -> udpate_and_track_user(user, params) # Guest user pass by here
-    end
-    case user do
-      {:ok, user} -> Contents.create_announce(params["announces"]["0"], user.id)
-      error_user -> error_user
+      nil ->
+        # create_and_track_user(params)
+        {:error, dgettext("errors", "You are not registered. Please open a conversation on Viber or Messenger before creating an offer.")}
+      user ->
+        case udpate_and_track_user(user, params) do # Guest user pass by here
+          {:ok, user} -> Contents.create_announce(params["announces"]["0"], user.id)
+          error_user -> error_user
+        end
     end
   end
 

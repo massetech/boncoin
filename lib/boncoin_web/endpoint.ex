@@ -2,6 +2,8 @@ defmodule BoncoinWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :boncoin
 
   socket "/socket", BoncoinWeb.UserSocket
+    # websocket: true, # or list of options
+    # longpoll: [check_origin: ...]
 
   # Serve at "/" the static files from "priv/static" directory.
   #

@@ -19,7 +19,7 @@ defmodule BoncoinWeb.ImageController do
       {:ok, image} ->
         conn
         |> put_flash(:info, "Image created successfully.")
-        |> redirect(to: image_path(conn, :show, image))
+        |> redirect(to: Routes.image_path(conn, :show, image))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -55,6 +55,6 @@ defmodule BoncoinWeb.ImageController do
 
     conn
     |> put_flash(:info, "Image deleted successfully.")
-    |> redirect(to: image_path(conn, :index))
+    |> redirect(to: Routes.image_path(conn, :index))
   end
 end

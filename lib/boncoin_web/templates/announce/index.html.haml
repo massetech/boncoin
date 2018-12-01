@@ -1,6 +1,6 @@
 %nav{aria-label: "breadcrumb"}
   %ol.breadcrumb
-    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard), class: "text-secondary"
+    %li.breadcrumb-item= link "Dashboard", to: Routes.main_path(@conn, :dashboard), class: "text-secondary"
     %li.breadcrumb-item.active{aria-current: "page"}= "Offers"
 
 .table-responsive
@@ -48,11 +48,11 @@
           %td
             .d-none.d-sm-block
               - if offer.user.bot_active == true do
-                = img_tag static_path(@conn, "/images/#{offer.user.bot_provider}_icon.png"), class: "logo"
+                = img_tag Routes.static_path(@conn, "/images/#{offer.user.bot_provider}_icon.png"), class: "logo"
               - else
                 = "-"
           %td
-            .d-none.d-sm-block= img_tag static_path(@conn, "/fonts/#{offer.language}.svg"), class: "flag-small"
+            .d-none.d-sm-block= img_tag img_url_tag(@conn, "flags/1x1/#{offer.language}.svg"), class: "flag-small"
           %td
             .d-none.d-sm-block= offer.township.division.title_en
           %td= offer.township.title_en
@@ -80,4 +80,4 @@
           %td
             .d-none.d-sm-block
               - if @conn.assigns.current_user.role == "SUPER" do
-                = link "Delete", to: announce_path(@conn, :delete, offer), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"
+                = link "Delete", to: Routes.announce_path(@conn, :delete, offer), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

@@ -6,8 +6,10 @@
     %meta(name="description" content="")
     %meta(name="author" content="PawChaunKaung")
     %title= "PawChaunKaung"
-    %link(rel="stylesheet" href='#{static_path(@conn, "/css/app.css")}')
-    %link(rel="shortcut icon" type="image/x-icon" href='#{static_path(@conn, "/images/favicon.ico")}')
+    -# %link(rel="stylesheet" href='#{Routes.static_path(@conn, "/css/app.css")}')
+    -# %link(rel="shortcut icon" type="image/x-icon" href='#{Routes.static_path(@conn, "/images/favicon.ico")}')
+    %link(rel="stylesheet" href="#{css_link_tag(@conn)}")
+    %link(rel="shortcut icon" type="image/x-icon" href="#{img_url_tag(@conn, 'favicon.ico')}")
 
   %body.bg-light.side-bar-wrapper{data-js-view-name: "#{js_view_name(@conn, @view_template)}"}
     = render "_flashes.html", assigns
@@ -15,7 +17,8 @@
     - if @conn.request_path =~ "/admin/" == false do
       - unless Browser.mobile?(@conn) do
         .add.add-full.col-12.d-none.d-lg-block.p-0
-          = img_tag(static_path(@conn, "/images/backgrounds/myanmar_#{@conn.assigns.background_id}.jpg"), class: "full-img")
+          = img_tag("#{img_url_tag(@conn, 'backgrounds/myanmar_1.jpg')}", class: "full-img")
+          -# = img_tag(Routes.static_path(@conn, "/images/backgrounds/myanmar_#{@conn.assigns.background_id}.jpg"), class: "full-img")
         .add.add-left.col-lg-2.d-none.p-0
         .add.add-right.col-lg-2.d-none.p-0
       .content.container-fluid.px-0
@@ -40,7 +43,8 @@
     .overlay
     %div{id: "config", data-api: "#{@conn.assigns.api_key}"}
 
-    %script(src='#{static_path(@conn, "/js/app.js")}')
+    %script(src='#{js_script_tag(@conn)}')
+
     -# <!-- Global site tag (gtag.js) - Google Analytics -->
     - if Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:google_analytics] == true do
       %script(src="https://www.googletagmanager.com/gtag/js?id=UA-125321228-1" async)

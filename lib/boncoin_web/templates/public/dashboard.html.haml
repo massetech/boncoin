@@ -1,6 +1,6 @@
 %nav{aria-label: "breadcrumb"}
   %ol.breadcrumb
-    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard), class: "text-secondary"
+    %li.breadcrumb-item= link "Dashboard", to: Routes.main_path(@conn, :dashboard), class: "text-secondary"
 
 .row
   /------------- USERS -------------------------
@@ -22,8 +22,8 @@
             %li= "nb clic"
             %li= "language"
       .card-footer
-        = link "All users", to: user_path(@conn, :index), class: "btn btn-info btn-small"
-        = link "Purge users", to: user_path(@conn, :index), class: "btn btn-danger btn-small"
+        = link "All users", to: Routes.user_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Purge users", to: Routes.user_path(@conn, :index), class: "btn btn-danger btn-small"
 
   /------------- OFFERS -------------------------
   .col-xs-12.col-lg-6.my-4
@@ -42,8 +42,8 @@
             %li= "nb clic / day"
             %li= "device"
       .card-footer
-        = link "All offers", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
-        = link "Purge offers", to: announce_path(@conn, :index), class: "btn btn-danger btn-small"
+        = link "All offers", to: Routes.announce_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Purge offers", to: Routes.announce_path(@conn, :index), class: "btn btn-danger btn-small"
 
   /------------- ADDS -------------------------
   .col-xs-12.col-lg-6.my-4
@@ -55,8 +55,8 @@
           .col-xs-12.col-sm-6
           .col-xs-12.col-sm-6
       .card-footer
-        = link "All offers", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
-        = link "Purge offers", to: announce_path(@conn, :index), class: "btn btn-danger btn-small"
+        = link "All offers", to: Routes.announce_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Purge offers", to: Routes.announce_path(@conn, :index), class: "btn btn-danger btn-small"
 
   /------------- TECHNICAL -------------------------
   .col-xs-12.col-lg-6.my-4
@@ -73,17 +73,17 @@
 
       .card-footer
         .viber-box.d-flex.justify-content-start.align-items-center
-          = img_tag static_path(@conn, "/images/viber_icon.png"), class: "icon_viber"
+          = img_tag Routes.static_path(@conn, "/images/viber_icon.png"), class: "icon_viber"
           - if @conn.assigns.viber_status == "online" do
             .round.bg-success
           - else
             .round.bg-danger
         - if @conn.assigns.viber_status == "online" do
-          = link "disconnect Viber", to: viber_path(@conn, :disconnect), class: "btn btn-danger btn-small"
+          = link "disconnect Viber", to: Routes.viber_path(@conn, :disconnect), class: "btn btn-danger btn-small"
         - else
-          = link "connect Viber", to: viber_path(@conn, :connect), class: "btn btn-success btn-small"
-        = link "Download logs", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
-        = link "Download db", to: announce_path(@conn, :index), class: "btn btn-info btn-small"
+          = link "connect Viber", to: Routes.viber_path(@conn, :connect), class: "btn btn-success btn-small"
+        = link "Download logs", to: Routes.announce_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Download db", to: Routes.announce_path(@conn, :index), class: "btn btn-info btn-small"
 
   /------------- PARAMETERS -------------------------
   .col-xs-12.col-lg-6.my-4
@@ -93,7 +93,7 @@
       .card-body
         .row
       .card-footer
-        = link "Divisions", to: division_path(@conn, :index), class: "btn btn-info btn-small"
-        = link "Townships", to: township_path(@conn, :index), class: "btn btn-info btn-small"
-        = link "Families", to: family_path(@conn, :index), class: "btn btn-info btn-small"
-        = link "Categories", to: category_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Divisions", to: Routes.division_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Townships", to: Routes.township_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Families", to: Routes.family_path(@conn, :index), class: "btn btn-info btn-small"
+        = link "Categories", to: Routes.category_path(@conn, :index), class: "btn btn-info btn-small"

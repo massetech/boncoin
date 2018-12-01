@@ -1,11 +1,11 @@
 %nav{aria-label: "breadcrumb"}
   %ol.breadcrumb
-    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard), class: "text-secondary"
+    %li.breadcrumb-item= link "Dashboard", to: Routes.main_path(@conn, :dashboard), class: "text-secondary"
     %li.breadcrumb-item.active{aria-current: "page"}= "Townships"
 
 .text-right
-  = link "View Divisions", to: division_path(@conn, :index), class: "btn btn-outline-info btn-sm"
-  = link "New Township", to: township_path(@conn, :new), class: "btn btn-outline-info btn-sm"
+  = link "View Divisions", to: Routes.division_path(@conn, :index), class: "btn btn-outline-info btn-sm"
+  = link "New Township", to: Routes.township_path(@conn, :new), class: "btn btn-outline-info btn-sm"
 
 .table-responsive
   %table.table.table-hover
@@ -37,5 +37,5 @@
           %td= "visitors"
           %td= "offers"
           %td
-            = link "Edit", to: township_path(@conn, :edit, township), class: "btn btn-outline-primary btn-sm"
-            = link "Delete", to: township_path(@conn, :delete, township), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"
+            = link "Edit", to: Routes.township_path(@conn, :edit, township), class: "btn btn-outline-primary btn-sm"
+            = link "Delete", to: Routes.township_path(@conn, :delete, township), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

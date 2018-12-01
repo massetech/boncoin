@@ -41,7 +41,7 @@ defmodule BoncoinWeb.MainControllerTest do
       assert html_response(conn, 200) =~ "About PawChaungKaung"
     end
   end
-
+  @tag :dede
   describe "Viber" do
     test "arrives on the right page", %{conn: conn} do
       conn = conn

@@ -590,7 +590,6 @@ msgstr "နောက်ထပ်ရောင်းရန်ကြော်ငြ
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/public_index.html.haml:11
-#: lib/boncoin_web/templates/announce/public_likes.html.haml:8
 msgid "Please meet the seller and try the product before giving any money"
 msgstr "ကျေးဇူးပြု၍ ရောင်းသူနှင့်တွေ့ပြီးဝယ်မည့်ပစ္စည်းအတွက်ငွေမပေးမီ စစ်ဆေးကြည့်ပါ။"
 
@@ -879,24 +878,9 @@ msgid "The owner is selling the product"
 msgstr "ပိုင်ရှင်သည်ကုန်ပစ္စည်းကိရောင်ရန်းလိုပါသည်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/public_likes.html.haml:21
-msgid "Please search again !"
-msgstr "ကျေးဇုးပြု၍ထပ်ရှာပါ"
-
-#, elixir-format
 #: lib/boncoin_web/controllers/announce_controller.ex:112
 msgid "This offer is no more published."
 msgstr "၍ကြော်ငြာသည်မရှိတော့ပါ"
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/public_likes.html.haml:19
-msgid "You didn't save any offer yet or these offers are not online anymore."
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/public_likes.html.haml:6
-msgid "You saved {nb_offers}offers}"
-msgstr ""
 
 #, elixir-format
 #: lib/boncoin_web/controllers/user_controller.ex:74

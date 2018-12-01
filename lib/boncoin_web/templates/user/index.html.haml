@@ -1,6 +1,6 @@
 %nav{aria-label: "breadcrumb"}
   %ol.breadcrumb
-    %li.breadcrumb-item= link "Dashboard", to: main_path(@conn, :dashboard), class: "text-secondary"
+    %li.breadcrumb-item= link "Dashboard", to: Routes.main_path(@conn, :dashboard), class: "text-secondary"
     %li.breadcrumb-item.active{aria-current: "page"}= "Users"
 
 .row.my-3
@@ -8,8 +8,7 @@
     %span= "Logged in as"
     %span.text-secondary= "#{@conn.assigns.current_user.email}"
   .col-xs-12.col-sm-6.text-right
-    -# = link "View Divisions", to: division_path(@conn, :index), class: "btn btn-outline-info btn-sm"
-    = link "New USer", to: user_path(@conn, :new), class: "btn btn-outline-info btn-sm"
+    = link "New USer", to: Routes.user_path(@conn, :new), class: "btn btn-outline-info btn-sm"
 
 .table-responsive
   %table.table.table-hover
@@ -43,7 +42,7 @@
         %tr
           %td= user.id
           %th= LayoutView.icon_active(user.active)
-          %td= img_tag static_path(@conn, "/fonts/#{user.language}.svg"), class: "flag-small"
+          %td= img_tag img_url_tag(@conn, "flags/1x1/#{user.language}.svg"), class: "flag-small"
           %td
             .d-none.d-sm-block
               = user.role
@@ -68,4 +67,4 @@
           %td
             .d-none.d-sm-block
               - unless (@conn.assigns.current_user.id == user.id) || (user.role == "GUEST") do
-                = link "Delete", to: user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"
+                = link "Delete", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

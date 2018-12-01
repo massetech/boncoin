@@ -59,6 +59,6 @@
                 %i.fa.fa-exclamation-circle.width-30.mr-3.text-secondary
                 %p.m-0
                   = LayoutView.convert_zawgyi(gettext("we wont answer to offers messages"))
-                  - link to: main_path(@conn, :conditions) do
+                  - link to: Routes.main_path(@conn, :conditions) do
                     %span.text-secondary.font-weight-bold= gettext "terms and conditions"
                   = LayoutView.convert_zawgyi(gettext("we wont answer to offers messages (burmese end)"))

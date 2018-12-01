@@ -1,105 +1,103 @@
-var MiniCssExtractPlugin = require('mini-css-extract-plugin');
-var merge = require("webpack-merge");
-var webpack = require("webpack");
-var production = process.env.NODE_ENV == 'production'
-var node_modules_dir = "node_modules"
-var plugins = [
-  new MiniCssExtractPlugin({filename: "css/app.css"}),
-  new webpack.ProvidePlugin({
-    $: "jquery",  jQuery: "jquery", "window.jQuery": "jquery",
-    Alert: 'exports-loader?Alert!bootstrap/js/dist/alert',
-    Button: 'exports-loader?Button!bootstrap/js/dist/button',
-    Carousel: 'exports-loader?Carousel!bootstrap/js/dist/carousel',
-    Collapse: 'exports-loader?Collapse!bootstrap/js/dist/collapse',
-    Dropdown: 'exports-loader?Dropdown!bootstrap/js/dist/dropdown',
-    Modal: 'exports-loader?Modal!bootstrap/js/dist/modal',
-    Popover: 'exports-loader?Popover!bootstrap/js/dist/popover',
-    Scrollspy: 'exports-loader?Scrollspy!bootstrap/js/dist/scrollspy',
-    Tab: 'exports-loader?Tab!bootstrap/js/dist/tab',
-    Tooltip: "exports-loader?Tooltip!bootstrap/js/dist/tooltip",
-    Util: 'exports-loader?Util!bootstrap/js/dist/util'
-  })
+const webpack = require('webpack');
+const path = require('path');
+const dev = process.env.NODE_ENV === "dev"
+// const VENDOR_LIBS = ['jquery', 'popper.js', 'webpack-jquery-ui', 'nestedSortable']
+// const glob = require('glob');
+
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+let cssLoaders = [
+  // dev ? 'style-loader' : MiniCssExtractPlugin.loader,
+  MiniCssExtractPlugin.loader, // Necessary to get one full app.css
+  { loader: 'css-loader', options: {sourceMap: true, importLoaders: 3} },
+  { loader: 'postcss-loader',
+    options: {
+      plugins: (loader) => [require('autoprefixer')]
+    }
+  },
+  { loader: 'sass-loader' },
+  { loader: 'sass-resources-loader',
+    options: {
+      sourceMap: true,
+      // resources: [@css 'variables.scss')]
+      resources: [path.resolve('./css/variables.scss')]
+    }
+  }
 ]
 
-if (production == true) {
-  // plugins.push(
-  //   new webpack.optimize.UglifyJsPlugin({
-  //     compress: {warnings: false},
-  //     output: {comments: false}
-  //   })
-  // );
-} else {
-  plugins.push(
-    new webpack.EvalSourceMapDevToolPlugin()
-  );
-}
-
-var common = {
+let config = {
+  entry: {
+    app: ['./js/app.js'],
+    // vendor: VENDOR_LIBS.concat(glob.sync('./vendor/**/*.js')),
+  },
+  output: dev ? {
+      // IDK why `public` - it's the only path that works
+      path: path.resolve(__dirname, 'public'),
+      filename: 'js/app.js',
+      publicPath: 'http://localhost:8080/',
+    }
+    : {
+      path: path.resolve(__dirname, '../priv/static'),
+      filename: 'js/app.js',
+  },
+  resolve: {
+    // alias: {
+    //   '@css': path.resolve('./css/')
+    // }
+  },
+  devtool: dev ? "cheap-module-eval-source-map" : false, // Analyse code line in developper tool
   module: {
     rules: [
       {
         test: /\.js$/,
-        exclude: [node_modules_dir],
-        loader: "babel-loader",
-        options: {
-          presets: ["es2015"]
-        }
+        exclude: /node_modules/,
+        loader: 'babel-loader',
       },
       {
-        test: /\.css$/, use: ['style-loader', 'css-loader', 'postcss-loader']
+        test: /\.(css|sass|scss)$/,
+        use: cssLoaders,
       },
       {
-        test: /\.scss$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            {loader: 'css-loader'},
-            {loader: 'postcss-loader', options: {
-                plugins() {
-                  return [
-                    require("precss"),
-                    require("autoprefixer")
-                  ];
-                }
-              }
-            },
-            {loader: 'sass-loader'}
-          ]
-      },
-      {
-        test: /\.(png|jpg|jpeg|gif|ico)$/,
-        // loader: "file-loader?name=/images/[name].[ext]"
-        use: [{
-          loader: 'file-loader', options: {
-            name: 'images/[path][name].[ext]', context: './static/images'
+        test: /\.(png|jpg|jpeg|gif|svg|ico)$/,
+        use: [
+          { loader: 'url-loader',
+            options: {
+              limit: 1, // inline img looks to fail with Phoenix preprocessing
+              fallback: 'file-loader?&name=images/[name].[ext]'
+            }
           }
-        }]
+        ]
       },
-
       {
         test: /\.(ttf|otf|eot|svg|woff2?)$/,
-        loader: "file-loader?name=/fonts/[name].[ext]"
-      }
+        loader: 'file-loader?&name=fonts/[name].[ext]',
+      },
+    ],
+  },
+  plugins: [
+    new MiniCssExtractPlugin({filename: 'css/app.css'}),
+    new webpack.ProvidePlugin({$: 'jquery', jQuery: 'jquery', Popper: ['popper.js', 'default']}),
+    new CopyWebpackPlugin([{ from: 'static/', to: './' }]),
+  ],
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({ cache: true, parallel: true, sourceMap: false }),
+      new OptimizeCSSAssetsPlugin({})
     ]
   },
-  plugins: plugins,
-  optimization: {minimize: true}
+  devServer: {
+    watchOptions: {ignored: /node_modules/},
+    headers: {'Access-Control-Allow-Origin': '*'}, // CORS header is also required for HMR to work
+  },
 };
 
-module.exports = [
-  merge(common, {
-    entry: [
-      __dirname + "/css/app.scss",
-      __dirname + "/js/app.js"
-    ],
-    output: {
-      path: __dirname + "/../priv/static",
-      filename: "js/app.js"
-    },
-    resolve: {
-      modules: [
-        node_modules_dir,
-        __dirname + "./"
-      ]
-    }
-  })
-];
+if (!dev) {
+  config.plugins.push(new UglifyJsPlugin({ cache: true, parallel: true, sourceMap: true }))
+  config.plugins.push(new CleanWebpackPlugin(path.resolve(__dirname, '../priv/static/*'), {dry: false, verbose: true, allowExternal: true}))
+}
+
+module.exports = config

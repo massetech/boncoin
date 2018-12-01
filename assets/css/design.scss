@@ -1,3 +1,4 @@
+/* ------------------------------ DESIGN SCSS  ------------------------------ */
 /* ------------------------------ LAYOUT  ------------------------------ */
 html{overflow-y: scroll;} // Avoid centering jumps of scrollbar //https://css-tricks.com/snippets/css/force-vertical-scrollbar/
 .main-wrapper{background-color: white;}
@@ -8,8 +9,9 @@ html{overflow-y: scroll;} // Avoid centering jumps of scrollbar //https://css-tr
   height: calc(var(--vh, 1vh) * 100 - 3em - 1em);
   position: relative;overflow-x: hidden;
 }
-// img {width: 100%;}
-img.full-img {height: 100%;object-fit: cover;}
+a {max-width: 100%;} // Fix the cards max-width nested in a tag
+img {width: 100%;}
+img.full-img {width: 100vw;height: 100vh;object-fit: cover;}
 ::-webkit-scrollbar {
     -webkit-appearance: none;
 }
@@ -19,6 +21,7 @@ img.full-img {height: 100%;object-fit: cover;}
 ::-webkit-scrollbar:horizontal {
     height: 0px;
 }
+
 /* ------------------------------ TYPOGRAPHY  ------------------------------ */
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, a, p {font-family: 'Roboto', sans-serif;}
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, p {
@@ -26,8 +29,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, p {
   @extend .text-dark;
 }
 a:hover, button:hover, i:hover, label:hover {cursor: pointer;text-decoration: none;box-shadow: none;}
-.text-viber{color: $viber-color;}
-.text-grey{color: $form-grey2;}
+.text-viber{color: map-get($theme-colors, viber-color);}
+.text-grey{color: map-get($theme-colors, form-grey);}
 i.icon-big{font-size: 30px !important;}
 .font-s-9 {font-size: 0.9rem !important;}
 .font-s-8 {font-size: 0.8rem !important;}
@@ -62,21 +65,24 @@ i {font-size: 20px!important;}
   img.icon {width: 30px !important;}
   p {text-align: justify;}
 }
-/* ------------------------------ ADDS @ BACKGROUNDS  ------------------------------ */
+// /* ------------------------------ ADDS @ BACKGROUNDS  ------------------------------ */
 .add{
   img {font-size: 30px!important;}
 }
 img.welcome_img{width: auto;position: absolute; bottom: 0;}
-@include media-breakpoint-up(sm) {
-  img.welcome_img{width: 1024px;}
-}
-@include media-breakpoint-up(xl) {
-  img.welcome_img{width: 100vw;}
-}
+// @include media-breakpoint-up(sm) {
+//   img.welcome_img{width: 1024px;}
+// }
+// @include media-breakpoint-up(xl) {
+//   img.welcome_img{width: 100vw;}
+// }
 /* ------------------------------ SEARCHBAR  ------------------------------ */
 #searchBar{
   z-index: 1000;
   .family-selector{position: relative;width: 100%;padding: 6px 0;}
+}
+.category-selector{
+  border-bottom: 10px solid map-get($theme-colors, primary);
 }
 .triangle{
     position: absolute;
@@ -99,7 +105,8 @@ a.btn:hover, a.slide-menu:hover {i, span {@extend .text-white;}}
 div > i, .btn > i:not(.btn-icon) {display: flex; align-items: center; justify-content: center;}
 i.icon{
   width: 20px; height: 20px; font-size: 12px !important; display: flex;
-  border-radius: 100px; border: 1px solid $success;
+  border-radius: 100px;
+  border: 1px solid map-get($theme-colors, success);
 }
 
 .btn-icon-left {position: absolute;left: 30px;}
@@ -114,7 +121,7 @@ i.width-40, img.width-40 {width: 40px;}
   input {display: none;}
   width: 33.333%;//border-radius: 10px;
 }
-.icon-like {position: absolute;right: 10px;bottom: 10px;}
+// .icon-like {position: absolute;right: 10px;bottom: 10px;}
 /* ------------------------------ SIDEBAR  ------------------------------ */
 span.language-active{
   font-weight: 600;
@@ -133,10 +140,8 @@ span.language-active{
   box-shadow: none;
   cursor: pointer;
   @extend .text-white;
-  // @extend .bg-secondary;
-  background-color: $secondary;
+  background-color: map-get($theme-colors, secondary);
   a, span {@extend .text-white;}
-  // a:hover {@extend .text-white;}
 }
 #sidebar .sidebar-header {
   height: 6em;
@@ -191,12 +196,12 @@ span.language-active{
 .add-right {right: 0;z-index: -1;}
 /* ------------------------------ CUSTO BOOSTRAP  ------------------------------ */
 .btn-form{
-  background-color: $form_grey1;
-  border: 1px solid $form-grey2;
+  background-color: map-get($theme-colors, form-grey-light);
+  border: 1px solid map-get($theme-colors, form-grey);
 }
 .btn-outline-form{
   background-color: transparent;
-  border: 1px solid $form-grey2;
+  border: 1px solid map-get($theme-colors, form-grey);
 }
 .btn-outline-secondary:not(:hover){background-color: white;}
 .dropdown-toggle-split{
@@ -228,7 +233,7 @@ a[data-toggle="collapse"] {
     transform: translateY(-50%);
 }
 .dropdown-item.active, .dropdown-item:active{
-  background-color: $secondary;
+  background-color: map-get($theme-colors, secondary);
 }
 .modal {
   button.close{position: absolute;right: 15px;top: 15px;z-index: 99999;}
@@ -293,45 +298,48 @@ a[data-toggle="collapse"] {
 }
 /* ------------------------------ PAGE : POST ANNOUNCE  ------------------------------ */
 .field-bot{
-  // font-family: Helvetica-Bold;
-  // font-size: 1em;
-  p{color: $viber-color;}
+  p{color: map-get($theme-colors, viber-color);}
   text-align: left;
 }
 .btn-viber-outline{
   background: white;
-  border: 2px solid $viber-color;
+  border: 2px solid map-get($theme-colors, viber-color);
   border-radius: 5px;
-  color: $viber-color;
+  color: map-get($theme-colors, viber-color);
 }
 .btn-viber-outline:hover{
-  background: $viber-color;
+  background: map-get($theme-colors, viber-color);
   color: white;
 }
-.btn-viber{background: $viber-color;color: white}
+.btn-viber{background: map-get($theme-colors, viber-color); color: white}
 .btn-messenger{
   background: white;
-  border: 2px solid $messenger-color;
+  border: 2px solid map-get($theme-colors, messenger-color);
   border-radius: 5px;
-  color: $messenger-color;
+  color: map-get($theme-colors, messenger-color);
 }
 .btn-messenger:hover{
-  background: $messenger-color;
+  background: map-get($theme-colors, messenger-color);
   color: white;
 }
 .img-icon{height: 20px;width: 20px;}
-
-/* ------------------------------ PAGE : SEE ANNOUNCE  ------------------------------ */
-@include media-breakpoint-down(xs) {
-  .modal-full {min-width: 100%;margin: 0;}
-  .modal-full .modal-content {min-height: 100vh;}
+.img-ratio-1x1 {
+  object-fit: cover;
+  width: 100%;
+  height: 150px; // Fixes the card height by the way
 }
 
+/* ------------------------------ PAGE : SEE ANNOUNCE  ------------------------------ */
+// @include media-breakpoint-down(xs) {
+//   .modal-full {min-width: 100%;margin: 0;}
+//   .modal-full .modal-content {min-height: 100vh;}
+// }
+
 .icon-nb-pict {
-  position: absolute;bottom: 0;right: 0;width: 30px;height: 30px;
-  i {color: $dark;position: relative;opacity: 0.8;}
-  span {font-size: 12px;font-weight: bold;background-color: rgba(74,74,74,0.8);
-    width: 10px;height: 10px;position: absolute
+  position: absolute;bottom: 0;right: 0; width: 30px;height: 30px;
+  i {color: map-get($theme-colors, dark); position: relative;opacity: 0.8;}
+  span {font-size: 12px;font-weight: bold; background-color: rgba(74,74,74,0.8);
+    width: 10px;height: 10px;position: absolute;
   }
 }
 

@@ -28,7 +28,8 @@ defmodule BoncoinWeb.MainController do
     viber_status = ViberApi.check_online()
     conn
       |> assign(:viber_status, viber_status)
-      |> render(BoncoinWeb.PublicView, "dashboard.html")
+      |> put_view(BoncoinWeb.PublicView)
+      |> render("dashboard.html")
   end
 
 end

@@ -82,11 +82,11 @@ defmodule BoncoinWeb.AnnounceController do
       {:ok, msg, _user_messages} ->
         conn
         |> put_flash(:info, "Offer treated and #{msg}")
-        |> redirect(to: announce_path(conn, :index))
+        |> redirect(to: Routes.announce_path(conn, :index))
       {:error, _, _} ->
         conn
         |> put_flash(:alert, gettext("Technical problem, cannot treat this offer."))
-        |> redirect(to: announce_path(conn, :index))
+        |> redirect(to: Routes.announce_path(conn, :index))
     end
   end
 
@@ -103,14 +103,14 @@ defmodule BoncoinWeb.AnnounceController do
         IO.inspect(msg)
         conn
           |> put_flash(:alert, gettext("Sorry, this offer doesn't exist or the link is broken."))
-          |> redirect(to: root_path(conn, :welcome))
+          |> redirect(to: Routes.root_path(conn, :welcome))
       {:ok, _msg} ->
         announce = Contents.get_announce!(offer_id)
         case announce.status do
           "CLOSED" ->
             conn
               |> put_flash(:info, gettext("This offer is no more published."))
-              |> redirect(to: root_path(conn, :welcome))
+              |> redirect(to: Routes.root_path(conn, :welcome))
           _ ->
             render(conn, "show.html", announce: announce)
         end
@@ -124,7 +124,7 @@ defmodule BoncoinWeb.AnnounceController do
       {:ok, _announce} ->
         conn
           |> put_flash(:info, gettext("Your offer has been closed and is no more online."))
-          |> redirect(to: root_path(conn, :welcome))
+          |> redirect(to: Routes.root_path(conn, :welcome))
       {:error, _changeset} ->
         render(conn, "edit.html", announce: announce)
     end
@@ -136,7 +136,7 @@ defmodule BoncoinWeb.AnnounceController do
     conn
       |> put_flash(:info, "Offer deleted successfully.")
       # |> put_status(308)
-      |> redirect(to: announce_path(conn, :index))
+      |> redirect(to: Routes.announce_path(conn, :index))
       # |> halt()
   end
 end

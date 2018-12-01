@@ -14,14 +14,14 @@ defmodule BoncoinWeb.AuthController do
     conn
       |> Guardian.Plug.sign_out()
       |> put_flash(:info, "You are logged out.")
-      |> redirect(to: root_path(conn, :welcome))
+      |> redirect(to: Routes.root_path(conn, :welcome))
   end
 
   def callback(%{assigns: %{ueberauth_failure: _fails}} = conn, _params) do
     conn
       |> put_flash(:error, "Couldn't log you on Google.")
       |> put_status(308)
-      |> redirect(to: root_path(conn, :welcome))
+      |> redirect(to: Routes.root_path(conn, :welcome))
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
@@ -30,12 +30,12 @@ defmodule BoncoinWeb.AuthController do
         conn
           |> Guardian.Plug.sign_in(user, %{"typ" => "user-access"})
           |> put_flash(:info, "Welcome #{user.nickname} !")
-          |> redirect(to: root_path(conn, :welcome))
+          |> redirect(to: Routes.root_path(conn, :welcome))
       _ ->
         conn
           |> put_flash(:alert, "Sorry you are not allowed to log in.")
           |> put_status(308)
-          |> redirect(to: root_path(conn, :welcome))
+          |> redirect(to: Routes.root_path(conn, :welcome))
     end
   end
 end

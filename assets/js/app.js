@@ -1,19 +1,11 @@
-import "phoenix_html";
+import "phoenix_html"
 // import socket from "./socket"
+import Css from '../css/app.scss'
 
-// Import CSS
-import "../css/app.scss";
-// Import static images
-function requireAll(r) { r.keys().forEach(r); }
-requireAll(require.context('../static/images/', true, /\.(png|gif|svg|jpg|jpeg)$/));
-
-import '../node_modules/bootstrap';                   // imports Boostrap js functions
-import '../node_modules/jquery-touchswipe';           // imports touchswipe effects
-import '../node_modules/ekko-lightbox';
-import "../vendor/bootstrap-select-1.13.0-beta/js/bootstrap-select";
-import "../vendor/slim/js/slim.kickstart.min";
-// import "../vendor/custom_scroller/jquery.mCustomScrollbar.concat.min";
-
+import "../node_modules/bootstrap/dist/js/bootstrap.min" // imports Boostrap js functions
+import '../node_modules/jquery-touchswipe/jquery.touchSwipe.min'          // imports touchswipe effects
+import "../vendor/slim/js/slim.kickstart.min"
+import "../vendor/bootstrap-select-1.13.0-beta/js/bootstrap-select.min"
 
 import loadView from './views/loader';          // Custom js to run code per page
 window.__socket = require("phoenix").Socket;    // Fix for webpack with drab

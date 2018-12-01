@@ -89,28 +89,11 @@ defmodule Boncoin.Contents.Announce do
   defp check_offer_has_one_photo_min(changeset, %{}), do: changeset
 
   defp check_offer_has_accepted_conditions(changeset, %{"conditions" => value}) do
-    if value == true, do: changeset, else: add_error(changeset, :conditions, "please accepte conditions")
+    if value == "true", do: changeset, else: add_error(changeset, :conditions, "please accepte conditions")
   end
   defp check_offer_has_accepted_conditions(changeset, %{}) do
     changeset
   end
-
-  # def build_safe_link(announce_id) do
-  #   Cipher.encrypt(Integer.to_string(announce_id))
-  # end
-
-  # def show_errors_in_msg(changeset) do
-  #   case List.first(changeset.errors) do
-  #     # {:surname, _msg} -> gettext("Please fill your name or surname.")
-  #     {:title, _msg} -> gettext("Please put a title to your offer.")
-  #     {:price, _msg} -> gettext("Please give a price to your offer.")
-  #     {:description, _msg} -> gettext("Please write a description of your offer.")
-  #     {:photo, _msg} -> gettext("Please post at least one photo.")
-  #     {:user, _msg} -> gettext("Please choose another phone number.")
-  #     _ -> # Something else went wrong
-  #       gettext("Sorry we have a technical problem.")
-  #   end
-  # end
 
   def status_select_btn() do
     [pending: "PENDING", accepted: "ONLINE", refused: "REFUSED", outdated: "OUTDATED", closed: "CLOSED"]
@@ -121,7 +104,6 @@ defmodule Boncoin.Contents.Announce do
       %{label: "NOT_ALLOWED", btn_color: "btn-outline-danger", title_en: "Content not allowed", user_msg_en: "its content is not allowed.", user_msg_my: "ဥပဒေအရခွင့်မပြုသော"},
       %{label: "UNCLEAR", btn_color: "btn-outline-danger", title_en: "Description unclear", user_msg_en: "its description is not clear.", user_msg_my: "ရှင်လင်းစွာမဖေါ်ပြနိုင်သော"},
       %{label: "BAD_PHOTOS", btn_color: "btn-outline-danger", title_en: "Photos not good", user_msg_en: "the photos are not good.", user_msg_my: "ဓါတ်ပုံများသည်မကောင်းသော"}
-      # %{label: "SHOCKING", title_my: "စိတ်မသက်မသာဖြစ်စေသော", title_en: "shocking", btn_color: "btn-outline-danger"}
     ]
   end
 

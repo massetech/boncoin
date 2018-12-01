@@ -25,4 +25,4 @@
               = text_input f, :phone_number, class: "form-control", autocomplete: "nope", placeholder: gettext("Phone number")
           .form-group
             = submit gettext("Create user"), class: "btn btn-primary"
-          = link "Cancel", to: user_path(@conn, :index), class: "btn btn-outline-info"
+          = link "Cancel", to: Routes.user_path(@conn, :index), class: "btn btn-outline-info"
