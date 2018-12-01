@@ -1,5 +1,5 @@
 defmodule BoncoinWeb.WebpackHelpers do
-  import BoncoinWeb.Router.Helpers
+  alias BoncoinWeb.Router.Helpers, as: Routes
 
   def js_script_tag(conn) do
     if Mix.env == :prod do
