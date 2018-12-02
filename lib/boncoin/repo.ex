@@ -1,5 +1,8 @@
 defmodule Boncoin.Repo do
-  use Ecto.Repo, otp_app: :boncoin
+  use Ecto.Repo,
+    otp_app: :boncoin,
+    adapter: Ecto.Adapters.Postgres
+
   use Paginator,
     limit: 20,                  # sets the default limit to 10
     include_total_count: true   # include total count by default

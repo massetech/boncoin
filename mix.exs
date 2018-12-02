@@ -3,7 +3,7 @@ defmodule Boncoin.Mixfile do
 
   def project do
     [ app: :boncoin,
-      version: "1.3.0",
+      version: "1.4.0",
       elixir: "~> 1.7.3",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
@@ -33,18 +33,18 @@ defmodule Boncoin.Mixfile do
   defp deps do
     [
       {:phoenix, "~> 1.4.0"},
-      {:phoenix_pubsub, "~> 1.0"},
+      {:phoenix_pubsub, "~> 1.1"},
       {:ecto_sql, "~> 3.0"},
       {:phoenix_ecto, "~> 4.0"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.10"},
-      {:phoenix_live_reload, "~> 1.0", only: :dev},
+      {:phoenix_html, "~> 2.11"},
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
       {:plug_cowboy, "~> 2.0"},
+      # {:plug, "~> 1.7"},
       {:poison, "~> 3.1"},
       {:jason, "~> 1.0"},
 
-      {:plug, "~> 1.7"},
       {:ueberauth_google, "~> 0.7"},
       {:guardian, "~> 1.0-beta"},
       {:timex, "~> 3.1"},
