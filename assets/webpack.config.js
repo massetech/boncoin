@@ -74,7 +74,11 @@ let config = {
       },
       {
         test: /\.(ttf|otf|eot|svg|woff2?)$/,
-        loader: 'file-loader?&name=fonts/[name].[ext]',
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+          outputPath: './fonts'
+        }
       },
     ],
   },
