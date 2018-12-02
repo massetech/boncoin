@@ -34,5 +34,5 @@ defmodule BoncoinWeb.WebpackHelpers do
       "http://localhost:8080#{path}"
     end
   end
-  
+
 end
