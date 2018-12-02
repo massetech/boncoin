@@ -100,7 +100,7 @@ img.welcome_img{width: auto;position: absolute; bottom: 0;}
 // Fix the color or boostrap a dropdown not changing COLOURS
 a.btn:hover, a.slide-menu:hover {i, span {@extend .text-white;}}
 // Go to line in button if too large
-.btn:not(.dropdown-toggle) {white-space:normal !important; word-wrap: break-word; word-break: normal;}
+.btn {white-space:normal !important; word-wrap: break-word; word-break: normal;}
 
 div > i, .btn > i:not(.btn-icon) {display: flex; align-items: center; justify-content: center;}
 i.icon{
