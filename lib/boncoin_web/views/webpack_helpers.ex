@@ -2,6 +2,7 @@ defmodule BoncoinWeb.WebpackHelpers do
   alias BoncoinWeb.Router.Helpers, as: Routes
 
   def js_script_tag(conn) do
+    # Routes.static_path(conn, "/js/app.js")
     if Mix.env == :prod do
       # Routes.static_path('/js/app.js')
       # Routes.static_url(conn, '/js/app.js')

@@ -8,13 +8,16 @@ defmodule Boncoin.Contents do
   # -------------------------------- TRAFFIC KPI ----------------------------------------
 
   def add_kpi_township_traffic(township_id, type) do
-    date_now = Timex.now()
+    # date_now = Timex.now()
+    # date_now = DateTime.utc_now()
+    date_now = Date.utc_today()
     add_new_guest = if type == "new_user", do: 1, else: 0
     add_old_guest = if type == "old_user", do: 1, else: 0
     add_search = if type == "new_search", do: 1, else: 0
     add_more = if type == "add_more", do: 1, else: 0
     kpi = TrafficKpi
-      |> TrafficKpi.select_township_traffic_kpi_by_date(township_id, {date_now.year, date_now.month, date_now.day})
+      # |> TrafficKpi.select_township_traffic_kpi_by_date(township_id, %Date{date_now.year, date_now.month, date_now.day})
+      |> TrafficKpi.select_township_traffic_kpi_by_date(township_id, date_now)
       |> Repo.one()
     case kpi do
       nil -> %TrafficKpi{} # Not yet any record for this township / date

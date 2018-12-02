@@ -27,7 +27,8 @@ defmodule Boncoin.Contents.TrafficKpi do
 
   def select_township_traffic_kpi_by_date(query, township_id, date) do
     from k in query,
-      where: k.township_id == ^township_id and fragment("?::date", k.date) == ^date
+      where: k.township_id == ^township_id #and k.date.year == ^date.year and k.date.month == ^date.month and k.date.day == ^date.day
+      and fragment("?::date", k.date) == ^date
   end
 
 end
