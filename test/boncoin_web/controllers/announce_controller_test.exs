@@ -40,6 +40,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       assert new_offer.cause == "ACCEPTED"
       assert_called ViberApi, :send_message, ["123RENE", _msg], 1
     end
+    @tag :dede
     test "treats offer : ACCEPTED / ONLINE and send Messenger msg", %{conn: conn} do
       Mockery.History.enable_history()
       user = insert(:user, %{bot_provider: "messenger", bot_id: "123RENE2"})

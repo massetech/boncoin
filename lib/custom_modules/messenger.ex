@@ -16,24 +16,30 @@ defmodule Boncoin.MessengerApi do
 
   defp post(payload) do
     resp = HTTPotion.post prepare_post_url(), headers: ["Content-Type": "application/json"], body: Poison.encode!(payload)
-    map = if Map.has_key?(resp, "body") do
-      resp.body
-        |> Poison.decode
-        |> handle_response
-      else
-        :error
-      end
+    resp.body
+      |> Poison.decode
+      |> handle_response
+    # map = if Map.has_key?(resp, "body") do
+    #   resp.body
+    #     |> Poison.decode
+    #     |> handle_response
+    #   else
+    #     :error
+    #   end
   end
 
   def get_user_profile(psid) do
     resp = HTTPotion.get prepare_profile_url(psid)
-    map = if Map.has_key?(resp, "body") do
-      resp.body
-        |> Poison.decode
-        |> handle_response
-      else
-        :error
-      end
+    map = resp.body
+      |> Poison.decode
+      |> handle_response
+    # map = if Map.has_key?(resp, "body") do
+    #   resp.body
+    #     |> Poison.decode
+    #     |> handle_response
+    #   else
+    #     :error
+    #   end
     case map do
       {:ok, map} -> map["first_name"]
       _ ->
