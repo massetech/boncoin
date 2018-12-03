@@ -11,7 +11,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 let cssLoaders = [
-  // dev ? 'style-loader' : MiniCssExtractPlugin.loader,
   MiniCssExtractPlugin.loader, // Necessary to get one full app.css
   { loader: 'css-loader', options: {sourceMap: true, importLoaders: 3} },
   { loader: 'postcss-loader',
@@ -32,7 +31,6 @@ let cssLoaders = [
 let config = {
   entry: {
     app: ['./js/app.js'],
-    // vendor: VENDOR_LIBS.concat(glob.sync('./vendor/**/*.js')),
   },
   output: dev ? {
       // IDK why `public` - it's the only path that works
@@ -74,16 +72,16 @@ let config = {
       },
       {
         test: /\.(ttf|otf|eot|svg|woff2?)$/,
-        loader: 'file-loader?&name=css/fonts/[name].[ext]'
-        // options: {
-        //   name: '[name].[ext]',
-        //   outputPath: './fonts'
-        // }
+        // loader: 'file-loader?&name=dede/boris/[name].[ext]'
+        loader: 'file-loader',
+        options: {
+          name: 'css/fonts/[name].[ext]',
+        }
       },
     ],
   },
   plugins: [
-    new MiniCssExtractPlugin({filename: 'css/app.css'}),
+    new MiniCssExtractPlugin({filename: './css/app.css'}),
     new webpack.ProvidePlugin({$: 'jquery', jQuery: 'jquery', Popper: ['popper.js', 'default']}),
     new CopyWebpackPlugin([{ from: 'static/', to: './' }]),
   ],
