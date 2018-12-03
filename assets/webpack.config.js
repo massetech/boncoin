@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const dev = process.env.NODE_ENV === "dev"
+// const dev = false
 // const VENDOR_LIBS = ['jquery', 'popper.js', 'webpack-jquery-ui', 'nestedSortable']
 // const glob = require('glob');
 
@@ -9,6 +10,9 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+// Bug between font paths with or without webpack-dev-server
+let fontLoader = dev ? { loader: "file-loader?name=fonts/[name].[ext]" } : { loader: "file-loader?name=/fonts/[name].[ext]" }
 
 let cssLoaders = [
   MiniCssExtractPlugin.loader, // Necessary to get one full app.css
@@ -34,7 +38,7 @@ let config = {
   },
   output: dev ? {
       // IDK why `public` - it's the only path that works
-      path: path.resolve(__dirname, 'public'),
+      path: path.resolve(__dirname, 'public/static'),
       filename: 'js/app.js',
       publicPath: 'http://localhost:8080/',
     }
@@ -60,7 +64,7 @@ let config = {
         use: cssLoaders,
       },
       {
-        test: /\.(png|jpg|jpeg|gif|svg|ico)$/,
+        test: /\.(png|jpg|jpeg|gif|ico)$/,
         use: [
           { loader: 'url-loader',
             options: {
@@ -72,18 +76,14 @@ let config = {
       },
       {
         test: /\.(ttf|otf|eot|svg|woff2?)$/,
-        // loader: 'file-loader?&name=dede/boris/[name].[ext]'
-        loader: 'file-loader',
-        options: {
-          name: 'css/fonts/[name].[ext]',
-        }
+        use: fontLoader
       },
     ],
   },
   plugins: [
     new MiniCssExtractPlugin({filename: './css/app.css'}),
     new webpack.ProvidePlugin({$: 'jquery', jQuery: 'jquery', Popper: ['popper.js', 'default']}),
-    new CopyWebpackPlugin([{ from: 'static/', to: './' }]),
+    new CopyWebpackPlugin([{ from: 'static/', to: './' }]), // Copy to the same folder (priv/static)
   ],
   optimization: {
     minimizer: [

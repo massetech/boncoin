@@ -5,7 +5,7 @@ defmodule BoncoinWeb.WebpackHelpers do
     if Mix.env == :prod do
       Routes.static_path(conn, "/js/app.js")
     else
-      webpack_path(conn, '/js/app.js')
+      webpack_path(conn, "/js/app.js")
     end
   end
 
@@ -13,7 +13,7 @@ defmodule BoncoinWeb.WebpackHelpers do
     if Mix.env == :prod do
       Routes.static_path(conn, "/css/app.css")
     else
-      webpack_path(conn, '/css/app.css')
+      webpack_path(conn, "/css/app.css")
     end
   end
 
@@ -21,7 +21,7 @@ defmodule BoncoinWeb.WebpackHelpers do
     if Mix.env == :prod do
       Routes.static_path(conn, "/images/#{file_path}")
     else
-      webpack_path(conn, '/images/#{file_path}')
+      webpack_path(conn, "/images/#{file_path}")
     end
   end
 
