@@ -15,7 +15,7 @@
     - if @conn.request_path =~ "/admin/" == false do
       - unless Browser.mobile?(@conn) do
         .add.add-full.col-12.d-none.d-lg-block.p-0
-          = img_tag("#{img_url_tag(@conn, 'backgrounds/myanmar_1.jpg')}", class: "full-img")
+          = img_tag("#{img_url_tag(@conn, @conn.assigns.background_url)}", class: "full-img")
         .add.add-left.col-lg-2.d-none.p-0
         .add.add-right.col-lg-2.d-none.p-0
       .content.container-fluid.px-0
