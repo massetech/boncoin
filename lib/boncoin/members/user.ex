@@ -7,7 +7,7 @@ defmodule Boncoin.Members.User do
   alias Boncoin.CustomModules
 
   # Select only those fields to encode in json the API response
-  @derive {Poison.Encoder, only: [:id, :email, :nickname, :phone_number, :bot_active, :bot_provider, :viber_number]}
+  @derive {Jason.Encoder, only: [:id, :email, :nickname, :phone_number, :bot_active, :bot_provider, :viber_number]}
 
   schema "users" do
     field :uid, :string
