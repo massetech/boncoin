@@ -38,7 +38,7 @@ defmodule Boncoin.Members do
         {:ok, "message sent to user by Viber", bot_results.messages}
       "messenger" ->
         # IO.puts("Message sent to user by Messenger")
-        Enum.map(bot_results.messages, fn msg -> mockable(MessengerApi).send_message(user.bot_id, msg) end)
+        Enum.map(bot_results.messages, fn msg -> mockable(MessengerApi).send_update_message(user.bot_id, msg) end)
         {:ok, "message sent to user by Messenger", bot_results.messages}
       _ -> {:error, "message not sent, bot not recognized", bot_results.messages}
     end
@@ -177,10 +177,14 @@ defmodule Boncoin.Members do
   end
 
   def get_or_initiate_conversation(bot_provider, psid, nickname) do
-    # Initiate the conversation for the first visit
-    conv_params = %{scope: "welcome", bot_provider: bot_provider, psid: psid, nickname: nickname}
     case get_conversation_by_provider_psid(bot_provider, psid) do
       nil ->
+        # Get the nickname (Messenger only, Viber get it in nickname)
+        nick = cond do
+          nickname == nil && bot_provider == "messenger" -> MessengerApi.get_user_profile(psid) |> IO.inspect()
+          true -> nickname
+        end
+        conv_params = %{scope: "welcome", bot_provider: bot_provider, psid: psid, nickname: nick}
         case create_conversation(conv_params) do
           {:ok, conversation} -> conversation
           error -> error

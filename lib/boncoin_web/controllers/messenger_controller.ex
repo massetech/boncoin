@@ -23,17 +23,17 @@ defmodule BoncoinWeb.MessengerController do
     IO.puts("#{messenger_id} opened a new conversation at #{Timex.now()}")
 
     # Treat the message
-    messenger_name = MessengerApi.get_user_profile(messenger_id)
-    conversation = Members.get_or_initiate_conversation("messenger", messenger_id, messenger_name)
+    conversation = Members.get_or_initiate_conversation("messenger", messenger_id, nil)
     results = %{user: conn.assigns.current_user, conversation: conversation, announce: nil, user_msg: nil}
       |> BotDecisions.call_bot_algorythm()
 
     # Send message to the visitor
     case Members.update_conversation(conversation, %{scope: results.scope, language: results.language}) do
-      {:ok, _} -> mockable(MessengerApi).send_message(messenger_id, List.first(results.messages))
+      {:ok, _} -> mockable(MessengerApi).send_answer_message(messenger_id, List.first(results.messages))
       {:error, _changeset} -> IO.puts("Messenger error : can't initiate conversation")
     end
 
+    # Answers to Messenger to avoid overload of messages
     send_resp(conn, 200, "ok")
   end
 
@@ -43,23 +43,24 @@ defmodule BoncoinWeb.MessengerController do
     IO.puts("User #{messenger_id} spoke at #{Timex.now()}")
 
     # Treat the message
-    conversation = Members.get_or_initiate_conversation("messenger", messenger_id, "")
+    conversation = Members.get_or_initiate_conversation("messenger", messenger_id, nil)
     results = %{user: conn.assigns.current_user, conversation: conversation, announce: nil, user_msg: user_msg}
       |> BotDecisions.call_bot_algorythm()
 
     # Send response
     if results.scope == "close" do
       case Members.delete_conversation(conversation) do
-        {:ok, _} -> Enum.map(results.messages, fn message -> mockable(MessengerApi).send_message(messenger_id, message) end)
+        {:ok, _} -> Enum.map(results.messages, fn message -> mockable(MessengerApi).send_answer_message(messenger_id, message) end)
         {:error, _changeset} -> IO.puts("Messenger error : can't delete conversation #{conversation.id}")
       end
     else
       case Members.update_conversation(conversation, %{scope: results.scope, language: results.language}) do
-        {:ok, _} -> Enum.map(results.messages, fn message -> mockable(MessengerApi).send_message(messenger_id, message) end)
+        {:ok, _} -> Enum.map(results.messages, fn message -> mockable(MessengerApi).send_answer_message(messenger_id, message) end)
         {:error, _changeset} -> IO.puts("Messenger error : can't update conversation #{conversation.id}")
       end
     end
 
+    # Answers to Messenger to avoid overload of messages
     send_resp(conn, 200, "ok")
   end
 

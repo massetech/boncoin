@@ -19,7 +19,7 @@ defmodule Boncoin.Mixfile do
   def application do
     [
       mod: {Boncoin.Application, []},
-      extra_applications: [:ex_machina, :logger, :runtime_tools, :timex, :httpotion]
+      extra_applications: [:ex_machina, :logger, :runtime_tools, :timex]
     ]
   end
 
@@ -42,8 +42,8 @@ defmodule Boncoin.Mixfile do
       {:gettext, "~> 0.11"},
       {:plug_cowboy, "~> 2.0"},
       {:plug, "~> 1.7"},
-      {:poison, "~> 3.1"},
-      {:jason, "~> 1.0"},
+      # {:poison, "~> 3.1"},
+      {:jason, "~> 1.1"},
 
       {:ueberauth_google, "~> 0.7"},
       {:guardian, "~> 1.0-beta"},
@@ -55,7 +55,8 @@ defmodule Boncoin.Mixfile do
       {:arc_ecto, git: "https://github.com/massetech/arc_ecto.git"},
       {:arc_gcs, "~> 0.0.8"},
       {:rabbitElixir, "~> 1.0.0"},
-      {:httpotion, "~> 3.1.0"},
+      # {:httpotion, "~> 3.1.0"},
+      {:httpoison, "~> 1.4"},
       {:distillery, "~> 2.0.0-rc.4"},
       {:cipher, ">= 1.4.0"},
       {:paginator, "~> 0.4"},

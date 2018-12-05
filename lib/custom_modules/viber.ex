@@ -78,29 +78,31 @@ defmodule Boncoin.ViberApi do
     end
   end
 
-  def get(path) do
-    token = get_viber_token()
-    # IO.puts("token: #{token}")
-    uri = URI.merge(@api_url, path) |> to_string
-    resp = HTTPotion.get uri, headers: prepare_headers(token)
-    resp.body |> Poison.decode |> handle_response
-  end
+  # def get(path) do
+  #   token = get_viber_token()
+  #   uri = URI.merge(@api_url, path) |> to_string
+  #   resp = HTTPoison.get uri, headers: prepare_headers(token)
+  #   resp.body |> Jason.decode! |> handle_response
+  # end
 
   def send_message(viber_id, message) do
-    # IO.inspect(viber_id)
-    # IO.inspect(message)
     data = %{sender: %{name: "PawChaungKaung", avatar: ""}, receiver: viber_id, type: "text", tracking_data: "", text: message}
     post("send_message", data)
   end
 
   def post(path, payload \\ %{}) do
     token = get_viber_token()
-    # IO.puts("token: #{token}")
     uri = URI.merge(@api_url, path) |> to_string
-    resp = HTTPotion.post uri, headers: prepare_headers(token), body: Poison.encode!(payload)
-    resp.body
-      |> Poison.decode
-      |> handle_response
+    resp = HTTPoison.post uri, Jason.encode!(payload), prepare_headers(token)
+    case resp do
+      {:ok, response} ->
+        response.body
+          |> Jason.decode
+          |> handle_response
+      {:error, msg} ->
+        IO.puts("The request was not posted to Viber (Elixir internal problem)")
+        IO.inspect(msg)
+    end
   end
 
   defp get_viber_token() do

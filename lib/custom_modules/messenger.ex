@@ -2,49 +2,57 @@ defmodule Boncoin.MessengerApi do
   @api_url "https://graph.facebook.com/v2.6/me/messages"
   @api_profile_url "https://graph.facebook.com"
 
-  defp default_nickname() do
-    case Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment] do
-      :test -> "mr_X"
-      _ -> ""
-    end
+  # API doc https://developers.facebook.com/docs/messenger-platform/reference/send-api/
+  def send_answer_message(messenger_id, user_msg) do
+    %{messaging_type: "RESPONSE", recipient: %{id: messenger_id}, message: %{text: user_msg}}
+      |> post()
   end
-
-  def send_message(messenger_id, user_msg) do
-    %{recipient: %{id: messenger_id}, message: %{text: user_msg}}
+  def send_update_message(messenger_id, user_msg) do
+    %{messaging_type: "UPDATE", recipient: %{id: messenger_id}, message: %{text: user_msg}}
       |> post()
   end
 
   defp post(payload) do
-    resp = HTTPotion.post prepare_post_url(), headers: ["Content-Type": "application/json"], body: Poison.encode!(payload)
-    resp.body
-      |> Poison.decode
-      |> handle_response
-    # map = if Map.has_key?(resp, "body") do
-    #   resp.body
-    #     |> Poison.decode
-    #     |> handle_response
-    #   else
-    #     :error
-    #   end
+    uri = prepare_post_url()
+    resp = HTTPoison.post uri, Jason.encode!(payload), [{"Content-Type", "application/json"}]
+    case resp do
+      {:ok, response} ->
+        response.body
+          |> Jason.decode
+          |> handle_response
+      {:error, msg} ->
+        IO.puts("The request was not posted to Messenger (Elixir internal problem)")
+        IO.inspect(msg)
+    end
   end
 
   def get_user_profile(psid) do
-    resp = HTTPotion.get prepare_profile_url(psid)
-    map = resp.body
-      |> Poison.decode
-      |> handle_response
-    # map = if Map.has_key?(resp, "body") do
-    #   resp.body
-    #     |> Poison.decode
-    #     |> handle_response
-    #   else
-    #     :error
-    #   end
-    case map do
-      {:ok, map} -> map["first_name"]
+    resp = HTTPoison.get prepare_profile_url(psid)
+    case resp do
+      {:ok, response} ->
+        detail_map = response.body
+          |> Jason.decode
+          |> handle_response
+        case detail_map do
+          {:ok, %{"first_name" => first_name}} -> first_name
+          {:ok, _} -> default_nickname()
+          {:error, msg} ->
+            IO.puts(msg)
+            default_nickname()
+        end
+      {:error, msg} ->
+        IO.puts("The request was not posted to Messenger (Elixir internal problem)")
+        IO.inspect(msg)
+        default_nickname()
+    end
+  end
+
+  defp default_nickname() do
+    case Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment] do
+      :test -> "mr_X"
       _ ->
-        IO.puts("No answer received from Messenger user profile API")
-        default_nickname() # Rule added to manage tests without Messenger API
+        IO.puts("No first_name received in Messenger respnse")
+        ""
     end
   end
 

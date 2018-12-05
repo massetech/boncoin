@@ -1,6 +1,6 @@
 use Mix.Config
 
-# config :phoenix, :json_library, Jason
+config :phoenix, :json_library, Jason
 
 config :boncoin,
   ecto_repos: [Boncoin.Repo]
