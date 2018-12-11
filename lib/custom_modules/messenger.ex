@@ -51,8 +51,8 @@ defmodule Boncoin.MessengerApi do
     case Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment] do
       :test -> "mr_X"
       _ ->
-        IO.puts("No first_name received in Messenger respnse")
-        ""
+        IO.puts("No first_name received in Messenger response")
+        " "
     end
   end
 

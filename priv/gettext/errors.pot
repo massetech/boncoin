@@ -119,11 +119,6 @@ msgid "Please post at least one photo."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:69
-msgid "Please put a title to your offer."
-msgstr ""
-
-#, elixir-format
 #: lib/boncoin/members/user.ex:75
 msgid "This email is already used by another user."
 msgstr ""
@@ -131,11 +126,6 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin/members/user.ex:76
 msgid "This email not a proper email."
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin/members/user.ex:68
-msgid "Viber phone number is already taken."
 msgstr ""
 
 #, elixir-format
@@ -149,16 +139,21 @@ msgid "Sorry we have a technical problem.."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:73
+#: lib/boncoin/members/members.ex:127 lib/boncoin/members/user.ex:73
 msgid "Please open a conversation on Viber or Messenger to create an offer."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:71
-msgid "Please write a description of your offer."
+#: lib/boncoin/members/user.ex:69
+msgid "Please put a title to your offer (max 50 characters)."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin/members/members.ex:127
-msgid "You are not registered. Please open a conversation on Viber or Messenger before creating an offer."
+#: lib/boncoin/members/user.ex:71
+msgid "Please write a description of your offer (max 200 characters)."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin/members/user.ex:68
+msgid "Viber phone number is not correct (+95....)"
 msgstr ""

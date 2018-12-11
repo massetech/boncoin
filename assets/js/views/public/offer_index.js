@@ -20,19 +20,21 @@ let init_functions = () => {
   $('#btn-more-offers').on('click', function() {
     event.preventDefault()
     event.stopPropagation()
+    $(this).addClass("d-none")
+    $("#btn-more-offers-wait").removeClass("d-none")
     var cursor_after = $('#config').attr('data-cursor-after')
     var search_params = JSON.parse($('#config').attr('data-search-params'))
     call_internal_api("/api/add_offers", "get_more_offers", {cursor_after: cursor_after, search_params: search_params}).then(function (response) {
       var data = response.results.data
       console.log("received new offers to show")
-      add_new_offers_to_page(data.offers, data.new_cursor_after)
+      add_new_offers_to_page(data.offers_map, data.new_cursor_after)
     })
   })
 }
 
 // Add new offers received by the button load more
-let add_new_offers_to_page = (offers, new_cursor_after) => {
-  var new_cursor_after = new_cursor_after
+let add_new_offers_to_page = (offers_map, new_cursor_after) => {
+  // var new_cursor_after = new_cursor_after
   $('#config').attr('data-cursor-after', new_cursor_after)
   if (new_cursor_after == null) {
     $("#btn-more-offers-wait").addClass("d-none")
@@ -40,12 +42,8 @@ let add_new_offers_to_page = (offers, new_cursor_after) => {
     $("#btn-more-offers-wait").addClass("d-none")
     $("#btn-more-offers").removeClass("d-none")
   }
-  for (const offer of offers) {
-    var html = offer.inline_html
-    $("#offers-results").append(small)
-    // var big = offer.display_big
-    // $("#offers-results").append(big)
-  }
+  // Append the offers_html to the page
+  $("#offers-results").append(offers_map.inline_html)
   // Reload the JS functions on the new DOM
   load_actions_in_offers_display_page()
 }
@@ -57,12 +55,14 @@ let disable_alert_button = (offer_id) => {
 
 // Load the actions on offers display page
 let load_actions_in_offers_display_page = () => {
+  // Boostrap 4 caroussel select active and swipe
+  load_boostrap_carousel()
   // Disable the scrolling behind modal
   $('.modal').on('show.bs.modal', function () {
-    bodyScrollLock.disableBodyScroll($(this));
+    bodyScrollLock.disableBodyScroll($(this))
   })
   $('.modal').on('hide.bs.modal', function () {
-    bodyScrollLock.enableBodyScroll($(this));
+    bodyScrollLock.clearAllBodyScrollLocks()
   })
   // Display big announce on small announce click
   $('.btn-small-announce').on('click', function() {
@@ -73,13 +73,6 @@ let load_actions_in_offers_display_page = () => {
     $(`#big_announce_${announce_id}`).removeClass('d-none')
     scrollToAnchor(`big_announce_${announce_id}`)
   })
-  // // Scroll back to small card on modal closing
-  // $('.modal').on('hidden.bs.modal', function () {
-  //   var offer_id = $(this).attr('data-offer-id')
-  //   $('html, body').animate({
-  //     scrollTop: ($(`#card_small_${offer_id}`).offset().top)
-  //   },500);
-  // });
   // Show the sellor's number
   $('.btn-show-contact').on('click', function() {
     var offer_id = $(this).attr('data-offer-id')
@@ -97,10 +90,6 @@ let load_actions_in_offers_display_page = () => {
       })
     }
   })
-  // Hide the sellor's number
-  // $('.btn-see-number').on('click', function() {
-  //   $(this).closest('div.offer-contact').addClass('d-none').prev('div.offer-actions').removeClass('d-none')
-  // })
   // Send an alert on the offer
   $('.btn-offer-alert').on('click', function() {
     var offer_id = $(this).attr('data-offer-id')
@@ -117,43 +106,7 @@ let load_actions_in_offers_display_page = () => {
       })
     }
   })
-  // Keep the offer in likes cookie
-  // $('.btn-like').on('click', function(e) {
-  //   e.stopPropagation();
-  //   var offer_id = $(this).attr('data-offer-id')
-    // Update the likes list
-    // var id_list = $('#config').attr('data-likes')
-    // console.log(id_list)
-    // var token = $('#config').attr('data-api')
-    // console.log(token)
-    // var ids = JSON.stringify(id_list)
-    // console.log(ids)
-    //
-    // if (likes.includes(offer_id)){} else {
-    //   likes.push(offer_id)
-    //   document.cookie = "likes=" + JSON.stringify(likes)
-    // }
 
-    // $(".btn-like[data-offer-id="${offer_id}"]").toggleClass("d-none")
-    // $(`#footer_contact_${offer_id}`)
-    // .btn-like[data-offer-id="${offer_id}"]
-
-
-    // var id_list = JSON.parse($.cookie("likes"))
-    // console.log(id_list)
-    // if (document.cookie.indexOf('likes') == -1 ) { // Cookie doesnt exist yet
-    //   var arr = new Array(0)
-    //   var cookie = JSON.stringify(arr)
-    // } else { // Cookie exist already
-    //   var cookie = document.cookie.replace(/(?:(?:^|.*;\s*)likes\s*\=\s*([^;]*).*$)|^.*$/, "$1")
-    // }
-    // var likes = JSON.parse(cookie)
-    // console.log(likes)
-    // if (likes.includes(offer_id)){} else {
-    //   likes.push(offer_id)
-    //   document.cookie = "likes=" + JSON.stringify(likes)
-    // }
-  // })
   // Copy phone number to clipboard
   $('button.copy-number').on('click', function() {
     var number = $(this).attr('data-phone-number')

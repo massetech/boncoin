@@ -83,69 +83,64 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin/members/user.ex:67
 msgid "Phone number is already taken."
-msgstr ""
+msgstr "ဤဖုန်းနံပါတ်သည်အခြားသူအသုံးပြုပြီးဖြစ်ပါသည်"
 
 #, elixir-format
 #: lib/boncoin/members/user.ex:72
 msgid "Please accept the conditions."
-msgstr ""
+msgstr "ကျေးဇူးပြု၍စည်ကမ်းချက်များကိုလက်ခံပေးပါ"
 
 #, elixir-format
 #: lib/boncoin/members/user.ex:66
 msgid "Please check your phone number."
-msgstr ""
+msgstr "ကျေးဇူးပြု၍သင့်ဖုန်းနံပါတ်ကိုစစ်ဆေးကြည့်ပါ"
 
 #, elixir-format
 #: lib/boncoin/members/user.ex:70
 msgid "Please give a price to your offer."
-msgstr ""
+msgstr "ကျေးဇူးပြု၍သင်၏ရောင်းရန်ပစ္စည်းအတွက်စျေးနှုန်းသတ်မှတ်ပေးပါ"
 
 #, elixir-format
 #: lib/boncoin/members/user.ex:74
 msgid "Please post at least one photo."
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin/members/user.ex:69
-msgid "Please put a title to your offer."
-msgstr ""
+msgstr "ကျေးဇူးပြု၍ဓါတ်ပုံအနည်ဆုံးတစ်ပုံတင်ပေးပါ"
 
 #, elixir-format
 #: lib/boncoin/members/user.ex:75
 msgid "This email is already used by another user."
-msgstr ""
+msgstr "ဤ email သည်အခြားသူမှအသုံးပြုပြီးဖြစ်သည်"
 
 #, elixir-format
 #: lib/boncoin/members/user.ex:76
 msgid "This email not a proper email."
-msgstr ""
-
-#, elixir-format
-#: lib/boncoin/members/user.ex:68
-msgid "Viber phone number is already taken."
-msgstr ""
+msgstr "ဤ email သည်မှန်ကန်မှုမရှိပါ"
 
 #, elixir-format
 #: lib/boncoin/members/user.ex:65
 msgid "Please check your nickname."
-msgstr ""
+msgstr "သင်၏အမည်ကိုစစ်ဆေးကြည့်ပါ"
 
 #, elixir-format
 #: lib/boncoin/members/user.ex:78
 msgid "Sorry we have a technical problem.."
-msgstr ""
+msgstr "စိတ်မကောင်းပါဘူး၊ ကျန်ပ်တို့ထံတွင်နည်းပညာပိုင်းဆိုင်ရာမှာအခက်အခဲရှိနေပါသယ်"
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:73
+#: lib/boncoin/members/members.ex:127 lib/boncoin/members/user.ex:73
 msgid "Please open a conversation on Viber or Messenger to create an offer."
-msgstr ""
+msgstr "သင့်အရောင်းကြောငြာတင်နိုင်ရန်အတွက်ကျေးဇူးပြု၍ Viber (သို့) Messenger ဖြင့်ဆက်သွယ်ပါ"
+
+#, elixir-format
+#: lib/boncoin/members/user.ex:69
+msgid "Please put a title to your offer (max 50 characters)."
+msgstr "ကျေးဇူးပြု၍သင့်ရောင်ရန်ပစ္စည်း၏ခေါင်းစဥ်ကိုတပ်ပေးပါ"
 
 #, elixir-format
 #: lib/boncoin/members/user.ex:71
-msgid "Please write a description of your offer."
-msgstr ""
+msgid "Please write a description of your offer (max 200 characters)."
+msgstr "ကျေးဇူးပြု၍သင့်ရောင်ရန်ပစ္စည်း၏ဖေါ်ပြချက်များကိုရေးပေးပါ"
 
 #, elixir-format
-#: lib/boncoin/members/members.ex:127
-msgid "You are not registered. Please open a conversation on Viber or Messenger before creating an offer."
-msgstr ""
+#: lib/boncoin/members/user.ex:68
+msgid "Viber phone number is not correct (+95....)"
+msgstr "Viber ဖုမ်းနံပါတ်သည်မှားနေပါသည် (+9598765432)"

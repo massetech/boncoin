@@ -30,6 +30,7 @@ defmodule BoncoinWeb.AuthController do
         conn
           |> Guardian.Plug.sign_in(user, %{"typ" => "user-access"})
           |> put_flash(:info, "Welcome #{user.nickname} !")
+          |> put_status(308)
           |> redirect(to: Routes.root_path(conn, :welcome))
       _ ->
         conn

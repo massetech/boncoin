@@ -9,7 +9,7 @@
     %link(rel="stylesheet" href="#{css_link_tag(@conn)}")
     %link(rel="shortcut icon" type="image/x-icon" href="#{img_url_tag(@conn, 'favicon.ico')}")
 
-  %body.bg-light.side-bar-wrapper{data-js-view-name: "#{js_view_name(@conn, @view_template)}"}
+  %body.bg-light.sidebar-wrapper{data-js-view-name: "#{js_view_name(@conn, @view_template)}"}
     = render "_flashes.html", assigns
     = render "_sidebar.html", assigns
     - if @conn.request_path =~ "/admin/" == false do
@@ -44,9 +44,10 @@
 
     -# <!-- Global site tag (gtag.js) - Google Analytics -->
     - if Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:google_analytics] == true do
-      %script(src="https://www.googletagmanager.com/gtag/js?id=UA-125321228-1" async)
-      %script
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-125321228-1');
+      - unless @conn.assigns.current_user.role in ["ADMIN", "SUPER"] do
+        %script(src="https://www.googletagmanager.com/gtag/js?id=UA-125321228-1" async)
+        %script
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-125321228-1');

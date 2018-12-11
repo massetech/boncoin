@@ -3,7 +3,7 @@
     .card-body.p-0
       .row.m-0
         .col-6.p-0
-          = img_tag BoncoinWeb.AnnounceView.image_url(List.first(@announce.images), :original), class: "img-ratio-1x1"
+          = img_tag BoncoinWeb.AnnounceView.image_url(List.first(@announce.images), :original), class: "ratio-occupy-center fixed-height-150"
           .icon-nb-pict.d-flex.justify-content-center.align-items-center
             %i.fas.fa-camera.d-flex
               %span.text-white= Enum.count(@announce.images)

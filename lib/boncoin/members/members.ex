@@ -124,7 +124,7 @@ defmodule Boncoin.Members do
     user = case get_active_user_by_phone_number(phone_number) do
       nil ->
         # create_and_track_user(params)
-        {:error, dgettext("errors", "You are not registered. Please open a conversation on Viber or Messenger before creating an offer.")}
+        {:error, dgettext("errors", "Please open a conversation on Viber or Messenger to create an offer.")}
       user ->
         case udpate_and_track_user(user, params) do # Guest user pass by here
           {:ok, user} -> Contents.create_announce(params["announces"]["0"], user.id)
@@ -179,10 +179,9 @@ defmodule Boncoin.Members do
   def get_or_initiate_conversation(bot_provider, psid, nickname) do
     case get_conversation_by_provider_psid(bot_provider, psid) do
       nil ->
-        # Get the nickname (Messenger only, Viber get it in nickname)
         nick = cond do
-          nickname == nil && bot_provider == "messenger" -> MessengerApi.get_user_profile(psid) |> IO.inspect()
-          true -> nickname
+          nickname == nil && bot_provider == "messenger" -> MessengerApi.get_user_profile(psid) # Messenger process (we don't know the nickname before)
+          true -> nickname # Viber process
         end
         conv_params = %{scope: "welcome", bot_provider: bot_provider, psid: psid, nickname: nick}
         case create_conversation(conv_params) do

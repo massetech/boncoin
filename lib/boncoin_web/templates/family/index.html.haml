@@ -30,11 +30,11 @@
           %td= family.title_en
           %td= family.title_my
           %td
-            %p{class: "#{LayoutView.insert_icon_classes(family)}"}
+            %i{class: "#{LayoutView.insert_icon_classes(family)}"}
           %td= LayoutView.icon_active(family.active)
-          %td= "sellers"
-          %td= "visitors"
-          %td= "offers"
+          %td= "-"
+          %td= "-"
+          %td= "-"
           %td
-            = link "Edit", to: Routes.family_path(@conn, :edit, family), class: "btn btn-outline-primary btn-sm"
+            = link "Edit", to: Routes.family_path(@conn, :edit, family), class: "btn btn-outline-info btn-sm"
             = link "Delete", to: Routes.family_path(@conn, :delete, family), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

@@ -18,10 +18,17 @@ defmodule BoncoinWeb.LayoutView do
     "#{model.icon_type} fa-#{model.icon}"
   end
 
+  def show_family_selector(conn, family) do
+    case family do
+      nil -> if conn.assigns.search_params["family_id"] == "", do: "border-bottom-lg", else: ""
+      _ -> if conn.assigns.search_params["family_id"] == Integer.to_string(family.id), do: "border-bottom-lg", else: ""
+    end
+  end
+
   def icon_active(status) do
     case status do
       true -> "<i class='fa fa-check-circle text-success d-none d-sm-block'></>" |> raw
-      false -> "<i class='fa fa-times-circle text-warning d-none d-sm-block'></>" |> raw
+      false -> "<i class='fa fa-times-circle text-danger d-none d-sm-block'></>" |> raw
     end
   end
 
@@ -71,9 +78,7 @@ defmodule BoncoinWeb.LayoutView do
   def convert_zawgyi(map, key) do
     case Gettext.get_locale() do
       "en" -> Map.fetch!(map, String.to_atom("#{key}_en"))
-      "my" ->
-        Map.fetch!(map, String.to_atom("#{key}_my"))
-        |> Rabbit.zg2uni()
+      "my" -> Map.fetch!(map, String.to_atom("#{key}_my"))
       "dz" ->
         Map.fetch!(map, String.to_atom("#{key}_my"))
         |> Rabbit.uni2zg()

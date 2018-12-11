@@ -9,6 +9,7 @@ export default class MainView {
       // Assign global variable to support functions
       var global = (1,eval)('this')
       init_custom_actions()
+      load_boostrap_carousel()
     });
   }
 
@@ -29,6 +30,9 @@ export default class MainView {
 // global.validatePrice = (str) => {
 //     return /^([1-9]{1})([0-9]{1,9})?$/.test(str)
 // }
+
+global.clipboard = require('clipboard-polyfill');
+global.bodyScrollLock = require('body-scroll-lock'); // Block scrolling when modal is showed
 
 global.scrollToAnchor = (aid) => {
   // var aTag = $("a[name='"+ aid +"']");
@@ -63,102 +67,105 @@ global.call_internal_api = (url, scope, params) => {
   })
 }
 
+// Boostrap 4 caroussel select active and swipe
+global.load_boostrap_carousel = () => {
+  $('.carousel-inner').each(function(){
+    $(this).children(":first").addClass('active');
+  })
+  $('.carousel-indicators').each(function(){
+    $(this).children(":first").addClass('active');
+  })
+  $('.carousel').carousel({interval: false})
+  $(".carousel-inner").swipe({
+    swipeLeft:function(event, direction, distance, duration, fingerCount) {
+        $(this).parent().carousel('next')
+    },
+    swipeRight: function() {
+        $(this).parent().carousel('prev')
+    },
+    threshold:75
+  })
+}
+
 /* ------------- METHODS  --------------------------------------------------- */
-  let init_custom_actions = () => {
+let init_custom_actions = () => {
 
-    /* ------------- BOOSTRAP CUSTO  --------------------------------------------------- */
-    // Correct behaviour on the multiselect items
-    $('.submenu-item-hover').on('click', function(event) {
-      $(this).mouseenter()
-      event.stopPropagation()
-    })
-    // Boostrap 4 caroussel select active and swipe
-    $('.carousel-inner').each(function(){
-      $(this).children(":first").addClass('active');
-    })
-    $('.carousel-indicators').each(function(){
-      $(this).children(":first").addClass('active');
-    })
-    $('.carousel').carousel({interval: false})
-    $(".carousel-inner").swipe({
-      swipeLeft:function(event, direction, distance, duration, fingerCount) {
-          $(this).parent().carousel('next')
-      },
-      swipeRight: function() {
-          $(this).parent().carousel('prev')
-      },
-      threshold:75
-    })
+  /* ------------- BOOSTRAP CUSTO  --------------------------------------------------- */
+  // Correct behaviour on the multiselect items
+  $('.submenu-item-hover').on('click', function(event) {
+    $(this).mouseenter()
+    event.stopPropagation()
+  })
 
-    /* ------------- CHROME ANDROID FIX  --------------------------------------------------- */
-    // see https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+  /* ------------- CHROME ANDROID FIX  --------------------------------------------------- */
+  // see https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+  let vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+  window.addEventListener('resize', () => {
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
-    window.addEventListener('resize', () => {
-      let vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    });
+  });
 
-    /* ------------- GENERAL DISPLAY --------------------------------------------------- */
-    // Remove flashes after click
-    $('.alert').on('click', function () {
-      $(this).alert('close')
-    })
-    // Activate Boostrap plugins
-    $('[data-toggle="popover"]').popover()
-    // Set up CustomScroller - http://manos.malihu.gr/jquery-custom-content-scroller/
-    // $("#sidebar").mCustomScrollbar({
-    //   theme: "minimal"
-    // });
-    // Opens the slidebar
-    $('#sidebarCollapse').on('click', function () {
-        $('.collapse-level1').collapse('hide')
-        $('.collapse-level2').collapse('hide')
-        $("#searchBar").collapse('hide')
-        $(".category-selector").addClass('d-none')
-        $('#navbarDismiss').show()
-        $('#sidebar').addClass('active')
-        $('.overlay').addClass('active')
-        $('.collapse.in').toggleClass('in')
-        $('a[aria-expanded=true]').attr('aria-expanded', 'false')
-    })
-    // Close the sidebar
-    $('#navbarDismiss, .overlay').on('click', function () {
-        $('#sidebar').removeClass('active')
-        $('.overlay').removeClass('active')
-        $('#navbarDismiss').hide()
-        $('.collapse-slide').collapse('hide')
-        $('#searchBar').collapse('hide')
-    })
-    // Manage slidebar collapses
-    $('.collapse-level1').on('show.bs.collapse', function (e) {
+  /* ------------- GENERAL DISPLAY --------------------------------------------------- */
+  // Remove flashes after click
+  $('.alert').on('click', function () {
+    $(this).alert('close')
+  })
+  // Activate Boostrap plugins
+  $('[data-toggle="popover"]').popover()
+  // Opens the slidebar
+  $('#sidebarCollapse').on('click', function () {
       $('.collapse-level1').collapse('hide')
       $('.collapse-level2').collapse('hide')
-    })
-    $('.collapse-level2').on('show.bs.collapse', function (e) {
-      e.stopPropagation()
-      $('.collapse-level2').collapse('hide')
-    })
-
-    /* ------------- HEADER SEARCHES --------------------------------------------------- */
-    // Trigger search row in the header
-    $('.family-selector').on('click', function () {
-      var family_id = $(this).attr('data-target')
-      $(".category-selector").not(`#searchFamily_${family_id}`).addClass('d-none')
-      $(".triangle").not(`#triangle_${family_id}`).addClass('d-none')
-      $(`#searchFamily_${family_id}`).toggleClass("d-none")
-      $(`#triangle_${family_id}`).toggleClass("d-none")
-    })
-    // Close the search row when something else is clicked
-    $('#main').on('click', function () {
       $("#searchBar").collapse('hide')
       $(".category-selector").addClass('d-none')
-      $(".triangle").addClass('d-none')
-    })
-    // Reinit the searchbar when it is collapsed
-    $('#searchBar').on('hidden.bs.collapse', function (e) {
-      $(".category-selector").addClass('d-none')
-      $(".triangle").addClass('d-none')
-    })
+      $('#navbarDismiss').show()
+      $('#sidebar').addClass('active')
+      $('.overlay').addClass('active')
+      $('.collapse.in').toggleClass('in')
+      $('a[aria-expanded=true]').attr('aria-expanded', 'false')
+      bodyScrollLock.disableBodyScroll($("#sidebar"))    
+  })
+  // Closes the sidebar
+  $('#navbarDismiss, .overlay').on('click', function () {
+      $('.collapse-level1').collapse('hide')
+      $('.collapse-level2').collapse('hide')
+      $('#sidebar').removeClass('active')
+      $('.overlay').removeClass('active')
+      $('#navbarDismiss').hide()
+      $('.collapse-slide').collapse('hide')
+      $('#searchBar').collapse('hide')
+      bodyScrollLock.clearAllBodyScrollLocks()
+  })
+  // Manage slidebar collapses
+  $('.collapse-level1').on('show.bs.collapse', function (e) {
+    $('.collapse-level1').collapse('hide')
+    $('.collapse-level2').collapse('hide')
+  })
+  $('.collapse-level2').on('show.bs.collapse', function (e) {
+    e.stopPropagation()
+    $('.collapse-level2').collapse('hide')
+  })
 
-  }
+  /* ------------- HEADER SEARCHES --------------------------------------------------- */
+  // Trigger search row in the header
+  $('.family-selector').on('click', function () {
+    var family_id = $(this).attr('data-target')
+    $(".category-selector").not(`#searchFamily_${family_id}`).addClass('d-none')
+    $(".triangle").not(`#triangle_${family_id}`).addClass('d-none')
+    $(`#searchFamily_${family_id}`).toggleClass("d-none")
+    $(`#triangle_${family_id}`).toggleClass("d-none")
+  })
+  // Close the search row when something else is clicked
+  $('#main').on('click', function () {
+    $("#searchBar").collapse('hide')
+    $(".category-selector").addClass('d-none')
+    $(".triangle").addClass('d-none')
+  })
+  // Reinit the searchbar when it is collapsed
+  $('#searchBar').on('hidden.bs.collapse', function (e) {
+    $(".category-selector").addClass('d-none')
+    $(".triangle").addClass('d-none')
+  })
+
+}

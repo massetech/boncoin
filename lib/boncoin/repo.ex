@@ -4,7 +4,7 @@ defmodule Boncoin.Repo do
     adapter: Ecto.Adapters.Postgres
 
   use Paginator,
-    limit: 20,                  # sets the default limit to 10
+    limit: 10,                  # sets the default limit to 10
     include_total_count: true   # include total count by default
     # maximum_limit: 100,         # sets the maximum limit to 100
 

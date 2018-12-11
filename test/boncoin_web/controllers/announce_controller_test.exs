@@ -154,7 +154,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
         |> post("/api/add_offers", data)
       resp_body = result.resp_body
         |> Poison.decode!()
-      resp_html = resp_body["results"]["data"]["offers"]["inline_html"]
+      resp_html = resp_body["results"]["data"]["offers_map"]["inline_html"]
       # Tests very fasts : we can't do that anymore
       assert result.status == 200, "wrong status code returned"
       # assert resp_html =~ "offer_#{first_offer_shown.id}", "First offer is missing in loading more call"
@@ -188,7 +188,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{title: ""}), user_params, township.id, category.id)
       assert html_response(conn, 302) =~ "/offer/new/"
-      assert get_flash(conn, :alert) == "Please put a title to your offer."
+      assert get_flash(conn, :alert) == "Please put a title to your offer (max 50 characters)."
     end
     test "renders errors when description is empty", %{conn: conn} do
       user = insert(:member_user, %{phone_number: "09000000113"})
@@ -197,7 +197,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{description: ""}), user_params, township.id, category.id)
       assert html_response(conn, 302) =~ "/offer/new/"
-      assert get_flash(conn, :alert) == "Please write a description of your offer."
+      assert get_flash(conn, :alert) == "Please write a description of your offer (max 200 characters)."
     end
     test "renders errors when price is empty", %{conn: conn} do
       user = insert(:member_user, %{phone_number: "09000000114"})
@@ -274,7 +274,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{title: ""}), user_params, township.id, category.id)
       assert html_response(conn, 302) =~ "/offer/new/"
-      assert get_flash(conn, :alert) == "Please put a title to your offer."
+      assert get_flash(conn, :alert) == "Please put a title to your offer (max 50 characters)."
     end
 
     test "renders errors when description is empty", %{conn: conn} do
@@ -284,7 +284,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{description: ""}), user_params, township.id, category.id)
       assert html_response(conn, 302) =~ "/offer/new/"
-      assert get_flash(conn, :alert) == "Please write a description of your offer."
+      assert get_flash(conn, :alert) == "Please write a description of your offer (max 200 characters)."
     end
 
     test "renders errors when price is empty", %{conn: conn} do

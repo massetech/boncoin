@@ -9,8 +9,6 @@ import "../vendor/bootstrap-select-1.13.0-beta/js/bootstrap-select.min"
 
 import loadView from './views/loader';          // Custom js to run code per page
 window.__socket = require("phoenix").Socket;    // Fix for webpack with drab
-window.clipboard = require('clipboard-polyfill');
-window.bodyScrollLock = require('body-scroll-lock'); // Block scrolling when modal is showed
 
 function handleDOMContentLoaded() {
   const viewName = document.getElementsByTagName('body')[0].dataset.jsViewName;

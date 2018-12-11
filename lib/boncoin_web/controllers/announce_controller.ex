@@ -23,18 +23,15 @@ defmodule BoncoinWeb.AnnounceController do
   # API to be called if user wants to load more offers on public page
   def add_offers_to_public_index(conn, %{"scope" => scope, "params" => %{"cursor_after" => cursor_after, "search_params" => search_params}}) do
     paginator_results = Contents.list_announces_public(cursor_after, search_params)
-    conn
-      |> assign(:refusal_causes, Announce.refusal_causes())
-      |> assign(:closing_causes, Announce.admin_closing_causes())
-    offers = paginator_results.entries
+    offers_map = paginator_results.entries
       |> build_offers_html(conn)
-      # |> Enum.map(fn announce -> build_offers_html(conn, announce) end)
     results = case paginator_results.metadata.after do
       nil -> # There are no more records after
-        %{scope: scope, data: %{offers: offers, new_cursor_after: nil}, error: ""}
-      _new_cursor_after -> # There are still records after
-        %{scope: scope, data: %{offers: offers, new_cursor_after: paginator_results.metadata.after}, error: ""}
+        %{scope: scope, data: %{offers_map: offers_map, new_cursor_after: nil}, error: ""}
+      new_cursor_after -> # There are still records after
+        %{scope: scope, data: %{offers_map: offers_map, new_cursor_after: new_cursor_after}, error: ""}
     end
+    # IO.inspect(results)
     # Count KPI add_more by township
     if search_params["township_id"] != "" do
       Contents.add_kpi_township_traffic(search_params["township_id"], "add_more")

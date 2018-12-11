@@ -3,4 +3,4 @@
   .card.shadow.bg-white.rounded
     .card-body.p-0
       .col-12.p-0
-        = img_tag(Routes.static_path(@conn, "/images/pubs/test_pub_small.png"))
+        = img_tag "#{img_url_tag(@conn, 'pubs/test_pub_small.png')}", class: "ratio-occupy-bottom fixed-height-150"

@@ -110,8 +110,8 @@ msgid "Alcohol, cigarettes and drugs"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_search_btn_form.html.haml:24
-#: lib/boncoin_web/templates/layout/_search_btn_form.html.haml:31
+#: lib/boncoin_web/templates/layout/_search_btn_form.html.haml:25
+#: lib/boncoin_web/templates/layout/_search_btn_form.html.haml:32
 msgid "All %{title}"
 msgstr ""
 
@@ -446,7 +446,7 @@ msgid "I understand and agree to "
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/layout/_search_btn_form.html.haml:37
+#: lib/boncoin_web/templates/layout/_search_btn_form.html.haml:13
 msgid "No filter"
 msgstr ""
 
@@ -643,26 +643,26 @@ msgid "Nickname"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:49
+#: lib/boncoin_web/views/announce_view.ex:50
 msgid "yesterday"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:50
+#: lib/boncoin_web/views/announce_view.ex:51
 msgid "one day ago"
 msgid_plural "%{count} days ago"
 msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:48
+#: lib/boncoin_web/views/announce_view.ex:49
 msgid "one hour ago"
 msgid_plural "%{count} hours ago"
 msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:47
+#: lib/boncoin_web/views/announce_view.ex:48
 msgid "one minute ago"
 msgid_plural "%{count} minutes ago"
 msgstr[0] ""
@@ -835,22 +835,22 @@ msgid "See contact"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:89
+#: lib/boncoin_web/views/announce_view.ex:90
 msgid "The owner gives the product, you can propose your price"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:88
+#: lib/boncoin_web/views/announce_view.ex:89
 msgid "The owner is renting the product"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/views/announce_view.ex:87
+#: lib/boncoin_web/views/announce_view.ex:88
 msgid "The owner is selling the product"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:112
+#: lib/boncoin_web/controllers/announce_controller.ex:109
 msgid "This offer is no more published."
 msgstr ""
 
@@ -860,17 +860,17 @@ msgid "Your offer was created. We will treat it soon."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:88
+#: lib/boncoin_web/controllers/announce_controller.ex:85
 msgid "Technical problem, cannot treat this offer."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:126
+#: lib/boncoin_web/controllers/announce_controller.ex:123
 msgid "Your offer has been closed and is no more online."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/controllers/announce_controller.ex:105
+#: lib/boncoin_web/controllers/announce_controller.ex:102
 msgid "Sorry, this offer doesn't exist or the link is broken."
 msgstr ""
 
