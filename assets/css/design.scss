@@ -31,7 +31,6 @@ img.ratio-occupy-bottom {
 ::-webkit-scrollbar:horizontal {
     height: 0px;
 }
-
 /* ------------------------------ TYPOGRAPHY  ------------------------------ */
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, a, p {font-family: 'Roboto', sans-serif;}
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, p {
@@ -45,7 +44,8 @@ i.icon-big{font-size: 30px !important;}
 .font-s-9 {font-size: 0.9rem !important;}
 .font-s-8 {font-size: 0.8rem !important;}
 p.one-line{white-space: nowrap;}
-/* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+p{white-space: normal!important;word-wrap: break-word;word-break: normal;}
+/* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";*/
 /* ------------------------------ LOGO  ------------------------------ */
 img.logo{width: auto;height: 2.5em;}
 /* ------------------------------ HEADER  ------------------------------ */

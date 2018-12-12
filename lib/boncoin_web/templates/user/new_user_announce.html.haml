@@ -9,18 +9,16 @@
 
 - form_for @changeset, Routes.user_path(@conn, :create_announce), fn u ->
   = inputs_for u, :announces, fn a ->
+    = hidden_input a, :currency, value: "Kyats"
+    = hidden_input a, :language, value: Gettext.get_locale()
+    -# = hidden_input a, :zawgyi, value: false
     .row
-      .col-xs-12.col-sm-6.order-xs-1.my-3
+      .col-xs-12.col-sm-6.order-xs-1.order-sm-1.my-3
         = render "_details_form.html", conn: @conn, u: u
-      .col-xs-12.col-sm-6.order-xs-2.my-3.collapse.collapsible_form_offer
+      .col-xs-12.col-sm-6.order-xs-2.order-sm-2.my-sm-3.collapse.collapsible_form_offer
+        = render BoncoinWeb.AnnounceView, "_define_offer.html", conn: @conn, a: a
+      .col-xs-12.col-sm-6.order-xs-3.order-sm-4.my-sm-3.collapse.collapsible_form_offer
         = render BoncoinWeb.AnnounceView, "_describe_offer.html", conn: @conn, a: a
-      .col-xs-12.col-sm-6.order-xs-3.order-sm-4.my-3.collapse.collapsible_form_offer
-        .form-group
-          .input-group
-            %span.input-group-prepend
-              .input-group-text.bg-transparent
-                %i.fa.fa-edit
-            = textarea a, :description, class: "form-control", rows: "8", maxlength: "200", autocomplete: "nope", placeholder: LayoutView.convert_zawgyi(gettext("Describe your offer (size, dimensions, condition, scratches, date of buy, ...)"))
       .col-xs-12.col-sm-6.order-xs-4.order-sm-3.my-3.collapse.collapsible_form_offer
         = render BoncoinWeb.AnnounceView, "_select_photos.html"
 

@@ -702,7 +702,7 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/announce/public_index.html.haml:22
 msgid "Sorry, we don't have any offer for your search."
-msgstr "စိတ်မကေားပါဘူး ကျွန်ပ်တို့တိမှာသင်ရှာဖွေနေိုတောကြောငြာမရှိပါ"
+msgstr "စိတ်မကေားပါဘူး ကျွန်ပ်တို့တံမှာသင်ရှာဖွေနေသောကြောငြာမရှိပါ"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:55
