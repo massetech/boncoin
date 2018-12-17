@@ -12,8 +12,8 @@
           = text_input @u, :phone_number, class: "form-control", maxlength: "11", placeholder: LayoutView.convert_zawgyi(gettext("Main phone number"))
         %small.form-text.text-muted{id: "phone_helper"}= LayoutView.convert_zawgyi(gettext("Myanmar mobile only (09000000000)"))
       .col-4.pl-0
-        %button.btn.btn-primary.text-secondary.font-weight-bold.btn-block.m-0{id: "btn_validate_number", drab-click: "read_user_details", data-item-id: ""}= "OK"
-        %button.h-100.btn.btn-secondary.font-s-9.btn-block.m-0.d-none{id: "btn_change_number", drab-click: "read_user_details", data-item-id: ""}= LayoutView.convert_zawgyi(gettext("change"))
+        %button.btn.btn-secondary.text-primary.font-weight-bold.btn-block.m-0{id: "btn_validate_number", data-item-id: ""}= "OK"
+        %button.h-100.btn.btn-primary.font-s-9.btn-block.m-0.d-none{id: "btn_change_number", data-item-id: ""}= LayoutView.convert_zawgyi(gettext("change"))
 
   .col-12.collapse.collapsible_form_bot
     -# Viber number field
@@ -22,8 +22,7 @@
         %span.input-group-prepend
           .input-group-text.bg-transparent
             %i.fab.fa-viber
-        = text_input @u, :viber_number, class: "form-control", maxlength: "11", autocomplete: "nope", placeholder: LayoutView.convert_zawgyi(gettext("Viber phone number"))
-      -# %small.form-text.text-muted= LayoutView.convert_zawgyi(gettext("If you want, your Viber phone number (+95xxxxxxxxxx)"))
+        = text_input @u, :viber_number, class: "form-control", readonly: true
 
     -# Username field
     .form-group
@@ -31,25 +30,20 @@
         %span.input-group-prepend
           .input-group-text.bg-transparent
             %i.fa.fa-user
-        = text_input @u, :nickname, class: "form-control", maxlength: "20",autocomplete: "nope", placeholder: LayoutView.convert_zawgyi(gettext("Name or nickname"))
+        = text_input @u, :nickname, class: "form-control", readonly: true
 
     -# Bot description
-    .row.form-group{id: "field-bot"}
-      .input-group.field-bot
-        .col-xs-12.col-sm-12.d-flex.align-items-center
-          %div{id: "viber-linked"}
-            .d-flex.align-items-center
-              %i.ml-2.fab.fa-viber.mr-3
-              %p.one-line.m-0.text-grey= LayoutView.convert_zawgyi(gettext("You are linked by Viber"))
+    .form-group
+      .input-group
+        %span.input-group-prepend
+          .input-group-text.bg-transparent
+            %i.fas.fa-comments
+        = text_input @u, :viber_linked, class: "form-control", readonly: true, value: LayoutView.convert_zawgyi(gettext("You are linked by Viber"))
+        = text_input @u, :messenger_linked, class: "form-control", readonly: true, value: LayoutView.convert_zawgyi(gettext("You are linked by Messenger"))
 
-          %div{id: "messenger-linked"}
-            .d-flex.align-items-center.mr-3
-              %i.ml-2.fab.fa-facebook-messenger
-              %p.one-line.m-0.text-grey= LayoutView.convert_zawgyi(gettext("You are linked by Messenger"))
-
-        -# .col-xs-12.col-sm-5.mt-2.mt-sm-0
-        -#   - link to: Routes.main_path(@conn, :conversations), class: "btn btn-outline-secondary font-s-9 btn-block m-0 d-inline-flex justify-content-center align-items-center" do
-        -#     %span= LayoutView.convert_zawgyi(gettext("unlink"))
+    .col-xs-12
+      - link to: Routes.main_path(@conn, :conversations), class: "btn btn-outline-info btn-block m-0 d-inline-flex justify-content-center align-items-center" do
+        %span= LayoutView.convert_zawgyi(gettext("change details"))
 
     -# Bot options
     .form-group{id: "btn-bot"}

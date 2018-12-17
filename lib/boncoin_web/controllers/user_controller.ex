@@ -79,7 +79,7 @@ defmodule BoncoinWeb.UserController do
         conn
           |> put_flash(:alert, User.show_errors_in_msg(changeset))
           |> redirect(to: Routes.user_path(conn, :new_user_announce_with_phone, phone_number, offer_params: offer_params))
-      {:error, msg} -> # When the user doesnt exist or is not found
+      {:error, msg} -> # When the user doesn't exist or is not found
         %{"phone_number" => phone_number, "announces" => %{"0" => offer_params}} = params
         offer_params = Map.drop(offer_params, ["image_file_1", "image_file_2", "image_file_3"])
         conn

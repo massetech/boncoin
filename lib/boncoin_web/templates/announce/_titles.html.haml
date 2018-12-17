@@ -1,4 +1,4 @@
 .d-flex.flex-column.justify-content-center.w-100.my-2
-  %h5.font-weight-bold.text-secondary.m-0= LayoutView.convert_zawgyi(@announce.title)
+  %h5.font-weight-bold.text-primary.m-0= LayoutView.convert_zawgyi(@announce.title)
   .d-flex.flex-row.align-items-center.justify-content-center.my-1
     = render "_show_price.html", announce: @announce

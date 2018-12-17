@@ -50,6 +50,12 @@ defmodule Boncoin.Members do
       |> Repo.one()
   end
 
+  defp get_super_user() do
+    User
+      |> User.filter_super_users()
+      |> Repo.one()
+  end
+
   def list_users do
     User
       |> Repo.all()

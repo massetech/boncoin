@@ -46,7 +46,6 @@ defmodule BoncoinWeb.MessengerController do
     conversation = Members.get_or_initiate_conversation("messenger", messenger_id, nil)
     results = %{user: conn.assigns.current_user, conversation: conversation, announce: nil, user_msg: user_msg}
       |> BotDecisions.call_bot_algorythm()
-
     # Send response
     if results.scope == "close" do
       case Members.delete_conversation(conversation) do

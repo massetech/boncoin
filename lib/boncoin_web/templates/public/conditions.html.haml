@@ -1,17 +1,17 @@
 .row.conditions
   .col-12
-    .card.mb-4.bg-secondary
+    .card.mb-4.bg-primary
       .card-body
         %h5.font-weight-bold.text-white.mb-3= LayoutView.convert_zawgyi(gettext("Our terms of use"))
         %h6.text-white.m-0= LayoutView.convert_zawgyi(gettext("Your access to PawChaungKaung implies your fully agreement to these terms of use."))
 
   .col-xs-12.col-sm-8.offset-sm-2.my-3
-    .d-flex.align-items-center
-      %i.fa.fa-exclamation-circle.mr-3.text-secondary.d-none.d-sm-block
-      %p.m-0.text-left= LayoutView.convert_zawgyi(gettext("introduction to terms of use"))
-    .d-flex.align-items-center.my-4
-      %i.fa.fa-award.mr-3.text-secondary.d-none.d-sm-block
-      %p.m-0.text-left= LayoutView.convert_zawgyi(gettext("introduction to trademark"))
+    -# .d-flex.align-items-center
+    %i.fa.fa-exclamation-circle.my-3.text-primary
+    %p.m-0.text-left= LayoutView.convert_zawgyi(gettext("introduction to terms of use"))
+    -# .d-flex.align-items-center.my-4
+    %i.fa.fa-award.my-3.text-primary
+    %p.m-0.text-left= LayoutView.convert_zawgyi(gettext("introduction to trademark"))
 
 .accordion{id: "conditions"}
   .row
@@ -20,7 +20,7 @@
         %a{data-toggle: "collapse", data-target: "#object", aria-expanded: "true", aria-controls: "object"}
           .card-header
             .d-flex.align-items-center
-              %i.width-40.fa.fa-desktop.mr-3.text-secondary
+              %i.width-40.fa.fa-desktop.mr-3.text-primary
               %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("Object of PawChaungKaung"))
         %div.collapse{id: "object", aria-labelledby: "object", data-parent: "#conditions"}
           .card-body
@@ -34,7 +34,7 @@
         %a{data-toggle: "collapse", data-target: "#submission", aria-expanded: "true", aria-controls: "submission"}
           .card-header
             .d-flex.align-items-center
-              %i.width-40.fa.fa-edit.mr-3.text-secondary
+              %i.width-40.fa.fa-edit.mr-3.text-primary
               %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("Manage an offer"))
         %div.collapse{id: "submission", aria-labelledby: "submission", data-parent: "#conditions"}
           .card-body
@@ -54,7 +54,7 @@
         %a{data-toggle: "collapse", data-target: "#prohibited", aria-expanded: "true", aria-controls: "prohibited"}
           .card-header
             .d-flex.align-items-center
-              %i.width-40.fa.fa-ban.mr-3.text-secondary
+              %i.width-40.fa.fa-ban.mr-3.text-primary
               %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("Prohibited items"))
         %div.collapse{id: "prohibited", aria-labelledby: "prohibited", data-parent: "#conditions"}
           .card-body
@@ -76,7 +76,7 @@
         %a{data-toggle: "collapse", data-target: "#terms", aria-expanded: "true", aria-controls: "terms"}
           .card-header
             .d-flex.align-items-center
-              %i.width-40.fa.fa-handshake.mr-3.text-secondary
+              %i.width-40.fa.fa-handshake.mr-3.text-primary
               %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("The contract between us"))
         %div.collapse{id: "terms", aria-labelledby: "terms", data-parent: "#conditions"}
           .card-body
@@ -92,7 +92,7 @@
         %a{data-toggle: "collapse", data-target: "#privacy", aria-expanded: "true", aria-controls: "privacy"}
           .card-header
             .d-flex.align-items-center
-              %i.width-40.fa.fa-user-secret.mr-3.text-secondary
+              %i.width-40.fa.fa-user-secret.mr-3.text-primary
               %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("Your privacy"))
         %div.collapse{id: "privacy", aria-labelledby: "privacy", data-parent: "#conditions"}
           .card-body

@@ -24,28 +24,23 @@ msgid "All Myanmar"
 msgstr "မြန်မာနိုင်ငံအတွင်း"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:75
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:78
+#: lib/boncoin_web/templates/announce/_define_offer.html.haml:37
+#: lib/boncoin_web/templates/announce/_define_offer.html.haml:40
 msgid "Kyats"
 msgstr "ကျပ်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:42
-msgid "Name or nickname"
-msgstr "အမည်ရင်း(သို့)အခြားအမည်"
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:73
+#: lib/boncoin_web/templates/announce/_define_offer.html.haml:35
 msgid "Price"
 msgstr "ဈေးနှုန်း"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:40
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:10
 msgid "Title"
 msgstr "ခေါင်းစဥ်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_select_photos.html.haml:3
+#: lib/boncoin_web/templates/announce/_select_photos.html.haml:4
 msgid "3. Show some photos"
 msgstr "၃၊ ပုံအချို့ကိုပြပါ"
 
@@ -80,12 +75,12 @@ msgid "Log out"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:13
+#: lib/boncoin_web/templates/user/_details_form.html.haml:15
 msgid "Main phone number"
 msgstr "ဖုန်းနံပါတ်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:15
+#: lib/boncoin_web/templates/user/_details_form.html.haml:17
 msgid "Myanmar mobile only (09000000000)"
 msgstr "မြန်မာဖုန်းများသာ (09××××××××)"
 
@@ -99,11 +94,6 @@ msgstr "ရောင်းရန်"
 #: lib/boncoin_web/templates/layout/_sidebar.html.haml:96
 msgid "Technical"
 msgstr "နည်းပညာ"
-
-#, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:63
-msgid "unlink"
-msgstr "လိုင်းဖြုတ်ရန်"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:83
@@ -445,17 +435,12 @@ msgid "Please note that your are acting on your own..."
 msgstr "ကျေးဇူးပြု၍မှတ်သားထားရန်မှာ သင်သည်သင်၏ဆန္ဒအတိုင်းဆောင်ရွက်နေသည်ဖြစ်ပြီး နောက်ဆက်တွဲဖြစ်ပေါ်လာနိုင်သော အခြားသူများမှသင်၏နံပါတ်ကို အချိန်မရွေးဆက်သွယ်လာ နိုင်သည့်ကိစ္စကို ပေါချောင်ကောင်း website မှ တာဝန်ယူလိမ့်မည်မဟုတ်ပါ။ သင်၏ရောင်းရန် ပစ္စည်းကြော်ငြာကို online သို့မရောက်မီ ပေါချောင်ကောင်းမှ စီစစ်ပြီးနောက် ကြော်ငြာကို online သို့တင်ပေးမည်ဖြစ်သည်။"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/new_user_announce.html.haml:30
+#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:22
 msgid "Describe your offer (size, dimensions, condition, scratches, date of buy, ...)"
 msgstr "သင့်ရောင်းရန်ပစ္စည်း၏ (အရွယ်အစား၊ အခြေအနေ၊ အနာအစာ၊ ဝယ်ယူခဲ့သည့်ရက်စွဲ၊ အစရှိသည်ဖြင့်) ဖေါ်ပြရန်။"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:68
-msgid "How to scan the QR code on Viber ?"
-msgstr "ဗိုင်ဘာတွင် QR code scan ကိုဘယ်လိုလုပ်မလဲ"
-
-#, elixir-format
-#: lib/boncoin_web/templates/user/new_user_announce.html.haml:44
+#: lib/boncoin_web/templates/user/new_user_announce.html.haml:37
 msgid "I understand and agree to "
 msgstr " "
 
@@ -465,22 +450,22 @@ msgid "No filter"
 msgstr "အားလုံး"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_select_photos.html.haml:4
+#: lib/boncoin_web/templates/announce/_select_photos.html.haml:5
 msgid "Please select 1, 2, or 3 photos to show the object and its condition."
 msgstr "သင်၏ရောင်းရန်ပစ္စည်းအခြေအနေကိုပြနိုင်ရန် ကျေးဇူးပြု၍ ဓါတ်ပုံ ၁ပုံ၊ ၂ပုံ (သို့) ၃ပုံ ကို ရွေးချယ်ပါ။"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:79
+#: lib/boncoin_web/templates/announce/_define_offer.html.haml:41
 msgid "USD"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:19
+#: lib/boncoin_web/templates/user/_details_form.html.haml:21
 msgid "change"
 msgstr "ပြောင်းရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/new_user_announce.html.haml:46
+#: lib/boncoin_web/templates/user/new_user_announce.html.haml:39
 msgid "conditions"
 msgstr "သတ်မှတ်ချက်များ"
 
@@ -551,17 +536,17 @@ msgid "Buyer's and seller's rights"
 msgstr "ရောင်းသူနှင့်ဝယ်သူတို့၏အခွင့်အရေး"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:126
+#: lib/boncoin_web/templates/public/conversations.html.haml:175
 msgid "Explain how to unlink the viber account"
 msgstr "သင်၏ဖုန်းနံပါတ်ကိုသင့်ဗိုင်ဘာမှချိတ်ဆက်ထားမှုကိုဖြုတ်ရန်အတွက် သင်၏ဗိုင်ဘာသို့ ဝင်၍ [999#] ဟု ရိုက်ထည့်ပြီး ပေါချောင်ကောင်းသို့ ပို့ပါ"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:111
+#: lib/boncoin_web/templates/public/conversations.html.haml:160
 msgid "Explain how to get change phone number from Viber"
 msgstr "သင်၏ဗိုင်ဘာနံပါတ်ကိုပြောင်းရန် သင်၏လက်ရှိဗိုင်ဘာသို့ဝင်၍ [*888#] ဟုရိုက်ထည့်ပြီး ပေါချောင်ကောင်းသို့ပို့ပါ။"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:96
+#: lib/boncoin_web/templates/public/conversations.html.haml:115
 msgid "Explain how to get offer list from Viber"
 msgstr "သင်တင်ထားသည့်ရောင်းရန်ပစ္စည်းစာရင်းကိုရယူနိုင်ရန် ဗိုင်ဘာသို့ဝင်၍ [*111#] ဟုရိုက်ထည့်ပြီး ပေါချောင်ကောင်းသို့ပို့ပါ။"
 
@@ -582,12 +567,12 @@ msgid "Where do you search ?"
 msgstr "သင်ဘယ်မှာရှာဖွေပါသလဲ"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:2
+#: lib/boncoin_web/templates/user/_details_form.html.haml:4
 msgid "1. Fill your details"
 msgstr "၁. သင့်ရဲ့အချက်အလက်များကိုဖြည့်ပါ"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:4
+#: lib/boncoin_web/templates/announce/_define_offer.html.haml:4
 msgid "2. Describe your offer"
 msgstr "၂. သင်ရောင်းမည့်ပစ္စည်းကိုဖေါ်ပြပါ"
 
@@ -632,22 +617,22 @@ msgid "For more details... (burmese end)"
 msgstr "ကိုဖတ်ကြည့်ပါ"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/new_user_announce.html.haml:48
+#: lib/boncoin_web/templates/user/new_user_announce.html.haml:41
 msgid "I understand and agree to (burmese end)"
 msgstr "ကိုနားလည်လက်ခံပါသည်။"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_select_photos.html.haml:10
+#: lib/boncoin_web/templates/announce/_select_photos.html.haml:11
 msgid "Photo 1"
 msgstr "ဓာတ်ပုံ ၁"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_select_photos.html.haml:15
+#: lib/boncoin_web/templates/announce/_select_photos.html.haml:16
 msgid "Photo 2"
 msgstr "ဓာတ်ပုံ ၂"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_select_photos.html.haml:20
+#: lib/boncoin_web/templates/announce/_select_photos.html.haml:21
 msgid "Photo 3"
 msgstr "ဓာတ်ပုံ ၃"
 
@@ -705,38 +690,38 @@ msgid "Sorry, we don't have any offer for your search."
 msgstr "စိတ်မကေားပါဘူး ကျွန်ပ်တို့တံမှာသင်ရှာဖွေနေသောကြောငြာမရှိပါ"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:55
+#: lib/boncoin_web/templates/public/conversations.html.haml:72
 msgid "Open Viber on my phone"
 msgstr "ကျွန်တော်/မ၏ ဖုန်းတွင် Viber ဖွင့်ရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:44
+#: lib/boncoin_web/templates/public/conversations.html.haml:62
 msgid "How to receive notifications by Viber ?"
 msgstr "အသိပေးချက်များကိုလက်ခံရရှိနိုင်ရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:86
+#: lib/boncoin_web/templates/user/_details_form.html.haml:80
 msgid "Send me notifications by Messenger"
 msgstr "သတိပေ၊ချက်များကို Messenger မှတဆင့်ကျွန်ပ်ထံပိုပေးရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:75
-#: lib/boncoin_web/templates/user/_details_form.html.haml:80
+#: lib/boncoin_web/templates/user/_details_form.html.haml:69
+#: lib/boncoin_web/templates/user/_details_form.html.haml:74
 msgid "Send me notifications by Viber"
 msgstr "သတိပေ၊ချက်များကို Viber မှတဆင့်ကျွန်ပ်ထံပိုပေးရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:60
+#: lib/boncoin_web/templates/announce/_define_offer.html.haml:22
 msgid "give"
 msgstr "ပေးရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:55
+#: lib/boncoin_web/templates/announce/_define_offer.html.haml:17
 msgid "rent"
 msgstr "ငှားရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:50
+#: lib/boncoin_web/templates/announce/_define_offer.html.haml:12
 msgid "sell"
 msgstr "ရောင်းရန်"
 
@@ -746,37 +731,37 @@ msgid "Connect to PawChaungKaung by Viber or Messenger !"
 msgstr "ပေါကြောင်ကောင်သို Viber (သို့) Messenger မှတဆင့်ချိက်ဆက်ရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:105
+#: lib/boncoin_web/templates/public/conversations.html.haml:154
 msgid "How to change your phone number ?"
 msgstr "သင်၏ဖုန်းနံပါတ်ကိုဘယ်လိုပြောင်းမလဲ၊"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:90
+#: lib/boncoin_web/templates/public/conversations.html.haml:109
 msgid "How to get your offers list ?"
 msgstr "သင်၏ရောင်းရန်ပစ္စည်းစာရင်းကိုဘယ်လိုရယူမလဲ"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:29
+#: lib/boncoin_web/templates/public/conversations.html.haml:32
 msgid "How to receive notifications by Messenger ?"
 msgstr "Messenger အားဖြင့်အသိပေးချက်များကိုလက်ခံရရှိနိုင်ရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:120
+#: lib/boncoin_web/templates/public/conversations.html.haml:169
 msgid "How to unlink your Viber or Messenger account ?"
 msgstr "သင်၏ Viber or Messenger ကိုဘယ်လိုအချိတ်အဆက်ဖြုတ်မလဲ"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:127
+#: lib/boncoin_web/templates/public/conversations.html.haml:176
 msgid "Please note that you can't unlink your phone number if you still have active offers."
 msgstr "ကျေးဇုးပြု၍မှတ်သားရမ်သင်ကြောင်ငြာသည်လိုင်းပေါ်တွင်တင်ထားသရွေသင်ဖုန်းနံပါတ်ကိုအချိတ်အဆက်ဖြုတ်၍ရမည်မဟုတ်ပါ"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:35
+#: lib/boncoin_web/templates/public/conversations.html.haml:39
 msgid "Please open a conversation with PawChaungKaung on Messenger."
 msgstr "ကျေးဇုးပြု၍ Messenger မှတဆင့် PawChaungKaung သိုဆက်သွယ်ပါ"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:50
+#: lib/boncoin_web/templates/public/conversations.html.haml:69
 msgid "Please open a conversation with PawChaungKaung on Viber."
 msgstr "ကျေးဇုးပြု၍ Viber မှတဆင့် PawChaungKaung သိုဆက်သွယ်ပါ"
 
@@ -786,37 +771,27 @@ msgid "Receive notifications"
 msgstr "သတိပေးချက်များရယူရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/new_user_announce.html.haml:55
+#: lib/boncoin_web/templates/user/new_user_announce.html.haml:48
 msgid "Submit your offer"
 msgstr "ဤအရောင်းကိုတင်ရန်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:6
-msgid "We will send you notifications (this conversation is private between you and PawChaungKaung)."
-msgstr "ကျန်ပ်တို့သည်သင်ထံသိုအကြောင်ကြာဉချက်များကိုပေးပိုမည် (ထိုဆက်သွယ်မှုသည် PawChaungKaung နှင့်သင့်အကြားသီသန်ဖြစ်သည်)။ "
-
-#, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:56
+#: lib/boncoin_web/templates/user/_details_form.html.haml:54
 msgid "You are linked by Messenger"
 msgstr "Messenger နှင့်ဆက်သွယ်ပြီးဖြစ်သည်။"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:50
+#: lib/boncoin_web/templates/user/_details_form.html.haml:53
 msgid "You are linked by Viber"
 msgstr "Viber နှင့်ဆက်သွယ်ပြီးဖြစ်သည်။"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:31
-msgid "Viber phone number"
-msgstr "သင့် Viber နံပါတ်"
-
-#, elixir-format
-#: lib/boncoin_web/templates/announce/_describe_offer.html.haml:57
+#: lib/boncoin_web/templates/announce/_define_offer.html.haml:19
 msgid "I don't want to throw it, so I sell it for very cheap price."
 msgstr "ဤပစ္စည်းကိုမလွှင့်ပစ်ချင်ပါထိုကြောင်စျေးအလွန်သက်သာစွာဖြင့်ရောင်းပါမည်"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:69
+#: lib/boncoin_web/templates/user/_details_form.html.haml:63
 msgid "Please choose how PawChaungKaung can contact you (this conversation will be private)"
 msgstr "ကျေးဇူးပြု၍ PawChaungKaung မှသင်ထံသိုမည်သို့အဆက်သွယ်ရမည်ကိုရွေးချယ်ပါ။ (၍ဆက်သွယ်မှုသည်သီးသန်ဖြစ်သည်။)"
 
@@ -834,11 +809,6 @@ msgstr "ဤကြော်ငြာကိုပယ်ဖျက်မည်"
 #: lib/boncoin_web/templates/announce/_user_footer_actions.html.haml:4
 msgid "I already sold it"
 msgstr "ဤပစ္စည်းကိုရောင်းပြီးပါပြိ"
-
-#, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:33
-msgid "If you want, your Viber phone number (+95xxxxxxxxxx)"
-msgstr "ဆန္ဒရှိပါက သင့် Viber နံပါတ် (+95xxxxxxxxxx)"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_public_modal_offer.html.haml:17
@@ -899,3 +869,63 @@ msgstr "စည်းကမ်းချက်နှင့်သတ်မှတ်
 #: lib/boncoin_web/templates/public/about.html.haml:88
 msgid "we wont answer to offers messages (burmese end)"
 msgstr " သို့ဝင်ကြည့်ပါ။"
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/conversations.html.haml:130
+msgid "Explain how to change language"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/conversations.html.haml:145
+msgid "Explain how to change surname"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/conversations.html.haml:100
+msgid "Explain how to get help"
+msgstr "သင်တင်ထားသည့်ရောင်းရန်ပစ္စည်းစာရင်းကိုရယူနိုင်ရန် ဗိုင်ဘာသို့ဝင်၍ [*111#] ဟုရိုက်ထည့်ပြီး ပေါချောင်ကောင်းသို့ပို့ပါ။"
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/conversations.html.haml:124
+msgid "How to change your language ?"
+msgstr "သင်၏ဖုန်းနံပါတ်ကိုဘယ်လိုပြောင်းမလဲ၊"
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/conversations.html.haml:139
+msgid "How to change your surname ?"
+msgstr "သင်၏ဖုန်းနံပါတ်ကိုဘယ်လိုပြောင်းမလဲ၊"
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/conversations.html.haml:94
+msgid "How to get help ?"
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/conversations.html.haml:41
+msgid "Open Messenger on my phone"
+msgstr "ကျွန်တော်/မ၏ ဖုန်းတွင် Viber ဖွင့်ရန်"
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/conversations.html.haml:6
+msgid "The registration is necessary if you want to create offers on Pawchaungkaung."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/user/_details_form.html.haml:59
+msgid "change details"
+msgstr "ပြောင်းရန်"
+
+#, elixir-format
+#: lib/boncoin_web/templates/public/conversations.html.haml:21
+msgid "explain registration and conversation"
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/public/conversations.html.haml:44
+msgid "Please scan this QR code on your Messenger."
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/boncoin_web/templates/public/conversations.html.haml:75
+msgid "Please scan this QR code on your Viber."
+msgstr ""

@@ -1,12 +1,12 @@
 %nav{aria-label: "breadcrumb"}
   %ol.breadcrumb
-    %li.breadcrumb-item= link "Dashboard", to: Routes.main_path(@conn, :dashboard), class: "text-secondary"
+    %li.breadcrumb-item= link "Dashboard", to: Routes.main_path(@conn, :dashboard), class: "text-primary"
     %li.breadcrumb-item.active{aria-current: "page"}= "Users"
 
 .row.my-3
   .col-xs-12.col-sm-6.text-left
     %span= "Logged in as"
-    %span.text-secondary= "#{@conn.assigns.current_user.email}"
+    %span.text-primary= "#{@conn.assigns.current_user.email}"
   .col-xs-12.col-sm-6.text-right
     = link "New USer", to: Routes.user_path(@conn, :new), class: "btn btn-outline-info btn-sm"
 

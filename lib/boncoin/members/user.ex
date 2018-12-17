@@ -47,8 +47,8 @@ defmodule Boncoin.Members.User do
       |> validate_format(:phone_number, phone_regex(), message: "This is not a Myanmar phone number")
       |> validate_format(:viber_number, viber_regex(), message: "This is not a Viber phone number")
       |> validate_inclusion(:auth_provider, ["google"], message: "Oauth provider not supported")
-      |> validate_inclusion(:bot_provider, ["viber", "messenger"], message: "Bot provider not supported")
-      |> validate_inclusion(:language, ["dz", "my", "en"], message: "Language not supported")
+      # |> validate_inclusion(:bot_provider, ["viber", "messenger"], message: "Bot provider not supported")
+      # |> validate_inclusion(:language, ["dz", "my", "en"], message: "Language not supported")
       |> validate_inclusion(:role, ["GUEST", "MEMBER", "ADMIN", "PARTNER", "SUPER"], message: "Role not supported")
       |> refuse_guest_phone_number(params)
   end
@@ -111,6 +111,11 @@ defmodule Boncoin.Members.User do
   def filter_admin_users_by_email(query, email) do
     from u in query,
       where: u.email == ^email and u.role in ["SUPER", "ADMIN"]
+  end
+
+  def filter_super_users(query) do
+    from u in query,
+      where: u.role in ["SUPER"]
   end
 
   def filter_active_user_by_bot_id(query, bot_id, provider) do

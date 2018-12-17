@@ -1,6 +1,6 @@
 -# .row
 -#   .col-12
--#     .card.mb-4.bg-secondary
+-#     .card.mb-4.bg-primary
 -#       .card-body
 -#         %h5.font-weight-bold.text-white
 -#           = gettext("You saved {nb_offers}offers}", nb_offers: @conn.assigns.nb_offers_found)
@@ -13,8 +13,8 @@
 -#     .col-xs-12.col-sm-8.offset-sm-2.mt-5
 -#       .card
 -#         .card-body
--#           %h4.text-secondary= gettext "You didn't save any offer yet or these offers are not online anymore."
--#           .btn.bg-secondary.my-3.mw-100.text-white
+-#           %h4.text-primary= gettext "You didn't save any offer yet or these offers are not online anymore."
+-#           .btn.bg-primary.my-3.mw-100.text-white
 -#             = gettext "Please search again !"
 -#
 -# %div{id: "config", data-api: "#{@conn.assigns.api_key}"}

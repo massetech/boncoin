@@ -1,9 +1,9 @@
 .row.about
   .col-12
-    .card
-      .card-header.bg-secondary.text-center
+    .card.mb-4
+      .card-header.bg-primary.text-center
         %h5.font-weight-bold.text-white= LayoutView.convert_zawgyi(gettext("Connect to PawChaungKaung by Viber or Messenger !"))
-        %h6.text-white= LayoutView.convert_zawgyi(gettext("We will send you notifications (this conversation is private between you and PawChaungKaung)."))
+        %h6.text-white= LayoutView.convert_zawgyi(gettext("The registration is necessary if you want to create offers on Pawchaungkaung."))
       .card-body.p-0
         .row
           .col-12.d-flex.justify-content-center.align-items-center.my-2
@@ -12,68 +12,114 @@
             %i.fas.fa-exchange-alt.text-viber.mx-3.icon-big
             = img_tag Routes.static_path(@conn, "/images/logo_white.png"), class: "logo"
 
+  .col-xs-12.col-sm-8.offset-sm-2.my-3
+    %p= LayoutView.convert_zawgyi(gettext("explain registration and conversation"))
+
 .accordion{id: "bot"}
   .row
     .col-xs-12.col-sm-8.offset-sm-2.my-3
-      -# QR link to Messenger
+      -# Register on Messenger
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#messenger", aria-expanded: "true", aria-controls: "messenger", data-parent: "#bot"}
           .card-header
             .d-flex.align-items-center
-              %i.width-40.fas.fa-comments.mr-3.text-secondary
+              %i.width-40.fab.fa-facebook-messenger.mr-3.text-primary
               %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to receive notifications by Messenger ?"))
         %div.collapse{id: "messenger", aria-labelledby: "messenger", data-parent: "#bot"}
           .card_body.text-center.p-3
-            %p.my-3= LayoutView.convert_zawgyi(gettext("Please open a conversation with PawChaungKaung on Messenger."))
+            - if Browser.mobile?(@conn) do
+              %p.text-left.my-3= LayoutView.convert_zawgyi(gettext("Please open a conversation with PawChaungKaung on Messenger."))
+              %a.btn.btn-lg.btn-block.btn-messenger.my-3{href: "http://m.me/pawchaungkaung?ref=website_mobile"}
+                %span= LayoutView.convert_zawgyi(gettext("Open Messenger on my phone"))
+            - else
+              %p.my-3= LayoutView.convert_zawgyi(gettext("Please scan this QR code on your Messenger."))
+              - if Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment] == :dev do
+                = img_tag "#{img_url_tag(@conn, "FB_QR_code_website_dev.png")}", class: "w-50"
+              - else
+                = img_tag "#{img_url_tag(@conn, "FB_QR_code_website_prod.png")}", class: "w-50"
+              .row
+                .col-xs-12.col-sm-6
+                  = img_tag "#{img_url_tag(@conn, "messenger_QR_code_explained_1.png")}", class: "my-3 w-100"
+                .col-xs-12.col-sm-6
+                  = img_tag "#{img_url_tag(@conn, "messenger_QR_code_explained_2.png")}", class: "my-3 w-100"
 
-      -# QR link to Viber
+      -# Register on Viber
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#viber", aria-expanded: "true", aria-controls: "viber", data-parent: "#bot"}
           .card-header
             .d-flex.align-items-center
-              %i.width-40.fas.fa-comments.mr-3.text-secondary
+              %i.width-40.fab.fa-viber.mr-3.text-primary
               %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to receive notifications by Viber ?"))
         %div.collapse{id: "viber", aria-labelledby: "viber", data-parent: "#bot"}
           .card_body.text-center.p-3
-            %p.my-3= LayoutView.convert_zawgyi(gettext("Please open a conversation with PawChaungKaung on Viber."))
-            .col-xs-12.col-sm-6.offset-sm-3.flex-column
-              - if Browser.mobile?(@conn) do
-                %a.btn.btn-block.btn-viber{href: "viber://pa/info?uri=pawchaungkaung_en"}
-                  %i.fab.fa-viber
+            - if Browser.mobile?(@conn) do
+              %p.text-left.my-3= LayoutView.convert_zawgyi(gettext("Please open a conversation with PawChaungKaung on Viber."))
+              .d-flex.flex-column
+                %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa?chatURI=pawchaungkaung_en&context=website_mobile"}
                   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
-              - else
-                = img_tag Routes.static_path(@conn, "/images/viber_QR_code.png")
+                %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa?chatURI=pawchaungkaung_en"}
+                  %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
+                %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa/info?uri=pawchaungkaung_en&context=website_mobile"}
+                  %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
+                %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa/info?uri=pawchaungkaung_en"}
+                  %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
+                %i.fas.fa-plus.text-center.mt-3.text-primary
+                = img_tag "#{img_url_tag(@conn, "viber_msg_btn.png")}", class: "m-auto w-50"
+            - else
+              %p.my-3= LayoutView.convert_zawgyi(gettext("Please scan this QR code on your Viber."))
+              = img_tag "#{img_url_tag(@conn, "viber_msg_btn.png")}", class: "w-50 my-3"
+              = img_tag Routes.static_path(@conn, "/images/viber_QR_code.png"), class: "w-50 my-3"
+              .row
+                .col-xs-12.col-sm-6
+                  = img_tag Routes.static_path(@conn, "/images/viber_QR_code_explained_1.png"), class: "my-3 w-100"
+                .col-xs-12.col-sm-6
+                  = img_tag Routes.static_path(@conn, "/images/viber_QR_code_explained_2.png"), class: "my-3 w-100"
 
-      -# QR code explained
       .card.text-left
-        %a{data-toggle: "collapse", data-target: "#viber_explain", aria-expanded: "true", aria-controls: "viber_explain", data-parent: "#bot"}
+        %a{data-toggle: "collapse", data-target: "#help_explain", aria-expanded: "true", aria-controls: "help_explain", data-parent: "#bot"}
           .card-header
             .d-flex.align-items-center
-              %i.width-40.fas.fa-qrcode.mr-3.text-secondary
-              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to scan the QR code on Viber ?"))
-        %div.collapse{id: "viber_explain", aria-labelledby: "viber_explain", data-parent: "#bot"}
-          .card-body.p-0
-            .row
-              .col-xs-12.col-sm-6
-                = img_tag Routes.static_path(@conn, "/images/viber_QR_code_explained_1.png"), class: "my-3 w-100"
-              .col-xs-12.col-sm-6
-                = img_tag Routes.static_path(@conn, "/images/viber_QR_code_explained_2.png"), class: "my-3 w-100"
+              %i.width-40.fas.fa-question.mr-3.text-primary
+              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to get help ?"))
+        %div.collapse{id: "help_explain", aria-labelledby: "help_explain", data-parent: "#bot"}
+          .card-body
+            %p.my-3= LayoutView.convert_zawgyi(gettext("Explain how to get help"))
 
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#offer_list_explain", aria-expanded: "true", aria-controls: "offer_list_explain", data-parent: "#bot"}
           .card-header
             .d-flex.align-items-center
-              %i.width-40.fas.fa-list-alt.mr-3.text-secondary
+              %i.width-40.fas.fa-list-alt.mr-3.text-primary
               %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to get your offers list ?"))
         %div.collapse{id: "offer_list_explain", aria-labelledby: "offer_list_explain", data-parent: "#bot"}
           .card-body
             %p.my-3= LayoutView.convert_zawgyi(gettext("Explain how to get offer list from Viber"))
 
       .card.text-left
+        %a{data-toggle: "collapse", data-target: "#language_explain", aria-expanded: "true", aria-controls: "language_explain", data-parent: "#bot"}
+          .card-header
+            .d-flex.align-items-center
+              %i.width-40.fab.fa-font-awesome-flag.mr-3.text-primary
+              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to change your language ?"))
+        %div.collapse{id: "language_explain", aria-labelledby: "language_explain", data-parent: "#bot"}
+          .card-body
+            %p.my-3= LayoutView.convert_zawgyi(gettext("Explain how to change language"))
+
+      .card.text-left
+        %a{data-toggle: "collapse", data-target: "#surname_explain", aria-expanded: "true", aria-controls: "surname_explain", data-parent: "#bot"}
+          .card-header
+            .d-flex.align-items-center
+              %i.width-40.fas.fa-user.mr-3.text-primary
+              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to change your surname ?"))
+        %div.collapse{id: "surname_explain", aria-labelledby: "surname_explain", data-parent: "#bot"}
+          .card-body
+            %p.my-3= LayoutView.convert_zawgyi(gettext("Explain how to change surname"))
+
+      .card.text-left
         %a{data-toggle: "collapse", data-target: "#change_explain", aria-expanded: "true", aria-controls: "change_explain", data-parent: "#bot"}
           .card-header
             .d-flex.align-items-center
-              %i.width-40.fa.fa-phone.mr-3.text-secondary
+              %i.width-40.fa.fa-phone.mr-3.text-primary
               %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to change your phone number ?"))
         %div.collapse{id: "change_explain", aria-labelledby: "change_explain", data-parent: "#bot"}
           .card-body
@@ -83,7 +129,7 @@
         %a{data-toggle: "collapse", data-target: "#unlink_explain", aria-expanded: "true", aria-controls: "unlink_explain", data-parent: "#bot"}
           .card-header
             .d-flex.align-items-center
-              %i.width-40.fa.fa-unlink.mr-3.text-secondary
+              %i.width-40.fa.fa-unlink.mr-3.text-primary
               %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to unlink your Viber or Messenger account ?"))
         %div.collapse{id: "unlink_explain", aria-labelledby: "unlink_explain", data-parent: "#bot"}
           .card-body

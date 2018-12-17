@@ -41,8 +41,8 @@ a:hover, button:hover, i:hover, label:hover {cursor: pointer;text-decoration: no
 .text-viber{color: map-get($theme-colors, viber-color);}
 .text-grey{color: map-get($theme-colors, form-grey);}
 i.icon-big{font-size: 30px !important;}
-.font-s-9 {font-size: 0.9rem !important;}
-.font-s-8 {font-size: 0.8rem !important;}
+// .font-s-9 {font-size: 0.9rem !important;}
+// .font-s-8 {font-size: 0.8rem !important;}
 p.one-line{white-space: nowrap;}
 p{white-space: normal!important;word-wrap: break-word;word-break: normal;}
 /* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";*/
@@ -52,7 +52,7 @@ img.logo{width: auto;height: 2.5em;}
 .nav-row{height: 3em;}
 th, td {font-size: 12px; vertical-align: middle !important; padding: 0.5rem 0 !important;}
 td:hover, th:hover {cursor: pointer;}
-.border-bottom-lg{border-bottom: 4px solid $secondary !important;}
+.border-bottom-lg{border-bottom: 4px solid map-get($theme-colors, primary) !important;}
 /* ------------------------------ FLASHES  ------------------------------ */
 .flashes{
   position: absolute; width: 100%; z-index: 9999;
@@ -92,7 +92,7 @@ img.welcome_img{width: auto;position: absolute; bottom: 0;}
   .family-selector{position: relative;width: 100%;padding: 6px 0;}
 }
 .category-selector{
-  border-bottom: 10px solid map-get($theme-colors, primary);
+  border-bottom: 10px solid map-get($theme-colors, secondary);
 }
 .triangle{
     position: absolute;
@@ -116,6 +116,11 @@ div > i, .btn > i:not(.btn-icon) {display: flex; align-items: center; justify-co
 i.icon{
   width: 20px; height: 20px; font-size: 12px !important; display: flex;
   border-radius: 100px;
+}
+i.icon-primary{
+  border: 1px solid map-get($theme-colors, primary);
+}
+i.icon-success{
   border: 1px solid map-get($theme-colors, success);
 }
 
@@ -163,7 +168,7 @@ i.width-40, img.width-40 {width: 40px;}
 }
 .slide-menu:hover {
   color: none; box-shadow: none; cursor: pointer;
-  @extend .text-white; background-color: map-get($theme-colors, secondary);
+  @extend .text-white; background-color: map-get($theme-colors, primary);
   a, span {@extend .text-white;}
 }
 .overlay {
@@ -187,7 +192,7 @@ i.width-40, img.width-40 {width: 40px;}
 }
 span.language-active{
   font-weight: 600;
-  @extend .text-secondary;
+  @extend .text-primary;
 }
 
 /* ------------------------------ ADDS  ------------------------------ */
@@ -204,7 +209,7 @@ span.language-active{
   background-color: transparent;
   border: 1px solid map-get($theme-colors, form-grey);
 }
-.btn-outline-secondary:not(:hover){background-color: white;}
+.btn-outline-primary:not(:hover){background-color: white;}
 .dropdown-toggle-split{
   width: 30px;
 }
@@ -234,7 +239,7 @@ a[data-toggle="collapse"] {
     transform: translateY(-50%);
 }
 .dropdown-item.active, .dropdown-item:active{
-  background-color: map-get($theme-colors, secondary);
+  background-color: map-get($theme-colors, primary);
 }
 .modal {
   button.close{position: absolute;right: 15px;top: 15px;z-index: 99999;}
@@ -313,7 +318,7 @@ a[data-toggle="collapse"] {
   color: white;
 }
 .btn-viber{background: map-get($theme-colors, viber-color); color: white}
-.btn-messenger{
+.btn-messenger-outline{
   background: white;
   border: 2px solid map-get($theme-colors, messenger-color);
   border-radius: 5px;
@@ -323,6 +328,7 @@ a[data-toggle="collapse"] {
   background: map-get($theme-colors, messenger-color);
   color: white;
 }
+.btn-messenger{background: map-get($theme-colors, messenger-color); color: white}
 .img-icon{height: 20px;width: 20px;}
 
 /* ------------------------------ PAGE : SEE ANNOUNCE  ------------------------------ */

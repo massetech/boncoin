@@ -1,19 +1,19 @@
 .row.m-0.w-100
   .col-12.p-1
-    %button.btn.btn-block.btn-outline-secondary.d-flex.justify-content-center.align-items-center.my-0
+    %button.btn.btn-block.btn-outline-primary.d-flex.justify-content-center.align-items-center.my-0
       %i.fas.fa-eye.mr-3
       %span= LayoutView.convert_zawgyi(gettext("%{nb_times}people saw it", nb_times: @announce.nb_view))
   .col-6.p-1
-    %button.btn.btn-block.btn-secondary.d-flex.flex-column.justify-content-center.align-items-center.my-0.copy-number{data-phone-number: "#{@announce.user.phone_number}"}
+    %button.btn.btn-block.btn-primary.d-flex.flex-column.justify-content-center.align-items-center.my-0.copy-number{data-phone-number: "#{@announce.user.phone_number}"}
       %i.fa.fa-phone
       %span= render "_phone_number.html", phone_number: @announce.user.phone_number
 
   - if @announce.user.viber_number != nil do
     .col-6.p-1
-      %button.btn.btn-block.btn-secondary.d-flex.flex-column.justify-content-center.align-items-center.my-0.btn-viber.copy-number{data-phone-number: "95#{String.slice(@announce.user.viber_number, 1..-1)}"}
+      %button.btn.btn-block.btn-primary.d-flex.flex-column.justify-content-center.align-items-center.my-0.btn-viber.copy-number{data-phone-number: "95#{String.slice(@announce.user.viber_number, 1..-1)}"}
         %i.fab.fa-viber
         = render "_phone_number.html", phone_number: "95#{String.slice(@announce.user.viber_number, 1..-1)}"
   - else
     .col-6.p-1
-      %button.btn.btn-block.btn-secondary.d-flex.flex-column.justify-content-center.align-items-center.my-0.btn-viber.disabled
+      %button.btn.btn-block.btn-primary.d-flex.flex-column.justify-content-center.align-items-center.my-0.btn-viber.disabled
         %i.fab.fa-viber

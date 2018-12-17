@@ -5,15 +5,15 @@
   .col-12
     .form-group
       .btn-group.w-100{data-toggle: "buttons"}
-        %label.btn.btn-outline-secondary.active.radio-btn.d-inline-flex.justify-content-center.m-0.px-0
+        %label.btn.btn-outline-primary.active.radio-btn.d-inline-flex.justify-content-center.m-0.px-0
           = radio_button @a, :sell_mode, "SELL", autocomplete: "off", class: ""
           %i.fas.fa-dollar-sign.mx-2
           %span= LayoutView.convert_zawgyi(gettext("sell"))
-        %label.btn.btn-outline-secondary.radio-btn.d-inline-flex.justify-content-center.m-0.px-0
+        %label.btn.btn-outline-primary.radio-btn.d-inline-flex.justify-content-center.m-0.px-0
           = radio_button @a, :sell_mode, "RENT", autocomplete: "off", class: ""
           %i.fas.fa-clock.mx-2
           %span= LayoutView.convert_zawgyi(gettext("rent"))
-        %label.btn.btn-outline-secondary.radio-btn.d-inline-flex.justify-content-center.m-0.px-0{id: "gift-btn", data-toggle: "popover", tabindex: "0", data-trigger: "focus", data-placement: "bottom", data-content: "#{LayoutView.convert_zawgyi(gettext("I don't want to throw it, so I sell it for very cheap price."))}"}
+        %label.btn.btn-outline-primary.radio-btn.d-inline-flex.justify-content-center.m-0.px-0{id: "gift-btn", data-toggle: "popover", tabindex: "0", data-trigger: "focus", data-placement: "bottom", data-content: "#{LayoutView.convert_zawgyi(gettext("I don't want to throw it, so I sell it for very cheap price."))}"}
           = radio_button @a, :sell_mode, "GIVE", autocomplete: "off", class: ""
           %i.fas.fa-gift.mx-2
           %span= LayoutView.convert_zawgyi(gettext("give"))

@@ -1,10 +1,14 @@
 .justify-content-top.flex-grow-1.text-area.text-left
-  %p.m-0= LayoutView.convert_zawgyi(gettext("Sold by%{seller_name}", seller_name: @announce.user.nickname))
-  %p.m-0
-    = LayoutView.convert_zawgyi(@announce.township, "title")
-    = "|"
-    = LayoutView.convert_zawgyi(@announce.township.division, "title")
-  .d-flex.flex-row.align-items-center.my-1
-    %i.icon.fas.text-center.text-success.mr-1{class: "#{BoncoinWeb.AnnounceView.show_sell_mode(@announce.sell_mode)}"}
+  .d-flex.align-items-center
+    %i.icon.icon-primary.fas.fa-user.text-primary.mr-2
+    %p.m-0= LayoutView.convert_zawgyi(gettext("Sold by%{seller_name}", seller_name: @announce.user.nickname))
+  .d-flex.align-items-center.my-1
+    %i.icon.icon-primary.fas.fa-map-marker-alt.text-primary.mr-2
+    %p.m-0
+      = LayoutView.convert_zawgyi(@announce.township, "title")
+      = "|"
+      = LayoutView.convert_zawgyi(@announce.township.division, "title")
+  .d-flex.flex-row.align-items-center
+    %i.icon.icon-primary.fas.text-center.text-primary.mr-2{class: "#{BoncoinWeb.AnnounceView.show_sell_mode(@announce.sell_mode)}"}
     %h6.m-0= BoncoinWeb.AnnounceView.explain_sell_mode(@announce.sell_mode)
   %p.mt-3= LayoutView.convert_zawgyi(@announce.description)

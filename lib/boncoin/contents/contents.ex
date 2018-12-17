@@ -570,6 +570,11 @@ defmodule Boncoin.Contents do
             create_announce_image(announce.id, attrs[i])
           end
         end
+        # Send a message to admin that a new announce was posted
+        admin = Members.get_super_user()
+        user = Members.get_user!(user_id)
+        messages = %{messages: ["A new offer was created at #{Timex.now()} by #{user.nickname}"]}
+        Members.send_bot_message_to_user(messages, admin)
         {:ok, announce}
       error_offer -> error_offer
     end

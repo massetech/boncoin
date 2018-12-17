@@ -1,16 +1,16 @@
 .container-fluid.m-0.p-0
-  .row.nav-row.align-items-center.bg-primary.m-0.p-0
+  .row.nav-row.align-items-center.bg-secondary.m-0.p-0
     .col.col-xs-1.text-left.p-0
-      %button.btn.bg-primary.text-secondary{type: "button", id: "sidebarCollapse"}
+      %button.btn.bg-secondary.text-primary{type: "button", id: "sidebarCollapse"}
         %i.fa.fa-bars
     .col.col-xs-8.text-center.p-0
       - link to: Routes.root_path(@conn, :welcome), class: "brand-logo text-white" do
         = img_tag "#{img_url_tag(@conn, 'logo_colour.png')}", class: "logo"
     .col.col-xs-1.text-right.p-0
-      %button.btn.bg-primary.text-secondary{type: "button", data-toggle: "collapse", data-target: "#searchBar", aria-expanded: "false"}
+      %button.btn.bg-secondary.text-primary{type: "button", data-toggle: "collapse", data-target: "#searchBar", aria-expanded: "false"}
         %i.fa.fa-search
 
 
-  .row.collapse.bg-primary.m-0.p-0{id: "searchBar"}
+  .row.collapse.bg-secondary.m-0.p-0{id: "searchBar"}
     .col-xs-12.mt-3.w-100
       = render "_search_btn_form.html", assigns

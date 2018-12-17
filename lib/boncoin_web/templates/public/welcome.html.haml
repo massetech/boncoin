@@ -1,14 +1,14 @@
 .row.welcome_container.justify-content-center.align-items-start
   = img_tag("#{img_url_tag(@conn, "welcome.png")}", class: "welcome_img")
   .col-xs-12.col-sm-8.d-flex.flex-column.justify-content-center.my-3
-    .card.bg-secondary
+    .card.bg-primary
       .card-body.p-3
         %h5.text-white.m-0
           = LayoutView.convert_zawgyi(gettext("Find a good-deal in more than %{nb_offers}offers", nb_offers: @nb_announces))
 
     .col-xs-12.col-sm-8.offset-sm-2.my-4.p-0
       = render BoncoinWeb.LayoutView, "_cities_list.html", assigns
-      - link to: Routes.user_path(@conn, :new_user_announce), class: "btn btn-lg btn-outline-secondary text-secondary btn-block text-white" do
+      - link to: Routes.user_path(@conn, :new_user_announce), class: "btn btn-lg btn-outline-primary text-primary btn-block text-white" do
         %i.width-30.fa.fa-edit.btn-icon{}
         %span= LayoutView.convert_zawgyi(gettext("Sell something"))
 
@@ -16,7 +16,7 @@
   .col-xs-12.col-sm-8.my-4
     .card.shadow.bg-white.rounded
       .card-body.text-left
-        %h5.text-secondary.text-center= LayoutView.convert_zawgyi(gettext("Presenting website"))
+        %h5.text-primary.text-center= LayoutView.convert_zawgyi(gettext("Presenting website"))
 
 .row.justify-content-center
   .col-xs-12.col-sm-8.my-4

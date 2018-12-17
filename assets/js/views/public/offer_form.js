@@ -90,7 +90,7 @@ let reset_announce_form_field = () => {
 
 // Populate form when the phone_number is accepted
 let validate_phone_number_pop_field = (user) => {
-  $('#user_phone_number').attr('readonly', 'readonly')  //.removeClass("field-danger").addClass("field-success")
+  $('#user_phone_number').attr('readonly', 'readonly')
   $('#btn_validate_number').hide()
   $('#btn_change_number').removeClass('d-none').show()
   $('#phone_helper').hide()
@@ -102,11 +102,11 @@ let validate_phone_number_pop_field = (user) => {
     $('#field-bot').show()
     $('#btn-bot').hide()
     if (user.bot_provider == "viber") {
-      $('#viber-linked').show()
-      $('#messenger-linked').hide()
+      $('#user_viber_linked').show()
+      $('#user_messenger_linked').hide()
     } else {
-      $('#viber-linked').hide()
-      $('#messenger-linked').show()
+      $('#user_viber_linked').hide()
+      $('#user_messenger_linked').show()
     }
     $('.collapsible_form_offer').collapse('show')
   } else {

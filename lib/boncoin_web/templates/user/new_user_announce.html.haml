@@ -1,10 +1,10 @@
-.card.mb-4.bg-secondary
+.card.mb-4.bg-primary
   .card-body.text-left
     %p.font-s-9.text-white= LayoutView.convert_zawgyi(gettext("Please note that your are acting on your own..."))
     %p.font-s-9.text-white.m-0
       = LayoutView.convert_zawgyi(gettext("For more details please read our"))
       - link to: Routes.main_path(@conn, :conditions), target: "_blank" do
-        %span.text-primary.font-weight-bold= LayoutView.convert_zawgyi(gettext("terms and conditions."))
+        %span.text-secondary.font-weight-bold= LayoutView.convert_zawgyi(gettext("terms and conditions."))
       = LayoutView.convert_zawgyi(gettext("For more details... (burmese end)"))
 
 - form_for @changeset, Routes.user_path(@conn, :create_announce), fn u ->
@@ -30,11 +30,11 @@
             = checkbox a, :conditions, class: "form-check-input", type: "radio"
             = LayoutView.convert_zawgyi(gettext("I understand and agree to "))
             - link to: Routes.main_path(@conn, :conditions), target: "_blank" do
-              %span.text-secondary.font-weight-bold= LayoutView.convert_zawgyi(gettext("conditions"))
+              %span.text-primary.font-weight-bold= LayoutView.convert_zawgyi(gettext("conditions"))
             = LayoutView.convert_zawgyi(gettext("I understand and agree to (burmese end)"))
       .col-xs-12.col-sm-6.offset-sm-3
         .form-group
-          - submit class: "btn btn-primary text-secondary font-weight-bold btn-block btn-lg mt-3" do
+          - submit class: "btn btn-secondary text-primary font-weight-bold btn-block btn-lg mt-3" do
             = LayoutView.convert_zawgyi(gettext("Submit your offer"))
 
   <% end %>

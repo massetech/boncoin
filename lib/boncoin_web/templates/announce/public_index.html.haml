@@ -1,6 +1,6 @@
 .row
   .col-12
-    .card.mb-4.bg-secondary
+    .card.mb-4.bg-primary
       .card-body
         %h5.font-weight-bold.text-white
           - if @conn.assigns.search_titles.searched_arbo.title_en == "" do
@@ -16,8 +16,8 @@
     .col-xs-12.col-sm-8.offset-sm-2.mt-5
       .card
         .card-body
-          %h4.text-secondary= gettext "Sorry, we don't have any offer for your search."
-          .btn.bg-secondary.my-3.mw-100.text-white
+          %h4.text-primary= gettext "Sorry, we don't have any offer for your search."
+          .btn.bg-primary.my-3.mw-100.text-white
             = LayoutView.convert_zawgyi(gettext("Please change your filters or search in another city !"))
 
 - unless @conn.assigns.cursor_after == nil do
