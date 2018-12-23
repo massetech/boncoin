@@ -3,15 +3,6 @@ defmodule Boncoin.Factory do
   alias Boncoin.Members.{User, Conversation, Phone}
   alias Boncoin.Contents.{Family, Category, Township, Division, Announce, Image, TrafficKpi}
 
-  def conversation_factory do
-    %Conversation{
-      scope: nil,
-      bot_provider: "viber",
-      nickname: "mr_X",
-      language: "en"
-    }
-  end
-
   def admin_user_factory do
     %User{
       phone_number: "09000000003",
@@ -19,9 +10,6 @@ defmodule Boncoin.Factory do
       role: "ADMIN",
       language: "en",
       member_psw: "e",
-      bot_provider: "viber",
-      bot_active: true,
-      bot_id: "e",
       nickname: "Mr admin",
     }
   end
@@ -33,26 +21,9 @@ defmodule Boncoin.Factory do
       role: "MEMBER",
       language: "en",
       member_psw: "e",
-      bot_provider: "viber",
-      bot_active: true,
-      bot_id: "12345671",
       nickname: "Mr member",
     }
   end
-
-  # def guest_user_factory do
-  #   %User{
-  #     phone_number: "09000000000",
-  #     email: sequence(:email, &"email-#{&1}@example.com"),
-  #     role: "GUEST",
-  #     language: "en",
-  #     member_psw: "e",
-  #     bot_provider: "viber",
-  #     bot_active: true,
-  #     bot_id: "e",
-  #     nickname: "Mr guest",
-  #   }
-  # end
 
   def user_factory do
     %User{
@@ -61,18 +32,28 @@ defmodule Boncoin.Factory do
       role: sequence(:role, ["ADMIN", "MEMBER"]),
       language: "en",
       member_psw: "e",
-      bot_provider: "viber",
-      bot_active: true,
-      bot_id: "e",
       nickname: "Mr unknown",
     }
   end
 
   def conversation_factory do
     %Conversation {
-      bot_provider: "viber",
       psid: "some psid",
-      scope: "some scope"
+      scope: nil,
+      bot_provider: "viber",
+      nickname: "mr_X",
+      language: "en",
+      active: true
+    }
+  end
+
+  def phone_factory do
+    %Phone {
+      user: insert(:user),
+      active: true,
+      bot_id: "bot1234",
+      bot_provider: "messenger",
+      nickname: "Boris"
     }
   end
 
@@ -120,6 +101,7 @@ defmodule Boncoin.Factory do
 
   def announce_factory do
     user = insert(:member_user)
+    insert(:conversation, %{user_id: user.id})
     division = insert(:division, %{active: true})
     township = insert(:township, %{active: true, division_id: division.id})
     family = insert(:family, %{active: true})

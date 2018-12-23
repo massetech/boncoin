@@ -8,15 +8,15 @@ defmodule BoncoinWeb.AnnounceControllerTest do
   import Mockery.Assertions
   use Mockery
 
-  @create_attrs %{conditions: "true", description: "some description", language: "some language", image_file_1: Announce.image_param_example(), image_file_2: "", image_file_3: "", price: "120", title: "some title"}
-  @update_attrs %{conditions: "true", description: "some updated description", language: "some updated language", image_file_1: Announce.image_param_example(), image_file_2: "", image_file_3: "", price: "450", title: "some updated title"}
-  @invalid_attrs %{conditions: "nil", description: nil, language: nil, photo1: nil, photo2: nil, photo3: nil, price: nil, status: nil, title: nil,}
+  @create_attrs %{conditions: "true", description: "some description", image_file_1: Announce.image_param_example(), image_file_2: "", image_file_3: "", price: "120", title: "some title"}
+  @update_attrs %{conditions: "true", description: "some updated description", image_file_1: Announce.image_param_example(), image_file_2: "", image_file_3: "", price: "450", title: "some updated title"}
+  @invalid_attrs %{conditions: "nil", description: nil, photo1: nil, photo2: nil, photo3: nil, price: nil, status: nil, title: nil,}
   @moduletag :AnnounceController
   @moduletag :Controller
 
-  defp build_offer_params(attrs, %{phone_number: phone_number, nickname: nickname}, township_id, category_id) do
+  defp build_offer_params(attrs, %{phone_number: phone_number}, township_id, category_id) do
     %{user: %{
-        phone_number: phone_number, nickname: nickname,
+        phone_number: phone_number,
         announces: %{'0': Map.merge(attrs, %{township_id: township_id, category_id: category_id})}
       }
     }
@@ -30,7 +30,8 @@ defmodule BoncoinWeb.AnnounceControllerTest do
     end
     test "treats offer : ACCEPTED / ONLINE and send Viber msg", %{conn: conn} do
       Mockery.History.enable_history()
-      user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE"})
+      user = insert(:user)
+      insert(:conversation, %{user_id: user.id, psid: "123RENE"})
       offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: true, cause: "ACCEPTED", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
@@ -38,79 +39,86 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
       assert new_offer.status == "ONLINE"
       assert new_offer.cause == "ACCEPTED"
-      assert_called ViberApi, :send_message, ["123RENE", _msg], 1
+      assert_called ViberApi, :send_message, [:update, "123RENE", _msg, _quick_replies, _buttons, _offer], 1
     end
     test "treats offer : ACCEPTED / ONLINE and send Messenger msg", %{conn: conn} do
       Mockery.History.enable_history()
-      user = insert(:user, %{bot_provider: "messenger", bot_id: "123RENE2"})
+      user = insert(:user)
+      insert(:conversation, %{user_id: user.id, psid: "123RENE2", bot_provider: "messenger"})
       offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: true, cause: "ACCEPTED", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      # msg = "Hi Mr unknown, your offer an offer title is now published !\nIt will be online for 1 month until #{LayoutView.format_date(new_offer.validity_date)}.\nYou can manage your offer on"
+      date = Timex.shift(DateTime.utc_now, months: 1)
+      msg = "Hi Mr unknown, your offer is now published ! It will be online for 1 month until #{date.year}/#{date.month}/#{date.day}."
       assert get_flash(conn, :info) == "Offer treated and message sent to user by Messenger"
       assert new_offer.status == "ONLINE"
       assert new_offer.cause == "ACCEPTED"
-      assert_called MessengerApi, :send_update_message, ["123RENE2", _msg], 1
+      assert_called MessengerApi, :send_message, [:update, "123RENE2", ^msg, _quick_replies, _buttons, _offer], 1
     end
     test "treats offer : NOT_ALLOWED / REFUSED and send Viber msg", %{conn: conn} do
       Mockery.History.enable_history()
-      user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE3"})
+      user = insert(:user)
+      insert(:conversation, %{user_id: user.id, psid: "123RENE3"})
       offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "NOT_ALLOWED", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      msg = "Hi Mr unknown, we are sorry but your offer an offer title was refused because its content is not allowed.. \nPlease create a new one on http://localhost:4001/offer/new/09000000000"
+      msg = "Hi Mr unknown, we are sorry but your offer was refused because its content is not allowed.. Please create a new offer."
       assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
       assert new_offer.status == "REFUSED"
       assert new_offer.cause == "NOT_ALLOWED"
-      assert_called ViberApi, :send_message, ["123RENE3", ^msg], 1
+      assert_called ViberApi, :send_message, [:update, "123RENE3", ^msg, _quick_replies, _buttons, _offer], 1
     end
     test "treats offer : UNCLEAR / REFUSED and send Viber msg", %{conn: conn} do
       Mockery.History.enable_history()
-      user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE4"})
+      user = insert(:user)
+      insert(:conversation, %{user_id: user.id, psid: "123RENE4"})
       offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "UNCLEAR", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      msg = "Hi Mr unknown, we are sorry but your offer an offer title was refused because its description is not clear.. \nPlease create a new one on http://localhost:4001/offer/new/09000000000"
+      msg = "Hi Mr unknown, we are sorry but your offer was refused because its description is not clear.. Please create a new offer."
       assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
       assert new_offer.status == "REFUSED"
       assert new_offer.cause == "UNCLEAR"
-      assert_called ViberApi, :send_message, ["123RENE4", ^msg], 1
+      assert_called ViberApi, :send_message, [:update, "123RENE4", ^msg, _quick_replies, _buttons, _offer], 1
     end
     test "treats offer : BAD_PHOTOS / REFUSED and send Viber msg", %{conn: conn} do
       Mockery.History.enable_history()
-      user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE5"})
+      user = insert(:user)
+      insert(:conversation, %{user_id: user.id, psid: "123RENE5"})
       offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "BAD_PHOTOS", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      msg = "Hi Mr unknown, we are sorry but your offer an offer title was refused because the photos are not good.. \nPlease create a new one on http://localhost:4001/offer/new/09000000000"
+      msg = "Hi Mr unknown, we are sorry but your offer was refused because the photos are not good.. Please create a new offer."
       assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
       assert new_offer.status == "REFUSED"
       assert new_offer.cause == "BAD_PHOTOS"
-      assert_called ViberApi, :send_message, ["123RENE5", ^msg], 1
+      assert_called ViberApi, :send_message, [:update, "123RENE5", ^msg, _quick_replies, _buttons, _offer], 1
     end
     test "treats offer : ADMIN_DECISION / CLOSED and send Viber msg", %{conn: conn} do
       Mockery.History.enable_history()
-      user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE6"})
+      user = insert(:user)
+      insert(:conversation, %{user_id: user.id, psid: "123RENE6"})
       offer = insert(:announce, %{user_id: user.id, status: "ONLINE"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "ADMIN_DECISION", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      msg = "Hi Mr unknown, your offer an offer title has been closed following an admin decision.. \nPlease create a new one on http://localhost:4001/offer/new/09000000000"
+      msg = "Hi Mr unknown, your offer an offer title has been closed following an admin decision."
       assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
       assert new_offer.status == "CLOSED"
       assert new_offer.cause == "ADMIN_DECISION"
-      assert_called ViberApi, :send_message, ["123RENE6", ^msg], 1
+      assert_called ViberApi, :send_message, [:update, "123RENE6", ^msg, _quick_replies, _buttons, _offer], 1
     end
     test "treats offer : TIME_PASSED / CLOSED and send Viber msg", %{conn: conn} do
       Mockery.History.enable_history()
-      user = insert(:user, %{bot_provider: "viber", bot_id: "123RENE7"})
+      user = insert(:user)
+      insert(:conversation, %{user_id: user.id, psid: "123RENE7"})
       offer = insert(:announce, %{user_id: user.id, status: "ONLINE"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "TIME_PASSED", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      msg = "Hi Mr unknown, your offer an offer title has been closed after its publication time.. \nPlease create a new one on http://localhost:4001/offer/new/09000000000"
+      msg = "Hi Mr unknown, your offer an offer title has been closed after its publication time."
       assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
       assert new_offer.status == "CLOSED"
       assert new_offer.cause == "TIME_PASSED"
-      assert_called ViberApi, :send_message, ["123RENE7", ^msg], 1
+      assert_called ViberApi, :send_message, [:update, "123RENE7", ^msg, _quick_replies, _buttons, _offer], 1
     end
     test "deletes chosen announce from dashboard", %{conn: conn} do
       announce = insert(:announce)
@@ -119,7 +127,6 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       assert get_flash(conn, :info) == "Offer deleted successfully."
     end
   end
-  # @tag :dde
   describe "public" do
     test "list announces in public view", %{conn: conn} do
       list = insert_list(21, :announce)
@@ -163,103 +170,12 @@ defmodule BoncoinWeb.AnnounceControllerTest do
     end
   end
 
-  describe "new user creates announce" do
-    test "renders errors when phone number is guest", %{conn: conn} do
-      user_params = %{phone_number: "09000000000", nickname: "some_nickname"}
-      township = insert(:township)
-      category = insert(:category)
-      conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
-      assert html_response(conn, 302) =~ "/offer/new/"
-      assert get_flash(conn, :alert) == "Please check your phone number."
-    end
-    test "redirects to public offers when data is valid", %{conn: conn} do
-      user = insert(:member_user, %{phone_number: "09000000111"})
-      user_params = %{phone_number: "09000000111", nickname: "some_nickname"}
-      township = insert(:township)
-      category = insert(:category)
-      conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
-      assert html_response(conn, 302) =~ "/offer/index?search[township_id]"
-      assert get_flash(conn, :info) == "Your offer was created. We will treat it soon."
-    end
-    test "renders errors when title is empty", %{conn: conn} do
-      user = insert(:member_user, %{phone_number: "09000000112"})
-      user_params = %{phone_number: "09000000112", nickname: "some_nickname"}
-      township = insert(:township)
-      category = insert(:category)
-      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{title: ""}), user_params, township.id, category.id)
-      assert html_response(conn, 302) =~ "/offer/new/"
-      assert get_flash(conn, :alert) == "Please put a title to your offer (max 50 characters)."
-    end
-    test "renders errors when description is empty", %{conn: conn} do
-      user = insert(:member_user, %{phone_number: "09000000113"})
-      user_params = %{phone_number: "09000000113", nickname: "some_nickname"}
-      township = insert(:township)
-      category = insert(:category)
-      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{description: ""}), user_params, township.id, category.id)
-      assert html_response(conn, 302) =~ "/offer/new/"
-      assert get_flash(conn, :alert) == "Please write a description of your offer (max 200 characters)."
-    end
-    test "renders errors when price is empty", %{conn: conn} do
-      user = insert(:member_user, %{phone_number: "09000000114"})
-      user_params = %{phone_number: "09000000114", nickname: "some_nickname"}
-      township = insert(:township)
-      category = insert(:category)
-      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{price: "sz"}), user_params, township.id, category.id)
-      assert html_response(conn, 302) =~ "/offer/new/"
-      assert get_flash(conn, :alert) == "Please give a price to your offer."
-    end
-    test "renders errors when no photo is given", %{conn: conn} do
-      user = insert(:member_user, %{phone_number: "09000000115"})
-      user_params = %{phone_number: "09000000115", nickname: "some_nickname"}
-      township = insert(:township)
-      category = insert(:category)
-      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{image_file_1: ""}), user_params, township.id, category.id)
-      assert html_response(conn, 302) =~ "/offer/new/"
-      assert get_flash(conn, :alert) == "Please post at least one photo."
-    end
-    test "renders errors when user surname is empty", %{conn: conn} do
-      user = insert(:member_user, %{phone_number: "09000000116"})
-      user_params = %{phone_number: "09000000116", nickname: ""}
-      township = insert(:township)
-      category = insert(:category)
-      conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
-      assert html_response(conn, 302) =~ "/offer/new/"
-      assert get_flash(conn, :alert) == "Please check your nickname."
-    end
-    test "renders errors when user is not linked to bot", %{conn: conn} do
-      user = insert(:member_user, %{phone_number: "09000000117", bot_active: false})
-      user_params = %{phone_number: "09000000117", nickname: "some_nickname"}
-      township = insert(:township)
-      category = insert(:category)
-      conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
-      assert html_response(conn, 302) =~ "/offer/new/"
-      assert get_flash(conn, :alert) == "Please open a conversation on Viber or Messenger to create an offer."
-    end
-    test "renders errors when conditions are not accepted", %{conn: conn} do
-      user = insert(:member_user, %{phone_number: "09000000114"})
-      user_params = %{phone_number: "09000000114", nickname: "some_nickname"}
-      township = insert(:township)
-      category = insert(:category)
-      conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{conditions: false}), user_params, township.id, category.id)
-      assert html_response(conn, 302) =~ "/offer/new/"
-      assert get_flash(conn, :alert) == "Please accept the conditions."
-    end
-  end
-
   describe "existing user creates announce" do
-    test "renders errors when user surname is empty", %{conn: conn} do
-      user = insert(:user, %{phone_number: "09000000110"})
-      user_params = %{phone_number: user.phone_number, nickname: ""}
-      township = insert(:township)
-      category = insert(:category)
-      conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
-      assert html_response(conn, 302) =~ "/offer/new/"
-      assert get_flash(conn, :alert) == "Please check your nickname."
-    end
 
     test "redirects to public offers when data is valid", %{conn: conn} do
       user = insert(:user, %{phone_number: "09000000111"})
-      user_params = %{phone_number: user.phone_number, nickname: user.nickname}
+      insert(:conversation, %{user_id: user.id})
+      user_params = %{phone_number: user.phone_number}
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
@@ -269,7 +185,8 @@ defmodule BoncoinWeb.AnnounceControllerTest do
 
     test "renders errors when title is empty", %{conn: conn} do
       user = insert(:user, %{phone_number: "09000000112"})
-      user_params = %{phone_number: user.phone_number, nickname: user.nickname}
+      insert(:conversation, %{user_id: user.id})
+      user_params = %{phone_number: user.phone_number}
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{title: ""}), user_params, township.id, category.id)
@@ -279,7 +196,8 @@ defmodule BoncoinWeb.AnnounceControllerTest do
 
     test "renders errors when description is empty", %{conn: conn} do
       user = insert(:user, %{phone_number: "09000000113"})
-      user_params = %{phone_number: user.phone_number, nickname: user.nickname}
+      insert(:conversation, %{user_id: user.id})
+      user_params = %{phone_number: user.phone_number}
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{description: ""}), user_params, township.id, category.id)
@@ -289,7 +207,8 @@ defmodule BoncoinWeb.AnnounceControllerTest do
 
     test "renders errors when price is empty", %{conn: conn} do
       user = insert(:user, %{phone_number: "09000000114"})
-      user_params = %{phone_number: user.phone_number, nickname: user.nickname}
+      insert(:conversation, %{user_id: user.id})
+      user_params = %{phone_number: user.phone_number}
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{price: "dede"}), user_params, township.id, category.id)
@@ -299,7 +218,8 @@ defmodule BoncoinWeb.AnnounceControllerTest do
 
     test "renders errors when no photo is given", %{conn: conn} do
       user = insert(:user, %{phone_number: "09000000115"})
-      user_params = %{phone_number: user.phone_number, nickname: user.nickname}
+      insert(:conversation, %{user_id: user.id})
+      user_params = %{phone_number: user.phone_number}
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{conditions: "false"}), user_params, township.id, category.id)
@@ -308,57 +228,23 @@ defmodule BoncoinWeb.AnnounceControllerTest do
     end
   end
 
-  # describe "show announce" do
-  #   @tag :admin_authenticated
-  #   test "to admin", %{conn: conn} do
-  #     offer = insert(:announce, %{title: "dede"})
-  #     conn = get conn, announce_path(conn, :show, offer.id)
-  #     assert html_response(conn, 200) =~ "dede"
-  #   end
-
-    # @tag :member_authenticated
-    # test "returns on landing page for non admin user", %{conn: conn} do
-    #   offer = insert(:announce)
-    #   conn = get conn, announce_path(conn, :show, offer.id)
-    #   assert html_response(conn, 308)
-    #   assert get_flash(conn, :alert) == "You must be admin to access that part."
-    # end
-
-    # test "returns on landing page for non authenticated user", %{conn: conn} do
-    #   offer = insert(:announce)
-    #   conn = get conn, announce_path(conn, :show, offer.id)
-    #   assert html_response(conn, 308)
-    #   assert get_flash(conn, :alert) == "You must be logged in to access that part."
-    # end
-  # end
-
   describe "show user announce" do
     test "shows the offer when it is ONLINE", %{conn: conn} do
       offer = insert(:announce, %{title: "dede"})
-      # safe_link = Cipher.encrypt(Integer.to_string(offer.id))
-      # {:ok, offer} = Contents.update_announce(offer, %{safe_link: safe_link})
       url = BotDecisions.offer_view_link(offer.id)
-      #Cipher.sign_url("http://localhost:4001/#{announce_path(conn, :show, offer.id)}")
       conn = get conn, url
       assert html_response(conn, 200) =~ "dede"
     end
     test "redirects when the offer is CLOSED", %{conn: conn} do
       offer = insert(:announce, %{status: "CLOSED"})
-      # safe_link = Cipher.encrypt(Integer.to_string(offer.id))
-      # {:ok, offer} = Contents.update_announce(offer, %{safe_link: safe_link})
-      # conn = get conn, announce_path(conn, :show, offer.safe_link)
       url = BotDecisions.offer_view_link(offer.id)
-      # Cipher.sign_url("http://localhost:4001/#{announce_path(conn, :show, offer.id)}")
       conn = get conn, url
       assert html_response(conn, 302)
       assert get_flash(conn, :info) == "This offer is no more published."
     end
     test "redirects with broken link", %{conn: conn} do
-      # offer = insert(:announce, %{safe_link: "whatever_wrong_link"})
       offer = insert(:announce)
-      # conn = get conn, announce_path(conn, :show, offer.safe_link)
       url = BotDecisions.offer_view_link(offer.id)
-        # Cipher.sign_url("http://localhost:4001/#{announce_path(conn, :show, offer.id)}")
         |> String.replace("b", "") # Removes all the "b" from the string
         |> String.replace("y", "") # Removes all the "b" from the string
         |> String.replace("z", "") # Removes all the "b" from the string
@@ -373,23 +259,5 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       assert get_flash(conn, :info) == "Your offer has been closed and is no more online."
     end
   end
-
-
-  # describe "update announce" do
-  #   setup [:create_announce]
-  #
-  #   test "redirects when data is valid", %{conn: conn, announce: announce} do
-  #     conn = put conn, announce_path(conn, :update, announce), announce: @update_attrs
-  #     assert redirected_to(conn) == announce_path(conn, :show, announce)
-  #
-  #     conn = get conn, announce_path(conn, :show, announce)
-  #     assert html_response(conn, 200) =~ "some updated description"
-  #   end
-  #
-  #   test "renders errors when data is invalid", %{conn: conn, announce: announce} do
-  #     conn = put conn, announce_path(conn, :update, announce), announce: @invalid_attrs
-  #     assert html_response(conn, 200) =~ "Edit Announce"
-  #   end
-  # end
 
 end

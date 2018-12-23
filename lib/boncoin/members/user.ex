@@ -3,11 +3,11 @@ defmodule Boncoin.Members.User do
   import Ecto.{Query, Changeset}
   import Boncoin.Gettext
   alias Boncoin.Contents.{Announce}
-  alias Boncoin.Members.{Phone}
+  alias Boncoin.Members.{Phone, Conversation}
   alias Boncoin.CustomModules
 
   # Select only those fields to encode in json the API response
-  @derive {Jason.Encoder, only: [:id, :email, :nickname, :phone_number, :bot_active, :bot_provider, :viber_number]}
+  @derive {Jason.Encoder, only: [:id, :phone_number, :nickname, :viber_number, :conversation]}
 
   schema "users" do
     field :uid, :string
@@ -23,17 +23,15 @@ defmodule Boncoin.Members.User do
     field :role, :string, default: "MEMBER"
     field :token, :string
     field :token_expiration, :utc_datetime
-    field :bot_provider, :string
-    field :bot_active, :boolean, default: false
-    field :bot_id, :string
     has_many :announces, Announce, on_delete: :delete_all
+    has_one :conversation, Conversation, on_delete: :delete_all
     has_many :phones, Phone, on_delete: :delete_all
     has_many :treated_offers, Announce, foreign_key: :treated_by_id, on_delete: :nilify_all
     timestamps()
   end
 
-  @required_fields ~w(language nickname phone_number role bot_provider bot_active bot_id active)a
-  @optional_fields ~w(auth_provider email uid member_psw viber_number)a
+  @required_fields ~w(uid language nickname phone_number role active)a
+  @optional_fields ~w(auth_provider email member_psw viber_number)a
 
   @doc false
   def changeset(user, attrs) do
@@ -44,11 +42,12 @@ defmodule Boncoin.Members.User do
       |> cast(params, @required_fields ++ @optional_fields)
       |> validate_required(@required_fields)
       |> validate_format(:email, email_regex(), message: "This is not a real email")
-      |> validate_format(:phone_number, phone_regex(), message: "This is not a Myanmar phone number")
-      |> validate_format(:viber_number, viber_regex(), message: "This is not a Viber phone number")
+      |> validate_format(:phone_number, myanmar_phone_regex(), message: "This is not a Myanmar phone number")
+      |> validate_format(:viber_number, myanmar_phone_regex(), message: "This is not a Myanmar Viber phone number")
+      |> convert_viber_number(attrs)
       |> validate_inclusion(:auth_provider, ["google"], message: "Oauth provider not supported")
-      # |> validate_inclusion(:bot_provider, ["viber", "messenger"], message: "Bot provider not supported")
-      # |> validate_inclusion(:language, ["dz", "my", "en"], message: "Language not supported")
+      |> validate_length(:nickname, min: 4, max: 30, message: "Nickname length is not good")
+      |> validate_inclusion(:language, ["dz", "my", "en"], message: "Language not supported")
       |> validate_inclusion(:role, ["GUEST", "MEMBER", "ADMIN", "PARTNER", "SUPER"], message: "Role not supported")
       |> refuse_guest_phone_number(params)
   end
@@ -60,18 +59,22 @@ defmodule Boncoin.Members.User do
       changeset
   end
 
+  defp convert_viber_number(changeset, %{"viber_number" => viber_number}) do
+    case viber_number do
+      "" -> changeset
+      _ -> put_change(changeset, :viber_number, "+959#{String.slice(viber_number, 2..10)}")
+    end
+  end
+  defp convert_viber_number(changeset, _) do
+    changeset
+  end
+
   def show_errors_in_msg(changeset) do
     case List.first(changeset.errors) do
       {:nickname, _msg} -> dgettext("errors", "Please check your nickname.")
       {:phone_number, {"Guest phone number can't post offer", _}} -> dgettext("errors", "Please check your phone number.")
       {:phone_number, _msg} -> dgettext("errors", "Phone number is already taken.")
       {:viber_number, _msg} -> dgettext("errors", "Viber phone number is not correct (+95....)")
-      {:title, _msg} -> dgettext("errors", "Please put a title to your offer (max 50 characters).")
-      {:price, _msg} -> dgettext("errors", "Please give a price to your offer.")
-      {:description, _msg} -> dgettext("errors", "Please write a description of your offer (max 200 characters).")
-      {:conditions, _msg} -> dgettext("errors", "Please accept the conditions.")
-      {:bot_active, _} -> dgettext("errors", "Please open a conversation on Viber or Messenger to create an offer.")
-      {:photo, _msg} -> dgettext("errors", "Please post at least one photo.")
       {:email, {"Email is already taken", _}} -> dgettext("errors", "This email is already used by another user.")
       {:email, {"This is not a real email", _}} -> dgettext("errors", "This email not a proper email.")
       _ -> # Something else went wrong
@@ -80,20 +83,20 @@ defmodule Boncoin.Members.User do
   end
 
   def check_myanmar_phone_number(phone_number) do
-    String.match?(phone_number, phone_regex())
+    String.match?(phone_number, myanmar_phone_regex())
   end
 
   def email_regex() do
     # ~r/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
     ~r/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   end
-  def phone_regex() do
-    ~r/^[0][9]\d{9}$/
-    # ~r/^([09]{1})([0-9]{10})$/
+  def myanmar_phone_regex() do
+    # ~r/^[0][9]\d{9}$/ # 09 + 9 digits
+    ~r/^([0][9])(\d{7}|\d{8}|\d{9})$/ # 09 + 7 to 9 digits
   end
-  def viber_regex() do
-    ~r/^\+[1-9]{1,2}\d{5,10}$/
-  end
+  # def viber_regex() do
+  #   ~r/^\+[1-9]{1,2}\d{5,10}$/
+  # end
 
   def role_select_btn() do
     [guest: "GUEST", member: "MEMBER", admin: "ADMIN", partner: "PARTNER", super: "SUPER"]
@@ -113,6 +116,11 @@ defmodule Boncoin.Members.User do
       where: u.email == ^email and u.role in ["SUPER", "ADMIN"]
   end
 
+  def filter_not_guest(query) do
+    from u in query,
+      where: u.role != "GUEST"
+  end
+
   def filter_super_users(query) do
     from u in query,
       where: u.role in ["SUPER"]
@@ -120,7 +128,8 @@ defmodule Boncoin.Members.User do
 
   def filter_active_user_by_bot_id(query, bot_id, provider) do
     from u in query,
-      where: u.bot_id == ^bot_id and u.bot_provider == ^provider and u.active == true and u.bot_active == true
+      join: c in assoc(u, :conversation),
+      where: c.psid == ^bot_id and c.bot_provider == ^provider and u.active == true
   end
 
   def filter_active_user_by_phone_number(query, phone_number) do

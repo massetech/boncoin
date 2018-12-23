@@ -1,6 +1,7 @@
 defmodule Boncoin.Contents.Announce do
   use Ecto.Schema
   import Ecto.{Query, Changeset}
+  import Boncoin.Gettext
   alias Boncoin.Contents.{Category, Township, Image}
   alias Boncoin.Members.{User}
   alias Boncoin.{CustomModules, Members} # Used to make some Zawgyi conversion
@@ -52,11 +53,24 @@ defmodule Boncoin.Contents.Announce do
       |> validate_inclusion(:sell_mode, ["SELL", "RENT", "GIVE"])
       |> validate_length(:title, max: 50)
       |> validate_length(:price, max: 50)
-      |> validate_length(:title, max: 200)
+      |> validate_length(:description, max: 200)
       |> check_offer_has_one_photo_min(params)
       |> check_offer_has_accepted_conditions(params)
       |> refuse_users_without_active_bot(params)
       |> refuse_non_numeric_price(params)
+  end
+
+  def show_errors_in_msg(changeset) do
+    case List.first(changeset.errors) do
+      {:title, _msg} -> dgettext("errors", "Please put a title to your offer (max 50 characters).")
+      {:price, _msg} -> dgettext("errors", "Please give a price to your offer.")
+      {:description, _msg} -> dgettext("errors", "Please write a description of your offer (max 200 characters).")
+      {:conditions, _msg} -> dgettext("errors", "Please accept the conditions.")
+      {:bot_active, _} -> dgettext("errors", "Please open a conversation on Viber or Messenger to create an offer.")
+      {:photo, _msg} -> dgettext("errors", "Please post at least one photo.")
+      _ -> # Something else went wrong
+        dgettext("errors", "Sorry we have a technical problem..")
+    end
   end
 
   defp refuse_non_numeric_price(changeset, %{"price" => price}) do
@@ -70,8 +84,8 @@ defmodule Boncoin.Contents.Announce do
   end
 
   defp refuse_users_without_active_bot(changeset, %{"user_id" => user_id}) do
-    user = Members.get_user!(user_id)
-    case user.bot_active do
+    user = Members.get_user(user_id)
+    case user.conversation.active do
       true -> changeset
       false -> add_error(changeset, :bot_active, "this user has no bot active and cant post offer")
     end

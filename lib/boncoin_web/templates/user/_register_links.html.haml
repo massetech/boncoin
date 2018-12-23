@@ -1,0 +1,21 @@
+.row.text-left.mt-3
+  .col-12.mb-3
+    %hr.d-block.d-sm-none
+    %h5.text-left= LayoutView.convert_zawgyi(gettext("Please register to create offer"))
+  .col-12
+    .form-group{id: "btn-bot"}
+      %p.form-text.text-muted= LayoutView.convert_zawgyi(gettext("Please choose how PawChaungKaung can contact you (this conversation will be private)"))
+      .input-group.mt-2
+        .col-6.pl-0
+          - if Browser.mobile?(@conn) do
+            %a.btn.btn-block.btn-viber-outline{href: "viber://pa/info?uri=pawchaungkaung_en"}
+              %i.fab.fa-viber
+              %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Viber"))
+          - else
+            - link to: Routes.main_path(@conn, :conversations), class: "btn btn-block btn-viber-outline", target: "_blank" do
+              %i.fab.fa-viber
+              %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Viber"))
+        .col-6.pr-0
+          - link to: Routes.main_path(@conn, :conversations), class: "btn btn-block btn-messenger disabled", target: "_blank" do
+            %i.fab.fa-facebook-messenger
+            %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Messenger"))

@@ -7,7 +7,8 @@
   // Fix for Chrome adding bar on android ; see https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
   height: calc(100vh - 3em - 1em); /* Fallback for browsers that do not support Custom Properties */
   height: calc(var(--vh, 1vh) * 100 - 3em - 1em);
-  position: relative;overflow-x: hidden;
+  position: relative;
+  overflow-x: hidden; // Hides the image outside container
 }
 a {max-width: 100%;} // Fix the cards max-width nested in a tag
 // img {width: 100%;}
@@ -48,6 +49,7 @@ p{white-space: normal!important;word-wrap: break-word;word-break: normal;}
 /* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";*/
 /* ------------------------------ LOGO  ------------------------------ */
 img.logo{width: auto;height: 2.5em;}
+img.logo-50{max-width: 50%;}
 /* ------------------------------ HEADER  ------------------------------ */
 .nav-row{height: 3em;}
 th, td {font-size: 12px; vertical-align: middle !important; padding: 0.5rem 0 !important;}
@@ -76,16 +78,14 @@ i {font-size: 20px!important;}
   p {text-align: justify;}
 }
 // /* ------------------------------ ADDS @ BACKGROUNDS  ------------------------------ */
-.add{
-  img {font-size: 30px!important;}
+.add{img {font-size: 30px!important;}}
+img.welcome_img{position: absolute; bottom: 0;}
+@include media-breakpoint-up(sm) {
+  img.welcome_img{width: 1024px;}
 }
-img.welcome_img{width: auto;position: absolute; bottom: 0;}
-// @include media-breakpoint-up(sm) {
-//   img.welcome_img{width: 1024px;}
-// }
-// @include media-breakpoint-up(xl) {
-//   img.welcome_img{width: 100vw;}
-// }
+@include media-breakpoint-up(xl) {
+  img.welcome_img{width: 100vw;}
+}
 /* ------------------------------ SEARCHBAR  ------------------------------ */
 #searchBar{
   z-index: 1000;
@@ -137,12 +137,13 @@ i.width-40, img.width-40 {width: 40px;}
   width: 33.333%;
 }
 /* ------------------------------ SIDEBAR  ------------------------------ */
-.sidebar-wrapper{
-  display: flex;
-  align-items: stretch;
-}
+// .sidebar-wrapper{
+//   display: flex;
+//   align-items: stretch;
+//   max-width: 85%;
+// }
 #sidebar {
-  width: 300px; min-height: 100vh; max-height: 100%;
+  width: 300px; min-height: 100vh; max-height: 100%;max-width: 85%;
   position: fixed; left: -300px;
   z-index: 9999; overflow-y: auto;
   transition: all 0.3s;

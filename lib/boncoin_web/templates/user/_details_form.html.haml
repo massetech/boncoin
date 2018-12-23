@@ -15,7 +15,7 @@
         %button.btn.btn-secondary.text-primary.font-weight-bold.btn-block.m-0{id: "btn_validate_number", data-item-id: ""}= "OK"
         %button.h-100.btn.btn-primary.font-s-9.btn-block.m-0.d-none{id: "btn_change_number", data-item-id: ""}= LayoutView.convert_zawgyi(gettext("change"))
 
-  .col-12.collapse.collapsible_form_bot
+  .col-12.collapse.collapsible_form_user
     -# Viber number field
     .form-group{id: "field-viber-number"}
       .input-group
@@ -44,21 +44,3 @@
     .col-xs-12
       - link to: Routes.main_path(@conn, :conversations), class: "btn btn-outline-info btn-block m-0 d-inline-flex justify-content-center align-items-center" do
         %span= LayoutView.convert_zawgyi(gettext("change details"))
-
-    -# Bot options
-    .form-group{id: "btn-bot"}
-      %small.form-text.text-muted= LayoutView.convert_zawgyi(gettext("Please choose how PawChaungKaung can contact you (this conversation will be private)"))
-      .input-group.mt-2
-        .col-6.pl-0
-          - if Browser.mobile?(@conn) do
-            %a.btn.btn-block.btn-viber-outline{href: "viber://pa/info?uri=pawchaungkaung_en"}
-              %i.fab.fa-viber
-              %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Viber"))
-          - else
-            - link to: Routes.main_path(@conn, :conversations), class: "btn btn-block btn-viber-outline", target: "_blank" do
-              %i.fab.fa-viber
-              %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Viber"))
-        .col-6.pr-0
-          - link to: Routes.main_path(@conn, :conversations), class: "btn btn-block btn-messenger disabled", target: "_blank" do
-            %i.fab.fa-facebook-messenger
-            %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Messenger"))

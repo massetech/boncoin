@@ -3,13 +3,21 @@ defmodule Boncoin.MessengerApi do
   @api_profile_url "https://graph.facebook.com"
 
   # API doc https://developers.facebook.com/docs/messenger-platform/reference/send-api/
-  def send_answer_message(messenger_id, user_msg) do
-    %{messaging_type: "RESPONSE", recipient: %{id: messenger_id}, message: %{text: user_msg}}
-      |> post()
-  end
-  def send_update_message(messenger_id, user_msg) do
-    %{messaging_type: "UPDATE", recipient: %{id: messenger_id}, message: %{text: user_msg}}
-      |> post()
+  def send_message(type, psid, msg, quick_replies, buttons, offer) do
+    cond do
+      offer == nil && buttons == [] -> # Send a TEXT message
+        %{messaging_type: type, recipient: %{id: psid}, message: %{text: msg, quick_replies: build_quick_replies(quick_replies)}}
+          # |> IO.inspect()
+          |> post()
+      offer == nil && buttons != [] -> # Send a BUTTON message
+        %{messaging_type: type, recipient: %{id: psid}, message: %{quick_replies: build_quick_replies(quick_replies), attachment: build_button_attachment(msg, buttons)}}
+          # |> IO.inspect()
+          |> post()
+      true -> # Send a GENERIC message
+        %{messaging_type: type, recipient: %{id: psid}, message: %{attachment: build_generic_attachment(offer, msg)}}
+          # |> IO.inspect()
+          |> post()
+    end
   end
 
   defp post(payload) do
@@ -70,5 +78,75 @@ defmodule Boncoin.MessengerApi do
 
   defp handle_response({:ok, resp}), do: {:ok, resp}
   defp handle_response(_), do: {:error, "Unexpected response from Messenger"}
+
+  defp build_quick_replies(quick_replies) do
+    case Enum.map(quick_replies, fn quick_reply -> build_quick_reply(quick_reply) end) do
+      [] -> nil
+      list -> list
+    end
+  end
+  defp build_quick_reply(quick_reply) do
+    %{
+      content_type: "text",
+      payload: quick_reply.link,
+      title: quick_reply.title
+    }
+  end
+  defp build_button_attachment(msg, buttons) do
+    case buttons do
+      [] -> nil
+      _ ->
+        %{
+          type: "template",
+          payload: %{
+            template_type: "button",
+            text: msg,
+            buttons: Enum.map(buttons, fn button -> build_button(button) end)
+          }
+        }
+    end
+  end
+  defp build_button(button) do
+    if button.link =~ "http" do
+      %{
+        type: "web_url",
+        url: button.link,
+        title: button.title
+      }
+    else
+      %{
+        type: "postback",
+        payload: button.link,
+        title: button.title
+      }
+    end
+  end
+
+  defp build_generic_attachment(offer, msg) do
+    image_url = List.first(offer.images)
+      |> BoncoinWeb.AnnounceView.image_url(:original)
+    offer_url = Boncoin.CustomModules.BotDecisions.offer_view_link(offer.id)
+    %{
+      type: "template",
+      payload: %{
+        template_type: "generic",
+        sharable: false,
+        elements: [
+          %{
+            title: offer.title,
+            subtitle: msg,
+            image_url: image_url,
+            buttons: [
+              %{
+                type: "web_url",
+                url: offer_url,
+                title: "View offer",
+              }
+            ]
+          }
+        ]
+      }
+    }
+  end
 
 end

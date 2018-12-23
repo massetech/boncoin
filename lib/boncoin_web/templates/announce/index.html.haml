@@ -47,8 +47,8 @@
             .d-none.d-sm-block= offer.user.nickname
           %td
             .d-none.d-sm-block
-              - if offer.user.bot_active == true do
-                = img_tag Routes.static_path(@conn, "/images/#{offer.user.bot_provider}_icon.png"), class: "logo"
+              - if offer.user.conversation.active == true do
+                = img_tag Routes.static_path(@conn, "/images/#{offer.user.conversation.bot_provider}_icon.png"), class: "logo"
               - else
                 = "-"
           %td

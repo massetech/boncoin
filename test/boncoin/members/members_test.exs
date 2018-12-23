@@ -4,10 +4,12 @@ defmodule Boncoin.MembersTest do
   alias Boncoin.Members.{User, Conversation}
   import Boncoin.Factory
 
+  @moduletag :MembersModule
+
   describe "users" do
-    @valid_attrs %{email: "some_email@gmail.com", language: "en", nickname: "some name", phone_number: "09030303030", bot_active: true, bot_id: "some bot_id", bot_provider: "viber"}
-    @update_attrs %{email: "some_other_email@gmail.com", language: "dz", nickname: "some updated name", phone_number: "09726272625", bot_active: false, bot_id: "some updated bot_id", bot_provider: "viber"}
-    @invalid_attrs %{email: nil, language: nil, nickname: nil, password: nil, phone_number: nil, bot_active: nil, bot_id: nil, bot_provider: ""}
+    @valid_attrs %{email: "some_email@gmail.com", language: "en", nickname: "some name", phone_number: "09030303030"}
+    @update_attrs %{email: "some_other_email@gmail.com", language: "dz", nickname: "some updated name", phone_number: "09726272625"}
+    @invalid_attrs %{email: nil, language: nil, nickname: nil, password: nil, phone_number: nil}
 
     test "list_users/0 returns all users" do
       [user_0, user_1, user_2] = insert_list(3, :user)
@@ -23,34 +25,34 @@ defmodule Boncoin.MembersTest do
     end
 
     test "create_user/1 with valid data creates a user" do
-      assert {:ok, %User{} = user} = Members.create_and_track_user(@valid_attrs)
+      conversation = insert(:conversation)
+      assert {:ok, %User{} = user} = Members.create_and_track_user(@valid_attrs, conversation)
       assert user.email == "some_email@gmail.com"
       assert user.language == "en"
       assert user.nickname == "some name"
       assert user.phone_number == "09030303030"
-      assert user.bot_active == true
-      assert user.bot_id == "some bot_id"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Members.create_and_track_user(@invalid_attrs)
+      conversation = insert(:conversation)
+      assert {:error, %Ecto.Changeset{}} = Members.create_and_track_user(@invalid_attrs, conversation)
     end
 
     test "update_user/2 with valid data updates the user" do
+      conversation = insert(:conversation)
       user = insert(:user)
-      assert {:ok, user} = Members.udpate_and_track_user(user, @update_attrs)
+      assert {:ok, user} = Members.update_and_track_user(user, conversation, @update_attrs)
       assert %User{} = user
       assert user.email == "some_other_email@gmail.com"
       assert user.language == "dz"
       assert user.nickname == "some updated name"
       assert user.phone_number == "09726272625"
-      assert user.bot_active == false
-      assert user.bot_id == "some updated bot_id"
     end
 
     test "update_user/2 with invalid data returns error changeset" do
       user = insert(:user)
-      assert {:error, %Ecto.Changeset{}} = Members.udpate_and_track_user(user, @invalid_attrs)
+      conversation = insert(:conversation)
+      assert {:error, %Ecto.Changeset{}} = Members.update_and_track_user(user, conversation, @invalid_attrs)
       assert user == Members.get_user!(user.id)
     end
 
@@ -67,9 +69,9 @@ defmodule Boncoin.MembersTest do
   end
 
   describe "conversations" do
-    @valid_attrs %{bot_provider: "viber", psid: "some psid", scope: "some scope"}
-    @update_attrs %{bot_provider: "viber", psid: "some updated psid", scope: "some updated scope"}
-    @invalid_attrs %{bot_provider: nil, psid: nil, scope: nil}
+    @valid_attrs %{bot_provider: "viber", psid: "some psid", scope: "some scope", bot_active: true, bot_id: "bot_id", bot_provider: "messenger", nickname: "dede"}
+    @update_attrs %{bot_provider: "viber", psid: "some updated psid", scope: "some updated scope", bot_active: false, bot_id: "some updated bot_id", bot_provider: "viber", nickname: "meme"}
+    @invalid_attrs %{bot_provider: nil, psid: nil, scope: nil, bot_active: false, bot_id: nil, bot_provider: nil}
 
     # def conversation_fixture(attrs \\ %{}) do
     #   {:ok, conversation} =
@@ -116,11 +118,11 @@ defmodule Boncoin.MembersTest do
       assert conversation == Members.get_conversation!(conversation.id)
     end
 
-    test "delete_conversation/1 deletes the conversation" do
-      conversation = insert(:conversation)
-      assert {:ok, %Conversation{}} = Members.delete_conversation(conversation)
-      assert_raise Ecto.NoResultsError, fn -> Members.get_conversation!(conversation.id) end
-    end
+    # test "delete_conversation/1 deletes the conversation" do
+    #   conversation = insert(:conversation)
+    #   assert {:ok, %Conversation{}} = Members.delete_conversation(conversation)
+    #   assert_raise Ecto.NoResultsError, fn -> Members.get_conversation!(conversation.id) end
+    # end
 
     # test "change_conversation/1 returns a conversation changeset" do
     #   conversation = conversation_fixture()
@@ -202,64 +204,46 @@ defmodule Boncoin.MembersTest do
     end
   end
 
-  # describe "phones" do
-  #   alias Boncoin.Members.Phone
-  #
-  #   @valid_attrs %{phone_number: "some phone_number"}
-  #   @update_attrs %{phone_number: "some updated phone_number"}
-  #   @invalid_attrs %{phone_number: nil}
-  #
-  #   def phone_fixture(attrs \\ %{}) do
-  #     {:ok, phone} =
-  #       attrs
-  #       |> Enum.into(@valid_attrs)
-  #       |> Members.create_phone()
-  #
-  #     phone
-  #   end
-  #
-  #   test "list_phones/0 returns all phones" do
-  #     phone = phone_fixture()
-  #     assert Members.list_phones() == [phone]
-  #   end
-  #
-  #   test "get_phone!/1 returns the phone with given id" do
-  #     phone = phone_fixture()
-  #     assert Members.get_phone!(phone.id) == phone
-  #   end
-  #
-  #   test "create_phone/1 with valid data creates a phone" do
-  #     assert {:ok, %Phone{} = phone} = Members.create_phone(@valid_attrs)
-  #     assert phone.phone_number == "some phone_number"
-  #   end
-  #
-  #   test "create_phone/1 with invalid data returns error changeset" do
-  #     assert {:error, %Ecto.Changeset{}} = Members.create_phone(@invalid_attrs)
-  #   end
-  #
-  #   test "update_phone/2 with valid data updates the phone" do
-  #     phone = phone_fixture()
-  #     assert {:ok, phone} = Members.update_phone(phone, @update_attrs)
-  #     assert %Phone{} = phone
-  #     assert phone.phone_number == "some updated phone_number"
-  #   end
-  #
-  #   test "update_phone/2 with invalid data returns error changeset" do
-  #     phone = phone_fixture()
-  #     assert {:error, %Ecto.Changeset{}} = Members.update_phone(phone, @invalid_attrs)
-  #     assert phone == Members.get_phone!(phone.id)
-  #   end
-  #
-  #   test "delete_phone/1 deletes the phone" do
-  #     phone = phone_fixture()
-  #     assert {:ok, %Phone{}} = Members.delete_phone(phone)
-  #     assert_raise Ecto.NoResultsError, fn -> Members.get_phone!(phone.id) end
-  #   end
-  #
-  #   test "change_phone/1 returns a phone changeset" do
-  #     phone = phone_fixture()
-  #     assert %Ecto.Changeset{} = Members.change_phone(phone)
-  #   end
-  # end
+  describe "phones" do
+    alias Boncoin.Members.Phone
+
+    test "list_phones returns all phones" do
+      [phone_1, phone_2, phone_3] = insert_list(3, :phone)
+      list = Members.list_phones()
+      assert Enum.count(list, fn x -> x.id == phone_1.id end) > 0
+      assert Enum.count(list, fn x -> x.id == phone_2.id end) > 0
+      assert Enum.count(list, fn x -> x.id == phone_3.id end) > 0
+    end
+
+    test "get_phone!/1 returns the phone with given id" do
+      phone = insert(:phone, %{nickname: "dede la frite"})
+      new_phone = Members.get_phone!(phone.id)
+      assert new_phone.phone_number == phone.phone_number
+      assert new_phone.nickname == "dede la frite"
+    end
+
+    test "create_phone with valid data creates a phone" do
+      user = insert(:user)
+      conversation = insert(:conversation, %{user_id: user.id})
+      assert {:ok, %User{} = returned_user} = Members.update_phone(user, conversation)
+      assert user == returned_user
+    end
+
+    test "update_phone with valid data updates the phone" do
+      user = insert(:user, %{phone_number: "09777777777"})
+      conversation = insert(:conversation, %{user_id: user.id})
+      Members.update_phone(user, conversation)
+      phone = Members.get_active_phone_by_user_id(user.id)
+      assert phone.phone_number == "09777777777"
+
+      {:ok, new_user} = Members.update_user(user, %{phone_number: "09777777778"})
+      Members.update_phone(new_user, conversation)
+      count = Enum.count(Members.get_phones_by_user_id(user.id))
+      phone = Members.get_active_phone_by_user_id(user.id)
+      assert count = 2
+      assert phone.phone_number == "09777777778"
+    end
+
+  end
 
 end

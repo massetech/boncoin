@@ -15,11 +15,13 @@
     .row
       .col-xs-12.col-sm-6.order-xs-1.order-sm-1.my-3
         = render "_details_form.html", conn: @conn, u: u
-      .col-xs-12.col-sm-6.order-xs-2.order-sm-2.my-sm-3.collapse.collapsible_form_offer
+      .col-xs-12.col-sm-6.order-xs-2.order-sm-2.my-3.collapse.collapsible_form_register
+        = render "_register_links.html", conn: @conn
+      .col-xs-12.col-sm-6.order-xs-3.order-sm-3.my-sm-3.collapse.collapsible_form_offer
         = render BoncoinWeb.AnnounceView, "_define_offer.html", conn: @conn, a: a
-      .col-xs-12.col-sm-6.order-xs-3.order-sm-4.my-sm-3.collapse.collapsible_form_offer
+      .col-xs-12.col-sm-6.order-xs-4.order-sm-5.my-sm-3.collapse.collapsible_form_offer
         = render BoncoinWeb.AnnounceView, "_describe_offer.html", conn: @conn, a: a
-      .col-xs-12.col-sm-6.order-xs-4.order-sm-3.my-3.collapse.collapsible_form_offer
+      .col-xs-12.col-sm-6.order-xs-5.order-sm-4.my-3.collapse.collapsible_form_offer
         = render BoncoinWeb.AnnounceView, "_select_photos.html"
 
     .row.my-3.collapse.collapsible_form_offer

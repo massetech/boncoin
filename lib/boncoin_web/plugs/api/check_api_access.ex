@@ -37,21 +37,17 @@ defmodule Boncoin.Auth.CheckApiAccess do
       auth_viber != nil ->
         viber_id = conn.params["sender"]["id"] || conn.params["user_id"] || nil
         user = Members.get_active_user_by_bot_id(viber_id, "viber")
-        # conversation = Members.get_actual_conversation_by_provider_psid("viber", viber_id)
         conn
           |> assign(:current_user, user)
-          # |> assign(:conversation, conversation)
 
       # API call from Facebook
       auth_messenger != nil && auth_messenger =~ "facebook" ->
         messenger_id = params_from_messenger(conn.params) || nil
         user = Members.get_active_user_by_bot_id(messenger_id, "messenger")
-        # conversation = Members.get_actual_conversation_by_provider_psid("messenger", messenger_id)
         conn
           |> assign(:current_user, user)
-          # |> assign(:conversation, conversation)
 
-      # Other call = Danger !
+      # Other call = Scary !
       true ->
         conn
           |> put_status(401)

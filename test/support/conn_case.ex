@@ -44,11 +44,13 @@ defmodule BoncoinWeb.ConnCase do
     {conn, user} = cond do
       tags[:admin_authenticated] == true ->
         user = insert(:admin_user)
+        insert(:conversation, %{user_id: user.id})
         conn = Phoenix.ConnTest.build_conn()
           |> Guardian.Plug.sign_in(user, %{"typ" => "user-access"})
         {conn, user}
       tags[:member_authenticated] == true ->
         user = insert(:member_user)
+        insert(:conversation, %{user_id: user.id})
         conn = Phoenix.ConnTest.build_conn()
           |> Guardian.Plug.sign_in(user, %{"typ" => "user-access"})
         {conn, user}

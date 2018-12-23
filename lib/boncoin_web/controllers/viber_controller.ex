@@ -1,7 +1,7 @@
 defmodule BoncoinWeb.ViberController do
   use BoncoinWeb, :controller
   import Mockery.Macro
-  alias Boncoin.{ViberApi, Members}
+  alias Boncoin.{Members, ViberApi}
   alias Boncoin.CustomModules.BotDecisions
 
 # ---------------------------- CONNECTION -------------------------------------
@@ -36,56 +36,41 @@ defmodule BoncoinWeb.ViberController do
     send_resp(conn, 200, "ok")
   end
 
-  # Welcome message when a user opens a new conversation
+  # ---------------------------- RECEIVE MESSAGE -------------------------------------
+
+  # conversation_started : welcome message when a user opens a new conversation
   def callback(conn, %{"event" => "conversation_started", "user" => %{"id" => viber_id, "name" => viber_name}}) do
     IO.puts("#{viber_name} opened a new conversation on Viber at #{Timex.now()}")
-
-    # Treat the message
-    conversation = Members.get_or_initiate_conversation("viber", viber_id, viber_name)
-    results = %{user: conn.assigns.current_user, conversation: conversation, announce: nil, user_msg: nil}
-      |> BotDecisions.call_bot_algorythm()
-
-    # Send response
-    case Members.update_conversation(conversation, %{scope: results.scope, language: results.language}) do
-      {:ok, _} ->
+    case treat_message(conn, viber_id, viber_name, nil, nil) do
+      {:new, msg} ->
         conn
           |> put_status(:ok)
-          |> render("send_message.json", sender: %{name: "PawChaungKaung", avatar: ""}, message: List.first(results.messages), tracking_data: results.scope)
-      {:error, _changeset} ->
+          |> render("send_message.json", sender: %{name: "PawChaungKaung", avatar: ""}, message: msg, tracking_data: nil)
+      :ok ->
         send_resp(conn, 200, "ok")
-        IO.puts("Viber error : can't initiate conversation with user")
+      :error ->
+        IO.puts("Viber error : can't initiate conversation conversation_started")
+        send_resp(conn, 200, "ok")
     end
   end
 
-
   # Treat a message comming from the user
   def callback(conn, %{"event" => "message", "timestamp" => timestamp, "sender" => %{"id" => viber_id, "name" => viber_name}, "message" => %{"type" => "text", "text" => user_msg}} = params) do
-    IO.puts("User #{viber_id} spoke at #{timestamp}")
-
-    # Treat the message
-    conversation = Members.get_or_initiate_conversation("viber", viber_id, viber_name)
-    results = %{user: conn.assigns.current_user, conversation: conversation, announce: nil, user_msg: user_msg}
-      |> BotDecisions.call_bot_algorythm()
-
-    # Send response
-    if results.scope == "close" do
-      case Members.delete_conversation(conversation) do
-        {:ok, _} -> Enum.map(results.messages, fn message -> mockable(ViberApi).send_message(viber_id, message) end)
-        {:error, _changeset} -> IO.puts("Messenger error : can't delete conversation #{conversation.id}")
-      end
-    else
-      case Members.update_conversation(conversation, %{scope: results.scope, language: results.language}) do
-        {:ok, _} -> Enum.map(results.messages, fn message -> mockable(ViberApi).send_message(viber_id, message) end)
-        {:error, _changeset} -> IO.puts("Messenger error : can't update conversation #{conversation.id}")
-      end
+    # Links on Viber rich_media are reposted : stop any message like that from being treated
+    if user_msg =~ "http" do
+      send_resp(conn, 200, "ok")
+      IO.puts("http auto message stopped")
+      halt(conn)
     end
-
-    # case Members.update_conversation(conversation, %{scope: results.scope, language: results.language}) do
-    #   {:ok, _} -> Enum.map(results.messages, fn message -> ViberApi.send_message(viber_id, message) end)
-    #   {:error, _changeset} -> IO.puts("Viber error : can't update conversation")
-    # end
-
-    send_resp(conn, 200, "ok")
+    IO.puts("User #{viber_id} spoke at #{timestamp}")
+    # IO.inspect(params)
+    case treat_message(conn, viber_id, viber_name, user_msg, nil) do
+      :ok ->
+        send_resp(conn, 200, "ok")
+      :error ->
+        IO.puts("Viber error : can't update conversation message")
+        send_resp(conn, 200, "ok")
+    end
   end
 
   # Notification that a message was delivered to user
@@ -100,4 +85,27 @@ defmodule BoncoinWeb.ViberController do
     send_resp(conn, 200, "ok")
   end
 
+  # ---------------------------- ANSWER TO MESSAGE -------------------------------------
+
+  defp treat_message(conn, viber_id, viber_name, user_msg, origin) do
+    conversation = Members.get_or_initiate_conversation("viber", viber_id, viber_name, nil)
+    results = %{user: conn.assigns.current_user, conversation: conversation, announce: nil, user_msg: user_msg}
+      |> BotDecisions.call_bot_algorythm()
+
+    case Members.update_conversation(conversation, results.conversation) do
+      {:ok, _} ->
+        case user_msg do
+          nil -> # Conversation opening callback
+            {:new, results.messages.message}
+          _ -> # Answer to user new msg
+            # IO.inspect(results)
+            mockable(ViberApi).send_message(nil, conversation.psid, results.messages.message, results.messages.quick_replies, results.messages.buttons, nil)
+            Enum.map(results.messages.offers, fn map -> mockable(ViberApi).send_message(nil, conversation.psid, map.message, [], [], map.offer) end)
+            :ok
+        end
+      {:error, changeset} ->
+        IO.inspect(changeset)
+        :error
+    end
+  end
 end

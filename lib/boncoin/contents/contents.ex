@@ -494,7 +494,7 @@ defmodule Boncoin.Contents do
     Announce
       |> Announce.list_admin_announces()
       |> Repo.all()
-      |> Repo.preload([:user, :images, :category, township: [:division]])
+      |> Repo.preload([:images, :category, township: [:division], user: [:conversation]])
   end
 
   def filter_announces_liked_online(id_list) do
@@ -549,6 +549,7 @@ defmodule Boncoin.Contents do
     Announce
       |> Announce.select_user_online_offers(user)
       |> Repo.all()
+      |> Repo.preload([:images])
   end
 
   def get_announce!(id) do
@@ -571,10 +572,10 @@ defmodule Boncoin.Contents do
           end
         end
         # Send a message to admin that a new announce was posted
-        admin = Members.get_super_user()
-        user = Members.get_user!(user_id)
-        messages = %{messages: ["A new offer was created at #{Timex.now()} by #{user.nickname}"]}
-        Members.send_bot_message_to_user(messages, admin)
+        # admin = Members.get_super_user()
+        # user = Members.get_user!(user_id)
+        # messages = %{messages: ["A new offer was created at #{Timex.now()} by #{user.nickname}"]}
+        # Members.send_bot_message_to_user(messages, admin)
         {:ok, announce}
       error_offer -> error_offer
     end
@@ -582,24 +583,22 @@ defmodule Boncoin.Contents do
 
   def treat_announce(admin_user, %{"announce_id" => announce_id, "validate" => validate, "cause" => cause_label, "category_id" => category_id} = params) do
     announce = get_announce!(announce_id)
-    user = Members.get_user!(announce.user_id)
+    user = Members.get_user(announce.user_id)
     user_msg = if validate == "true", do: "", else: select_user_msg_for_offer_treatment(announce, user, cause_label)
     status = if validate == "true", do: "ONLINE", else: select_status_for_offer_treatment(announce)
-    # Check if we can remove that
-    # category_id = if category_id == nil, do: announce.category_id, else: category_id
     dates = calc_announce_validity_date()
     params = %{treated_by_id: admin_user.id, status: status, cause: cause_label, category_id: category_id, parution_date: dates.parution_date, validity_date: dates.validity_date}
     case update_announce(announce, params) do
       {:ok, updated_announce} ->
-        cond do # No msg sent if user_msg nil
-          user.bot_active == true && announce.status == "PENDING" -> # Bot msg for new offers
-            %{user: user, conversation: %{scope: "offer_treated"}, announce: updated_announce, user_msg: user_msg}
+        cond do
+          user.conversation.active == true && announce.status == "PENDING" -> # Bot msg for new offers
+            %{user: user, conversation: Map.put(user.conversation, :scope, "offer_treated"), announce: updated_announce, user_msg: user_msg}
               |> BotDecisions.call_bot_algorythm()
-              |> Members.send_bot_message_to_user(user)
-          user.bot_active == true && status == "CLOSED" -> # Bot msg for old offers closed by admin
-            %{user: user, conversation: %{scope: "offer_closed"}, announce: updated_announce, user_msg: user_msg}
+              |> Members.send_bot_message_to_user(updated_announce, :update)
+          user.conversation.active == true && status == "CLOSED" -> # Bot msg for old offers closed by admin
+            %{user: user, conversation: Map.put(user.conversation, :scope, "offer_closed"), announce: updated_announce, user_msg: user_msg}
               |> BotDecisions.call_bot_algorythm()
-              |> Members.send_bot_message_to_user(user)
+              |> Members.send_bot_message_to_user(updated_announce, :update)
           true -> {:ok, "no message sent (not Bot for this user)", []} # User is not bot active : do nothing
         end
       {:error, msg} -> {:error, msg, []}
@@ -633,7 +632,7 @@ defmodule Boncoin.Contents do
 
   defp calc_announce_validity_date() do
     parution_date = Timex.now()
-    validity_date = Timex.shift(parution_date, days: 30)
+    validity_date = Timex.shift(parution_date, months: 1)
     %{parution_date: parution_date, validity_date: validity_date}
   end
 

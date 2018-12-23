@@ -30,17 +30,24 @@ defmodule Boncoin.Members do
 
   # -------------------------------- USER ----------------------------------------
 
-  def send_bot_message_to_user(bot_results, user) do
-    case user.bot_provider do
+  # Send bot messages to the bot
+  def send_bot_message_to_user(bot_results, offer, type) do
+    psid = bot_results.conversation.psid
+    user_msg = bot_results.messages.message
+    buttons = bot_results.messages.buttons
+    quick_replies = bot_results.messages.quick_replies
+    case bot_results.conversation.bot_provider do
       "viber" ->
-        # IO.puts("Message sent to user by Viber")
-        Enum.map(bot_results.messages, fn msg -> mockable(ViberApi).send_message(user.bot_id, msg) end)
+        IO.puts("Message sent to user by Viber")
+        mockable(ViberApi).send_message(type, psid, user_msg, quick_replies, buttons, offer)
         {:ok, "message sent to user by Viber", bot_results.messages}
       "messenger" ->
-        # IO.puts("Message sent to user by Messenger")
-        Enum.map(bot_results.messages, fn msg -> mockable(MessengerApi).send_update_message(user.bot_id, msg) end)
+        IO.puts("Message sent to user by Messenger")
+        if type == :answer, do: "RESPONSE", else: "UPDATE"
+        mockable(MessengerApi).send_message(type, psid, user_msg, quick_replies, buttons, offer)
         {:ok, "message sent to user by Messenger", bot_results.messages}
-      _ -> {:error, "message not sent, bot not recognized", bot_results.messages}
+      _ ->
+        {:error, "message not sent, bot not recognized", bot_results.messages}
     end
   end
 
@@ -50,24 +57,28 @@ defmodule Boncoin.Members do
       |> Repo.one()
   end
 
-  defp get_super_user() do
+  def get_super_user() do
     User
       |> User.filter_super_users()
       |> Repo.one()
+      |> Repo.preload(:conversation)
   end
 
   def list_users do
     User
+      |> User.filter_not_guest()
       |> Repo.all()
-      |> Repo.preload(:announces)
+      |> Repo.preload([:announces, :conversation])
   end
 
   def read_phone_details(phone_number) do
     case User.check_myanmar_phone_number(phone_number) do
       true ->
-        get_or_initialize_user_by_phone_number(phone_number)
-      false ->
-        {:error, "wrong Myanmar phone number"}
+        case get_active_user_by_phone_number(phone_number) do
+          nil -> {:new_user, %User{conversation: %Conversation{active: false}}}
+          user -> {:ok, user}
+        end
+      false -> {:error, "wrong Myanmar phone number"}
     end
   end
 
@@ -88,11 +99,17 @@ defmodule Boncoin.Members do
 
   def get_user!(id), do: Repo.get!(User, id)
 
+  def get_user(id) do
+    User
+      |> Repo.get_by(id: id)
+      |> Repo.preload(:conversation)
+  end
+
   def get_active_user_by_phone_number(phone_number) do
     User
       |> User.filter_active_user_by_phone_number(phone_number)
       |> Repo.one()
-      |> Repo.preload(:announces)
+      |> Repo.preload([:conversation, :announces])
   end
 
   def get_active_user_by_bot_id(bot_id, provider) do
@@ -102,20 +119,29 @@ defmodule Boncoin.Members do
         User
           |> User.filter_active_user_by_bot_id(bot_id, provider)
           |> Repo.one()
-          |> Repo.preload(:announces)
+          |> Repo.preload([:conversation, :announces])
     end
   end
 
-  def get_or_initialize_user_by_phone_number(phone_number) do
-    case get_active_user_by_phone_number(phone_number) do
-      nil -> {:new_user, %User{}}
-      user -> {:ok, user}
-    end
-  end
+  # def get_or_initialize_user_by_phone_number(phone_number) do
+  #   case get_active_user_by_phone_number(phone_number) do
+  #     nil -> {:new_user, %User{}}
+  #     user -> {:ok, user}
+  #   end
+  # end
 
-  def create_and_track_user(user_params) do
+  def create_and_track_user(user_params, conversation) do
     case create_user(user_params) do
-      {:ok, user} -> create_phone(user)
+      {:ok, user} ->
+        update_conversation(conversation, %{user_id: user.id})
+        create_phone(user, conversation)
+      {:error, changeset} -> {:error, changeset}
+    end
+  end
+
+  def update_and_track_user(user, conversation, attrs) do
+    case update_user(user, attrs) do
+      {:ok, user} -> update_phone(user, conversation)
       {:error, changeset} -> {:error, changeset}
     end
   end
@@ -128,21 +154,8 @@ defmodule Boncoin.Members do
 
   def create_user_announce(%{"phone_number" => phone_number} = params) do
     user = case get_active_user_by_phone_number(phone_number) do
-      nil ->
-        # create_and_track_user(params)
-        {:error, dgettext("errors", "Please open a conversation on Viber or Messenger to create an offer.")}
-      user ->
-        case udpate_and_track_user(user, params) do # Guest user pass by here
-          {:ok, user} -> Contents.create_announce(params["announces"]["0"], user.id)
-          error_user -> error_user
-        end
-    end
-  end
-
-  def udpate_and_track_user(user, attrs) do
-    case update_user(user, attrs) do
-      {:ok, user} -> update_phone(user)
-      {:error, changeset} -> {:error, changeset}
+      nil -> {:error, dgettext("errors", "Please open a conversation on Viber or Messenger to create an offer.")}
+      user -> Contents.create_announce(params["announces"]["0"], user.id)
     end
   end
 
@@ -159,9 +172,13 @@ defmodule Boncoin.Members do
     end
   end
 
-  def remove_bot(user) do
+  def remove_bot(user, conversation) do
     case Contents.get_user_active_offers(user) do
-      [] -> udpate_and_track_user(user, %{bot_active: false})
+      [] ->
+        case update_user(user, %{active: false}) do
+          {:ok, _user} -> update_conversation(conversation, %{bot_active: false})
+          {:error, _changeset} -> {:error, _changeset}
+        end
       offers -> {:not_allowed, Enum.count(offers)}
     end
   end
@@ -182,14 +199,14 @@ defmodule Boncoin.Members do
       |> Repo.one()
   end
 
-  def get_or_initiate_conversation(bot_provider, psid, nickname) do
+  def get_or_initiate_conversation(bot_provider, psid, nickname, origin) do
     case get_conversation_by_provider_psid(bot_provider, psid) do
       nil ->
         nick = cond do
           nickname == nil && bot_provider == "messenger" -> MessengerApi.get_user_profile(psid) # Messenger process (we don't know the nickname before)
-          true -> nickname # Viber process
+          true -> nickname # Viber process : we know the nickname
         end
-        conv_params = %{scope: "welcome", bot_provider: bot_provider, psid: psid, nickname: nick}
+        conv_params = %{scope: "welcome", bot_provider: bot_provider, psid: psid, nickname: nick, origin: origin}
         case create_conversation(conv_params) do
           {:ok, conversation} -> conversation
           error -> error
@@ -212,9 +229,9 @@ defmodule Boncoin.Members do
       |> Repo.update()
   end
 
-  def delete_conversation(%Conversation{} = conversation) do
-    Repo.delete(conversation)
-  end
+  # def delete_conversation(%Conversation{} = conversation) do
+  #   Repo.delete(conversation)
+  # end
 
   def change_conversation(%Conversation{} = conversation) do
     Conversation.changeset(conversation, %{})
@@ -255,7 +272,12 @@ defmodule Boncoin.Members do
   end
 
   def get_phone!(id), do: Repo.get!(Phone, id)
-
+  def get_phones_by_user_id(user_id) do
+    # Function only used for tests !!!!! (many response possible for a user...)
+    Phone
+      |> Phone.search_phones_for_user(user_id)
+      |> Repo.all()
+  end
 
   def get_active_phone_by_user_id(user_id) do
     Phone
@@ -269,14 +291,7 @@ defmodule Boncoin.Members do
       |> Repo.one()
   end
 
-  def get_phones_by_user_id(user_id) do
-    # Function only used for tests !!!!! (many response possible for a user...)
-    Phone
-      |> Phone.search_phones_for_user(user_id)
-      |> Repo.all()
-  end
-
-  def create_phone(user) do
+  def create_phone(user, conversation) do
     # Unactive the old phone number if it exists
     case get_active_phone_by_phone_number(user.phone_number) do
       nil -> nil
@@ -284,19 +299,19 @@ defmodule Boncoin.Members do
     end
     # Create the new phone number tracking
     %Phone{}
-      |> Phone.changeset(%{user_id: user.id, phone_number: user.phone_number, active: true, creation_date: Timex.now()})
+      |> Phone.changeset(%{user_id: user.id, phone_number: user.phone_number, nickname: user.nickname, active: true, creation_date: Timex.now(), bot_provider: conversation.bot_provider, bot_id: conversation.psid})
       |> Repo.insert()
     {:ok, user}
   end
 
-  def update_phone(user) do
+  def update_phone(user, conversation) do
     phone_tracking = get_active_phone_by_user_id(user.id)
     cond do
-      phone_tracking == nil -> create_phone(user)
+      phone_tracking == nil -> create_phone(user, conversation)
       phone_tracking.phone_number == user.phone_number -> {:ok, user}
       phone_tracking.phone_number != user.phone_number ->
         unactive_phone_tracking(phone_tracking)
-        create_phone(user)
+        create_phone(user, conversation)
     end
   end
 

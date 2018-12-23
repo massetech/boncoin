@@ -101,10 +101,11 @@ let init_custom_actions = () => {
   // see https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
   let vh = window.innerHeight * 0.01;
   document.documentElement.style.setProperty('--vh', `${vh}px`);
-  window.addEventListener('resize', () => {
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  });
+  // Removed to avoid the resizing effect on scroll
+  // window.addEventListener('resize', () => {
+  //   let vh = window.innerHeight * 0.01;
+  //   document.documentElement.style.setProperty('--vh', `${vh}px`);
+  // });
 
   /* ------------- GENERAL DISPLAY --------------------------------------------------- */
   // Remove flashes after click
@@ -124,7 +125,7 @@ let init_custom_actions = () => {
       $('.overlay').addClass('active')
       $('.collapse.in').toggleClass('in')
       $('a[aria-expanded=true]').attr('aria-expanded', 'false')
-      bodyScrollLock.disableBodyScroll($("#sidebar"))    
+      bodyScrollLock.disableBodyScroll($("#sidebar"))
   })
   // Closes the sidebar
   $('#navbarDismiss, .overlay').on('click', function () {

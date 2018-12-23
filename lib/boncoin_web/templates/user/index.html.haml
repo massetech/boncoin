@@ -29,7 +29,7 @@
         %th
           .d-none.d-sm-block= "Bot"
         %th
-          .d-none.d-sm-block= "ID"
+          .d-none.d-sm-block= "PSID"
         %th
           .d-none.d-sm-block= "Status"
         %th= "Pending"
@@ -56,11 +56,11 @@
               = user.email
           %td
             .d-none.d-sm-block
-              = user.bot_provider
-          %td.text-truncate{style: "max-width: 30px;", data-toggle: "popover", title: "bot_id", data-placement: "top", data-content: "#{user.bot_id}"}
-            = user.bot_id
+              = user.conversation.bot_provider
+          %td.text-truncate{style: "max-width: 30px;", data-toggle: "popover", title: "psid", data-placement: "top", data-content: "#{user.conversation.psid}"}
+            = user.conversation.psid
           %td
-            = LayoutView.icon_active(user.bot_active)
+            = LayoutView.icon_active(user.conversation.active)
           %td= Enum.count(user.announces, &(&1.status == "PENDING"))
           %td= Enum.count(user.announces, &(&1.status == "ONLINE"))
           %td= Enum.count(user.announces, &(&1.status == "CLOSED"))

@@ -8,11 +8,14 @@ defmodule Boncoin.Members.Phone do
     field :active, :boolean, default: true
     field :creation_date, :utc_datetime
     field :closing_date, :utc_datetime
+    field :bot_id, :string
+    field :bot_provider, :string
+    field :nickname, :string
     belongs_to :user, User
     timestamps()
   end
 
-  @required_fields ~w(user_id phone_number active)a
+  @required_fields ~w(user_id phone_number active bot_id bot_provider nickname)a
   @optional_fields ~w(creation_date closing_date)a
 
   @doc false

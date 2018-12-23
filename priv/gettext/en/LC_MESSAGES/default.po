@@ -96,7 +96,7 @@ msgid "Technical"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:83
+#: lib/boncoin_web/templates/public/conditions.html.haml:79
 msgid "Alcohol, cigarettes and drugs"
 msgstr ""
 
@@ -107,7 +107,7 @@ msgid "All %{title}"
 msgstr "%{title}"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:85
+#: lib/boncoin_web/templates/public/conditions.html.haml:81
 msgid "Arms and explosives"
 msgstr ""
 
@@ -117,12 +117,12 @@ msgid "English"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:87
+#: lib/boncoin_web/templates/public/conditions.html.haml:83
 msgid "Humans and animals"
 msgstr "Humans and living beings"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:89
+#: lib/boncoin_web/templates/public/conditions.html.haml:85
 msgid "Medicine and chemicals"
 msgstr ""
 
@@ -142,53 +142,53 @@ msgid "Our terms of use"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:81
+#: lib/boncoin_web/templates/public/conditions.html.haml:77
 msgid "Private or protected contents"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:73
+#: lib/boncoin_web/templates/public/conditions.html.haml:69
 msgid "Prohibited items"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:91
+#: lib/boncoin_web/templates/public/conditions.html.haml:87
 msgid "Sexual and shocking contents"
 msgstr "Moral shocking contents or services"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:121
+#: lib/boncoin_web/templates/public/conditions.html.haml:117
 msgid "Your privacy"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:56
+#: lib/boncoin_web/templates/public/conditions.html.haml:52
 msgid "criteria to sell something"
 msgstr "When a seller posts an offer, he must guaranty that the object was legally acquired. He also must make sure that the offer "
 "represents an interest for potential buyers. The seller fixes the proposed price and may accept negotiation."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:85
+#: lib/boncoin_web/templates/public/conditions.html.haml:81
 msgid "detail on arms"
 msgstr "Any arm, ammo, military technology, weapon (even for hunting), fighting knive, cold weapon "
 "even used for recreative reasons (paintball, strike-ball...). Any kind of explosive substance or object "
 "being used to generate an explosion even for recreative reasons (fireworks, firecrackers, ...)"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:83
+#: lib/boncoin_web/templates/public/conditions.html.haml:79
 msgid "detail on drugs"
 msgstr "Any kind of alcohol or tobacco, electronic cigaret, pipe and Chicha. "
 "Any kind of drug or psychotropic substance, any kind of equipment used to produce or consume drugs."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:87
+#: lib/boncoin_web/templates/public/conditions.html.haml:83
 msgid "detail on humans"
 msgstr "Human organs and tissues as well as human trafficking or any content related to it "
 "will be reported to the authorities. Protected or forbidden animal and plant species under regulation are not "
 "allowed on the website."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:89
+#: lib/boncoin_web/templates/public/conditions.html.haml:85
 msgid "detail on medicines"
 msgstr "Medicines are not allowed. Any product that may be bought for medical reasons "
 "are under the responsibility of the buyer and not the website (medicinal herbs, objects, liquids, "
@@ -196,21 +196,21 @@ msgstr "Medicines are not allowed. Any product that may be bought for medical re
 "product that may present a risk for people or the environment."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:81
+#: lib/boncoin_web/templates/public/conditions.html.haml:77
 msgid "detail on private"
 msgstr "Any counterfeit product being protected by intellectual property rights (movies, songs, softwares, ...). "
 "Confidential documents and informations are not allowed on any kind of support. "
 "Objects breaking the privacy are not allowed (photos, letters, ...)."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:133
+#: lib/boncoin_web/templates/public/conditions.html.haml:129
 msgid "explaining cookies"
 msgstr "Cookies are these little files hidden by the internet browser when a user visits a website. PawChaungKaung uses cookies "
 "to identify the user language and get some traffic informations. To protect our users privacy, there "
 "is no personal information stored in our cookie."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:60
+#: lib/boncoin_web/templates/public/conditions.html.haml:56
 msgid "explaining how to describe your offer"
 msgstr "The offer must give enough description of the object and remain short. The description should especially "
 "precise the dimensions, age, state of use, any information that should be known by the buyer. The seller can "
@@ -218,7 +218,7 @@ msgstr "The offer must give enough description of the object and remain short. T
 "Links to other websites are not allowed on the description."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:62
+#: lib/boncoin_web/templates/public/conditions.html.haml:58
 msgid "explaining how to use photographs"
 msgstr "The offer must include at least one photo of the object, but can support up to 3 photos. Photos "
 "provide the best chance to sell the product, so they should be chosen carefully and show different sides. "
@@ -228,7 +228,7 @@ msgstr "The offer must include at least one photo of the object, but can support
 "the server for 1 year after the announce is unpublished."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:127
+#: lib/boncoin_web/templates/public/conditions.html.haml:123
 msgid "explaining informations collected"
 msgstr "PawChaungKaung is designed to use as little personal informations as possible. Its target is to connect "
 "buyers and sellers, and it doesn't aim at making profit with user's private informations. The only informations that are collected are sellers phone number, pseudo (nickname) and optionally Viber phone number. "
@@ -237,13 +237,13 @@ msgstr "PawChaungKaung is designed to use as little personal informations as pos
 "This conversation is private and can be removed at any time when the seller has no more offer online. To manage this conversation, we collect the Viber or Messenger ID which is kept private."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:129
+#: lib/boncoin_web/templates/public/conditions.html.haml:125
 msgid "explaining informations using"
 msgstr "PawChaungKaung won't use these informations for anything else than managing the "
 "relation with sellers and pushing them notifications."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:131
+#: lib/boncoin_web/templates/public/conditions.html.haml:127
 msgid "explaining privacy protection"
 msgstr "The datas are stored on a safe repository in the cloud. In order to provide the best experience to our "
 "users and guaranty security, they are stored for 1 year after the order removal. "
@@ -251,7 +251,7 @@ msgstr "The datas are stored on a safe repository in the cloud. In order to prov
 "emanates from the official authorities of the Republic of the Union of Myanmar."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:54
+#: lib/boncoin_web/templates/public/conditions.html.haml:50
 msgid "introduce add submission rule"
 msgstr "When a seller publishes an offer on PawChaungKaung, he/she necessarily accepts our terms and conditions. "
 "The seller understands that the offer may be accepted or refused without any notice or explanation. He/she accepts that the "
@@ -259,7 +259,7 @@ msgstr "When a seller publishes an offer on PawChaungKaung, he/she necessarily a
 "without any notice or explanation."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:79
+#: lib/boncoin_web/templates/public/conditions.html.haml:75
 msgid "introduce prohibition list"
 msgstr "Some items are prohibited on this website. Those items are either illegal "
 "or do not reach our conditions. The list bellow gives some of these items. Please note that this list "
@@ -268,7 +268,7 @@ msgstr "Some items are prohibited on this website. Those items are either illega
 "Be aware that we may inform the authorities about any suspect content or behaviour breaking the law of the Republic."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:13
+#: lib/boncoin_web/templates/public/conditions.html.haml:12
 msgid "introduction to terms of use"
 msgstr "These terms of use may be updated at any time without any notice. It is then your "
 "responsibility to read them before using the service. Should you disagree to any "
@@ -282,25 +282,25 @@ msgstr "On this website, you can sell and find second-hand products for free. "
 "Find everything you need in Myanmar for cheaper price !"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:91
+#: lib/boncoin_web/templates/public/conditions.html.haml:87
 msgid "detail on shocking"
 msgstr "Sexual materials, sex toys and services of erotic or sexual nature are forbidden. "
 "Products or messages calling for violence, prostitution, discrimination of any kind, or judged as "
 "being insulting to anybody are banned. Services and objects leading to trickery and extortion are not allowed."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:29
+#: lib/boncoin_web/templates/public/conditions.html.haml:25
 msgid "Object of PawChaungKaung"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:35
+#: lib/boncoin_web/templates/public/conditions.html.haml:31
 msgid "introduce the website"
 msgstr "PawChaungKaung connects individuals in the Republic of the Union of Myanmar who are selling or buying "
 "second-hand products. Companies and brands can buy advertisement space that will be displayed to visitors. "
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:39
+#: lib/boncoin_web/templates/public/conditions.html.haml:35
 msgid "introduce the process"
 msgstr "Sellers post their offers with details and photos. PawChaungKaung team will control that "
 "the offers meet our conditions. After being validated, an offer will be published for "
@@ -308,13 +308,13 @@ msgstr "Sellers post their offers with details and photos. PawChaungKaung team w
 "The relation between buyers and sellers and eventually the final transaction are held apart from the website."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:37
+#: lib/boncoin_web/templates/public/conditions.html.haml:33
 msgid "introduce who are the customers"
 msgstr "The users are private adults who want to sell or buy second-hand products. Professional sellers are not "
 "allowed to post offers on this website, they can contact our team to buy advertisement space."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:110
+#: lib/boncoin_web/templates/public/conditions.html.haml:106
 msgid "explaining buyers responsibilities"
 msgstr "The buyer should contact a seller only for buying purpose. If he/she needs more informations "
 "on an offer he/she must ask directly to the seller. PawChaungKaung won't hold any responsibility on the informations "
@@ -324,7 +324,7 @@ msgstr "The buyer should contact a seller only for buying purpose. If he/she nee
 " the seller and checking the product."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:112
+#: lib/boncoin_web/templates/public/conditions.html.haml:108
 msgid "explaining buyers rights"
 msgstr "If a buyer or seller rights were to be transgressed in any way, he/she must turn to the official "
 "authorities of the Republic of the Union of Myanmar. PawChaungKaung won't hold any responsibility on resolving the "
@@ -332,7 +332,7 @@ msgstr "If a buyer or seller rights were to be transgressed in any way, he/she m
 "No answer will be given to demands which emanate from buyers or sellers."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:108
+#: lib/boncoin_web/templates/public/conditions.html.haml:104
 msgid "explaining seller responsibilities"
 msgstr "The seller is responsible of any phone number, information and photo that he/she publishes on the website. "
 "Should these informations represent a transgress of any rule or law of the Republic of the Union of Myanmar, "
@@ -340,7 +340,7 @@ msgstr "The seller is responsible of any phone number, information and photo tha
 "on one offer, the seller is the only responsible and PawChaungKaung wouldn't hold any responsibility on that deal."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:106
+#: lib/boncoin_web/templates/public/conditions.html.haml:102
 msgid "explaining site responsability"
 msgstr "PawChaungKaung offers a free platform where sellers and buyers can contact each other. "
 "PawChaungKaung doesn't hold any responsibility on the relation that sellers and buyers may have before, during and after "
@@ -351,13 +351,13 @@ msgstr "PawChaungKaung offers a free platform where sellers and buyers can conta
 "to the users and the service may be discontinued at any time without notice."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:54
-#: lib/boncoin_web/templates/public/conditions.html.haml:79
+#: lib/boncoin_web/templates/public/conditions.html.haml:50
+#: lib/boncoin_web/templates/public/conditions.html.haml:75
 msgid "Please note"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:100
+#: lib/boncoin_web/templates/public/conditions.html.haml:96
 msgid "The contract between us"
 msgstr ""
 
@@ -367,7 +367,7 @@ msgid "Your access to PawChaungKaung implies your fully agreement to these terms
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:17
+#: lib/boncoin_web/templates/public/conditions.html.haml:14
 msgid "introduction to trademark"
 msgstr "PawChaungKaung and this website are "
 "trademark properties : they cannot be copied or reused in any way without the owner agreement."
@@ -412,12 +412,12 @@ msgid "For more details please read our"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:48
+#: lib/boncoin_web/templates/public/conditions.html.haml:44
 msgid "Manage an offer"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:64
+#: lib/boncoin_web/templates/public/conditions.html.haml:60
 msgid "explaining removing offer"
 msgstr "An offer is published on the website for 1 month. If the seller decides to remove "
 "one offer before this period, he/she can do it through Viber or Messenger conversation."
@@ -428,7 +428,7 @@ msgid "terms and conditions."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:58
+#: lib/boncoin_web/templates/public/conditions.html.haml:54
 msgid "explain viber process"
 msgstr "In Myanmar Viber and Messenger are the most used app to get in touch with people. Sellers must open a conversation "
 "with PawChaungKaung on Viber or Messenger before publishing their first offer. "
@@ -503,7 +503,7 @@ msgid "Describe your offer (size, dimensions, condition, scratches, date of buy,
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/new_user_announce.html.haml:37
+#: lib/boncoin_web/templates/user/new_user_announce.html.haml:40
 msgid "I understand and agree to "
 msgstr ""
 
@@ -528,7 +528,7 @@ msgid "change"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/new_user_announce.html.haml:39
+#: lib/boncoin_web/templates/user/new_user_announce.html.haml:42
 msgid "conditions"
 msgstr ""
 
@@ -539,81 +539,81 @@ msgid "rank"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:110
+#: lib/boncoin_web/templates/public/conditions.html.haml:106
 msgid "Buyers responsibilities"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:62
+#: lib/boncoin_web/templates/public/conditions.html.haml:58
 msgid "Choose the photos"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:56
+#: lib/boncoin_web/templates/public/conditions.html.haml:52
 msgid "Decide to sell something"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:60
+#: lib/boncoin_web/templates/public/conditions.html.haml:56
 msgid "Describe an offer"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:133
+#: lib/boncoin_web/templates/public/conditions.html.haml:129
 msgid "Explaining cookies"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:129
+#: lib/boncoin_web/templates/public/conditions.html.haml:125
 msgid "How we use these datas"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:127
+#: lib/boncoin_web/templates/public/conditions.html.haml:123
 msgid "Informations that we collect"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:106
+#: lib/boncoin_web/templates/public/conditions.html.haml:102
 msgid "PawChaungKaung responsability"
 msgstr "PawChaungKaung responsibilities"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:131
+#: lib/boncoin_web/templates/public/conditions.html.haml:127
 msgid "Privacy and datas protection"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:64
+#: lib/boncoin_web/templates/public/conditions.html.haml:60
 msgid "Remove an offer"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:108
+#: lib/boncoin_web/templates/public/conditions.html.haml:104
 msgid "Sellers responsibilities"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:112
+#: lib/boncoin_web/templates/public/conditions.html.haml:108
 msgid "Buyer's and seller's rights"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:175
+#: lib/boncoin_web/templates/public/conversations.html.haml:190
 msgid "Explain how to unlink the viber account"
 msgstr "To unlink your phone number, please "
 "open your conversation with PawChaungKaung on Viber or Messenger and send 999#"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:160
+#: lib/boncoin_web/templates/public/conversations.html.haml:175
 msgid "Explain how to get change phone number from Viber"
 msgstr "To change your phone number, please "
 "open your conversation with PawChaungKaung on Viber or Messenger and send 000#"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:115
+#: lib/boncoin_web/templates/public/conversations.html.haml:130
 msgid "Explain how to get offer list from Viber"
-msgstr "To receive the list of your active offers, please open your conversation with PawChaungKaung on Viber or Messenger and send 123#"
+msgstr "To receive the list of your active offers, please open your conversation with PawChaungKaung on Viber or Messenger and send 111#"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/public_index.html.haml:36
@@ -642,17 +642,17 @@ msgid "2. Describe your offer"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:39
+#: lib/boncoin_web/templates/public/conditions.html.haml:35
 msgid "How it works"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:35
+#: lib/boncoin_web/templates/public/conditions.html.haml:31
 msgid "Our activity"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:37
+#: lib/boncoin_web/templates/public/conditions.html.haml:33
 msgid "Our users"
 msgstr ""
 
@@ -682,7 +682,7 @@ msgid "For more details... (burmese end)"
 msgstr " "
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/new_user_announce.html.haml:41
+#: lib/boncoin_web/templates/user/new_user_announce.html.haml:44
 msgid "I understand and agree to (burmese end)"
 msgstr " "
 
@@ -743,7 +743,7 @@ msgid "%{nb_offers}offers found in%{place_searched}"
 msgstr "%{nb_offers} offers found in %{place_searched}"
 
 #, elixir-format
-#: lib/boncoin_web/templates/announce/_description.html.haml:2
+#: lib/boncoin_web/templates/announce/_description.html.haml:4
 msgid "Sold by%{seller_name}"
 msgstr ""
 
@@ -758,25 +758,28 @@ msgid "Sorry, we don't have any offer for your search."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:72
+#: lib/boncoin_web/templates/public/conversations.html.haml:75
+#: lib/boncoin_web/templates/public/conversations.html.haml:78
+#: lib/boncoin_web/templates/public/conversations.html.haml:81
+#: lib/boncoin_web/templates/public/conversations.html.haml:84
 msgid "Open Viber on my phone"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:62
+#: lib/boncoin_web/templates/public/conversations.html.haml:65
 msgid "How to receive notifications by Viber ?"
 msgstr "How to register on Viber ?"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:80
+#: lib/boncoin_web/templates/user/_register_links.html.haml:25
 msgid "Send me notifications by Messenger"
-msgstr "Register by Messenger"
+msgstr "Register on Messenger"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:69
-#: lib/boncoin_web/templates/user/_details_form.html.haml:74
+#: lib/boncoin_web/templates/user/_register_links.html.haml:14
+#: lib/boncoin_web/templates/user/_register_links.html.haml:19
 msgid "Send me notifications by Viber"
-msgstr "Register by Viber"
+msgstr "Register on Viber"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_define_offer.html.haml:22
@@ -796,15 +799,15 @@ msgstr ""
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:5
 msgid "Connect to PawChaungKaung by Viber or Messenger !"
-msgstr "Register on PawChaungKaung by Viber or Messenger !"
+msgstr "Register to PawChaungKaung by Viber or Messenger !"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:154
+#: lib/boncoin_web/templates/public/conversations.html.haml:169
 msgid "How to change your phone number ?"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:109
+#: lib/boncoin_web/templates/public/conversations.html.haml:124
 msgid "How to get your offers list ?"
 msgstr ""
 
@@ -814,12 +817,12 @@ msgid "How to receive notifications by Messenger ?"
 msgstr "How to register on Messenger ?"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:169
+#: lib/boncoin_web/templates/public/conversations.html.haml:184
 msgid "How to unlink your Viber or Messenger account ?"
 msgstr "How to close your account ?"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:176
+#: lib/boncoin_web/templates/public/conversations.html.haml:191
 msgid "Please note that you can't unlink your phone number if you still have active offers."
 msgstr ""
 
@@ -829,29 +832,29 @@ msgid "Please open a conversation with PawChaungKaung on Messenger."
 msgstr "Please open Messenger on your phone and start a conversation with Pawchaungkaung."
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:69
+#: lib/boncoin_web/templates/public/conversations.html.haml:72
 msgid "Please open a conversation with PawChaungKaung on Viber."
 msgstr "Please open Viber on your phone and click on this button to open a conversation with Pawchaungkaung"
 
 #, elixir-format
 #: lib/boncoin_web/templates/layout/_sidebar.html.haml:79
 msgid "Receive notifications"
-msgstr ""
+msgstr "Register"
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/new_user_announce.html.haml:48
+#: lib/boncoin_web/templates/user/new_user_announce.html.haml:51
 msgid "Submit your offer"
 msgstr ""
 
 #, elixir-format
 #: lib/boncoin_web/templates/user/_details_form.html.haml:54
 msgid "You are linked by Messenger"
-msgstr ""
+msgstr "You are registered on Messenger"
 
 #, elixir-format
 #: lib/boncoin_web/templates/user/_details_form.html.haml:53
 msgid "You are linked by Viber"
-msgstr ""
+msgstr "You are registered on Viber"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_define_offer.html.haml:19
@@ -859,7 +862,7 @@ msgid "I don't want to throw it, so I sell it for very cheap price."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/user/_details_form.html.haml:63
+#: lib/boncoin_web/templates/user/_register_links.html.haml:8
 msgid "Please choose how PawChaungKaung can contact you (this conversation will be private)"
 msgstr ""
 
@@ -924,7 +927,7 @@ msgid "Sorry, this offer doesn't exist or the link is broken."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conditions.html.haml:58
+#: lib/boncoin_web/templates/public/conditions.html.haml:54
 msgid "Link a number to Viber or Messenger"
 msgstr ""
 
@@ -939,32 +942,32 @@ msgid "we wont answer to offers messages (burmese end)"
 msgstr " )"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:130
+#: lib/boncoin_web/templates/public/conversations.html.haml:145
 msgid "Explain how to change language"
 msgstr "To change your language, please open your conversation with Pawchaungkaung on Viber or Messenger and send *123#"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:145
+#: lib/boncoin_web/templates/public/conversations.html.haml:160
 msgid "Explain how to change surname"
 msgstr "To change your nickname, please open your conversation with Pawchaungkaung on Viber or Messenger and send *124#"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:100
+#: lib/boncoin_web/templates/public/conversations.html.haml:115
 msgid "Explain how to get help"
 msgstr "To get some help, please open your conversation with PawChaungKaung on Viber or Messenger and send 0"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:124
+#: lib/boncoin_web/templates/public/conversations.html.haml:139
 msgid "How to change your language ?"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:139
+#: lib/boncoin_web/templates/public/conversations.html.haml:154
 msgid "How to change your surname ?"
 msgstr "How to change your nickname ?"
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:94
+#: lib/boncoin_web/templates/public/conversations.html.haml:109
 msgid "How to get help ?"
 msgstr ""
 
@@ -987,8 +990,9 @@ msgstr ""
 #: lib/boncoin_web/templates/public/conversations.html.haml:21
 msgid "explain registration and conversation"
 msgstr "Before selling on Pawchaungkaung, you need to register first by opening a conversation on Messenger or Viber. "
-"This conversation will be private between you and Pawchaungkaung. All you need is a mobile phone number which will be used by buyers to contact you. "
-"You can use this conversation to change your details and get access to your offers."
+"This conversation will be private between you and Pawchaungkaung. "
+"You can use this conversation to change your details and get access to your offers. "
+"All you need is a mobile phone number which will be used by buyers to contact you."
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:44
@@ -996,6 +1000,11 @@ msgid "Please scan this QR code on your Messenger."
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin_web/templates/public/conversations.html.haml:75
-msgid "Please scan this QR code on your Viber then click on the message button."
+#: lib/boncoin_web/templates/public/conversations.html.haml:90
+msgid "Please scan this QR code on your Viber."
+msgstr ""
+
+#, elixir-format
+#: lib/boncoin_web/templates/user/_register_links.html.haml:4
+msgid "Please register to create offer"
 msgstr ""
