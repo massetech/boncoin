@@ -25,7 +25,7 @@
         %th= "Status"
         %th= "Cause"
         %th
-          .d-none.d-sm-block= "Nb view, clic, alert"
+          .d-none.d-sm-block= "KPI"
         %th
           .d-none.d-sm-block= "Creation"
         %th
@@ -57,7 +57,8 @@
             .d-none.d-sm-block= offer.township.division.title_en
           %td= offer.township.title_en
           %td
-            %i.fa{class: "fa-#{offer.category.icon}"}
+            %a.btn.btn-sm.btn-outline-primary{tabindex: "0", role: "button", data-toggle: "popover", data-trigger: "focus", title: "Category", data-placement: "top", data-content: "#{offer.category.title_en}"}
+              %i.fa{class: "fa-#{offer.category.icon}"}
           %td
             .d-flex.flex-row.align-items-center.my-1
               = render "_show_price.html", announce: offer
@@ -68,7 +69,8 @@
             - if offer.status != "PENDING" do
               = offer.cause
           %td
-            .d-none.d-sm-block= "#{offer.nb_view}, #{offer.nb_clic}, #{offer.nb_alert}"
+            %a.btn.btn-sm.btn-outline-primary{tabindex: "0", role: "button", data-toggle: "popover", data-trigger: "focus", title: "kpi", data-placement: "top", data-content: "#{offer.nb_view}views, #{offer.nb_clic}clics, #{offer.nb_alert}alerts"}
+              %i.fas.fa-eye
           %td
             .d-none.d-sm-block= "#{offer.inserted_at.year}/#{offer.inserted_at.day}/#{offer.inserted_at.month}"
           %td

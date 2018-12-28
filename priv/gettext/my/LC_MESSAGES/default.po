@@ -139,7 +139,7 @@ msgstr "ျမန္မာ (ေဇာ္ဂ်ီ)"
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:5
 msgid "Our terms of use"
-msgstr ""
+msgstr "ကျွနု်ပ်တို့၏စည်းကမ်းချက်များ"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conditions.html.haml:77

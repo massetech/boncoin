@@ -513,7 +513,7 @@ defmodule Boncoin.Contents do
       |> Repo.all()
   end
 
-  def list_announces_public(cursor_after, %{"category_id" => category_id, "division_id" => division_id, "family_id" => family_id, "township_id" => township_id}) do
+  def list_announces_public(cursor_after, %{category_id: category_id, division_id: division_id, family_id: family_id, township_id: township_id}) do
     user_query = User
       |> User.filter_user_public_data()
     offer_query = Announce

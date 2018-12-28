@@ -51,14 +51,14 @@ defmodule BoncoinWeb.ConversationTest do
     test "case 1", %{conn: conn} do
       Mockery.History.enable_history()
       admin_user = insert(:admin_user)
-      insert(:conversation, %{user_id: admin_user.id})
+      insert(:conversation, %{user_id: admin_user.id, bot_provider: "messenger"})
       admin_conn = Phoenix.ConnTest.build_conn() |> Guardian.Plug.sign_in(admin_user, %{"typ" => "user-access"})
       messenger_id = "messenger_1234"
       other_messenger_id = "messenger_12345"
       other_active_user = insert(:user, %{phone_number: "09110000001"})
       insert(:conversation, %{user_id: other_active_user.id})
       other_inactive_user = insert(:user, %{phone_number: "09110000003", active: false})
-      # 1) Unknown user opens conversation
+      # 1) Unknown user opens conversation on Messenger
         IO.puts("test 1")
         receive_messenger_msg(conn, messenger_id, init_messenger_params(messenger_id))
         assert_sent_answer_messenger_msg("language", messenger_id, "ေပါေခ်ာင္ေကာင္းမွႀကိဳဆိုပါတယ္။ ေက်းဇူးျပဳ၍သင္၏ဘာသာစကားကိုေ႐ြးခ်ယ္ပါ\n\nWelcome to Pawchaungkaung, please choose your language")

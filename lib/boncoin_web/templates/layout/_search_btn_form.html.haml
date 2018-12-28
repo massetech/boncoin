@@ -7,7 +7,7 @@
         .triangle.d-none{id: "triangle_#{family.id}"}
   .col.m-0.p-0
     -# Clear filters
-    - link to: Routes.public_offers_path(@conn, :public_index, search: %{family_id: "", category_id: ""}, old_search: @conn.assigns.search_params) do
+    - link to: Routes.public_offers_path(@conn, :public_index, search: %{family_id: "", category_id: "", division_id: "#{@conn.assigns.search_params.division_id}", township_id: "#{@conn.assigns.search_params.township_id}"}) do
       %label.bg-white.text-primary.family-selector{class: "#{show_family_selector(@conn, nil)}"}
         -# %i.fa.fa-times
         = convert_zawgyi(gettext("No filter"))
@@ -18,32 +18,27 @@
     .col-12.my-3.text-left
       - if @conn.assigns.search_params["family_id"] == Integer.to_string(family.id) && @conn.assigns.search_params["category_id"] == "" do
         -# Button for searched family
-        - link to: Routes.public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}"}, old_search: @conn.assigns.search_params), class: "btn btn-primary mr-3" do
+        - link to: Routes.public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", division_id: "#{@conn.assigns.search_params.division_id}", township_id: "#{@conn.assigns.search_params.township_id}"}), class: "btn btn-primary mr-3" do
           %span.text-white
             %i.mr-1{class: "#{insert_icon_classes(family)}"}
             = convert_zawgyi(gettext("All %{title}", title: convert_lg_title(family, "title")))
       - else
         -# Button for another family
-        - link to: Routes.public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}"}, old_search: @conn.assigns.search_params), class: "btn btn-outline-primary mr-3" do
+        - link to: Routes.public_offers_path(@conn, :public_index, search: %{family_id: "#{family.id}", division_id: "#{@conn.assigns.search_params.division_id}", township_id: "#{@conn.assigns.search_params.township_id}"}), class: "btn btn-outline-primary mr-3" do
           %span.text-primary
             %i.mr-1{class: "#{insert_icon_classes(family)}"}
             = convert_zawgyi(gettext("All %{title}", title: convert_lg_title(family, "title")))
-      -# -# Clear filters
-      -# - link to: Routes.public_offers_path(@conn, :public_index, search: %{family_id: "", category_id: ""}, old_search: @conn.assigns.search_params), class: "btn btn-outline-danger mr-3" do
-      -#   %span.text-danger
-      -#     %i.mr-1.fa.fa-times
-      -#     = convert_zawgyi(gettext("No filter"))
     .col-12.text-left.mb-3
       - for category <- family.categorys do
         - if @conn.assigns.search_params["family_id"] == Integer.to_string(family.id) && @conn.assigns.search_params["category_id"] == Integer.to_string(category.id) do
           -# Button for searched category
-          - link to: Routes.public_offers_path(@conn, :public_index, search: %{category_id: "#{category.id}"}, old_search: @conn.assigns.search_params), class: "btn btn-primary my-1" do
+          - link to: Routes.public_offers_path(@conn, :public_index, search: %{category_id: "#{category.id}", division_id: "#{@conn.assigns.search_params.division_id}", township_id: "#{@conn.assigns.search_params.township_id}"}), class: "btn btn-primary my-1" do
             %span.text-white
               %i.mr-1{class: "#{insert_icon_classes(category)}"}
               = convert_zawgyi(category, "title")
         - else
           -# Button for another category
-          - link to: Routes.public_offers_path(@conn, :public_index, search: %{category_id: "#{category.id}"}, old_search: @conn.assigns.search_params), class: "btn btn-outline-primary my-1" do
+          - link to: Routes.public_offers_path(@conn, :public_index, search: %{category_id: "#{category.id}", division_id: "#{@conn.assigns.search_params.division_id}", township_id: "#{@conn.assigns.search_params.township_id}"}), class: "btn btn-outline-primary my-1" do
             %span.text-primary
               %i.mr-1{class: "#{insert_icon_classes(category)}"}
               = convert_zawgyi(category, "title")

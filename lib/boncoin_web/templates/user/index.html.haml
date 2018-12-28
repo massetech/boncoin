@@ -57,8 +57,9 @@
           %td
             .d-none.d-sm-block
               = user.conversation.bot_provider
-          %td.text-truncate{style: "max-width: 30px;", data-toggle: "popover", title: "psid", data-placement: "top", data-content: "#{user.conversation.psid}"}
-            = user.conversation.psid
+          %td
+            %a.btn.btn-sm.btn-outline-info{tabindex: "0", role: "button", data-toggle: "popover", data-trigger: "focus", title: "psid", data-placement: "top", data-content: "#{user.conversation.psid}"}
+              %i.fas.fa-eye
           %td
             = LayoutView.icon_active(user.conversation.active)
           %td= Enum.count(user.announces, &(&1.status == "PENDING"))

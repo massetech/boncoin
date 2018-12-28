@@ -13,15 +13,18 @@ defmodule Boncoin.CustomModules.BotDecisions do
       #---------------------- USER REGISTRATION -------------------------------------
 
       # We are welcoming a new visitor
-      user == nil && conversation.scope == nil ->
-        %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: welcome_msg(), offers: [], quick_replies: [%{title: link_zawgyi(), link: "1"}, %{title: link_unicode(), link: "2"}, %{title: link_english(), link: "3"}], buttons: []}}
-
+      user == nil && conversation.scope == "welcome" ->
+        if conversation.bot_provider == "viber" do # Viber opening conversation doesn't let us display quick_replies : ask user to type
+          %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: welcome_msg_full(), offers: [], quick_replies: [], buttons: []}}
+        else
+          %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: welcome_msg(), offers: [], quick_replies: [%{title: propose_zawgyi(), link: "1"}, %{title: propose_unicode(), link: "2"}, %{title: propose_english(), link: "3"}], buttons: []}}
+        end
       # We are waiting for a visitor LANGUAGE
       user == nil && conversation.scope == "language" ->
         language = String.slice(user_msg,0,1) |> convert_language()
         case language do
           nil ->
-            %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: welcome_msg(), offers: [], quick_replies: [%{title: link_zawgyi(), link: "1"}, %{title: link_unicode(), link: "2"}, %{title: link_english(), link: "3"}], buttons: []}}
+            %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: welcome_msg(), offers: [], quick_replies: [%{title: propose_zawgyi(), link: "1"}, %{title: propose_unicode(), link: "2"}, %{title: propose_english(), link: "3"}], buttons: []}}
           language ->
             %{conversation: %{scope: "visit_purpose", language: language, nb_errors: 0}, messages: %{message: ask_visit_purpose_msg(language), offers: [], quick_replies: [%{title: tell_registration(language), link: "1"}, %{title: tell_no_registration(language), link: "0"}], buttons: []}}
         end
@@ -33,7 +36,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
           0 -> # No error : ask the visit purpose
             %{conversation: %{scope: "visit_purpose", nb_errors: 1}, messages: %{message: ask_visit_purpose_msg(language), offers: [], quick_replies: [%{title: tell_registration(language), link: "1"}, %{title: tell_no_registration(language), link: "0"}], buttons: []}}  # We let the visitor return one time only
           1 -> # Errors : fallback to language asking
-            %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: welcome_msg(), offers: [], quick_replies: [%{title: link_zawgyi(), link: "1"}, %{title: link_unicode(), link: "2"}, %{title: link_english(), link: "3"}], buttons: []}}
+            %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: welcome_msg(), offers: [], quick_replies: [%{title: propose_zawgyi(), link: "1"}, %{title: propose_unicode(), link: "2"}, %{title: propose_english(), link: "3"}], buttons: []}}
         end
 
       # We are waiting the visitor's VISIT PURPOSE
@@ -56,7 +59,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
               false -> # Ask again for phone number
                 %{conversation: %{scope: "link_phone", nb_errors: 1}, messages: %{message: ask_again_phone_msg(language), offers: [], quick_replies: [], buttons: []}}
               true -> # No phone number for the 2nd time : return to beginning
-                %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: welcome_msg(), offers: [], quick_replies: [%{title: link_zawgyi(), link: "1"}, %{title: link_unicode(), link: "2"}, %{title: link_english(), link: "3"}], buttons: []}}
+                %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: welcome_msg(), offers: [], quick_replies: [%{title: propose_zawgyi(), link: "1"}, %{title: propose_unicode(), link: "2"}, %{title: propose_english(), link: "3"}], buttons: []}}
             end
           true -> # There is a phone number in the message
             other_user = Members.get_active_user_by_phone_number(phone_number)
@@ -121,14 +124,14 @@ defmodule Boncoin.CustomModules.BotDecisions do
       user != nil && conversation.scope == "viber_number" ->
         language = conversation.language
         if user_msg == "0" do
-          %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: welcome_new_user(user), offers: [], quick_replies: [], buttons: [%{title: tell_create_offer(language), link: offer_form_link(user.phone_number)}]}}
+          %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: welcome_new_user(user), offers: [], quick_replies: [], buttons: [link_create_offer(user), link_help(language)]}}
         else
           case Members.update_user(user, %{viber_number: user_msg}) do
-            {:ok, user} -> %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: welcome_new_user(user), offers: [], quick_replies: [], buttons: [%{title: tell_create_offer(language), link: offer_form_link(user.phone_number)}]}}
+            {:ok, user} -> %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: welcome_new_user(user), offers: [], quick_replies: [], buttons: [link_create_offer(user), link_help(language)]}}
             {:error, changeset} ->
               IO.puts("user_viber is not correct, we don't use it")
               IO.inspect(changeset)
-              %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: welcome_new_user_without_viber_phone(user), offers: [], quick_replies: [], buttons: [%{title: tell_create_offer(language), link: offer_form_link(user.phone_number)}]}}
+              %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: welcome_new_user_without_viber_phone(user), offers: [], quick_replies: [], buttons: [link_create_offer(user), link_help(language)]}}
           end
         end
 
@@ -138,25 +141,25 @@ defmodule Boncoin.CustomModules.BotDecisions do
       user != nil && conversation.scope == "offer_treated" ->
         language = user.language
         case announce.status do
-          "ONLINE" -> %{conversation: conversation, messages: %{message: tell_offer_accepted(user, announce), offers: [], quick_replies: [], buttons: [link_manage_offer(language, announce)]}}
-          "REFUSED" -> %{conversation: conversation, messages: %{message: tell_offer_refused(user, announce, user_msg), offers: [], quick_replies: [], buttons: [link_create_offer(user)]}}
+          "ONLINE" -> %{conversation: conversation, messages: %{message: tell_offer_accepted(user, announce), offers: [], quick_replies: [], buttons: [link_manage_offer(language, announce), link_help(language)]}}
+          "REFUSED" -> %{conversation: conversation, messages: %{message: tell_offer_refused(user, announce, user_msg), offers: [], quick_replies: [], buttons: [link_create_offer(user), link_help(language)]}}
         end
 
       # We send a NOTIFICATION to user after removing his offer
       user != nil && conversation.scope == "offer_closed" ->
         language = user.language
-        %{conversation: conversation, messages: %{message: tell_offer_closed(user, announce, user_msg), offers: [], quick_replies: [], buttons: [link_create_offer(user)]}}
+        %{conversation: conversation, messages: %{message: tell_offer_closed(user, announce, user_msg), offers: [], quick_replies: [], buttons: [link_create_offer(user), link_help(language)]}}
 
       #---------------------- CONVERSATIONS -------------------------------------
       # User asked for help
       user != nil && conversation.active && user_msg == "0" ->
         language = user.language
-        %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: inform_help(user), offers: [], quick_replies: [propose_change_language(language), propose_change_nickname(language), propose_see_offers_list(language), propose_change_phone(language), propose_quit(language, conversation.bot_provider)], buttons: []}}
+        %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: inform_help(user), offers: [], quick_replies: [propose_change_language(language), propose_change_nickname(language), propose_see_offers_list(language), propose_change_phone(language), propose_quit(language, conversation.bot_provider)], buttons: [link_visit_website(language)]}}
 
       # User wants to CHANGE LANGUAGE
       user != nil && conversation.active && user_msg == "*123#" ->
         language = user.language
-        %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: change_language_msg(), offers: [], quick_replies: [%{title: link_zawgyi(), link: "1"}, %{title: link_unicode(), link: "2"}, %{title: link_english(), link: "3"}], buttons: []}}
+        %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: change_language_msg(), offers: [], quick_replies: [%{title: propose_zawgyi(), link: "1"}, %{title: propose_unicode(), link: "2"}, %{title: propose_english(), link: "3"}], buttons: []}}
 
       # We are waiting for a LANGUAGE update
       user != nil && conversation.active && conversation.scope == "language" ->
@@ -284,13 +287,17 @@ defmodule Boncoin.CustomModules.BotDecisions do
         language = user.language
         %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: nothing_to_say_msg(user), offers: [], quick_replies: [], buttons: [link_visit_website(language), link_help(language)]}}
       true ->
-        %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: welcome_msg(), offers: [], quick_replies: [%{title: link_zawgyi(), link: "1"}, %{title: link_unicode(), link: "2"}, %{title: link_english(), link: "3"}], buttons: []}}
+        %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: welcome_msg_full(), offers: [], quick_replies: [%{title: propose_zawgyi(), link: "1"}, %{title: propose_unicode(), link: "2"}, %{title: propose_english(), link: "3"}], buttons: []}}
 
     end
   end
 
   # -------------------- MESSAGES   ---------------------------------------------
   #---------------------- USER REGISTRATION -------------------------------------
+  defp welcome_msg_full() do
+    uni = "ပေါချောင်ကောင်းမှကြိုဆိုပါတယ်။ ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပါ"
+    "#{Rabbit.uni2zg(uni)}\n\nWelcome to Pawchaungkaung, please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ 1\n  -> မြန်မာ(ယူနီကုတ်)အတွက် 2\n  -> For English send 3"
+  end
   defp welcome_msg() do
     uni = "ပေါချောင်ကောင်းမှကြိုဆိုပါတယ်။ ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပါ"
     "#{Rabbit.uni2zg(uni)}\n\nWelcome to Pawchaungkaung, please choose your language"
@@ -368,7 +375,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     end
   end
   defp tell_no_viber(language) do
-    uni = "translate"
+    uni = "ကျွန်တော်/ကျွန်မထံသို့ Viber ဖြင့်မဆက်သွယ်စေလိုပါ"
     case language do
       "en" -> "Don't contact me on Viber"
       "my" -> uni
@@ -376,7 +383,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     end
   end
   defp welcome_new_user(user) do
-    uni = "translate \nကျေးဇူးပြု၍ #{offer_form_link(user.phone_number)} သို့ဝင်ကြည့်ပါ။"
+    uni = "ကျေးဇူးတင်ပါတယ် #{user.nickname}, သင့်အတွက်ပေါချောင်ကောင်းတွင်စာရင်းသွင်းပြီးပါပြီ။\n သင့်ဖုန်းနံပါတ်မှာ #{user.phone_number}#{show_viber_number(user)} ဖြစ်ပါတယ်။ ကျေးဇူးပြု၍သင့်ရဲ့ပထပဆုံးရောင်းရန်ပစ္စည်းကြော်ငြာကိုပြုလုပ်ပါ။ "
     case user.language do
       "en" -> "Thanks #{user.nickname}, you are now registered on Pawchaungkaung !\nYour phone number is #{user.phone_number}#{show_viber_number(user)}.\nPlease create your first offer !"
       "my" -> uni
@@ -385,9 +392,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
   defp show_viber_number(user) do
     case user.viber_number do
-      "" -> ""
+      nil -> ""
       _ ->
-        uni = "translate"
+        uni = "ပြီးနောက် သင့်ရဲ့ Viber နံပါတ်မှာ #{user.viber_number}"
         case user.language do
           "en" -> " and your Viber number is #{user.viber_number}"
           "my" -> uni
@@ -396,17 +403,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
     end
   end
   defp welcome_new_user_without_viber_phone(user) do
-    uni = "translate \nကျေးဇူးပြု၍ #{offer_form_link(user.phone_number)} သို့ဝင်ကြည့်ပါ။"
+    uni = "ကျေးဇူးတင်ပါတယ် #{user.nickname}, သင့်အတွက်ပေါချောင်ကောင်းတွင်စာရင်းသွင်းပြီးပါပြီ။\nကျေးဇူးပြု၍ #{offer_form_link(user.phone_number)} သို့ဝင်ကြည့်ပါ။"
     case user.language do
-      "en" -> "Thanks #{user.nickname}, you are now registered on Pawchaungkaung !\nPlease note that your viber phone number was not correct, it will not be used.\nPlease create your first offer !"
-      "my" -> uni
-      "dz" -> Rabbit.uni2zg(uni)
-    end
-  end
-  def tell_create_offer(language) do
-    uni = "translate"
-    case language do
-      "en" -> "Create an offer"
+      "en" -> "Thanks #{user.nickname}, you are now registered on Pawchaungkaung !\nPlease create your first offer !"
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end
@@ -516,7 +515,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     end
   end
   defp tell_no_active_offer(user) do
-    uni = "translateသင့်မှာမည်သည့်ကြော်ငြာမျှမရှိသေးပါ။ ကျေးဇူးပြု၍သင်၏ပထမဆုံးကြော်ငြာကို်တင်လိုက်ပါ။"
+    uni = "သင့်မှာမည်သည့်ကြော်ငြာမျှမရှိသေးပါ။ ကျေးဇူးပြု၍သင်၏ပထမဆုံးကြော်ငြာကို်တင်လိုက်ပါ။"
     case user.language do
       "en" -> "You don't have any active offer yet. Please create your first offer !"
       "my" -> uni
@@ -597,15 +596,6 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   #---------------------- LINK REPLIES -----------------------------------------
-  defp link_zawgyi() do
-    "ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္"
-  end
-  defp link_unicode() do
-    "မြန်မာ(ယူနီကုတ်)အတွက်"
-  end
-  defp link_english() do
-    "English"
-  end
   defp link_create_offer(user) do
     uni = "ကြော်ငြာကိုတင်လိုက်ရန်"
     title = case user.language do
@@ -613,7 +603,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end
-    %{title: title, link: offer_form_link(user.phone_number)}
+    %{title: title, link: offer_form_link(user.phone_number), action: "open-url"}
   end
   defp link_visit_website(language) do
     uni = "ပေါချောင်ကေင်းသို့ဝင်ကြည့်ပါ။"
@@ -622,7 +612,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end
-    %{title: title, link: website_url()}
+    %{title: title, link: website_url(), action: "open-url"}
   end
   defp link_help(language) do
     uni = "အကူအညီရယူရန်"
@@ -631,7 +621,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end
-    %{title: title, link: "0"}
+    %{title: title, link: "0", action: "reply"}
   end
   defp link_manage_offer(language, offer) do
     uni = "သင်၏ကြော်ငြာကိုသင့်အလိုကျစီမံနိုင်ရန်"
@@ -640,10 +630,19 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end
-     %{title: title, link: offer_view_link(offer.id)}
+     %{title: title, link: offer_view_link(offer.id), action: "open-url"}
   end
 
   #---------------------- QUICK REPLIES -----------------------------------------
+  defp propose_zawgyi() do
+    "ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္"
+  end
+  defp propose_unicode() do
+    "မြန်မာ(ယူနီကုတ်)အတွက်"
+  end
+  defp propose_english() do
+    "English"
+  end
   defp propose_change_language(language) do
     uni = "ဘာသာစကားပြောင်းရန်"
     title = case language do

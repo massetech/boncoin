@@ -74,7 +74,7 @@ defmodule Boncoin.Contents.Announce do
   end
 
   defp refuse_non_numeric_price(changeset, %{"price" => price}) do
-    case String.match?(price, ~r/[^1234567890၁၂၃၄၅၆၇၈၉၀]/) do
+    case String.match?(price, ~r/[^1234567890၁၂၃၄၅၆၇၈၉၀,. ]/) do
       false -> changeset
       true -> add_error(changeset, :price, "this is not a numeric price")
     end
@@ -166,7 +166,7 @@ defmodule Boncoin.Contents.Announce do
 
   def select_announces_datas(query, user_query) do
     from a in query,
-      preload: [:images, user: ^user_query, township: [:division]]
+      preload: [:images, user: ^user_query, township: [:division], category: [:family]]
   end
 
   def filter_announces_by_location(query, division_id, township_id) do

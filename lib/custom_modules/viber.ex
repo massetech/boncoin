@@ -28,16 +28,20 @@ defmodule Boncoin.ViberApi do
   # API doc https://developers.viber.com/docs/api/rest-bot-api/#general-send-message-parameters
   def send_message(type, psid, msg, quick_replies, buttons, offer) do
     # Using Viber keyboards : https://developers.viber.com/docs/tools/keyboards/
-    cond do
-      offer == nil -> # Send a BUTTON message
-        %{receiver: psid, min_api_version: 1, type: "text", text: msg, keyboard: build_keyboard(buttons, quick_replies)}
-          # |> IO.inspect()
-          |> post("send_message")
-      true -> # Send a GENERIC message
-        %{receiver: psid, min_api_version: 2, type: "rich_media", rich_media: built_rich_media(offer, msg), keyboard: build_keyboard(buttons, quick_replies)}
-          # |> IO.inspect()
-          |> post("send_message")
-    end
+    # cond do
+    #   offer == nil -> # Send a BUTTON message
+    #     %{receiver: psid, min_api_version: 1, type: "rich_media", rich_media: built_rich_media(msg, buttons), keyboard: build_keyboard(quick_replies)}
+    #     # %{receiver: psid, min_api_version: 1, type: "text", text: msg, keyboard: build_keyboard(quick_replies)}
+    #       # |> IO.inspect()
+    #       |> post("send_message")
+    #   true -> # Send a GENERIC message
+    #     %{receiver: psid, min_api_version: 1, type: "rich_media", rich_media: built_rich_media(offer, msg, buttons), keyboard: build_keyboard(quick_replies)}
+    #       # |> IO.inspect()
+    #       |> post("send_message")
+    # end
+    %{receiver: psid, min_api_version: 1, type: "rich_media", rich_media: built_rich_media(offer, msg, buttons), keyboard: build_keyboard(quick_replies)}
+      # |> IO.inspect()
+      |> post("send_message")
   end
 
   def check_online() do
@@ -77,28 +81,27 @@ defmodule Boncoin.ViberApi do
   defp handle_response({:ok, resp}), do: if resp["status"] > 0, do: {:error, resp}, else: {:ok, resp}
   defp handle_response(_), do: {:error, "Unexpected response from Viber"}
 
-  defp build_keyboard(buttons, quick_replies) do
-    btn_list = Enum.map(buttons, fn button -> build_big_button(button) end)
-    reply_list = Enum.map(quick_replies, fn reply -> build_small_button(reply) end)
-    buttons_list = reply_list ++ btn_list
-    case buttons_list do
+  defp build_keyboard(quick_replies) do
+    case quick_replies do
       [] -> nil
       _ ->
         %{
           Type: "keyboard",
           DefaultHeight: false,
           BgColor: "#ffec00",
-          Buttons: buttons_list
+          Buttons: build_quick_replies(quick_replies)
         }
     end
   end
-  defp build_small_button(quick_reply) do
+  defp build_quick_replies(quick_replies) do
+    Enum.map(quick_replies, fn quick_reply -> build_quick_reply(quick_reply) end)
+  end
+  defp build_quick_reply(quick_reply) do
     %{
       Columns: 2,
       Rows: 1,
       ActionType: "reply",
       ActionBody: quick_reply.link,
-      Silent: false,
       Text: "<font color='#ffffff'><b>#{quick_reply.title}</b></font>",
       TextSize: "medium",
       TextVAlign: "middle",
@@ -106,76 +109,75 @@ defmodule Boncoin.ViberApi do
       BgColor: "#1568a0"
     }
   end
-  defp build_big_button(button) do
-    if button.link =~ "http" do
+
+  defp built_rich_media(offer, msg, buttons) do
+    if offer == nil do
       %{
-        Columns: 6,
-        Rows: 1,
-        ActionType: "open-url",
-        ActionBody: button.link,
-        Silent: true,
-        Text: "<font color='#ffffff'><b>#{button.title}</b></font>",
-        TextSize: "medium",
-  			TextVAlign: "middle",
-  			TextHAlign: "center",
-        BgColor: "#1568a0"
-  		}
+        Type: "rich_media",
+        ButtonsGroupColumns: 6,
+        ButtonsGroupRows: 7,
+        BgColor: "#FFFFFF",
+        Buttons: build_buttons(msg, buttons)
+      }
     else
       %{
-        Columns: 6,
-        Rows: 1,
-        ActionType: "reply",
-        ActionBody: button.link,
-        Silent: false,
-        Text: "<font color='#ffffff'><b>#{button.title}</b></font>",
-        TextSize: "medium",
-        TextVAlign: "middle",
-        TextHAlign: "center",
-        BgColor: "#1568a0"
+        Type: "rich_media",
+        ButtonsGroupColumns: 6,
+        ButtonsGroupRows: 7,
+        BgColor: "#FFFFFF",
+        Buttons: build_buttons(offer, msg, buttons)
       }
     end
   end
-
-  defp built_rich_media(offer, msg) do
+  defp build_buttons(msg, buttons) do
+    column = if length(buttons) == 0, do: 6, else: 3
+    msg = %{
+        Columns: 6,
+        Rows: 2,
+        ActionType: "none",
+        Text: msg,
+        TextSize: "medium",
+        TextVAlign: "middle",
+        TextHAlign: "left",
+      }
+    [msg | Enum.map(buttons, fn button -> build_button(button, column) end)]
+  end
+  defp build_buttons(offer, msg, buttons) do
+    column = if length(buttons) == 2, do: 3, else: 6
+    [build_offer_buttons(offer, msg) | Enum.map(buttons, fn button -> build_button(button, column) end)]
+  end
+  defp build_offer_buttons(offer, msg) do
     image_url = List.first(offer.images)
       |> BoncoinWeb.AnnounceView.image_url(:original)
-    offer_url = Boncoin.CustomModules.BotDecisions.offer_view_link(offer.id)
+    [
+      %{
+        Columns: 6,
+        Rows: 4,
+        ActionType: "none",
+        Image: image_url
+      },
+      %{
+        Columns: 6,
+        Rows: 2,
+        ActionType: "none",
+        Text: msg,
+        TextSize: "medium",
+        TextVAlign: "middle",
+        TextHAlign: "left",
+      }
+    ]
+  end
+  defp build_button(button, column) do
     %{
-      Type: "rich_media",
-      ButtonsGroupColumns: 6,
-      ButtonsGroupRows: 7,
-      BgColor: "#FFFFFF",
-      Buttons: [
-        %{
-          Columns: 6,
-          Rows: 4,
-          ActionType: "open-url",
-          ActionBody: offer_url,
-          Silent: true,
-          Image: image_url
-        },
-        %{
-          Columns: 6,
-          Rows: 2,
-          ActionType: "none",
-          Text: msg,
-          TextSize: "medium",
-          TextVAlign: "middle",
-          TextHAlign: "left",
-        },
-        %{
-          Columns: 6,
-          Rows: 1,
-          ActionType: "open-url",
-          ActionBody: offer_url,
-          Silent: true,
-          TextSize: "medium",
-          TextVAlign: "middle",
-          TextHAlign: "middle",
-          Text: "<font color='#ffffff'><b>SEE OFFER</b></font>",
-          BgColor: "#1568a0"
-        }
-      ]
+      Columns: column,
+      Rows: 1,
+      ActionType: button.action,
+      ActionBody: button.link,
+      TextSize: "medium",
+      TextVAlign: "middle",
+      TextHAlign: "middle",
+      Text: "<font color='#ffffff'><b>#{button.title}</b></font>",
+      BgColor: "#1568a0"
     }
   end
 

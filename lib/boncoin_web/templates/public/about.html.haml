@@ -17,7 +17,7 @@
               %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("About us"))
         %div.collapse{id: "company", aria-labelledby: "compagny", data-parent: "#about"}
           .card-body
-            = render "_card_body.html", title: "", text: LayoutView.convert_zawgyi(gettext("introduce the compagny")), icon: "fa fa-building"
+            = render "_card_body.html", title: "", text: LayoutView.convert_zawgyi(gettext("introduce the compagny")), icon: ""
 
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#work_with_us", aria-expanded: "true", aria-controls: "work_with_us"}
@@ -27,7 +27,7 @@
               %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("Become a partner"))
         %div.collapse{id: "work_with_us", aria-labelledby: "work_with_us", data-parent: "#about"}
           .card-body
-            = render "_card_body.html", title: "", text: LayoutView.convert_zawgyi(gettext("introduce the work with us")), icon: "fa fa-audio-description"
+            = render "_card_body.html", title: "", text: LayoutView.convert_zawgyi(gettext("introduce the work with us")), icon: ""
 
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#join_us", aria-expanded: "true", aria-controls: "join_us"}
@@ -37,7 +37,7 @@
               %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("Join us"))
         %div.collapse{id: "join_us", aria-labelledby: "join_us", data-parent: "#about"}
           .card-body
-            = render "_card_body.html", title: "", text: LayoutView.convert_zawgyi(gettext("introduce the join us")), icon: "fa fa-envelope"
+            = render "_card_body.html", title: "", text: LayoutView.convert_zawgyi(gettext("introduce the join us")), icon: ""
 
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#contact_us", aria-expanded: "true", aria-controls: "contact_us"}
@@ -47,7 +47,7 @@
               %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("Contact us"))
         %div.collapse{id: "contact_us", aria-labelledby: "contact_us", data-parent: "#about"}
           .card-body
-            = render "_card_body.html", title: "", text: LayoutView.convert_zawgyi(gettext("introduce the contact us")), icon: "fa fa-envelope"
+            = render "_card_body.html", title: "", text: LayoutView.convert_zawgyi(gettext("introduce the contact us")), icon: ""
             %hr
             .d-sm-none
               .flex-column

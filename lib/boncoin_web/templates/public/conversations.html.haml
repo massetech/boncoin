@@ -29,7 +29,7 @@
           .card_body.text-center.p-3
             - if Browser.mobile?(@conn) do
               %p.text-left.my-3= LayoutView.convert_zawgyi(gettext("Please open a conversation with PawChaungKaung on Messenger."))
-              %a.btn.btn-lg.btn-block.btn-messenger.my-3{href: "http://m.me/pawchaungkaung?ref=website_mobile"}
+              %a.btn.btn-lg.btn-block.btn-messenger.my-3.disabled{href: "http://m.me/pawchaungkaung?ref=website_mobile"}
                 %span= LayoutView.convert_zawgyi(gettext("Open Messenger on my phone"))
             - else
               %p.my-3= LayoutView.convert_zawgyi(gettext("Please scan this QR code on your Messenger."))
@@ -55,14 +55,14 @@
             - if Browser.mobile?(@conn) do
               %p.text-left.my-3= LayoutView.convert_zawgyi(gettext("Please open a conversation with PawChaungKaung on Viber."))
               .d-flex.flex-column
-                %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa?chatURI=pawchaungkaung_en&context=website_mobile"}
-                  %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
+                -# %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa?chatURI=pawchaungkaung_en&context=website_mobile"}
+                -#   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
                 %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa?chatURI=pawchaungkaung_en"}
                   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
-                %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa/info?uri=pawchaungkaung_en&context=website_mobile"}
-                  %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
-                %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa/info?uri=pawchaungkaung_en"}
-                  %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
+                -# %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa/info?uri=pawchaungkaung_en&context=website_mobile"}
+                -#   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
+                -# %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa/info?uri=pawchaungkaung_en"}
+                -#   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
                 %i.fas.fa-plus.text-center.mt-3.text-primary
                 = img_tag "#{img_url_tag(@conn, "viber_msg_btn.png")}", class: "m-auto w-50"
             - else

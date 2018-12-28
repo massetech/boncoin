@@ -1,6 +1,6 @@
 defmodule BoncoinWeb.AnnounceController do
   use BoncoinWeb, :controller
-  alias Boncoin.{Contents, Members}
+  alias Boncoin.{Contents, Members, CustomModules}
   alias Boncoin.Contents.Announce
 
   def public_index(conn, _params) do
@@ -22,7 +22,7 @@ defmodule BoncoinWeb.AnnounceController do
 
   # API to be called if user wants to load more offers on public page
   def add_offers_to_public_index(conn, %{"scope" => scope, "params" => %{"cursor_after" => cursor_after, "search_params" => search_params}}) do
-    paginator_results = Contents.list_announces_public(cursor_after, search_params)
+    paginator_results = Contents.list_announces_public(cursor_after, CustomModules.map_keys_to_atoms(search_params))
     offers_map = paginator_results.entries
       |> build_offers_html(conn)
     results = case paginator_results.metadata.after do

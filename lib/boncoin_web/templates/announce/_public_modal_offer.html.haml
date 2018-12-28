@@ -25,9 +25,9 @@
           - if Browser.mobile?(@conn) do
             %a.btn.btn-block.btn-primary.d-flex.flex-column.justify-content-center.align-items-center.my-0.btn-viber{href: "viber://contact?number=%2B95#{String.slice(@announce.user.viber_number, 1..-1)}"}
               %i.fab.fa-viber
-              %span= render "_phone_number.html", phone_number: "95#{String.slice(@announce.user.viber_number, 1..-1)}"
+              %span= render "_phone_number.html", phone_number: "#{@announce.user.viber_number}"
           - else
             %button.btn.btn-block.btn-primary.d-flex.flex-column.justify-content-center.align-items-center.my-0.btn-viber.copy-number{data-phone-number: "+95#{String.slice(@announce.user.viber_number, 1..-1)}"}
               %i.fab.fa-viber
-              = render "_phone_number.html", phone_number: "95#{String.slice(@announce.user.viber_number, 1..-1)}"
+              = render "_phone_number.html", phone_number: "#{@announce.user.viber_number}"
               -# %i.fa.fa-copy.bg-success.text-white.btn-copy-number.btn-icon-right

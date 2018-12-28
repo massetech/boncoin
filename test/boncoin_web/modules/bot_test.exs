@@ -9,7 +9,7 @@ defmodule BoncoinWeb.BotTest do
 
   describe "bot algorythm scope welcome" do
     test "with unknown user", %{conn: conn} do
-      %{messages: %{message: msg}} = %{user: nil, conversation: %{scope: nil}, announce: nil, user_msg: nil}
+      %{messages: %{message: msg}} = %{user: nil, conversation: %{scope: "welcome", bot_provider: "viber"}, announce: nil, user_msg: nil}
         |> call_bot_algorythm()
       assert msg =~ "Welcome to Pawchaungkaung, please choose your language"
     end
@@ -25,7 +25,7 @@ defmodule BoncoinWeb.BotTest do
 
   describe "bot algorythm scope language" do
     test "with unknown user ask language again", %{conn: conn} do
-      %{messages: %{message: msg}} = %{user: nil, conversation: %{scope: nil}, announce: nil, user_msg: "blablabla"}
+      %{messages: %{message: msg}} = %{user: nil, conversation: %{scope: "welcome", bot_provider: "viber"}, announce: nil, user_msg: "blablabla"}
         |> call_bot_algorythm()
       assert msg =~ "Welcome to Pawchaungkaung, please choose your language"
     end
@@ -305,7 +305,7 @@ defmodule BoncoinWeb.BotTest do
       assert msg =~ "မဂၤလာပါ Mr unknown။"
     end
     test "user unknown", %{conn: conn} do
-      %{messages: %{message: msg}} = %{user: nil, conversation: %{scope: "welcome"}, announce: nil, user_msg: "whatever anything"}
+      %{messages: %{message: msg}} = %{user: nil, conversation: %{scope: "welcome", bot_provider: "viber"}, announce: nil, user_msg: "whatever anything"}
         |> call_bot_algorythm()
       assert msg =~ "Welcome to Pawchaungkaung, please choose your language"
     end

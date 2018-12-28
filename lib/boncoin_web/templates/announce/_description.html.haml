@@ -2,6 +2,9 @@
   .d-flex.align-items-center
     %i.icon.icon-primary.fas.fa-user.text-primary.mr-2
     %p.m-0= LayoutView.convert_zawgyi(gettext("Sold by%{seller_name}", seller_name: @announce.user.nickname))
+  .d-flex.align-items-center
+    %i.icon.icon-primary.text-primary.mr-2{class: "#{LayoutView.insert_icon_classes(@announce.category)}"}
+    %p.m-0= LayoutView.convert_lg_title(@announce.category, "title")
   .d-flex.align-items-center.my-1
     %i.icon.icon-primary.fas.fa-map-marker-alt.text-primary.mr-2
     %p.m-0

@@ -602,18 +602,18 @@ msgstr ""
 #: lib/boncoin_web/templates/public/conversations.html.haml:190
 msgid "Explain how to unlink the viber account"
 msgstr "To unlink your phone number, please "
-"open your conversation with PawChaungKaung on Viber or Messenger and send 999#"
+"open your conversation with PawChaungKaung on Viber or Messenger and send *999#"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:175
 msgid "Explain how to get change phone number from Viber"
 msgstr "To change your phone number, please "
-"open your conversation with PawChaungKaung on Viber or Messenger and send 000#"
+"open your conversation with PawChaungKaung on Viber or Messenger and send 0"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:130
 msgid "Explain how to get offer list from Viber"
-msgstr "To receive the list of your active offers, please open your conversation with PawChaungKaung on Viber or Messenger and send 111#"
+msgstr "To receive the list of your active offers, please open your conversation with PawChaungKaung on Viber or Messenger and send *111#"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/public_index.html.haml:36
