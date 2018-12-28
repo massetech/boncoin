@@ -66,6 +66,7 @@ defmodule BoncoinWeb.ViberController do
     # IO.inspect(params)
     case treat_message(conn, viber_id, viber_name, user_msg, nil) do
       :ok ->
+        IO.inspect(conn)
         send_resp(conn, 200, "ok")
       :error ->
         IO.puts("Viber error : can't update conversation message")
