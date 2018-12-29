@@ -30,7 +30,7 @@ defmodule Boncoin.ViberApi do
   def send_message(type, psid, msg, quick_replies, buttons, offer) do
     # Using Viber keyboards : https://developers.viber.com/docs/tools/keyboards/
     # Rich media requires min_api_version 2
-    result = %{receiver: psid, min_api_version: 2, type: "rich_media", rich_media: built_rich_media(offer, msg, buttons), keyboard: build_keyboard(quick_replies)}
+    result = %{receiver: psid, min_api_version: 2, type: "rich_media", rich_media: build_rich_media(offer, msg, buttons), keyboard: build_keyboard(quick_replies)}
       |> IO.inspect()
       |> post("send_message")
     # Results are not used after ; alert in case of problem
@@ -109,7 +109,7 @@ defmodule Boncoin.ViberApi do
     }
   end
 
-  defp built_rich_media(offer, msg, buttons) do
+  defp build_rich_media(offer, msg, buttons) do
     msg_rows = if String.length(msg) < 50, do: 1, else: 2
     nb_rows = cond do
       offer == nil && buttons == [] -> msg_rows
@@ -162,6 +162,7 @@ defmodule Boncoin.ViberApi do
       length(buttons) == 1 -> 6
       length(buttons) == 2 -> 3
       length(buttons) == 3 -> 2
+      true -> 6
     end
     Enum.map(buttons, fn button -> build_button(button, nb_columns) end)
   end
