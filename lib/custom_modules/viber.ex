@@ -110,62 +110,60 @@ defmodule Boncoin.ViberApi do
   end
 
   defp built_rich_media(offer, msg, buttons) do
-    if offer == nil do
-      %{
-        Type: "rich_media",
-        ButtonsGroupColumns: 6,
-        ButtonsGroupRows: 2,
-        BgColor: "#FFFFFF",
-        Buttons: build_buttons(msg, buttons)
-      }
-    else
-      %{
-        Type: "rich_media",
-        ButtonsGroupColumns: 6,
-        ButtonsGroupRows: 7,
-        BgColor: "#FFFFFF",
-        Buttons: build_buttons(offer, msg, buttons)
-      }
+    msg_rows = if String.length(msg) < 50, do: 1, else: 2
+    nb_rows = cond do
+      offer == nil && buttons == [] -> msg_rows
+      offer == nil -> 1 + msg_rows
+      true -> 4 + 1 + msg_rows
     end
+    %{
+      Type: "rich_media",
+      ButtonsGroupColumns: 6,
+      ButtonsGroupRows: nb_rows,
+      Buttons: build_rows(offer, msg, buttons),
+      BgColor: "#FFFFFF"
+    }
   end
-  defp build_buttons(msg, buttons) do
-    column = if length(buttons) == 0, do: 6, else: 3
-    msg = %{
+  defp build_rows(offer, msg, buttons) do
+    [build_image(offer), build_message(msg)]
+      |> Enum.concat(build_btns(buttons))
+      |> Enum.reject(&is_nil/1) # Remove the nils from the final array
+  end
+
+  defp build_message(nil) do nil end
+  defp build_message(msg) do
+    nb_rows = if String.length(msg) < 50, do: 1, else: 2
+    %{
         Columns: 6,
-        Rows: 1,
+        Rows: nb_rows,
         ActionType: "none",
         Text: msg,
         TextSize: "medium",
         TextVAlign: "middle",
         TextHAlign: "left",
       }
-    [msg | Enum.map(buttons, fn button -> build_button(button, column) end)]
   end
-  defp build_buttons(offer, msg, buttons) do
-    column = if length(buttons) == 2, do: 3, else: 6
-    build_offer_buttons(offer, msg)
-      |> Enum.concat(Enum.map(buttons, fn button -> build_button(button, column) end))
-  end
-  defp build_offer_buttons(offer, msg) do
+
+  defp build_image(nil) do nil end
+  defp build_image(offer) do
     image_url = List.first(offer.images)
       |> BoncoinWeb.AnnounceView.image_url(:original)
-    [
-      %{
-        Columns: 6,
-        Rows: 4,
-        ActionType: "none",
-        Image: image_url
-      },
-      %{
-        Columns: 6,
-        Rows: 2,
-        ActionType: "none",
-        Text: msg,
-        TextSize: "medium",
-        TextVAlign: "middle",
-        TextHAlign: "left",
-      }
-    ]
+    %{
+      Columns: 6,
+      Rows: 4,
+      ActionType: "none",
+      Image: image_url
+    }
+  end
+
+  defp build_btns(nil) do nil end
+  defp build_btns(buttons) do
+    nb_columns = cond do
+      length(buttons) == 1 -> 6
+      length(buttons) == 2 -> 3
+      length(buttons) == 3 -> 2
+    end
+    Enum.map(buttons, fn button -> build_button(button, nb_columns) end)
   end
   defp build_button(button, column) do
     %{
@@ -180,5 +178,36 @@ defmodule Boncoin.ViberApi do
       BgColor: "#1568a0"
     }
   end
+
+  # defp build_buttons(nil, msg, buttons) do
+  #   nb_columns = if length(buttons) == 0, do: 6, else: 3
+  #   [msg | Enum.map(buttons, fn button -> build_button(button, nb_columns) end)]
+  # end
+  # defp build_buttons(offer, msg, buttons) do
+  #   column = if length(buttons) == 2, do: 3, else: 6
+  #   build_offer_buttons(offer, msg)
+  #     |> Enum.concat(Enum.map(buttons, fn button -> build_button(button, column) end))
+  # end
+  # defp build_offer_buttons(offer, msg) do
+  #   image_url = List.first(offer.images)
+  #     |> BoncoinWeb.AnnounceView.image_url(:original)
+  #   [
+  #     %{
+  #       Columns: 6,
+  #       Rows: 4,
+  #       ActionType: "none",
+  #       Image: image_url
+  #     },
+  #     %{
+  #       Columns: 6,
+  #       Rows: 2,
+  #       ActionType: "none",
+  #       Text: msg,
+  #       TextSize: "medium",
+  #       TextVAlign: "middle",
+  #       TextHAlign: "left",
+  #     }
+  #   ]
+  # end
 
 end
