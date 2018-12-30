@@ -30,7 +30,7 @@ defmodule Boncoin.Members do
 
   # -------------------------------- USER ----------------------------------------
 
-  # Send bot messages to the bot
+  # Send bot messages to the user
   def send_bot_message_to_user(bot_results, offer, type) do
     psid = bot_results.conversation.psid
     user_msg = bot_results.messages.message

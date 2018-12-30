@@ -31,7 +31,6 @@ defmodule BoncoinWeb.AnnounceController do
       new_cursor_after -> # There are still records after
         %{scope: scope, data: %{offers_map: offers_map, new_cursor_after: new_cursor_after}, error: ""}
     end
-    # IO.inspect(results)
     # Count KPI add_more by township
     if search_params["township_id"] != "" do
       Contents.add_kpi_township_traffic(search_params["township_id"], "add_more")
@@ -88,12 +87,7 @@ defmodule BoncoinWeb.AnnounceController do
   end
 
   def show(conn, %{"id" => offer_id}) do
-    # url = request_url(conn) |> IO.inspect()
-    # url = current_url(conn)
     path = current_path(conn)
-    IO.puts("in show")
-    IO.inspect(path)
-    # path = conn.request_path |> IO.inspect()
     case Cipher.validate_signed_url(path) do
       {:error, msg} ->
         IO.puts("cipher response")

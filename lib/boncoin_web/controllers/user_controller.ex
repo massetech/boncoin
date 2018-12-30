@@ -18,7 +18,6 @@ defmodule BoncoinWeb.UserController do
         results = %{scope: scope, data: %{user: user, nb_offers: nb_offers}, error: ""}
         render(conn, "phone_api.json", results: results)
       {:new_user, user} ->
-        IO.inspect(user)
         results = %{scope: scope, data: %{user: user, nb_offers: 0}, error: ""}
         render(conn, "phone_api.json", results: results)
       {:error, msg} ->

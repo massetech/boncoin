@@ -27,18 +27,27 @@ defmodule Boncoin.ViberApi do
   # --------------------------------------------------------------------------
 
   # API doc https://developers.viber.com/docs/api/rest-bot-api/#general-send-message-parameters
+  # More docs https://developers.viber.com/docs/all/
   def send_message(type, psid, msg, quick_replies, buttons, offer) do
     # Using Viber keyboards : https://developers.viber.com/docs/tools/keyboards/
     # Rich media requires min_api_version 2
-    result = %{receiver: psid, min_api_version: 2, type: "rich_media", rich_media: build_rich_media(offer, msg, buttons), keyboard: build_keyboard(quick_replies)}
-      |> IO.inspect()
-      |> post("send_message")
-    # Results are not used after ; alert in case of problem
-    case result do
-      {:ok, _} -> result
+    # IO.inspect(buttons)
+    # IO.inspect(offer)
+
+    msg_params = cond do
+      buttons == [] && offer == nil -> # No buttons : send a simple text message
+        %{receiver: psid, type: "text", text: msg, keyboard: build_keyboard(quick_replies)}
+      true -> # Buttons : send a rich_media message
+        %{receiver: psid, min_api_version: 2, type: "rich_media", rich_media: build_rich_media(offer, msg, buttons), keyboard: build_keyboard(quick_replies)}
+        |> IO.inspect()
+    end
+
+    # Function results are not used after : alert in case of problem
+    case post(msg_params, "send_message") do
+      {:ok, msg} -> {:ok, msg}
       {:error, msg} ->
         IO.inspect(msg)
-        result
+        {:error, msg}
     end
   end
 
@@ -54,6 +63,8 @@ defmodule Boncoin.ViberApi do
   end
 
   def post(payload \\ %{}, path) do
+    # IO.puts("Viber post params")
+    # IO.inspect(payload)
     token = get_viber_token()
     uri = URI.merge(@api_url, path) |> to_string
     resp = HTTPoison.post uri, Jason.encode!(payload), prepare_headers(token)
@@ -110,11 +121,10 @@ defmodule Boncoin.ViberApi do
   end
 
   defp build_rich_media(offer, msg, buttons) do
-    msg_rows = if String.length(msg) < 50, do: 1, else: 2
+    msg_rows = if String.length(msg) < 50, do: 1, else: 2 # !!! max 7 rows for Viber
     nb_rows = cond do
-      offer == nil && buttons == [] -> msg_rows
-      offer == nil -> 1 + msg_rows
-      true -> 4 + 1 + msg_rows
+      offer == nil -> 1 + msg_rows # 1 row for buttons + text rows
+      true -> 4 + 1 + msg_rows # 4 rows for image + 1 row for buttons + text rows
     end
     %{
       Type: "rich_media",
@@ -125,8 +135,8 @@ defmodule Boncoin.ViberApi do
     }
   end
   defp build_rows(offer, msg, buttons) do
-    [build_image(offer), build_message(msg)]
-      |> Enum.concat(build_btns(buttons))
+    [build_image(offer), build_message(msg)] # Add image and msg
+      |> Enum.concat(build_btns(buttons)) # Add the buttons
       |> Enum.reject(&is_nil/1) # Remove the nils from the final array
   end
 
@@ -161,17 +171,18 @@ defmodule Boncoin.ViberApi do
     nb_columns = cond do
       length(buttons) == 1 -> 6
       length(buttons) == 2 -> 3
-      length(buttons) == 3 -> 2
-      true -> 6
+      true -> 6 # Not normal to have more than 2 buttons but fallback to 6 by security
     end
     Enum.map(buttons, fn button -> build_button(button, nb_columns) end)
   end
+
   defp build_button(button, column) do
     %{
       Columns: column,
       Rows: 1,
       ActionType: button.action,
       ActionBody: button.link,
+      Silent: true, # The Silent parameter is supported on devices running Viber version 6.7 and above.
       TextSize: "medium",
       TextVAlign: "middle",
       TextHAlign: "middle",
@@ -179,36 +190,5 @@ defmodule Boncoin.ViberApi do
       BgColor: "#1568a0"
     }
   end
-
-  # defp build_buttons(nil, msg, buttons) do
-  #   nb_columns = if length(buttons) == 0, do: 6, else: 3
-  #   [msg | Enum.map(buttons, fn button -> build_button(button, nb_columns) end)]
-  # end
-  # defp build_buttons(offer, msg, buttons) do
-  #   column = if length(buttons) == 2, do: 3, else: 6
-  #   build_offer_buttons(offer, msg)
-  #     |> Enum.concat(Enum.map(buttons, fn button -> build_button(button, column) end))
-  # end
-  # defp build_offer_buttons(offer, msg) do
-  #   image_url = List.first(offer.images)
-  #     |> BoncoinWeb.AnnounceView.image_url(:original)
-  #   [
-  #     %{
-  #       Columns: 6,
-  #       Rows: 4,
-  #       ActionType: "none",
-  #       Image: image_url
-  #     },
-  #     %{
-  #       Columns: 6,
-  #       Rows: 2,
-  #       ActionType: "none",
-  #       Text: msg,
-  #       TextSize: "medium",
-  #       TextVAlign: "middle",
-  #       TextHAlign: "left",
-  #     }
-  #   ]
-  # end
 
 end

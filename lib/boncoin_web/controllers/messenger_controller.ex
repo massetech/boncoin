@@ -29,9 +29,6 @@ defmodule BoncoinWeb.MessengerController do
     send_resp(conn, 200, "ok")
   end
 
-  # %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "GET_STARTED_PAYLOAD"}, "sender" => %{"id" => messenger_id}}]}], "object" => "page"}
-  # %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "GET_STARTED_PAYLOAD"}, "sender" => %{"id" => "messenger_1234"}}]}], "object" => "page"}
-
   # EVENT messaging_postbacks (user opens a new conversation from messenger)
   def incoming_message(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => payload, "title" => title}, "sender" => %{"id" => messenger_id}}]}], "object" => "page"} = msg_query) do
     IO.puts("Messenger user  #{messenger_id} opened a new conversation at #{Timex.now()}")
@@ -68,7 +65,6 @@ defmodule BoncoinWeb.MessengerController do
 
     case Members.update_conversation(conversation, results.conversation) do
       {:ok, _} ->
-        # IO.inspect(results)
         mockable(MessengerApi).send_message("RESPONSE", conversation.psid, results.messages.message, results.messages.quick_replies, results.messages.buttons, nil)
         Enum.map(results.messages.offers, fn map -> mockable(MessengerApi).send_message("RESPONSE", conversation.psid, map.message, nil, nil, map.offer) end)
         :ok

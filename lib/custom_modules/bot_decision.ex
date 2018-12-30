@@ -248,8 +248,8 @@ defmodule Boncoin.CustomModules.BotDecisions do
         case Kernel.length(offers) do
           0 -> %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: tell_no_active_offer(user), offers: [], quick_replies: [], buttons: [link_create_offer(user), link_help(language)]}}
           nb_offers ->
-            offers = Enum.map(offers, fn offer -> %{offer: offer, message: detail_active_offers(user, offer)} end)
-            %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: tell_nb_active_offers(user, nb_offers), offers: offers, quick_replies: [], buttons: []}}
+            offers_list = Enum.map(offers, fn offer -> %{offer: offer, message: detail_active_offers(user, offer), buttons: [link_manage_offer(language, offer)]} end)
+            %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: tell_nb_active_offers(user, nb_offers), offers: offers_list, quick_replies: [], buttons: []}}
         end
 
       # User wants to QUIT BOT
@@ -275,7 +275,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
         user != nil && conversation.active == false ->
         language = user.language
         case Members.update_user(user, %{active: true}) do
-          {:ok, _} -> %{conversation: %{scope: "visit_purpose", language: language, nb_errors: 0}, messages: %{message: welcome_back_msg(user), offers: [], quick_replies: [%{title: tell_registration(language), link: "1"}, %{title: tell_no_registration(language), link: "0"}, buttons: []]}}
+          {:ok, _} -> %{conversation: %{scope: "visit_purpose", language: language, nb_errors: 0}, messages: %{message: welcome_back_msg(user), offers: [], quick_replies: [%{title: tell_registration(language), link: "1"}, %{title: tell_no_registration(language), link: "0"}], buttons: []}}
           {:error, changeset} ->
             IO.puts("Bot problem : returning_user")
             IO.inspect(changeset)

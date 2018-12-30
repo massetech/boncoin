@@ -608,7 +608,7 @@ msgstr "To unlink your phone number, please "
 #: lib/boncoin_web/templates/public/conversations.html.haml:175
 msgid "Explain how to get change phone number from Viber"
 msgstr "To change your phone number, please "
-"open your conversation with PawChaungKaung on Viber or Messenger and send 0"
+"open your conversation with PawChaungKaung on Viber or Messenger and send *888#"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:130

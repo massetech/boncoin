@@ -526,10 +526,8 @@ defmodule Boncoin.Contents do
     case cursor_after do # Format %{entries: entries, metadata: metadata}
       nil -> # Call the first time
         Repo.paginate(offer_query, cursor_fields: [:priority, :parution_date], sort_direction: :desc)
-        # |> IO.inspect()
       _ -> # load more entries
         Repo.paginate(offer_query, after: cursor_after, cursor_fields: [:priority, :parution_date], sort_direction: :desc)
-        # |> IO.inspect()
     end
   end
 
