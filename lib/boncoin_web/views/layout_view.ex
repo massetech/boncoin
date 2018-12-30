@@ -20,10 +20,19 @@ defmodule BoncoinWeb.LayoutView do
 
   def show_family_selector(conn, family) do
     case family do
-      nil -> if conn.assigns.search_params["family_id"] == "", do: "border-bottom-lg", else: ""
-      _ -> if conn.assigns.search_params["family_id"] == Integer.to_string(family.id), do: "border-bottom-lg", else: ""
+      nil -> if conn.assigns.search_params.family_id == "", do: "border-bottom-lg", else: ""
+      _ -> if conn.assigns.search_params.family_id == Integer.to_string(family.id), do: "border-bottom-lg", else: ""
     end
   end
+
+  def show_category_selector(conn, family, category) do
+    case category do
+      nil -> if conn.assigns.search_params.family_id == Integer.to_string(family.id) && conn.assigns.search_params.category_id == "", do: "btn-primary", else: "btn-outline-primary"
+      _ -> if conn.assigns.search_params.category_id == Integer.to_string(category.id), do: "btn-primary", else: "btn-outline-primary"
+    end
+  end
+
+  # if @conn.assigns.search_params.family_id == Integer.to_string(family.id) && @conn.assigns.search_params["category_id"] == "" do
 
   def icon_active(status) do
     case status do
@@ -54,6 +63,14 @@ defmodule BoncoinWeb.LayoutView do
         year = datetime.year
         "#{year}/#{month}/#{day}"
     end
+  end
+
+  def show_phone_number(phone_number) do
+    "#{String.slice(phone_number, 0..1)} #{String.slice(phone_number, 2..4)} #{String.slice(phone_number, 5..7)} #{String.slice(phone_number, 8..10)}"
+  end
+
+  def show_viber_number(viber_number) do
+    "+959 #{String.slice(viber_number, 2..4)} #{String.slice(viber_number, 5..7)} #{String.slice(viber_number, 8..10)}"
   end
 
   def show_inline_price(price, currency) do

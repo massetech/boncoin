@@ -46,7 +46,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
           "1" -> # Visitor wants to register
             %{conversation: %{scope: "link_phone", nb_errors: 0}, messages: %{message: ask_phone_msg(language), offers: [], quick_replies: [], buttons: []}}
           _ -> # Visitor doesn't want to register
-            %{conversation: %{scope: "visitor", nb_errors: conversation.nb_errors}, messages: %{message: send_visitor_to_website(language), offers: [], quick_replies: [], buttons: []}}
+            %{conversation: %{scope: "visitor", nb_errors: conversation.nb_errors}, messages: %{message: send_visitor_to_website(language), offers: [], quick_replies: [], buttons: [link_visit_website(language)]}}
         end
 
       # We are waiting for the visitor's PHONE NUMBER (for first or second time)
@@ -115,8 +115,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
             IO.puts("Bot problem : user_nickname")
             IO.inspect(changeset)
             case conversation.nb_errors do
-              0 -> %{conversation: %{scope: "nickname", nb_errors: 1}, messages: %{message: ask_nickname_msg(user, conversation), offers: [], quick_replies: [%{title: tell_keep_nickname(language), link: "1"}], buttons: []}}
-              1 -> %{conversation: %{scope: "viber_number", nb_errors: 0}, messages: %{message: ask_viber_number(user), offers: [], quick_replies: [%{title: tell_no_viber(language), link: "0"}], buttons: []}}
+              0 -> %{conversation: %{scope: "nickname", nb_errors: 1}, messages: %{message: ask_nickname_again_msg(user, conversation), offers: [], quick_replies: [%{title: tell_keep_nickname(language), link: "1"}], buttons: []}}
+              # 1 -> %{conversation: %{scope: "viber_number", nb_errors: 0}, messages: %{message: ask_viber_number(user), offers: [], quick_replies: [%{title: tell_no_viber(language), link: "0"}], buttons: []}}
+              1 -> %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: welcome_msg_full(), offers: [], quick_replies: [%{title: propose_zawgyi(), link: "1"}, %{title: propose_unicode(), link: "2"}, %{title: propose_english(), link: "3"}], buttons: []}}
             end
         end
 
@@ -354,6 +355,14 @@ defmodule Boncoin.CustomModules.BotDecisions do
     uni = "သင်၏ဖုန်းနံပါတ်နှင့် #{String.capitalize(conversation.bot_provider)} နံပါတ်တို့သည် အဆက်အသွယ်ရပြီးပြီဖြစ်သည်။ သင်၏အမည်သည်#{user.nickname}ဖြစ်ပါသည်၊ အတည်ပြုပါ (သို့) အမည်အသစ်ရေးပါ"
     case user.language do
       "en" -> "Your phone number and #{String.capitalize(conversation.bot_provider)} account are now linked.\nYour nickname is #{user.nickname}, please confirm or type a new nickname."
+      "my" -> uni
+      "dz" -> Rabbit.uni2zg(uni)
+    end
+  end
+  defp ask_nickname_again_msg(user, conversation) do
+    uni = "translate"
+    case user.language do
+      "en" -> "Sorry but this nickname is not valid. Please choose a nickname between 3 and 30 characters."
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end

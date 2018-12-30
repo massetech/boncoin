@@ -17,17 +17,20 @@
       .modal-footer.d-none{id: "footer_contact_#{@announce.id}"}
         %button.btn.btn-block.btn-primary.d-flex.flex-column.justify-content-center.align-items-center.my-0.copy-number{data-phone-number: "#{@announce.user.phone_number}"}
           %i.fa.fa-phone
-          %span= render "_phone_number.html", phone_number: @announce.user.phone_number
+          %span= LayoutView.show_phone_number(@announce.user.phone_number)
+          -# %span= render "_phone_number.html", phone_number: @announce.user.phone_number
           %i.fa.fa-copy.bg-success.text-white.btn-copy-number.btn-icon-right
 
         - if @announce.user.viber_number != nil do
           -# Show the button to open Viber conversation
           - if Browser.mobile?(@conn) do
-            %a.btn.btn-block.btn-primary.d-flex.flex-column.justify-content-center.align-items-center.my-0.btn-viber{href: "viber://contact?number=%2B95#{String.slice(@announce.user.viber_number, 1..-1)}"}
+            %a.btn.btn-block.btn-primary.d-flex.flex-column.justify-content-center.align-items-center.my-0.btn-viber{href: "viber://contact?number=%2B#{LayoutView.show_viber_number(@announce.user.viber_number)}"}
               %i.fab.fa-viber
-              %span= render "_phone_number.html", phone_number: "#{@announce.user.viber_number}"
+              %span= LayoutView.show_viber_number(@announce.user.viber_number)
+              -# %span= render "_phone_number.html", phone_number: LayoutView.show_viber_number(@announce.user.viber_number)
           - else
-            %button.btn.btn-block.btn-primary.d-flex.flex-column.justify-content-center.align-items-center.my-0.btn-viber.copy-number{data-phone-number: "+95#{String.slice(@announce.user.viber_number, 1..-1)}"}
+            %button.btn.btn-block.btn-primary.d-flex.flex-column.justify-content-center.align-items-center.my-0.btn-viber
               %i.fab.fa-viber
-              = render "_phone_number.html", phone_number: "#{@announce.user.viber_number}"
+              %span= LayoutView.show_viber_number(@announce.user.viber_number)
+              -# = render "_phone_number.html", phone_number: LayoutView.show_viber_number(@announce.user.viber_number)
               -# %i.fa.fa-copy.bg-success.text-white.btn-copy-number.btn-icon-right

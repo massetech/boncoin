@@ -44,9 +44,9 @@ defmodule Boncoin.Members.User do
       |> validate_format(:email, email_regex(), message: "This is not a real email")
       |> validate_format(:phone_number, myanmar_phone_regex(), message: "This is not a Myanmar phone number")
       |> validate_format(:viber_number, myanmar_phone_regex(), message: "This is not a Myanmar Viber phone number")
-      |> convert_viber_number(attrs)
+      # |> convert_viber_number(attrs)
       |> validate_inclusion(:auth_provider, ["google"], message: "Oauth provider not supported")
-      |> validate_length(:nickname, min: 4, max: 30, message: "Nickname length is not good")
+      |> validate_length(:nickname, min: 3, max: 30, message: "Nickname length is not good")
       |> validate_inclusion(:language, ["dz", "my", "en"], message: "Language not supported")
       |> validate_inclusion(:role, ["GUEST", "MEMBER", "ADMIN", "PARTNER", "SUPER"], message: "Role not supported")
       |> refuse_guest_phone_number(params)
@@ -59,15 +59,15 @@ defmodule Boncoin.Members.User do
       changeset
   end
 
-  defp convert_viber_number(changeset, %{"viber_number" => viber_number}) do
-    case viber_number do
-      "" -> changeset
-      _ -> put_change(changeset, :viber_number, "+959#{String.slice(viber_number, 2..10)}")
-    end
-  end
-  defp convert_viber_number(changeset, _) do
-    changeset
-  end
+  # defp convert_viber_number(changeset, %{"viber_number" => viber_number}) do
+  #   case viber_number do
+  #     "" -> changeset
+  #     _ -> put_change(changeset, :viber_number, "+959#{String.slice(viber_number, 2..10)}")
+  #   end
+  # end
+  # defp convert_viber_number(changeset, _) do
+  #   changeset
+  # end
 
   def show_errors_in_msg(changeset) do
     case List.first(changeset.errors) do

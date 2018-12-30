@@ -8,14 +8,14 @@
       .input-group.mt-2
         .col-6.pl-0
           - if Browser.mobile?(@conn) do
-            %a.btn.btn-block.btn-viber-outline{href: "viber://pa/info?uri=pawchaungkaung_en"}
+            %a.btn.btn-block.btn-viber-outline{href: "viber://pa?chatURI=pawchaungkaung_en"}
               %i.fab.fa-viber
               %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Viber"))
           - else
-            - link to: Routes.main_path(@conn, :conversations), class: "btn btn-block btn-viber-outline", target: "_blank" do
+            - link to: Routes.main_path(@conn, :conversations), class: "btn btn-block btn-viber-outline" do
               %i.fab.fa-viber
               %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Viber"))
         .col-6.pr-0
-          - link to: Routes.main_path(@conn, :conversations), class: "btn btn-block btn-messenger disabled", target: "_blank" do
+          - link to: Routes.main_path(@conn, :conversations), class: "btn btn-block btn-messenger disabled" do
             %i.fab.fa-facebook-messenger
             %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Messenger"))

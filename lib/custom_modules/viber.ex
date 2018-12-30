@@ -112,6 +112,7 @@ defmodule Boncoin.ViberApi do
       Rows: 1,
       ActionType: "reply",
       ActionBody: quick_reply.link,
+      Silent: true,
       Text: "<font color='#ffffff'><b>#{quick_reply.title}</b></font>",
       TextSize: "medium",
       TextVAlign: "middle",
