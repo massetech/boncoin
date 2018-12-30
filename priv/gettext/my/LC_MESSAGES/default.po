@@ -682,12 +682,12 @@ msgstr "ရောင်းသူ %{seller_name}"
 #, elixir-format
 #: lib/boncoin_web/templates/announce/public_index.html.haml:24
 msgid "Please change your filters or search in another city !"
-msgstr ""
+msgstr "ကျေးဇူးပြု၍ အခြားမြို့နယ်တွင်ပြောင်း၍ရှာကြည့်ပါ။"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/public_index.html.haml:22
 msgid "Sorry, we don't have any offer for your search."
-msgstr "စိတ်မကေားပါဘူး ကျွန်ပ်တို့တံမှာသင်ရှာဖွေနေသောကြောငြာမရှိပါ"
+msgstr "စိတ်မကောင်းပါဘူး ကျွန်ပ်တို့တံမှာသင်ရှာဖွေနေသောကြော်ငြာမရှိသေးပါ"
 
 #, elixir-format
 #: lib/boncoin_web/templates/public/conversations.html.haml:75

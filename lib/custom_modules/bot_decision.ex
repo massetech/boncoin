@@ -155,7 +155,13 @@ defmodule Boncoin.CustomModules.BotDecisions do
       # User asked for help
       user != nil && conversation.active && user_msg == "0" ->
         language = user.language
-        %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: inform_help(user), offers: [], quick_replies: [propose_change_language(language), propose_change_nickname(language), propose_see_offers_list(language), propose_change_phone(language), propose_quit(language, conversation.bot_provider)], buttons: [link_visit_website(language)]}}
+        %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: inform_help(user), offers: [], quick_replies: [propose_change_language(language), propose_change_nickname(language), propose_see_offers_list(language), propose_change_phone(language), propose_quit(language, conversation.bot_provider), propose_see_details(language)], buttons: [link_visit_website(language)]}}
+
+      # User wants to see his DETAILS
+      user != nil && conversation.active && user_msg == "details" ->
+        language = user.language
+        nb_offers = Contents.get_user_online_offers(user) |> Kernel.length()
+        %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: inform_details(user, nb_offers), offers: [], quick_replies: [], buttons: []}}
 
       # User wants to CHANGE LANGUAGE
       user != nil && conversation.active && user_msg == "*123#" ->
@@ -360,7 +366,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     end
   end
   defp ask_nickname_again_msg(user, conversation) do
-    uni = "translate"
+    uni = "စိတ်မကောင်းပါဘူး၊ သင့်ရဲ့အမည်သည်မှန်ကန်မှုမရှိသေးပါ။ ကျေးဇူးပြု၍သင့်အမည်ကိုစာလုံးသုံးလုံးအနည်းဆုံးရိုက်ထည့်ပါ။"
     case user.language do
       "en" -> "Sorry but this nickname is not valid. Please choose a nickname between 3 and 30 characters."
       "my" -> uni
@@ -453,6 +459,26 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "en" -> "We are ready to help #{user.nickname}"
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
+    end
+  end
+  defp inform_details(user, nb_offers) do
+    uni = "သင့်အမည်သည် #{user.nickname} ဖြစ်ပြီး သင့်ဖုန်းနံပါတ်သည် #{user.phone_number}၊ #{inform_viber_number(user)} သင့်ထံတွင်လက်ရှိကြော်ငြာ #{nb_offers} ခုရှိပါသည်။"
+    case user.language do
+      "en" -> "Your nickname is #{user.nickname}, your phone number is #{user.phone_number}, #{inform_viber_number(user)}you have #{nb_offers} active offers."
+      "my" -> uni
+      "dz" -> Rabbit.uni2zg(uni)
+    end
+  end
+  defp inform_viber_number(user) do
+    case user.viber_number do
+      nil -> ""
+      _ ->
+        uni = "သင့်ရဲ့ Viber နံပါတ်သည် #{user.viber_number} ဖြစ်သည်။"
+        case user.language do
+          "en" -> "your Viber number is #{user.viber_number}, "
+          "my" -> uni
+          "dz" -> Rabbit.uni2zg(uni)
+        end
     end
   end
   defp change_language_msg() do
@@ -645,6 +671,15 @@ defmodule Boncoin.CustomModules.BotDecisions do
   #---------------------- QUICK REPLIES -----------------------------------------
   defp propose_zawgyi() do
     "ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္"
+  end
+  defp propose_see_details(language) do
+    uni = "သင့်ရဲ့အချက်အလက်များကိုကြည့်ပါ။"
+    title = case language do
+      "en" -> "See your details"
+      "my" -> uni
+      "dz" -> Rabbit.uni2zg(uni)
+    end
+    %{title: title, link: "details"}
   end
   defp propose_unicode() do
     "မြန်မာ(ယူနီကုတ်)အတွက်"

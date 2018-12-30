@@ -39,7 +39,6 @@ defmodule Boncoin.ViberApi do
         %{receiver: psid, type: "text", text: msg, keyboard: build_keyboard(quick_replies)}
       true -> # Buttons : send a rich_media message
         %{receiver: psid, min_api_version: 2, type: "rich_media", rich_media: build_rich_media(offer, msg, buttons), keyboard: build_keyboard(quick_replies)}
-        |> IO.inspect()
     end
 
     # Function results are not used after : alert in case of problem
@@ -98,17 +97,22 @@ defmodule Boncoin.ViberApi do
         %{
           Type: "keyboard",
           DefaultHeight: false,
-          BgColor: "#ffec00",
+          BgColor: "#ffffff", # Yellow #ffec00
           Buttons: build_quick_replies(quick_replies)
         }
     end
   end
   defp build_quick_replies(quick_replies) do
-    Enum.map(quick_replies, fn quick_reply -> build_quick_reply(quick_reply) end)
+    nb_col = cond do
+      Kernel.length(quick_replies) == 1 -> 6
+      Kernel.length(quick_replies) == 2 -> 3
+      true -> 2
+    end
+    Enum.map(quick_replies, fn quick_reply -> build_quick_reply(quick_reply, nb_col) end)
   end
-  defp build_quick_reply(quick_reply) do
+  defp build_quick_reply(quick_reply, nb_col) do
     %{
-      Columns: 2,
+      Columns: nb_col,
       Rows: 1,
       ActionType: "reply",
       ActionBody: quick_reply.link,
@@ -117,15 +121,14 @@ defmodule Boncoin.ViberApi do
       TextSize: "medium",
       TextVAlign: "middle",
       TextHAlign: "center",
-      BgColor: "#1568a0"
+      BgColor: "#1568a0" # Blue #1568a0
     }
   end
 
   defp build_rich_media(offer, msg, buttons) do
-    msg_rows = if String.length(msg) < 50, do: 1, else: 2 # !!! max 7 rows for Viber
     nb_rows = cond do
-      offer == nil -> 1 + msg_rows # 1 row for buttons + text rows
-      true -> 4 + 1 + msg_rows # 4 rows for image + 1 row for buttons + text rows
+      offer == nil -> 1 + calc_msg_rows(msg) # 1 row for buttons + text rows
+      true -> 4 + 1 + calc_msg_rows(msg) # 4 rows for image + 1 row for buttons + text rows (!! max 2)
     end
     %{
       Type: "rich_media",
@@ -135,6 +138,13 @@ defmodule Boncoin.ViberApi do
       BgColor: "#FFFFFF"
     }
   end
+  defp calc_msg_rows(msg) do
+    cond do
+      String.length(msg) < 50 -> 1
+      String.length(msg) < 150 -> 2
+      true -> 4 # Make sure this kind of message is never used with an offer (not enough space with an image)
+    end
+  end
   defp build_rows(offer, msg, buttons) do
     [build_image(offer), build_message(msg)] # Add image and msg
       |> Enum.concat(build_btns(buttons)) # Add the buttons
@@ -143,10 +153,9 @@ defmodule Boncoin.ViberApi do
 
   defp build_message(nil) do nil end
   defp build_message(msg) do
-    nb_rows = if String.length(msg) < 50, do: 1, else: 2
     %{
         Columns: 6,
-        Rows: nb_rows,
+        Rows: calc_msg_rows(msg),
         ActionType: "none",
         Text: msg,
         TextSize: "medium",
