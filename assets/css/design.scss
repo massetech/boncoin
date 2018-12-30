@@ -245,6 +245,7 @@ a[data-toggle="collapse"] {
 .modal {
   button.close{position: absolute;right: 15px;top: 15px;z-index: 99999;}
 }
+.modal-footer {display: block;}
 
 /* ------------------------------ MULTI LEVEL DROPDOWN  ------------------------------ */
 // Multi Level Dropdown https://bootsnipp.com/snippets/featured/multi-level-dropdown-menu-bs3

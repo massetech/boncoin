@@ -94,10 +94,10 @@ defmodule BoncoinWeb.ViberController do
 
     case Members.update_conversation(conversation, results.conversation) do
       {:ok, _} ->
-        case user_msg do
-          nil -> # Conversation opening callback
+        cond do
+          user_msg == nil && conn.assigns.current_user == nil -> # Callback to an unknown user opening a new conversation
             {:new, results.messages.message}
-          _ -> # Answer to user new msg
+          true -> # Answer to user new msg
             mockable(ViberApi).send_message(nil, conversation.psid, results.messages.message, results.messages.quick_replies, results.messages.buttons, nil)
             Enum.map(results.messages.offers, fn map -> mockable(ViberApi).send_message(nil, conversation.psid, map.message, [], map.buttons, map.offer) end)
             :ok
