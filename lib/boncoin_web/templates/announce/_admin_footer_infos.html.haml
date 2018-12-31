@@ -2,12 +2,12 @@
   .col-xs-12.col-sm-4.p-1
     %button.btn.btn-block.btn-success.d-flex.flex-column.justify-content-center.align-items-center.my-0{}
       %i.fa.fa-phone
-      %span.font-s-8= render "_phone_number.html", phone_number: @announce.user.phone_number
+      %span.font-s-8= LayoutView.show_phone_number(@announce.user.phone_number)
   .col-xs-12.col-sm-4.p-1
     %button.btn.btn-block.btn-viber.d-flex.flex-column.justify-content-center.align-items-center.my-0{}
       %i.fab.fa-viber
       - if @announce.user.viber_number != nil do
-        %span.font-s-8= render "_phone_number.html", phone_number: @announce.user.viber_number
+        %span.font-s-8= LayoutView.show_viber_number(@announce.user.viber_number)
       - else
         %span= "-"
   .col-xs-12.col-sm-2.p-1

@@ -37,7 +37,7 @@
               = render @view_module, @view_template, assigns
             %footer.footer
               = render "footer.html", assigns
-    .overlay
+
     %div{id: "config", data-api: "#{@conn.assigns.api_key}"}
 
     %script(src='#{js_script_tag(@conn)}')

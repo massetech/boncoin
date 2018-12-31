@@ -32,7 +32,7 @@ export default class MainView {
 // }
 
 global.clipboard = require('clipboard-polyfill');
-global.bodyScrollLock = require('body-scroll-lock'); // Block scrolling when modal is showed
+// global.bodyScrollLock = require('body-scroll-lock'); // Block scrolling when modal is showed
 
 global.scrollToAnchor = (aid) => {
   // var aTag = $("a[name='"+ aid +"']");

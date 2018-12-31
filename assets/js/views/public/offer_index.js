@@ -58,12 +58,12 @@ let load_actions_in_offers_display_page = () => {
   // Boostrap 4 caroussel select active and swipe
   load_boostrap_carousel()
   // Disable the scrolling behind modal
-  $('.modal').on('show.bs.modal', function () {
-    bodyScrollLock.disableBodyScroll($(this))
-  })
-  $('.modal').on('hide.bs.modal', function () {
-    bodyScrollLock.clearAllBodyScrollLocks()
-  })
+  // $('.modal').on('show.bs.modal', function () {
+  //   bodyScrollLock.disableBodyScroll($(this))
+  // })
+  // $('.modal').on('hide.bs.modal', function () {
+  //   bodyScrollLock.clearAllBodyScrollLocks()
+  // })
   // Display big announce on small announce click
   $('.btn-small-announce').on('click', function() {
     $(".btn-small-announce").removeClass('d-none')

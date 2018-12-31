@@ -12,7 +12,8 @@
             .d-flex.flex-row.align-items-center.my-1
               %i.icon.icon-primary.text-center.text-primary.mr-1{class: "#{LayoutView.insert_icon_classes(@announce.category)}"}
               %h6.font-weight-bold.text-primary.m-0= LayoutView.convert_zawgyi(@announce.title)
-            .d-flex.flex-row.align-items-center.my-1= render "_show_price.html", announce: @announce
+            .d-flex.flex-row.align-items-center.my-1
+              = render "_show_price.html", announce: @announce
           .details
             %p.font-s-8.text-dark.m-0
               = LayoutView.convert_zawgyi(@announce.township, "title")
