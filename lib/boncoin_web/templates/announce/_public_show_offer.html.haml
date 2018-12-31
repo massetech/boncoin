@@ -13,7 +13,10 @@
               %i.icon.icon-primary.text-center.text-primary.mr-1{class: "#{LayoutView.insert_icon_classes(@announce.category)}"}
               %h6.font-weight-bold.text-primary.m-0= LayoutView.convert_zawgyi(@announce.title)
             .d-flex.flex-row.align-items-center.my-1
-              = render "_show_price.html", announce: @announce
+              -# Error in IOS due to haml bug : cannot use partial here
+              -# = render "_show_price.html", announce: @announce
+              %i.icon.icon-success.fas.text-center.text-success.mr-1{class: "#{BoncoinWeb.AnnounceView.show_sell_mode(@announce.sell_mode)}"}
+              %h6.font-weight-bold.text-success.m-0= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
           .details
             %p.font-s-8.text-dark.m-0
               = LayoutView.convert_zawgyi(@announce.township, "title")

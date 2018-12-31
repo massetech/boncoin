@@ -1,5 +1,5 @@
 .modal.fade{id: "modal_offer_#{@announce.id}", data-offer-id: "#{@announce.id}", tabindex: "-1", role: "dialog", aria-hidden: "true"}
-  .modal-dialog{role: "document"}
+  .modal-dialog{role: "document", body-scroll-lock-ignore: true}
     .modal-content
       .modal-header.flex-column.p-0
         %button.close{type: "button", data-dismiss: "modal", aria-label: "Close"}
