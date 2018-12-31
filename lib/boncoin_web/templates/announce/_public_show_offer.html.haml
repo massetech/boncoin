@@ -1,28 +1,29 @@
-%a.test{data-toggle: "modal", data-target: "#modal_offer_#{@announce.id}"}
+-# %a{href: "#modal_offer", data-toggle: "modal", data-target: "#modal_offer_#{@announce.id}"}
+  -# - link to: "#", data: [toggle: "modal", target: "#modal_offer_#{@announce.id}"] do
   -# %a.card.shadow.bg-white.rounded-0{id: "card_small_#{@announce.id}", data-toggle: "modal", data-target: "#modal_offer_#{@announce.id}"}
-  .card.shadow.bg-white.rounded-0{id: "card_small_#{@announce.id}"}
-    .card-body.p-0
-      .row.m-0
-        .col-6.p-0
-          = img_tag BoncoinWeb.AnnounceView.image_url(List.first(@announce.images), :original), class: "ratio-occupy-center fixed-height-150"
-          .icon-nb-pict.d-flex.justify-content-center.align-items-center
-            %i.fas.fa-camera.d-flex
-              %span.text-white= Enum.count(@announce.images)
-        .col-6.p-0.pt-1.pl-2.text-left
-          .title
-            .d-flex.flex-row.align-items-center.my-1
-              %i.icon.icon-primary.text-center.text-primary.mr-1{class: "#{LayoutView.insert_icon_classes(@announce.category)}"}
-              %h6.font-weight-bold.text-primary.m-0= LayoutView.convert_zawgyi(@announce.title)
-            .d-flex.flex-row.align-items-center.my-1
-              -# Error in IOS due to haml bug : cannot use partial here
-              = render "_show_price.html", announce: @announce
-              -# %i.icon.icon-success.fas.text-center.text-success.mr-1{class: "#{BoncoinWeb.AnnounceView.show_sell_mode(@announce.sell_mode)}"}
-              -# %h6.font-weight-bold.text-success.m-0= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
-          .details
-            %p.font-s-8.text-dark.m-0
-              = LayoutView.convert_zawgyi(@announce.township, "title")
-              = "|"
-              = LayoutView.convert_zawgyi(@announce.township.division, "title")
-            %p.font-s-8.text-dark.m-0= BoncoinWeb.AnnounceView.show_date(@announce)
-      -# %i.fas.fa-heart.icon-like.text-danger.btn-like.d-none{data-offer-id: "#{@announce.id}"}
-      -# %i.far.fa-heart.icon-like.text-danger.btn-like{data-offer-id: "#{@announce.id}"}
+.card.shadow.bg-white.rounded-0{id: "card_small_#{@announce.id}", data-toggle: "modal", data-target: "#modal_offer_#{@announce.id}"}
+  .card-body.p-0
+    .row.m-0
+      .col-6.p-0
+        = img_tag BoncoinWeb.AnnounceView.image_url(List.first(@announce.images), :original), class: "ratio-occupy-center fixed-height-150"
+        .icon-nb-pict.d-flex.justify-content-center.align-items-center
+          %i.fas.fa-camera.d-flex
+            %span.text-white= Enum.count(@announce.images)
+      .col-6.p-0.pt-1.pl-2.text-left
+        .title
+          .d-flex.flex-row.align-items-center.my-1
+            %i.icon.icon-primary.text-center.text-primary.mr-1{class: "#{LayoutView.insert_icon_classes(@announce.category)}"}
+            %h6.font-weight-bold.text-primary.m-0= LayoutView.convert_zawgyi(@announce.title)
+          .d-flex.flex-row.align-items-center.my-1
+            -# Error in IOS due to haml bug : cannot use partial here
+            = render "_show_price.html", announce: @announce
+            -# %i.icon.icon-success.fas.text-center.text-success.mr-1{class: "#{BoncoinWeb.AnnounceView.show_sell_mode(@announce.sell_mode)}"}
+            -# %h6.font-weight-bold.text-success.m-0= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
+        .details
+          %p.font-s-8.text-dark.m-0
+            = LayoutView.convert_zawgyi(@announce.township, "title")
+            = "|"
+            = LayoutView.convert_zawgyi(@announce.township.division, "title")
+          %p.font-s-8.text-dark.m-0= BoncoinWeb.AnnounceView.show_date(@announce)
+    -# %i.fas.fa-heart.icon-like.text-danger.btn-like.d-none{data-offer-id: "#{@announce.id}"}
+    -# %i.far.fa-heart.icon-like.text-danger.btn-like{data-offer-id: "#{@announce.id}"}
