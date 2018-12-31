@@ -1,6 +1,6 @@
 %div{id: "navbarDismiss"}
   %i.fas.fa-times-circle.text-white
-%nav.bg-white.body-scroll-lock-ignore{id: "sidebar"}
+%nav.bg-white.body-scroll-lock-ignore{id: "sidebar", body-scroll-lock-ignore: true}
   - link to: Routes.root_path(@conn, :welcome), class: "brand-logo text-white" do
     .sidebar-header.bg-secondary.text-primary.border-bottom.border-dark.p-3
       = img_tag "#{img_url_tag(@conn, 'logo_colour.png')}", class: "w-100"

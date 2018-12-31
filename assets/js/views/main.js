@@ -127,7 +127,7 @@ let init_custom_actions = () => {
       $('a[aria-expanded=true]').attr('aria-expanded', 'false')
       // bodyScrollLock.disableBodyScroll($("#sidebar"))
       bodyScrollLock.disableBodyScroll(
-        $($("#sidebar")), {
+        $("#sidebar"), {
           allowTouchMove: el => {
             while (el && el !== document.body) {
               if (el.getAttribute('body-scroll-lock-ignore') !== null) {
