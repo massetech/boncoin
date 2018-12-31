@@ -125,7 +125,19 @@ let init_custom_actions = () => {
       $('.overlay').addClass('active')
       $('.collapse.in').toggleClass('in')
       $('a[aria-expanded=true]').attr('aria-expanded', 'false')
-      bodyScrollLock.disableBodyScroll($("#sidebar"))
+      // bodyScrollLock.disableBodyScroll($("#sidebar"))
+      bodyScrollLock.disableBodyScroll(
+        $($("#sidebar")), {
+          allowTouchMove: el => {
+            while (el && el !== document.body) {
+              if (el.getAttribute('body-scroll-lock-ignore') !== null) {
+                return true
+              }
+              el = el.parentNode
+            }
+          }
+        }
+      )
   })
   // Closes the sidebar
   $('#navbarDismiss, .overlay').on('click', function () {

@@ -1,5 +1,5 @@
-.card.shadow.bg-white.rounded-0{id: "card_small_#{@announce.id}"}
-  %a{data-toggle: "modal", data-target: "#modal_offer_#{@announce.id}"}
+%a{data-toggle: "modal", data-target: "#modal_offer_#{@announce.id}"}
+  .card.shadow.bg-white.rounded-0{id: "card_small_#{@announce.id}"}
     .card-body.p-0
       .row.m-0
         .col-6.p-0
@@ -14,9 +14,9 @@
               %h6.font-weight-bold.text-primary.m-0= LayoutView.convert_zawgyi(@announce.title)
             .d-flex.flex-row.align-items-center.my-1
               -# Error in IOS due to haml bug : cannot use partial here
-              -# = render "_show_price.html", announce: @announce
-              %i.icon.icon-success.fas.text-center.text-success.mr-1{class: "#{BoncoinWeb.AnnounceView.show_sell_mode(@announce.sell_mode)}"}
-              %h6.font-weight-bold.text-success.m-0= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
+              = render "_show_price.html", announce: @announce
+              -# %i.icon.icon-success.fas.text-center.text-success.mr-1{class: "#{BoncoinWeb.AnnounceView.show_sell_mode(@announce.sell_mode)}"}
+              -# %h6.font-weight-bold.text-success.m-0= BoncoinWeb.AnnounceView.show_price(@announce.price, @announce.currency)
           .details
             %p.font-s-8.text-dark.m-0
               = LayoutView.convert_zawgyi(@announce.township, "title")
