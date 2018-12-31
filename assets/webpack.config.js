@@ -19,7 +19,14 @@ let cssLoaders = [
   { loader: 'css-loader', options: {sourceMap: true, importLoaders: 3} },
   { loader: 'postcss-loader',
     options: {
-      plugins: (loader) => [require('autoprefixer')]
+      ident: 'postcss',
+      plugins: [
+        require('autoprefixer')
+        // ({
+        //   'browsers': ['> 1%', 'last 2 versions']
+        // }),
+      ]
+      // plugins: (loader) => [require('autoprefixer')]
     }
   },
   { loader: 'sass-loader' },

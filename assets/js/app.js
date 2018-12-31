@@ -6,6 +6,7 @@ import "../node_modules/bootstrap/dist/js/bootstrap.min" // imports Boostrap js 
 import '../node_modules/jquery-touchswipe/jquery.touchSwipe.min'          // imports touchswipe effects
 import "../vendor/slim/js/slim.kickstart.min"
 import "../vendor/bootstrap-select-1.13.0-beta/js/bootstrap-select.min"
+import "whatwg-fetch"
 
 import loadView from './views/loader';          // Custom js to run code per page
 window.__socket = require("phoenix").Socket;    // Fix for webpack with drab

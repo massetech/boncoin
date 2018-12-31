@@ -13,13 +13,14 @@ defmodule Boncoin.Plug.SearchParams do
       true -> conn.params["search"]
       false -> %{} # Nothing will happen on the merge
     end
-    old_search_map = case Map.has_key?(conn.assigns, "search_params") do
-      true -> conn.assigns["search_params"]
-      false -> %{} # Nothing will happen on the merge
-    end
+    # old_search_map = case Map.has_key?(conn.assigns, "search_params") do
+    #   true -> conn.assigns["search_params"]
+    #   false -> %{} # Nothing will happen on the merge
+    # end
 
     search_params = %{"family_id" => "", "category_id" => "", "division_id" => "", "township_id" => ""}
-      |> Map.merge(old_search_map) # We start by old search to keep between pages old_search
+      # |> Map.merge(old_search_map) # We start by old search to keep between pages old_search
+    # search_params = conn.assigns.search_params
       |> Map.merge(new_search_map) # We add the new params
       |> resolve_township_conflicts()
       |> resolve_category_conflicts()
