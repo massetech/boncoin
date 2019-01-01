@@ -69,9 +69,9 @@ defmodule BoncoinWeb.LayoutView do
     "#{String.slice(phone_number, 0..1)} #{String.slice(phone_number, 2..4)} #{String.slice(phone_number, 5..7)} #{String.slice(phone_number, 8..10)}"
   end
 
-  def show_viber_number(viber_number) do
-    "+959 #{String.slice(viber_number, 2..4)} #{String.slice(viber_number, 5..7)} #{String.slice(viber_number, 8..10)}"
-  end
+  # def show_viber_number(viber_number) do
+  #   "+959 #{String.slice(viber_number, 2..4)} #{String.slice(viber_number, 5..7)} #{String.slice(viber_number, 8..10)}"
+  # end
 
   # Added &# to avoid the auto css on number for iphone
   def show_inline_price(price, currency) do

@@ -19,29 +19,29 @@
   .row
     .col-xs-12.col-sm-8.offset-sm-2.my-3
       -# Register on Messenger
-      .card.text-left
-        %a{data-toggle: "collapse", data-target: "#messenger", aria-expanded: "true", aria-controls: "messenger", data-parent: "#bot"}
-          .card-header
-            .d-flex.align-items-center
-              %i.width-40.fab.fa-facebook-messenger.mr-3.text-primary
-              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to receive notifications by Messenger ?"))
-        %div.collapse{id: "messenger", aria-labelledby: "messenger", data-parent: "#bot"}
-          .card_body.text-center.p-3
-            - if Browser.mobile?(@conn) do
-              %p.text-left.my-3= LayoutView.convert_zawgyi(gettext("Please open a conversation with PawChaungKaung on Messenger."))
-              %a.btn.btn-lg.btn-block.btn-messenger.my-3.disabled{href: "http://m.me/pawchaungkaung?ref=website_mobile"}
-                %span= LayoutView.convert_zawgyi(gettext("Open Messenger on my phone"))
-            - else
-              %p.my-3= LayoutView.convert_zawgyi(gettext("Please scan this QR code on your Messenger."))
-              - if Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment] == :dev do
-                = img_tag "#{img_url_tag(@conn, "FB_QR_code_website_dev.png")}", class: "w-50"
-              - else
-                = img_tag "#{img_url_tag(@conn, "FB_QR_code_website_prod.png")}", class: "w-50"
-              .row
-                .col-xs-12.col-sm-6
-                  = img_tag "#{img_url_tag(@conn, "messenger_QR_code_explained_1.png")}", class: "my-3 w-100"
-                .col-xs-12.col-sm-6
-                  = img_tag "#{img_url_tag(@conn, "messenger_QR_code_explained_2.png")}", class: "my-3 w-100"
+      -# .card.text-left
+      -#   %a{data-toggle: "collapse", data-target: "#messenger", aria-expanded: "true", aria-controls: "messenger", data-parent: "#bot"}
+      -#     .card-header
+      -#       .d-flex.align-items-center
+      -#         %i.width-40.fab.fa-facebook-messenger.mr-3.text-primary
+      -#         %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to receive notifications by Messenger ?"))
+      -#   %div.collapse{id: "messenger", aria-labelledby: "messenger", data-parent: "#bot"}
+      -#     .card_body.text-center.p-3
+      -#       - if Browser.mobile?(@conn) do
+      -#         %p.text-left.my-3= LayoutView.convert_zawgyi(gettext("Please open a conversation with PawChaungKaung on Messenger."))
+      -#         %a.btn.btn-lg.btn-block.btn-messenger.my-3.disabled{href: "http://m.me/pawchaungkaung?ref=website_mobile"}
+      -#           %span= LayoutView.convert_zawgyi(gettext("Open Messenger on my phone"))
+      -#       - else
+      -#         %p.my-3= LayoutView.convert_zawgyi(gettext("Please scan this QR code on your Messenger."))
+      -#         - if Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment] == :dev do
+      -#           = img_tag "#{img_url_tag(@conn, "FB_QR_code_website_dev.png")}", class: "w-50"
+      -#         - else
+      -#           = img_tag "#{img_url_tag(@conn, "FB_QR_code_website_prod.png")}", class: "w-50"
+      -#         .row
+      -#           .col-xs-12.col-sm-6
+      -#             = img_tag "#{img_url_tag(@conn, "messenger_QR_code_explained_1.png")}", class: "my-3 w-100"
+      -#           .col-xs-12.col-sm-6
+      -#             = img_tag "#{img_url_tag(@conn, "messenger_QR_code_explained_2.png")}", class: "my-3 w-100"
 
       -# Register on Viber
       .card.text-left
