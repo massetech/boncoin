@@ -110,7 +110,8 @@ defmodule Boncoin.CustomModules.BotDecisions do
         nickname = if user_msg == "1", do: conversation.nickname, else: user_msg
         case Members.update_user(user, %{nickname: nickname}) do
           {:ok, user} ->
-            %{conversation: %{scope: "viber_number", nb_errors: 0}, messages: %{message: ask_viber_number(user), offers: [], quick_replies: [%{title: tell_no_viber(language), link: "0"}], buttons: []}}
+            # We update the nickname in the conversation
+            %{conversation: %{nickname: nickname, scope: "viber_number", nb_errors: 0}, messages: %{message: ask_viber_number(user), offers: [], quick_replies: [%{title: tell_no_viber(language), link: "0"}], buttons: []}}
           {:error, changeset} ->
             IO.puts("Bot problem : user_nickname")
             IO.inspect(changeset)

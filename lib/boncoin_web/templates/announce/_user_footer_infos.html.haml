@@ -12,7 +12,7 @@
     .col-6.p-1
       %button.btn.btn-block.btn-primary.d-flex.flex-column.justify-content-center.align-items-center.my-0.btn-viber.copy-number{data-phone-number: "95#{String.slice(@announce.user.viber_number, 1..-1)}"}
         %i.fab.fa-viber
-        = LayoutView.show_viber_number(@announce.user.viber_number)
+        = LayoutView.show_phone_number(@announce.user.viber_number)
   - else
     .col-12.p-1
       %button.btn.btn-block.btn-primary.d-flex.flex-column.justify-content-center.align-items-center.my-0.copy-number{data-phone-number: "#{@announce.user.phone_number}"}
