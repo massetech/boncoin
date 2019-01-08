@@ -3,9 +3,9 @@ import "phoenix_html"
 import Css from '../css/app.scss'
 
 import "../node_modules/bootstrap/dist/js/bootstrap.min" // imports Boostrap js functions
-import '../node_modules/jquery-touchswipe/jquery.touchSwipe.min'          // imports touchswipe effects
+import '../node_modules/jquery-touchswipe/jquery.touchSwipe.min' // imports touchswipe effects
+import "../node_modules/bootstrap-select/dist/js/bootstrap-select.min"; // imports https://www.npmjs.com/package/bootstrap-select
 import "../vendor/slim/js/slim.kickstart.min"
-import "../vendor/bootstrap-select-1.13.0-beta/js/bootstrap-select.min"
 import "whatwg-fetch"
 
 import loadView from './views/loader';          // Custom js to run code per page

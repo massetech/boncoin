@@ -239,9 +239,9 @@ a[data-toggle="collapse"] {
     right: 20px;
     transform: translateY(-50%);
 }
-.dropdown-item.active, .dropdown-item:active{
-  background-color: map-get($theme-colors, primary);
-}
+// .dropdown-item.active, .dropdown-item:active{
+//   background-color: map-get($theme-colors, primary);
+// }
 .modal {
   button.close{position: absolute;right: 15px;top: 15px;z-index: 99999;}
 }
