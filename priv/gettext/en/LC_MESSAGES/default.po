@@ -745,7 +745,7 @@ msgstr "%{nb_offers} offers found in %{place_searched}"
 #, elixir-format
 #: lib/boncoin_web/templates/announce/_description.html.haml:4
 msgid "Sold by%{seller_name}"
-msgstr "Sold by %{seller_name}"
+msgstr "Selling by %{seller_name}"
 
 #, elixir-format
 #: lib/boncoin_web/templates/announce/public_index.html.haml:24

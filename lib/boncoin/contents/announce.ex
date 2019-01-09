@@ -184,7 +184,7 @@ defmodule Boncoin.Contents.Announce do
           _ ->
             from a in query,
               join: t in assoc(a, :township), where: t.active == true and t.id == ^township_id,
-              join: d in assoc(t, :division), where: d.active == true and t.id == ^division_id
+              join: d in assoc(t, :division), where: d.active == true and d.id == ^division_id
         end
     end
   end
@@ -193,18 +193,18 @@ defmodule Boncoin.Contents.Announce do
     case family_id do
       "" ->
         from a in query,
-          join: t in assoc(a, :category), where: t.active == true,
-          join: d in assoc(t, :family), where: d.active == true
+          join: c in assoc(a, :category), where: c.active == true,
+          join: f in assoc(c, :family), where: f.active == true
       _ ->
         case category_id do
           "" ->
             from a in query,
-              join: t in assoc(a, :category), where: t.active == true,
-              join: d in assoc(t, :family), where: d.active == true and d.id == ^family_id
+              join: c in assoc(a, :category), where: c.active == true,
+              join: f in assoc(c, :family), where: f.active == true and f.id == ^family_id
           _ ->
             from a in query,
-              join: t in assoc(a, :category), where: t.active == true and t.id == ^category_id,
-              join: d in assoc(t, :family), where: d.active == true and t.id == ^family_id
+              join: c in assoc(a, :category), where: c.active == true and c.id == ^category_id,
+              join: f in assoc(c, :family), where: f.active == true and f.id == ^family_id
         end
     end
   end

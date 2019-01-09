@@ -11,14 +11,14 @@ defmodule BoncoinWeb.AnnounceController do
       |> render("public_index.html", announces: paginator_results.entries)
   end
 
-  def likes_index(conn, _params) do
-    results = conn.assigns.likes_list
-      |> Poison.decode!()
-      |> Contents.list_announces_public_liked()
-    conn
-      |> assign(:nb_offers_found, Enum.count(results))
-      |> render("public_likes.html", announces: results)
-  end
+  # def likes_index(conn, _params) do
+  #   results = conn.assigns.likes_list
+  #     |> Poison.decode!()
+  #     |> Contents.list_announces_public_liked()
+  #   conn
+  #     |> assign(:nb_offers_found, Enum.count(results))
+  #     |> render("public_likes.html", announces: results)
+  # end
 
   # API to be called if user wants to load more offers on public page
   def add_offers_to_public_index(conn, %{"scope" => scope, "params" => %{"cursor_after" => cursor_after, "search_params" => search_params}}) do

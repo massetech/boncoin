@@ -106,12 +106,12 @@ defmodule Boncoin.CustomModules.BotDecisions do
 
       # We are waiting the new user NICKNAME
       user != nil && conversation.scope == "nickname" ->
-        language = conversation.language
+        language = user.language
         nickname = if user_msg == "1", do: conversation.nickname, else: user_msg
         case Members.update_user(user, %{nickname: nickname}) do
           {:ok, user} ->
             # We update the nickname in the conversation
-            %{conversation: %{nickname: nickname, scope: "viber_number", nb_errors: 0}, messages: %{message: ask_viber_number(user), offers: [], quick_replies: [%{title: tell_no_viber(language), link: "0"}], buttons: []}}
+            %{conversation: %{nickname: nickname, scope: "other_language", nb_errors: 0}, messages: %{message: ask_other_language(language), offers: [], quick_replies: propose_other_languages(language), buttons: []}}
           {:error, changeset} ->
             IO.puts("Bot problem : user_nickname")
             IO.inspect(changeset)
@@ -122,9 +122,16 @@ defmodule Boncoin.CustomModules.BotDecisions do
             end
         end
 
+      # We are waiting the new user OTHER LANGUAGE
+      user != nil && conversation.scope == "other_language" ->
+        language = user.language
+        other_language = user_msg
+        Members.update_user(user, %{other_language: other_language}) # We don't check if the language is fine
+        %{conversation: %{scope: "viber_number", nb_errors: 0}, messages: %{message: ask_viber_number(user), offers: [], quick_replies: [%{title: tell_no_viber(language), link: "0"}], buttons: []}}
+
       # We are waiting the new user VIBER NUMBER
       user != nil && conversation.scope == "viber_number" ->
-        language = conversation.language
+        language = user.language
         if user_msg == "0" do
           %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: welcome_new_user(user), offers: [], quick_replies: [], buttons: [link_create_offer(user), link_help(language)]}}
         else
@@ -175,7 +182,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
         new_language = String.slice(user_msg,0,1) |> convert_language()
         if language != new_language && new_language != nil do
           case Members.update_and_track_user(user, conversation, %{language: new_language}) do
-            {:ok, new_user} -> %{conversation: %{scope: "no_scope", language: new_language, nb_errors: 0}, messages: %{message: nothing_to_say_msg(new_user), offers: [], quick_replies: [], buttons: [link_visit_website(new_language), link_help(new_language)]}}
+            {:ok, new_user} -> %{conversation: %{scope: "other_language_update", language: new_language, nb_errors: 0}, messages: %{message: ask_other_language(new_language), offers: [], quick_replies: propose_other_languages(new_language), buttons: []}}
             {:error, changeset} ->
               IO.inspect(changeset)
               %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: nothing_to_say_msg(user), offers: [], quick_replies: [], buttons: [link_visit_website(language), link_help(language)]}}
@@ -183,6 +190,14 @@ defmodule Boncoin.CustomModules.BotDecisions do
         else
           %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: nothing_to_say_msg(user), offers: [], quick_replies: [], buttons: [link_visit_website(language), link_help(language)]}}
         end
+
+      # We are waiting for a OTHER LANGUAGE update
+      user != nil && conversation.active && conversation.scope == "other_language_update" ->
+        language = user.language
+        other_language = user_msg
+        Members.update_user(user, %{other_language: other_language}) # We don't check it is fine
+        %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: nothing_to_say_msg(user), offers: [], quick_replies: [], buttons: [link_visit_website(language), link_help(language)]}}
+
 
       # User wants to CHANGE SURNAME
       user != nil && conversation.active && user_msg == "*124#" ->
@@ -370,6 +385,14 @@ defmodule Boncoin.CustomModules.BotDecisions do
     uni = "စိတ်မကောင်းပါဘူး၊ သင့်ရဲ့အမည်သည်မှန်ကန်မှုမရှိသေးပါ။ ကျေးဇူးပြု၍သင့်အမည်ကိုစာလုံးသုံးလုံးအနည်းဆုံးရိုက်ထည့်ပါ။"
     case user.language do
       "en" -> "Sorry but this nickname is not valid. Please choose a nickname between 3 and 30 characters."
+      "my" -> uni
+      "dz" -> Rabbit.uni2zg(uni)
+    end
+  end
+  defp ask_other_language(language) do
+    uni = "အခြားဘာသာစကားပြောပါသလား"
+    case language do
+      "en" -> "Do you speak another language ?"
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end
@@ -672,6 +695,22 @@ defmodule Boncoin.CustomModules.BotDecisions do
   #---------------------- QUICK REPLIES -----------------------------------------
   defp propose_zawgyi() do
     "ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္"
+  end
+  defp propose_other_languages(language) do
+    only_burmese = "မြန်မာဘာသာစကားသာ" # ဘာသာစကား
+    english = "အင်္ဂလိပ်ဘာသာစကား"
+    chinese = "တရုတ်ဘာသာစကား"
+    japanese = "ဂျပန်ဘာသာစကား"
+    korean = "ကိုရီးရားဘာသာစကား"
+    case language do
+      "en" -> [%{title: "Burmese", link: "bi"}, %{title: "Only English", link: "0"}]
+      "my" -> [%{title: english, link: "en"}, %{title: chinese, link: "cn"}, %{title: japanese, link: "jp"}, %{title: korean, link: "kr"}, %{title: only_burmese, link: "0"}]
+      "dz" -> [
+        %{title: Rabbit.uni2zg(english), link: "en"}, %{title: Rabbit.uni2zg(chinese), link: "cn"},
+        %{title: Rabbit.uni2zg(japanese), link: "jp"}, %{title: Rabbit.uni2zg(korean), link: "kr"},
+        %{title: Rabbit.uni2zg(only_burmese), link: "0"}
+      ]
+    end
   end
   defp propose_see_details(language) do
     uni = "သင့်ရဲ့အချက်အလက်များကိုကြည့်ပါ။"

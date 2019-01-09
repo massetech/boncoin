@@ -2,6 +2,9 @@
   .d-flex.align-items-center
     %i.icon.icon-primary.fas.fa-user.text-primary.mr-2
     %p.m-0= LayoutView.convert_zawgyi(gettext("Sold by%{seller_name}", seller_name: @announce.user.nickname))
+    = img_tag img_url_tag(@conn, "flags/1x1/#{@announce.user.language}.svg"), class: "flag-small ml-3"
+    - if @announce.user.other_language != nil do
+      = img_tag img_url_tag(@conn, "flags/1x1/#{@announce.user.other_language}.svg"), class: "flag-small ml-1"
   .d-flex.align-items-center
     %i.icon.icon-primary.text-primary.mr-2{class: "#{LayoutView.insert_icon_classes(@announce.category)}"}
     %p.m-0= LayoutView.convert_lg_title(@announce.category, "title")

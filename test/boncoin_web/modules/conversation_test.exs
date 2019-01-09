@@ -38,12 +38,6 @@ defmodule BoncoinWeb.ConversationTest do
       msg -> assert_called MessengerApi, :send_message, ["RESPONSE", ^messenger_id, ^msg, _quick_replies, _buttons, _offer]
     end
   end
-  # defp assert_sent_answer_messenger_msg(messenger_id, msg) do
-  #   case msg do
-  #     "" -> assert_called MessengerApi, :send_message, [^messenger_id, _] # Can't count the nb of calls in same test
-  #     msg -> assert_called MessengerApi, :send_message, [^messenger_id, ^msg]
-  #   end
-  # end
 
   @tag :conversation
   describe "Messenger conversation workflow" do
@@ -107,10 +101,17 @@ defmodule BoncoinWeb.ConversationTest do
         messenger_params = messenger_params(messenger_id, "09110000002")
         receive_messenger_msg(conn, messenger_id, messenger_params)
         assert_sent_answer_messenger_msg("nickname", messenger_id, "Your phone number and Messenger account are now linked.\nYour nickname is mr_X, please confirm or type a new nickname.")
-      # 8.2) Unknown user confirms his nickname and receives question to viber_number
+      # 8.2) Unknown user confirms his nickname and receives question to other language
         IO.puts("test 8.2")
         messenger_params = messenger_params(messenger_id, "1")
         receive_messenger_msg(conn, messenger_id, messenger_params)
+        assert_sent_answer_messenger_msg("other_language", messenger_id, "Do you speak another language ?")
+      # 8.3) Unknown user says he speaks burmese and receives question to viber_number
+        IO.puts("test 8.3")
+        messenger_params = messenger_params(messenger_id, "my")
+        receive_messenger_msg(conn, messenger_id, messenger_params)
+        user_1 = Members.get_active_user_by_bot_id(messenger_id, "messenger")
+        assert user_1.other_language == "my"
         assert_sent_answer_messenger_msg("viber_number", messenger_id, "If you want people to contact you on Viber please type your Myanmar Viber number now.")
       # 9) Know user says nothing special
         IO.puts("test 9")
@@ -122,11 +123,12 @@ defmodule BoncoinWeb.ConversationTest do
         messenger_params = messenger_params(messenger_id, "0")
         receive_messenger_msg(conn, messenger_id, messenger_params)
         assert_sent_answer_messenger_msg("no_scope", messenger_id, "We are ready to help mr_X")
-      # 11) Known user wants to change his language for MY
+      # 11.1) Known user wants to change his language for MY and receives an alert
         IO.puts("test 11")
         messenger_params = messenger_params(messenger_id, "*123#")
         receive_messenger_msg(conn, messenger_id, messenger_params)
         assert_sent_answer_messenger_msg("language", messenger_id, "ေပါေခ်ာင္ေကာင္းမွႀကိဳဆိုပါတယ္။ ေက်းဇူးျပဳ၍သင္၏ဘာသာစကားကိုေ႐ြးခ်ယ္ပါ\n\nWelcome to Pawchaungkaung, please choose your language")
+      # 11.2) Known user confirms to change his language to MY
         IO.puts("test 11.2")
         messenger_params = messenger_params(messenger_id, "2")
         receive_messenger_msg(conn, messenger_id, messenger_params)
@@ -134,11 +136,20 @@ defmodule BoncoinWeb.ConversationTest do
         conversation = Members.get_conversation_by_provider_psid("messenger", messenger_id)
         assert user_1.language == "my"
         assert conversation.language == "my"
+        assert_sent_answer_messenger_msg("other_language_update", messenger_id, "အခြားဘာသာစကားပြောပါသလား")
+      # 11.3) Known user selects his other language to chinese
+        IO.puts("test 11.3")
+        messenger_params = messenger_params(messenger_id, "cn")
+        receive_messenger_msg(conn, messenger_id, messenger_params)
+        user_1 = Members.get_active_user_by_bot_id(messenger_id, "messenger")
+        conversation = Members.get_conversation_by_provider_psid("messenger", messenger_id)
+        assert user_1.other_language == "cn"
         assert_sent_answer_messenger_msg("no_scope", messenger_id, "")
+      # 12) Known user wants to change his phone number, types his own phone number and receives funny msg
         # Come back to normal to continue the tests
         Members.update_and_track_user(user_1, conversation, %{language: "en"})
         Members.update_conversation(conversation, %{language: "en"})
-      # 12) Known user wants to change his phone number, types his own phone number and receives funny msg
+        IO.puts("Conversation reseted")
         IO.puts("test 12")
         messenger_params = messenger_params(messenger_id, "*888#")
         receive_messenger_msg(conn, messenger_id, messenger_params)
@@ -213,9 +224,11 @@ defmodule BoncoinWeb.ConversationTest do
         receive_messenger_msg(conn, other_messenger_id, messenger_params)
         assert_sent_answer_messenger_msg("nickname", other_messenger_id, "Your phone number and Messenger account are now linked.\nYour nickname is mr_X, please confirm or type a new nickname.")
         # Finishes to register
-        messenger_params = messenger_params(other_messenger_id, "1")
+        messenger_params = messenger_params(other_messenger_id, "1") # Keeps nickname
         receive_messenger_msg(conn, other_messenger_id, messenger_params)
-        messenger_params = messenger_params(other_messenger_id, "0")
+        messenger_params = messenger_params(other_messenger_id, "0") # No other language
+        receive_messenger_msg(conn, other_messenger_id, messenger_params)
+        messenger_params = messenger_params(other_messenger_id, "0") # Doenst use Viber number
         receive_messenger_msg(conn, other_messenger_id, messenger_params)
         assert_sent_answer_messenger_msg("no_scope", other_messenger_id, "Your phone number and Messenger account are now linked.\nYour nickname is mr_X, please confirm or type a new nickname.")
 

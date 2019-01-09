@@ -69,9 +69,10 @@ defmodule BoncoinWeb.UserController do
   def create_announce(conn, %{"user" => params}) do
     case Members.create_user_announce(params) do
       {:ok, announce} ->
+        township = Contents.get_township!(announce.township_id)
         conn
           |> put_flash(:info, gettext("Your offer was created. We will treat it soon."))
-          |> redirect(to: Routes.public_offers_path(conn, :public_index, search: %{township_id: "#{announce.township_id}"}))
+          |> redirect(to: Routes.public_offers_path(conn, :public_index, search: %{division_id: township.division_id}))
       {:error, %Ecto.Changeset{} = changeset} ->
         %{"phone_number" => phone_number, "announces" => %{"0" => offer_params}} = params
         offer_params = Map.drop(offer_params, ["image_file_1", "image_file_2", "image_file_3"])

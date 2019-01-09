@@ -37,13 +37,21 @@ defmodule BoncoinWeb.BotTest do
         |> call_bot_algorythm()
       assert msg =~ "Now we can speak !\nTo sell on Pawchaungkaung, you need to register"
     end
-    test "with know user update language and say nothing", %{conn: conn} do
+    test "with know user update language and ask if other language", %{conn: conn} do
       user = insert(:user, %{language: "dz"})
       conversation = insert(:conversation, %{user_id: user.id, scope: "language", language: "dz"})
       user = Members.get_user(user.id)
       %{messages: %{message: msg}} = %{user: user, conversation: conversation, announce: nil, user_msg: "3"}
         |> call_bot_algorythm()
-      assert msg =~ "Hi Mr unknown !"
+      assert msg =~ "Do you speak another language ?"
+    end
+    test "with know user update other language says nothing", %{conn: conn} do
+      user = insert(:user, %{language: "dz"})
+      conversation = insert(:conversation, %{user_id: user.id, scope: "other_language_update", language: "dz"})
+      user = Members.get_user(user.id)
+      %{messages: %{message: msg}} = %{user: user, conversation: conversation, announce: nil, user_msg: "3"}
+        |> call_bot_algorythm()
+      assert msg =~ "Mr unknown"
     end
   end
 

@@ -6,7 +6,10 @@ defmodule Boncoin.ViberApi do
 
   # //// MANUAL TESTS OF VIBER BOT .....
   # Test manually the user sending a msg (nil message not possible)
-  def test_viber_new_message(user_id, user_msg) do
+  def test_viber_new_message(user_id, conversation_scope, user_msg) do
+    conversation = Members.get_conversation_by_user_id(user_id)
+    Members.update_conversation(conversation, %{scope: conversation_scope})
+      |> IO.inspect()
     user = Members.get_user(user_id)
     params = %{"event" => "message", "timestamp" => "time for lunch", "sender" => %{"id" => user.conversation.psid, "name" => user.nickname}, "message" => %{"type" => "text", "text" => user_msg}}
     conn = %Plug.Conn{private: %{phoenix_endpoint: BoncoinWeb.Endpoint}}

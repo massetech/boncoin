@@ -15,6 +15,7 @@ defmodule Boncoin.Members.User do
     field :email, :string
     field :active, :boolean, default: true
     field :language, :string, default: "dz"
+    field :other_language, :string
     field :nickname, :string
     field :member_psw, :string
     field :phone_number, :string
@@ -31,7 +32,7 @@ defmodule Boncoin.Members.User do
   end
 
   @required_fields ~w(uid language nickname phone_number role active)a
-  @optional_fields ~w(auth_provider email member_psw viber_number)a
+  @optional_fields ~w(auth_provider email member_psw viber_number other_language)a
 
   @doc false
   def changeset(user, attrs) do
@@ -48,6 +49,7 @@ defmodule Boncoin.Members.User do
       |> validate_inclusion(:auth_provider, ["google"], message: "Oauth provider not supported")
       |> validate_length(:nickname, min: 3, max: 30, message: "Nickname length is not good")
       |> validate_inclusion(:language, ["dz", "my", "en"], message: "Language not supported")
+      |> validate_inclusion(:other_language, ["my", "en", "cn", "jp", "kr"], message: "Language not supported")
       |> validate_inclusion(:role, ["GUEST", "MEMBER", "ADMIN", "PARTNER", "SUPER"], message: "Role not supported")
       |> refuse_guest_phone_number(params)
   end
@@ -139,7 +141,7 @@ defmodule Boncoin.Members.User do
 
   def filter_user_public_data(query) do
     from u in query,
-      select: %{nickname: u.nickname, phone_number: u.phone_number, viber_number: u.viber_number}
+      select: %{nickname: u.nickname, phone_number: u.phone_number, viber_number: u.viber_number, language: u.language, other_language: u.other_language}
   end
 
 end

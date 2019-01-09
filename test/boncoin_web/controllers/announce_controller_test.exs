@@ -171,7 +171,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
   end
 
   describe "existing user creates announce" do
-
+    @tag :dede
     test "redirects to public offers when data is valid", %{conn: conn} do
       user = insert(:user, %{phone_number: "09000000111"})
       insert(:conversation, %{user_id: user.id})
@@ -179,7 +179,8 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       township = insert(:township)
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(@create_attrs, user_params, township.id, category.id)
-      assert html_response(conn, 302) =~ "/offer/index?search[township_id]"
+      msg = "/offer/index?search[division_id]=#{township.division_id}"
+      assert html_response(conn, 302) =~ msg
       assert get_flash(conn, :info) == "Your offer was created. We will treat it soon."
     end
 

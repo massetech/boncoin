@@ -504,14 +504,14 @@ defmodule Boncoin.Contents do
       |> Repo.all()
   end
 
-  def list_announces_public_liked(id_list) do
-    user_query = User
-      |> User.filter_user_public_data()
-    Announce
-      |> Announce.filter_announces_id_list_online(id_list)
-      |> Announce.select_announces_datas(user_query)
-      |> Repo.all()
-  end
+  # def list_announces_public_liked(id_list) do
+  #   user_query = User
+  #     |> User.filter_user_public_data()
+  #   Announce
+  #     |> Announce.filter_announces_id_list_online(id_list)
+  #     |> Announce.select_announces_datas(user_query)
+  #     |> Repo.all()
+  # end
 
   def list_announces_public(cursor_after, %{category_id: category_id, division_id: division_id, family_id: family_id, township_id: township_id}) do
     user_query = User

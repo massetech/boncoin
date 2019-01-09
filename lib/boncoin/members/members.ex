@@ -216,6 +216,10 @@ defmodule Boncoin.Members do
   end
 
   def get_conversation!(id), do: Repo.get!(Conversation, id)
+  def get_conversation_by_user_id(user_id) do
+    Conversation
+      |> Repo.get_by(user_id: user_id)
+  end
 
   def create_conversation(attrs \\ %{}) do
     %Conversation{}

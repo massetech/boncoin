@@ -841,7 +841,7 @@ msgstr "ဤကြော်ငြာသည်မရှိတော့ပါ"
 #, elixir-format
 #: lib/boncoin_web/controllers/user_controller.ex:74
 msgid "Your offer was created. We will treat it soon."
-msgstr "သင့်၏ကြော်ငြာကိုပြုလုပ်ပြိးပါပြီ။ ပေါချောင်ကောင်း မှမကြာခင်သုံးသပ်မည်ဖြစ်သည်"
+msgstr "သင့်၏ကြော်ငြာကိုပြုလုပ်ပြိးပါပြီ။ ပေါချောင်ကောင်း မှမကြာခင်စိစစ်မည်ဖြစ်သည်"
 
 #, elixir-format
 #: lib/boncoin_web/controllers/announce_controller.ex:85

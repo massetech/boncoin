@@ -46,7 +46,7 @@ defmodule Boncoin.Plug.SearchParams do
     conn
       |> assign(:search_params, search_params)
       |> assign(:search_titles, search_titles)
-      |> print_params()
+      # |> print_params()
       # |> assign(:likes_list, Poison.encode!(likes_list)) # Resp cookie not accessible by js
   end
   defp print_params(conn) do
