@@ -1,11 +1,20 @@
-.card.mb-4.bg-primary
+.card.mb-4.bg-info
   .card-body.text-left
-    %p.font-s-9.text-white= LayoutView.convert_zawgyi(gettext("Please note that your are acting on your own..."))
-    %p.font-s-9.text-white.m-0
+    %p.font-s-8.text-white= LayoutView.convert_zawgyi(gettext("Please note that your are acting on your own..."))
+    %p.font-s-8.text-white.m-0
       = LayoutView.convert_zawgyi(gettext("For more details please read our"))
       - link to: Routes.main_path(@conn, :conditions), target: "_blank" do
-        %span.text-secondary.font-weight-bold= LayoutView.convert_zawgyi(gettext("terms and conditions."))
+        %span.text-white.font-weight-bold= LayoutView.convert_zawgyi(gettext("terms and conditions."))
       = LayoutView.convert_zawgyi(gettext("For more details... (burmese end)"))
+
+.row
+  .col-xs-12.col-sm-8.offset-sm-2.my-3
+    - link to: Routes.main_path(@conn, :conversations), class: "" do
+      .card.bg-primary
+        .card-body.p-3
+          %h5.text-white.m-0
+            = LayoutView.convert_zawgyi(gettext("Register now to start selling, it is free and easy !"))
+
 
 - form_for @changeset, Routes.user_path(@conn, :create_announce), fn u ->
   = inputs_for u, :announces, fn a ->

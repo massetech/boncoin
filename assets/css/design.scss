@@ -42,8 +42,9 @@ a:hover, button:hover, i:hover, label:hover {cursor: pointer;text-decoration: no
 .text-viber{color: map-get($theme-colors, viber-color);}
 .text-grey{color: map-get($theme-colors, form-grey);}
 i.icon-big{font-size: 30px !important;}
-// .font-s-9 {font-size: 0.9rem !important;}
-// .font-s-8 {font-size: 0.8rem !important;}
+.font-s-12 {font-size: 1.2rem !important;}
+.font-s-9 {font-size: 0.9rem !important;}
+.font-s-8 {font-size: 0.8rem !important;}
 p.one-line{white-space: nowrap;}
 p{white-space: normal!important;word-wrap: break-word;word-break: normal;}
 /* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";*/
@@ -191,9 +192,14 @@ i.width-40, img.width-40 {width: 40px;}
     display: block;
     opacity: 1;
 }
-span.language-active{
-  font-weight: 600;
-  @extend .text-primary;
+// span.language-active{
+//   font-weight: 600;
+//   @extend .text-white;
+// }
+a.sidebar-active, li.sidebar-active{
+  @extend .bg-secondary;
+  // background-color: map-get($theme-colors, primary-light);
+  // a, span {@extend .text-white;}
 }
 
 /* ------------------------------ ADDS  ------------------------------ */

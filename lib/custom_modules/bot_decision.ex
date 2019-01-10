@@ -181,14 +181,16 @@ defmodule Boncoin.CustomModules.BotDecisions do
         language = user.language
         new_language = String.slice(user_msg,0,1) |> convert_language()
         if language != new_language && new_language != nil do
+          # User sent a new language
           case Members.update_and_track_user(user, conversation, %{language: new_language}) do
             {:ok, new_user} -> %{conversation: %{scope: "other_language_update", language: new_language, nb_errors: 0}, messages: %{message: ask_other_language(new_language), offers: [], quick_replies: propose_other_languages(new_language), buttons: []}}
             {:error, changeset} ->
               IO.inspect(changeset)
-              %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: nothing_to_say_msg(user), offers: [], quick_replies: [], buttons: [link_visit_website(language), link_help(language)]}}
+              %{conversation: %{scope: "other_language_update", language: language, nb_errors: 0}, messages: %{message: ask_other_language(language), offers: [], quick_replies: propose_other_languages(language), buttons: []}}
           end
         else
-          %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: nothing_to_say_msg(user), offers: [], quick_replies: [], buttons: [link_visit_website(language), link_help(language)]}}
+          # No new language to update
+          %{conversation: %{scope: "other_language_update", language: language, nb_errors: 0}, messages: %{message: ask_other_language(language), offers: [], quick_replies: propose_other_languages(language), buttons: []}}
         end
 
       # We are waiting for a OTHER LANGUAGE update

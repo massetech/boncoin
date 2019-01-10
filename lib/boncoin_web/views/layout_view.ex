@@ -6,11 +6,34 @@ defmodule BoncoinWeb.LayoutView do
     if Members.admin_user?(user), do: true, else: false
   end
 
+  def display_alert(message) do
+    message
+      |> convert_zawgyi()
+      |> text_to_html([attributes: [class: "m-0 text-white font-s-12"]])
+      # |> safe_to_string()
+  end
+
   def test_lg(iso2code, nb) do
     case nb do
-      1 -> if iso2code == "en", do: "language-active", else: ""
-      2 -> if iso2code == "my", do: "language-active", else: ""
-      3 -> if iso2code == "dz", do: "language-active", else: ""
+      1 -> if iso2code == "en", do: "sidebar-active", else: ""
+      2 -> if iso2code == "my", do: "sidebar-active", else: ""
+      3 -> if iso2code == "dz", do: "sidebar-active", else: ""
+    end
+  end
+
+  def test_division(search_params, division_id) do
+    cond do
+      search_params.division_id == "" && division_id == nil -> "sidebar-active"
+      search_params.division_id == Kernel.inspect(division_id) -> "sidebar-active"
+      true -> ""
+    end
+  end
+
+  def test_township(search_params, division_id, township_id) do
+    cond do
+      search_params.division_id == Kernel.inspect(division_id) && search_params.township_id == "" && township_id == nil -> "sidebar-active"
+      search_params.division_id == Kernel.inspect(division_id) && search_params.township_id == Kernel.inspect(township_id) -> "sidebar-active"
+      true -> ""
     end
   end
 

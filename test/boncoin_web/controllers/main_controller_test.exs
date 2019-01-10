@@ -8,7 +8,7 @@ defmodule BoncoinWeb.MainControllerTest do
   describe "welcome" do
     test "arrives on landing page in EN", %{conn: conn} do
       conn = get conn, "/"
-      assert html_response(conn, 200) =~ "Find a good-deal in more than"
+      assert html_response(conn, 200) =~ "Please search second-hand products in more than"
     end
     test "shows the right number of public announces", %{conn: conn} do
       insert_list(3, :announce, %{status: "ONLINE"})

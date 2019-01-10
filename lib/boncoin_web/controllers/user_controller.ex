@@ -3,7 +3,6 @@ defmodule BoncoinWeb.UserController do
   alias Boncoin.{Members, Contents}
   alias Boncoin.Members.User
   alias Boncoin.Contents.Announce
-  # import Boncoin.CustomModules
 
   def index(conn, _params) do
     users = Members.list_users()

@@ -31,7 +31,7 @@ defmodule BoncoinWeb.AuthController do
           |> Guardian.Plug.sign_in(user, %{"typ" => "user-access"})
           |> put_flash(:info, "Welcome #{user.nickname} !")
           |> put_status(308)
-          |> redirect(to: Routes.root_path(conn, :welcome))
+          |> redirect(to: Routes.main_path(conn, :dashboard))
       _ ->
         conn
           |> put_flash(:alert, "Sorry you are not allowed to log in.")

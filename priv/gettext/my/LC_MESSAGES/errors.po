@@ -81,7 +81,7 @@ msgid "must be equal to %{number}"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:65
+#: lib/boncoin/members/user.ex:78
 msgid "Phone number is already taken."
 msgstr "ဤဖုန်းနံပါတ်သည်အခြားသူအသုံးပြုပြီးဖြစ်ပါသည်"
 
@@ -91,7 +91,7 @@ msgid "Please accept the conditions."
 msgstr "ကျေးဇူးပြု၍စည်ကမ်းချက်များကိုလက်ခံပေးပါ"
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:64
+#: lib/boncoin/members/user.ex:77
 msgid "Please check your phone number."
 msgstr "ကျေးဇူးပြု၍သင့်ဖုန်းနံပါတ်ကိုစစ်ဆေးကြည့်ပါ"
 
@@ -106,22 +106,22 @@ msgid "Please post at least one photo."
 msgstr "ကျေးဇူးပြု၍ဓါတ်ပုံအနည်ဆုံးတစ်ပုံတင်ပေးပါ"
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:67
+#: lib/boncoin/members/user.ex:80
 msgid "This email is already used by another user."
 msgstr "ဤ email သည်အခြားသူမှအသုံးပြုပြီးဖြစ်သည်"
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:68
+#: lib/boncoin/members/user.ex:81
 msgid "This email not a proper email."
 msgstr "ဤ email သည်မှန်ကန်မှုမရှိပါ"
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:63
+#: lib/boncoin/members/user.ex:76
 msgid "Please check your nickname."
 msgstr "သင်၏အမည်ကိုစစ်ဆေးကြည့်ပါ"
 
 #, elixir-format
-#: lib/boncoin/contents/announce.ex:72 lib/boncoin/members/user.ex:70
+#: lib/boncoin/contents/announce.ex:72 lib/boncoin/members/user.ex:83
 msgid "Sorry we have a technical problem.."
 msgstr "စိတ်မကောင်းပါဘူး၊ ကျန်ပ်တို့ထံတွင်နည်းပညာပိုင်းဆိုင်ရာမှာအခက်အခဲရှိနေပါသယ်"
 
@@ -141,6 +141,6 @@ msgid "Please write a description of your offer (max 200 characters)."
 msgstr "ကျေးဇူးပြု၍သင့်ရောင်ရန်ပစ္စည်း၏ဖေါ်ပြချက်များကိုရေးပေးပါ"
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:66
+#: lib/boncoin/members/user.ex:79
 msgid "Viber phone number is not correct (+95....)"
 msgstr "Viber ဖုမ်းနံပါတ်သည်မှားနေပါသည်"

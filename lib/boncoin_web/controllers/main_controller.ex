@@ -6,7 +6,14 @@ defmodule BoncoinWeb.MainController do
   def welcome(conn, _params) do
     nb_announces = Contents.count_announces_public()
     conn
+      |> put_flash(:info, welcome_message(conn))
+      # |> put_flash(:alert, welcome_message(conn))
+      # |> put_flash(:success, welcome_message(conn))
       |> Etag.render_or_cache(BoncoinWeb.PublicView, "welcome.html", %{nb_announces: nb_announces})
+  end
+
+  defp welcome_message(conn) do
+    gettext("Welcome on Pawchaungkaung !")
   end
 
   def conditions(conn, _params) do

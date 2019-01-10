@@ -2,7 +2,7 @@
   .carousel-inner
     - for image <- @announce.images do
       .carousel-item
-        = img_tag BoncoinWeb.AnnounceView.image_url(image, :original)
+        = img_tag BoncoinWeb.AnnounceView.image_url(image, :original), class: "w-100"
   %ol.carousel-indicators
     - for i <- 1..length(@announce.images) do
       %li{data-target: "#caroussel_img", data-slide-to: "#{i}"}

@@ -54,7 +54,7 @@ let init_functions = () => {
     $('#announce_currency').val(this.innerHTML)
   })
   // Get the title and check if it looks like Zawgyi
-  $('#announce_title').on('change', function() {
+  $('#user_announces_0_title').on('change', function() {
     var title = $(this).val()
     if (knayi.fontDetect(title) == "zawgyi") {
       console.log("zawgyi detected")

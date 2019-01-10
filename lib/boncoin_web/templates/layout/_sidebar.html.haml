@@ -11,23 +11,23 @@
         %span= convert_zawgyi(gettext("Where do you search ?"))
       %ul.collapse.list-unstyled.collapse-level1{id: "menuDivision"}
         - link to: Routes.public_offers_path(@conn, :public_index, search: %{division_id: "", township_id: ""}), class: "" do
-          %li.slide-menu.text-dark.border-bottom.border-dark
+          %li.slide-menu.text-dark.border-bottom.border-dark{class: "#{test_division(@conn.assigns.search_params, nil)}"}
             %i.width-20
             %span= convert_zawgyi(gettext("All Myanmar"))
         - for division <- @conn.assigns.select_menus.divisions do
           -# Nested parent
-          %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{href: "#subMenuDivision_#{division.id}", data-parent="#subMenuDivision_#{division.id}", data-toggle: "collapse", aria-expanded: "false"}
+          %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{class: "#{test_division(@conn.assigns.search_params, division.id)}", href: "#subMenuDivision_#{division.id}", data-parent="#subMenuDivision_#{division.id}", data-toggle: "collapse", aria-expanded: "false"}
             %i.width-20
             %span= convert_zawgyi(division, "title")
           -# Nested child
           %ul.collapse.list-unstyled.collapse-level2{id: "subMenuDivision_#{division.id}"}
             - link to: Routes.public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: ""}) do
-              %li.slide-menu.text-dark.border-bottom.border-dark
+              %li.slide-menu.text-dark.border-bottom.border-dark{class: "#{test_township(@conn.assigns.search_params, division.id, nil)}"}
                 %i.width-20
                 %span= convert_zawgyi(gettext("All %{division_title}", division_title: convert_lg_title(division, "title")))
             - for township <- division.townships do
               - link to: Routes.public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: "#{township.id}"}) do
-                %li.slide-menu.text-dark.border-bottom.border-dark
+                %li.slide-menu.text-dark.border-bottom.border-dark{class: "#{test_township(@conn.assigns.search_params, division.id, township.id)}"}
                   %i.width-20
                   %span= convert_zawgyi(township, "title")
 
@@ -41,15 +41,15 @@
         %span= convert_zawgyi(gettext("Change language"))
       %ul.collapse.list-unstyled.collapse-level1{id: "languageSubmenu"}
         %a{href: "?locale=en"}
-          %li.slide-menu.text-dark.border-bottom.border-dark
+          %li.slide-menu.text-dark.border-bottom.border-dark{class: "#{test_lg(@conn.assigns.flag, 1)}"}
             = img_tag img_url_tag(@conn, "flags/1x1/en.svg"), class: "flag"
             %span{class: "#{test_lg(@conn.assigns.flag, 1)}"}= gettext("English")
         %a{href: "?locale=my"}
-          %li.slide-menu.text-dark.border-bottom.border-dark{class: ""}
+          %li.slide-menu.text-dark.border-bottom.border-dark{class: "#{test_lg(@conn.assigns.flag, 2)}"}
             = img_tag img_url_tag(@conn, "flags/1x1/my.svg"), class: "flag"
             %span{class: "#{test_lg(@conn.assigns.flag, 2)}"}= gettext("Myanmar (Unicode)")
         %a{href: "?locale=dz"}
-          %li.slide-menu.text-dark.border-bottom.border-dark{class: ""}
+          %li.slide-menu.text-dark.border-bottom.border-dark{class: "#{test_lg(@conn.assigns.flag, 3)}"}
             = img_tag img_url_tag(@conn, "flags/1x1/my.svg"), class: "flag"
             %span{class: "#{test_lg(@conn.assigns.flag, 3)}"}= gettext("Myanmar (Zawgyi)")
 
