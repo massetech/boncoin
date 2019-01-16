@@ -705,7 +705,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     japanese = "ဂျပန်ဘာသာစကား"
     korean = "ကိုရီးရားဘာသာစကား"
     case language do
-      "en" -> [%{title: "Burmese", link: "bi"}, %{title: "Only English", link: "0"}]
+      "en" -> [%{title: "Burmese", link: "my"}, %{title: "Only English", link: "0"}]
       "my" -> [%{title: english, link: "en"}, %{title: chinese, link: "cn"}, %{title: japanese, link: "jp"}, %{title: korean, link: "kr"}, %{title: only_burmese, link: "0"}]
       "dz" -> [
         %{title: Rabbit.uni2zg(english), link: "en"}, %{title: Rabbit.uni2zg(chinese), link: "cn"},

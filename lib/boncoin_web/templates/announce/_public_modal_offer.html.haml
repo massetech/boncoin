@@ -16,7 +16,7 @@
           %span= LayoutView.convert_zawgyi(gettext("See contact"))
       .modal-footer.d-none{id: "footer_contact_#{@announce.id}"}
         - if @announce.user.viber_number == nil do
-          %button.btn.btn-block.btn-primary.d-flex.flex-column.justify-content-center.align-items-center.my-0.copy-number{href: "tel:#{@announce.user.phone_number}"}
+          %a.btn.btn-block.btn-primary.d-flex.flex-column.justify-content-center.align-items-center.my-0.copy-number{href: "tel:#{@announce.user.phone_number}"}
             %i.fa.fa-phone
             %span= LayoutView.show_phone_number(@announce.user.phone_number)
             %i.fa.fa-copy.bg-success.text-white.btn-copy-number.btn-icon-right
