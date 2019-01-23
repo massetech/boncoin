@@ -570,10 +570,7 @@ defmodule Boncoin.Contents do
           end
         end
         # Send a message to admin that a new announce was posted
-        # admin = Members.get_super_user()
-        # user = Members.get_user!(user_id)
-        # messages = %{messages: ["A new offer was created at #{Timex.now()} by #{user.nickname}"]}
-        # Members.send_bot_message_to_user(messages, admin)
+        Members.inform_admin_by_viber("A new offer was created !")
         {:ok, announce}
       error_offer -> error_offer
     end

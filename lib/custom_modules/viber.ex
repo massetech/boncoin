@@ -34,6 +34,7 @@ defmodule Boncoin.ViberApi do
   def send_message(type, psid, msg, quick_replies, buttons, offer) do
     # Using Viber keyboards : https://developers.viber.com/docs/tools/keyboards/
     # Rich media requires min_api_version 2
+    # type is not used in Viber (needed in Messenger only)
     # IO.inspect(buttons)
     # IO.inspect(offer)
 

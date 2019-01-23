@@ -30,7 +30,7 @@ defmodule Boncoin.Members do
 
   # -------------------------------- USER ----------------------------------------
 
-  # Send bot messages to the user
+  # Send bot message to the user
   def send_bot_message_to_user(bot_results, offer, type) do
     psid = bot_results.conversation.psid
     user_msg = bot_results.messages.message
@@ -130,9 +130,18 @@ defmodule Boncoin.Members do
   #   end
   # end
 
+  def inform_admin_by_viber(admin_msg) do
+    super_user = get_super_user()
+    if super_user.conversation.bot_provider == "viber" do
+      Boncoin.ViberApi.send_message(nil, super_user.conversation.psid, admin_msg, [], [], nil)
+    end
+  end
+
   def create_and_track_user(user_params, conversation) do
     case create_user(user_params) do
       {:ok, user} ->
+        # Send a message to admin that a new user was created
+        inform_admin_by_viber("New user #{user.nickname} (#{user.language}) registered !")
         update_conversation(conversation, %{user_id: user.id})
         create_phone(user, conversation)
       {:error, changeset} -> {:error, changeset}
