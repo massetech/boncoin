@@ -5,6 +5,8 @@ defmodule Boncoin.ViberApi do
   @api_url "https://chatapi.viber.com/pa/"
 
   # //// MANUAL TESTS OF VIBER BOT .....
+    # def test_viber_new_conversation() do
+    # end
   # Test manually the user sending a msg (nil message not possible)
   def test_viber_new_message(user_id, conversation_scope, user_msg) do
     conversation = Members.get_conversation_by_user_id(user_id)

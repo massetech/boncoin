@@ -587,6 +587,9 @@ defmodule Boncoin.Contents do
       {:ok, updated_announce} ->
         cond do
           user.conversation.active == true && announce.status == "PENDING" -> # Bot msg for new offers
+            # Flag the user first offer date if offer accepted (embassador KPI)
+            if validate == "true", do: Members.flag_first_user_offer(user)
+            # Send bot message to user
             %{user: user, conversation: Map.put(user.conversation, :scope, "offer_treated"), announce: updated_announce, user_msg: user_msg}
               |> BotDecisions.call_bot_algorythm()
               |> Members.send_bot_message_to_user(updated_announce, :update)
@@ -594,7 +597,7 @@ defmodule Boncoin.Contents do
             %{user: user, conversation: Map.put(user.conversation, :scope, "offer_closed"), announce: updated_announce, user_msg: user_msg}
               |> BotDecisions.call_bot_algorythm()
               |> Members.send_bot_message_to_user(updated_announce, :update)
-          true -> {:ok, "no message sent (not Bot for this user)", []} # User is not bot active : do nothing
+          # true -> {:ok, "no message sent (not Bot for this user)", []} # User is not bot active : do nothing
         end
       {:error, msg} -> {:error, msg, []}
     end

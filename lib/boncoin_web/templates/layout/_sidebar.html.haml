@@ -15,21 +15,26 @@
             %i.width-20
             %span= convert_zawgyi(gettext("All Myanmar"))
         - for division <- @conn.assigns.select_menus.divisions do
-          -# Nested parent
-          %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{class: "#{test_division(@conn.assigns.search_params, division.id)}", href: "#subMenuDivision_#{division.id}", data-parent="#subMenuDivision_#{division.id}", data-toggle: "collapse", aria-expanded: "false"}
-            %i.width-20
-            %span= convert_zawgyi(division, "title")
-          -# Nested child
-          %ul.collapse.list-unstyled.collapse-level2{id: "subMenuDivision_#{division.id}"}
-            - link to: Routes.public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: ""}) do
-              %li.slide-menu.text-dark.border-bottom.border-dark{class: "#{test_township(@conn.assigns.search_params, division.id, nil)}"}
-                %i.width-20
-                %span= convert_zawgyi(gettext("All %{division_title}", division_title: convert_lg_title(division, "title")))
-            - for township <- division.townships do
-              - link to: Routes.public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: "#{township.id}"}) do
-                %li.slide-menu.text-dark.border-bottom.border-dark{class: "#{test_township(@conn.assigns.search_params, division.id, township.id)}"}
-                  %i.width-20
-                  %span= convert_zawgyi(township, "title")
+          -# Simplification
+          - link to: Routes.public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: ""}) do
+            %li.slide-menu.text-dark.border-bottom.border-dark{class: "#{test_township(@conn.assigns.search_params, division.id, nil)}"}
+              %i.width-20
+              %span= convert_zawgyi(gettext("All %{division_title}", division_title: convert_lg_title(division, "title")))
+          -# -# Nested parent
+          -# %a.slide-menu.text-dark.border-bottom.border-dark.dropdown-toggle{class: "#{test_division(@conn.assigns.search_params, division.id)}", href: "#subMenuDivision_#{division.id}", data-parent="#subMenuDivision_#{division.id}", data-toggle: "collapse", aria-expanded: "false"}
+          -#   %i.width-20
+          -#   %span= convert_zawgyi(division, "title")
+          -# -# Nested child
+          -# %ul.collapse.list-unstyled.collapse-level2{id: "subMenuDivision_#{division.id}"}
+          -#   - link to: Routes.public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: ""}) do
+          -#     %li.slide-menu.text-dark.border-bottom.border-dark{class: "#{test_township(@conn.assigns.search_params, division.id, nil)}"}
+          -#       %i.width-20
+          -#       %span= convert_zawgyi(gettext("All %{division_title}", division_title: convert_lg_title(division, "title")))
+          -#   - for township <- division.townships do
+          -#     - link to: Routes.public_offers_path(@conn, :public_index, search: %{division_id: "#{division.id}", township_id: "#{township.id}"}) do
+          -#       %li.slide-menu.text-dark.border-bottom.border-dark{class: "#{test_township(@conn.assigns.search_params, division.id, township.id)}"}
+          -#         %i.width-20
+          -#         %span= convert_zawgyi(township, "title")
 
       - link to: Routes.user_path(@conn, :new_user_announce), class: "" do
         %li.slide-menu.text-dark.border-bottom.border-dark

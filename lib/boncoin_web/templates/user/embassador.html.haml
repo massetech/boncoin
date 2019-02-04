@@ -1,0 +1,50 @@
+%nav{aria-label: "breadcrumb"}
+  %ol.breadcrumb
+    %li.breadcrumb-item= link "Dashboard", to: Routes.main_path(@conn, :dashboard), class: "text-primary"
+    %li.breadcrumb-item= link "Users", to: Routes.user_path(@conn, :index)
+    %li.breadcrumb-item.active{aria-current: "page"}= "Embassador"
+
+.row
+  .col-xs-12.col-sm-8.offset-sm-2
+    .card
+      .card-header
+        .de
+          = @user.nickname
+          = img_tag img_url_tag(@conn, "flags/1x1/#{@user.language}.svg"), class: "flag-small ml-3"
+          - if @user.other_language != nil do
+            = img_tag img_url_tag(@conn, "flags/1x1/#{@user.other_language}.svg"), class: "flag-small ml-1"
+        .de
+          = @user.phone_number
+          - if @conversation.bot_provider == "viber" do
+            = img_tag img_url_tag(@conn, "viber_icon.png"), class: "flag-small ml-1"
+
+      .card-body
+        - form_for @conn, Routes.user_path(@conn, :embassador, @user), [as: :filter, method: "get", class: ""], fn f ->
+          .d-flex.justify-content-center
+            = select f, :month, @calendar.months, class: "custom-select mx-3"
+            = select f, :year, @calendar.years, class: "custom-select mx-3"
+            = submit "Search", class: "btn btn-info mx-3"
+
+        %table.table.table-bordered.mt-5
+          %thead
+            %tr
+              %th= ""
+              %th= "#{LayoutView.show_month(@filter.month)}-#{@filter.year}"
+              %th= "Total until #{LayoutView.show_month(@calendar.month_now)}-#{@calendar.year_now}"
+          %tbody
+            %tr
+              %th= "Nb new users"
+              %td= @data.nb_new_users
+              %td= @data.nb_user
+            %tr
+              %th= "Nb first offer"
+              %td= @data.nb_new_offers
+              %td= @data.nb_offers
+
+        - link to: Routes.user_path(@conn, :new_user_announce), class: "btn btn-primary" do
+          %i.width-30.far.fa-envelope.btn-icon{}
+          %span= "Send report"
+
+      .card-footer
+        %p= "viber://pa?chatURI=pawchaungkaung_en&context=#{@user.id}"
+        %p= "http://m.me/pawchaungkaung?ref=#{@user.id}"

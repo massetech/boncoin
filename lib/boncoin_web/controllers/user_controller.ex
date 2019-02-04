@@ -9,6 +9,15 @@ defmodule BoncoinWeb.UserController do
     render(conn, "index.html", users: users)
   end
 
+  def embassador(conn, %{"id" => user_id} = params) do
+    user = Members.get_user!(user_id)
+    calendar = %{year_now: Kernel.inspect(Timex.now().year), month_now: Kernel.inspect(Timex.now().month), years: Boncoin.CustomModules.list_of_years(), months: Boncoin.CustomModules.list_of_months()}
+    filter = if params["filter"] == nil, do: %{month: calendar.month_now, year: calendar.year_now}, else: %{month: params["filter"]["month"], year: params["filter"]["year"]}
+    data = Members.get_embassador_kpi(user_id, filter)
+    conversation = Members.get_conversation_by_user_id(user_id)
+    render(conn, "embassador.html", user: user, conversation: conversation, filter: filter, calendar: calendar, data: data)
+  end
+
   # API to ba called for a phone number on announce page
   def check_phone(conn, %{"scope" => scope, "params" => phone_number}) do
     case Members.read_phone_details(phone_number) do
@@ -25,12 +34,12 @@ defmodule BoncoinWeb.UserController do
     end
   end
 
-  def new(conn, _params) do
-    changeset = Members.change_user(%User{})
-    roles = Members.User.role_select_btn()
-    languages = Members.User.language_select_btn()
-    render(conn, "new.html", changeset: changeset, roles: roles, languages: languages)
-  end
+  # def new(conn, _params) do
+  #   changeset = Members.change_user(%User{})
+  #   roles = Members.User.role_select_btn()
+  #   languages = Members.User.language_select_btn()
+  #   render(conn, "new.html", changeset: changeset, roles: roles, languages: languages)
+  # end
 
   # def create(conn, %{"user" => user_params}) do
   #   case Members.create_and_track_user(user_params) do
@@ -84,6 +93,28 @@ defmodule BoncoinWeb.UserController do
         conn
           |> put_flash(:alert, msg)
           |> redirect(to: Routes.user_path(conn, :new_user_announce_with_phone, phone_number, offer_params: offer_params))
+    end
+  end
+
+  def edit(conn, %{"id" => id}) do
+    user = Members.get_user!(id)
+    changeset = Members.change_user(user)
+    roles = Members.User.role_select_btn()
+    render(conn, "edit.html", user: user, changeset: changeset, roles: roles)
+  end
+
+  def update(conn, %{"id" => id, "user" => user_params}) do
+    user = Members.get_user!(id)
+    roles = Members.User.role_select_btn()
+    case Members.update_user(user, user_params) do
+      {:ok, _division} ->
+        conn
+        |> put_flash(:info, "User updated successfully.")
+        |> redirect(to: Routes.user_path(conn, :index))
+      {:error, %Ecto.Changeset{} = changeset} ->
+        conn
+        |> put_flash(:info, "Errors, please check.")
+        |> render("edit.html", user: user, changeset: changeset, roles: roles)
     end
   end
 

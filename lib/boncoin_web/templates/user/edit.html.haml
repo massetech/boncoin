@@ -1,0 +1,6 @@
+%nav{aria-label: "breadcrumb"}
+  %ol.breadcrumb
+    %li.breadcrumb-item= link "Dashboard", to: Routes.main_path(@conn, :dashboard)
+    %li.breadcrumb-item= link "Users", to: Routes.user_path(@conn, :index)
+    %li.breadcrumb-item.active{aria-current: "page"}= "Edit user"
+= render "form.html", Map.put(assigns, :action, Routes.user_path(@conn, :update, @user))

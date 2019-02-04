@@ -8,7 +8,7 @@
 
     .col-xs-12.col-sm-8.offset-sm-2.my-4.p-0
       = render BoncoinWeb.LayoutView, "_cities_list.html", assigns
-      - link to: Routes.user_path(@conn, :new_user_announce), class: "btn btn-lg btn-outline-primary text-primary btn-block text-white" do
+      - link to: Routes.user_path(@conn, :new_user_announce), class: "btn btn-lg btn-outline-primary text-primary btn-block" do
         %i.width-30.fa.fa-edit.btn-icon{}
         %span= LayoutView.convert_zawgyi(gettext("Sell something"))
 

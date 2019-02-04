@@ -168,6 +168,45 @@ defmodule Boncoin.Members do
     end
   end
 
+  def flag_first_user_offer(user) do
+    if user.first_offer_date == nil, do: update_user(user, %{first_offer_date: Timex.now()})
+  end
+
+  def get_embassador_kpi(user_id, filter) do
+    %{nb_new_users: nb_new_users(user_id, filter), nb_user: nb_users(user_id), nb_new_offers: nb_new_offers(user_id, filter), nb_offers: nb_offers(user_id)}
+  end
+
+  defp nb_users(user_id) do
+    User
+      |> User.filter_embassador_users(user_id)
+      |> User.count()
+      |> Repo.one()
+  end
+
+  defp nb_new_users(user_id, filter) do
+    User
+      |> User.filter_embassador_users(user_id)
+      |> User.filter_users_created_in_month(filter.month, filter.year)
+      |> User.count()
+      |> Repo.one()
+  end
+
+  defp nb_offers(user_id) do
+    User
+      |> User.filter_embassador_users(user_id)
+      |> User.filter_users_with_first_offer_date()
+      |> User.count()
+      |> Repo.one()
+  end
+
+  defp nb_new_offers(user_id, filter) do
+    User
+      |> User.filter_embassador_users(user_id)
+      |> User.filter_users_with_first_offer_date_in_month(filter.month, filter.year)
+      |> User.count()
+      |> Repo.one()
+  end
+
   def update_user(%User{} = user, attrs) do
     user
       |> User.changeset(attrs)

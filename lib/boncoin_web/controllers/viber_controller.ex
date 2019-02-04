@@ -39,9 +39,9 @@ defmodule BoncoinWeb.ViberController do
   # ---------------------------- RECEIVE MESSAGE -------------------------------------
 
   # conversation_started : welcome message when a user opens a new conversation
-  def callback(conn, %{"event" => "conversation_started", "user" => %{"id" => viber_id, "name" => viber_name}}) do
+  def callback(conn, %{"event" => "conversation_started", "context" => context, "user" => %{"id" => viber_id, "name" => viber_name}}) do
     IO.puts("#{viber_name} opened a new conversation on Viber at #{Timex.now()}")
-    case treat_message(conn, viber_id, viber_name, nil, nil) do
+    case treat_message(conn, viber_id, viber_name, nil, context) do
       {:new, msg} ->
         conn
           |> put_status(:ok)

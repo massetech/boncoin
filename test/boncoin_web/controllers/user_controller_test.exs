@@ -26,8 +26,9 @@ defmodule BoncoinWeb.UserControllerTest do
 
   describe "edit user" do
     test "renders form", %{conn: conn} do
-      conn = get conn, user_path(conn, :new)
-      assert html_response(conn, 200) =~ "New user"
+      user = insert(:user)
+      conn = get conn, user_path(conn, :edit, user)
+      assert html_response(conn, 200) =~ "Edit user"
     end
   end
 

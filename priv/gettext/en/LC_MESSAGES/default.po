@@ -15,7 +15,7 @@ msgstr ""
 #: lib/boncoin_web/templates/layout/_cities_list.html.haml:14
 #: lib/boncoin_web/templates/layout/_sidebar.html.haml:32
 msgid "All %{division_title}"
-msgstr ""
+msgstr "%{division_title}"
 
 #, elixir-format
 #: lib/boncoin_web/templates/layout/_cities_list.html.haml:6

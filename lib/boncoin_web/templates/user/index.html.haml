@@ -7,8 +7,8 @@
   .col-xs-12.col-sm-6.text-left
     %span= "Logged in as"
     %span.text-primary= "#{@conn.assigns.current_user.email}"
-  .col-xs-12.col-sm-6.text-right
-    = link "New USer", to: Routes.user_path(@conn, :new), class: "btn btn-outline-info btn-sm"
+  -# .col-xs-12.col-sm-6.text-right
+  -#   = link "New USer", to: Routes.user_path(@conn, :new), class: "btn btn-outline-info btn-sm"
 
 .table-responsive
   %table.table.table-hover
@@ -32,6 +32,7 @@
           .d-none.d-sm-block= "PSID"
         %th
           .d-none.d-sm-block= "Status"
+        %th= "Partner"
         %th= "Pending"
         %th= "Online"
         %th= "Closed"
@@ -62,10 +63,15 @@
               %i.fas.fa-eye
           %td
             = LayoutView.icon_active(user.conversation.active)
+          %td
+            - if user.embassador == true do
+              - link to: Routes.user_path(@conn, :embassador, user), class: "btn btn-outline-info btn-sm" do
+                %i.fas.fa-graduation-cap
           %td= Enum.count(user.announces, &(&1.status == "PENDING"))
           %td= Enum.count(user.announces, &(&1.status == "ONLINE"))
           %td= Enum.count(user.announces, &(&1.status == "CLOSED"))
           %td
             .d-none.d-sm-block
+              = link "Edit", to: Routes.user_path(@conn, :edit, user), class: "btn btn-outline-info btn-sm"
               - unless (@conn.assigns.current_user.id == user.id) || (user.role == "GUEST") do
                 = link "Delete", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm"

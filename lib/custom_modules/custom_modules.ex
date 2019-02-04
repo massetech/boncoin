@@ -6,6 +6,26 @@ defmodule Boncoin.CustomModules do
     msg
   end
 
+  def list_of_months() do
+    [ January: 1,
+      February: 2,
+      March: 3,
+      April: 4,
+      May: 5,
+      June: 6,
+      July: 7,
+      August: 8,
+      September: 9,
+      October: 10,
+      November: 11,
+      Decembe: 12
+    ]
+  end
+
+  def list_of_years() do
+    [2019, 2020, 2021, 2022]
+  end
+
   def convert_fields_to_burmese_uni(%{"language" => language} = params, keys_list) do
     case language do
       "dz" -> Enum.into(params, %{}, fn {k, v} -> convert_field_to_uni(k, v, keys_list) end)

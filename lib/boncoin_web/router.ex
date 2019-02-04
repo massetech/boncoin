@@ -71,6 +71,7 @@ defmodule BoncoinWeb.Router do
     pipe_through [:browser, :auth, :login_required, :admin_required]
     get "/dashboard", MainController, :dashboard
     resources "/users", UserController
+    get "/embassador/:id", UserController, :embassador
     resources "/familys", FamilyController
     resources "/categorys", CategoryController
     resources "/divisions", DivisionController
