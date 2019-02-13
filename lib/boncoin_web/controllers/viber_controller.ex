@@ -39,8 +39,9 @@ defmodule BoncoinWeb.ViberController do
   # ---------------------------- RECEIVE MESSAGE -------------------------------------
 
   # conversation_started : welcome message when a user opens a new conversation
-  def callback(conn, %{"event" => "conversation_started", "context" => context, "user" => %{"id" => viber_id, "name" => viber_name}}) do
+  def callback(conn, %{"event" => "conversation_started", "user" => %{"id" => viber_id, "name" => viber_name}} = params) do
     IO.puts("#{viber_name} opened a new conversation on Viber at #{Timex.now()}")
+    context = if params["context"], do: params["context"], else: "none"
     case treat_message(conn, viber_id, viber_name, nil, context) do
       {:new, msg} ->
         conn
@@ -88,7 +89,7 @@ defmodule BoncoinWeb.ViberController do
   # ---------------------------- ANSWER TO MESSAGE -------------------------------------
 
   defp treat_message(conn, viber_id, viber_name, user_msg, origin) do
-    conversation = Members.get_or_initiate_conversation("viber", viber_id, viber_name, nil)
+    conversation = Members.get_or_initiate_conversation("viber", viber_id, viber_name, origin)
     results = %{user: conn.assigns.current_user, conversation: conversation, announce: nil, user_msg: user_msg}
       |> BotDecisions.call_bot_algorythm()
 

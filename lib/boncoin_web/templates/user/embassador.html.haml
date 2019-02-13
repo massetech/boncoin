@@ -37,9 +37,9 @@
               %td= @data.nb_new_users
               %td= @data.nb_user
             %tr
-              %th= "Nb first offer"
-              %td= @data.nb_new_offers
-              %td= @data.nb_offers
+              %th= "Nb publishers"
+              %td= @data.nb_new_publishers
+              %td= @data.nb_publishers
 
         - link to: Routes.user_path(@conn, :new_user_announce), class: "btn btn-primary" do
           %i.width-30.far.fa-envelope.btn-icon{}

@@ -24,7 +24,7 @@ defmodule Boncoin.Members.User do
     field :role, :string, default: "MEMBER"
     field :token, :string
     field :token_expiration, :utc_datetime
-    field :embassador, :boolean, default: true
+    field :embassador, :boolean, default: false
     field :first_offer_date, :utc_datetime
     has_many :announces, Announce, on_delete: :delete_all
     has_one :conversation, Conversation, on_delete: :delete_all
@@ -149,7 +149,7 @@ defmodule Boncoin.Members.User do
   def filter_embassador_users(query, user_id) do
     from u in query,
       join: c in assoc(u, :conversation),
-      where: c.origin == ^user_id
+      where: c.origin == ^user_id and u.active == true
   end
 
   def filter_users_created_in_month(query, month, year) do
@@ -157,12 +157,12 @@ defmodule Boncoin.Members.User do
       where: fragment("date_part('month', ?)", u.inserted_at) == ^String.to_integer(month) and fragment("date_part('year', ?)", u.inserted_at) == ^String.to_integer(year)
   end
 
-  def filter_users_with_first_offer_date(query) do
+  def filter_users_with_one_published_offer(query) do
     from u in query,
       where: not is_nil(u.first_offer_date)
   end
 
-  def filter_users_with_first_offer_date_in_month(query, month, year) do
+  def filter_users_with_one_published_offer_in_month(query, month, year) do
     from u in query,
       where: fragment("date_part('month', ?)", u.first_offer_date) == ^String.to_integer(month) and fragment("date_part('year', ?)", u.first_offer_date) == ^String.to_integer(year)
   end

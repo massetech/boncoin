@@ -130,18 +130,28 @@ defmodule Boncoin.Members do
   #   end
   # end
 
-  def inform_admin_by_viber(admin_msg) do
+  def inform_admin_by_viber(event, user) do
     super_user = get_super_user()
-    if super_user.conversation.bot_provider == "viber" do
-      Boncoin.ViberApi.send_message(nil, super_user.conversation.psid, admin_msg, [], [], nil)
+    msg = case event do
+      :new_user -> new_user_msg(user)
+      :new_offer -> new_offer_msg()
     end
+    if super_user.conversation.bot_provider == "viber" do
+      mockable(ViberApi).send_message(nil, super_user.conversation.psid, msg, [], [], nil)
+    end
+  end
+  def new_user_msg(user) do
+    "New user #{user.nickname} (#{user.language}) registered !"
+  end
+  def new_offer_msg() do
+    "A new offer was created !"
   end
 
   def create_and_track_user(user_params, conversation) do
     case create_user(user_params) do
       {:ok, user} ->
         # Send a message to admin that a new user was created
-        inform_admin_by_viber("New user #{user.nickname} (#{user.language}) registered !")
+        inform_admin_by_viber(:new_user, user)
         update_conversation(conversation, %{user_id: user.id})
         create_phone(user, conversation)
       {:error, changeset} -> {:error, changeset}
@@ -173,7 +183,7 @@ defmodule Boncoin.Members do
   end
 
   def get_embassador_kpi(user_id, filter) do
-    %{nb_new_users: nb_new_users(user_id, filter), nb_user: nb_users(user_id), nb_new_offers: nb_new_offers(user_id, filter), nb_offers: nb_offers(user_id)}
+    %{nb_user: nb_users(user_id), nb_new_users: nb_new_users(user_id, filter), nb_publishers: nb_publishers(user_id), nb_new_publishers: nb_new_publishers(user_id, filter)}
   end
 
   defp nb_users(user_id) do
@@ -191,18 +201,18 @@ defmodule Boncoin.Members do
       |> Repo.one()
   end
 
-  defp nb_offers(user_id) do
+  defp nb_publishers(user_id) do
     User
       |> User.filter_embassador_users(user_id)
-      |> User.filter_users_with_first_offer_date()
+      |> User.filter_users_with_one_published_offer()
       |> User.count()
       |> Repo.one()
   end
 
-  defp nb_new_offers(user_id, filter) do
+  defp nb_new_publishers(user_id, filter) do
     User
       |> User.filter_embassador_users(user_id)
-      |> User.filter_users_with_first_offer_date_in_month(filter.month, filter.year)
+      |> User.filter_users_with_one_published_offer_in_month(filter.month, filter.year)
       |> User.count()
       |> Repo.one()
   end

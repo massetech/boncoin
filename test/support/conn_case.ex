@@ -55,9 +55,10 @@ defmodule BoncoinWeb.ConnCase do
           |> Guardian.Plug.sign_in(user, %{"typ" => "user-access"})
         {conn, user}
       true ->
-        # user = insert(:guest_user) # User created by the DB seed
         user = Members.get_guest_user()
-        {Phoenix.ConnTest.build_conn(), user}
+        conn = Phoenix.ConnTest.build_conn()
+          |> assign(:current_user, nil)
+        {conn, user}
     end
 
     final_conn = conn

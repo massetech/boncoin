@@ -57,7 +57,7 @@
               .d-flex.flex-column
                 -# %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa?chatURI=pawchaungkaung_en&context=website_mobile"}
                 -#   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
-                %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa?chatURI=pawchaungkaung_en&context=website_mobile"}
+                %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa?chatURI=pawchaungkaung_en&context=website_mobile_1"}
                   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
                 -# %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa/info?uri=pawchaungkaung_en&context=website_mobile"}
                 -#   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
@@ -69,8 +69,8 @@
               %p.my-3= LayoutView.convert_zawgyi(gettext("Please scan this QR code on your Viber."))
               -# = img_tag "#{img_url_tag(@conn, "viber_msg_btn.png")}", class: "w-50 my-3"
               = img_tag Routes.static_path(@conn, "/images/viber_QR_code.png"), class: "w-50 my-3"
-              %i.fas.fa-plus.text-center.mt-3.text-primary.w-100
-              = img_tag "#{img_url_tag(@conn, "viber_msg_btn.png")}", class: "m-auto w-50"
+              -# %i.fas.fa-plus.text-center.mt-3.text-primary.w-100
+              -# = img_tag "#{img_url_tag(@conn, "viber_msg_btn.png")}", class: "m-auto w-50"
               .row
                 .col-xs-12.col-sm-6
                   = img_tag Routes.static_path(@conn, "/images/viber_QR_code_explained_1.png"), class: "my-3 w-100"

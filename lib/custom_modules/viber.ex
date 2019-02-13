@@ -41,9 +41,9 @@ defmodule Boncoin.ViberApi do
     # IO.inspect(offer)
 
     msg_params = cond do
-      buttons == [] && offer == nil -> # No buttons : send a simple text message
+      buttons == [] && offer == nil -> # No buttons and no offer : send a simple text message
         %{receiver: psid, type: "text", text: msg, keyboard: build_keyboard(quick_replies)}
-      true -> # Buttons : send a rich_media message
+      true -> # Send a rich_media message
         %{receiver: psid, min_api_version: 2, type: "rich_media", rich_media: build_rich_media(offer, msg, buttons), keyboard: build_keyboard(quick_replies)}
     end
 

@@ -117,7 +117,6 @@ defmodule Boncoin.CustomModules.BotDecisions do
             IO.inspect(changeset)
             case conversation.nb_errors do
               0 -> %{conversation: %{scope: "nickname", nb_errors: 1}, messages: %{message: ask_nickname_again_msg(user, conversation), offers: [], quick_replies: [%{title: tell_keep_nickname(language), link: "1"}], buttons: []}}
-              # 1 -> %{conversation: %{scope: "viber_number", nb_errors: 0}, messages: %{message: ask_viber_number(user), offers: [], quick_replies: [%{title: tell_no_viber(language), link: "0"}], buttons: []}}
               1 -> %{conversation: %{scope: "language", nb_errors: 0}, messages: %{message: welcome_msg_full(), offers: [], quick_replies: [%{title: propose_zawgyi(), link: "1"}, %{title: propose_unicode(), link: "2"}, %{title: propose_english(), link: "3"}], buttons: []}}
             end
         end
@@ -127,7 +126,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
         language = user.language
         other_language = user_msg
         Members.update_user(user, %{other_language: other_language}) # We don't check if the language is fine
-        %{conversation: %{scope: "viber_number", nb_errors: 0}, messages: %{message: ask_viber_number(user), offers: [], quick_replies: [%{title: tell_no_viber(language), link: "0"}], buttons: []}}
+        %{conversation: %{scope: "viber_number", nb_errors: 0}, messages: %{message: ask_viber_number(language), offers: [], quick_replies: [%{title: tell_no_viber(language), link: "0"}], buttons: []}}
 
       # We are waiting the new user VIBER NUMBER
       user != nil && conversation.scope == "viber_number" ->
@@ -319,15 +318,15 @@ defmodule Boncoin.CustomModules.BotDecisions do
 
   # -------------------- MESSAGES   ---------------------------------------------
   #---------------------- USER REGISTRATION -------------------------------------
-  defp welcome_msg_full() do
+  def welcome_msg_full() do
     uni = "ပေါချောင်ကောင်းမှကြိုဆိုပါတယ်။ ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပါ"
     "#{Rabbit.uni2zg(uni)}\n\nWelcome to Pawchaungkaung, please choose your language\n\n  -> ျမန္မာ(ေဇာ္ဂ်ီ)အတြက္ 1\n  -> မြန်မာ(ယူနီကုတ်)အတွက် 2\n  -> For English send 3"
   end
-  defp welcome_msg() do
+  def welcome_msg() do
     uni = "ပေါချောင်ကောင်းမှကြိုဆိုပါတယ်။ ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပါ"
     "#{Rabbit.uni2zg(uni)}\n\nWelcome to Pawchaungkaung, please choose your language"
   end
-  defp ask_visit_purpose_msg(language) do
+  def ask_visit_purpose_msg(language) do
     uni = "အခုစကားပြောလို့ရပါပြီ။ \nပေါချောင်ကောင်းတွင်ရောင်းနိုင်ရန်အတွက်သင့်ရဲ့ဖုန်းနံပါတ်ကိုစာရင်းသွင်းမှသာ ဝယ်သူမှသင့်ထံသို့ဆက်သွယ်နိုင်မည်ဖြစ်ပါသည်။"
     case language do
       "en" -> "Now we can speak !\nTo sell on Pawchaungkaung, you need to register your mobile phone number."
@@ -359,7 +358,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp ask_phone_msg(language) do
+  def ask_phone_msg(language) do
     uni = "သင့်ကိုဝယ်သူများမှဆက်သွယ်နိုင်ရန်အတွက် ကျေးဇူးပြုပြီးသင်၏ဖုန်းနံပါတ်ကိုရိုက်ထည့်ပါ။"
     case language do
       "en" -> "Please type your Myanmar mobile phone number for the buyers to contact you."
@@ -367,7 +366,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp ask_again_phone_msg(language) do
+  def ask_again_phone_msg(language) do
     uni = "အားနာပါတယ်။ ဝယ်သူများမှသင့်ကိုဆက်သွယ်နိုင်ရန်အတွက်ပေါချောင်ကောင်းသို့သင်၏ဖုန်းနံပါတ်အမှန်ကိုရိုက်ထည့်ရန်လိုအပ်ပါသည်။"
     case language do
       "en" -> "Sorry but you must provide a valid Myanmar phone number to register on Pawchaungkaung. Please type your mobile phone number for the buyers to contact you."
@@ -375,7 +374,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp ask_nickname_msg(user, conversation) do
+  def ask_nickname_msg(user, conversation) do
     uni = "သင်၏ဖုန်းနံပါတ်နှင့် #{String.capitalize(conversation.bot_provider)} နံပါတ်တို့သည် အဆက်အသွယ်ရပြီးပြီဖြစ်သည်။ သင်၏အမည်သည်#{user.nickname}ဖြစ်ပါသည်၊ အတည်ပြုပါ (သို့) အမည်အသစ်ရေးပါ"
     case user.language do
       "en" -> "Your phone number and #{String.capitalize(conversation.bot_provider)} account are now linked.\nYour nickname is #{user.nickname}, please confirm or type a new nickname."
@@ -391,7 +390,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp ask_other_language(language) do
+  def ask_other_language(language) do
     uni = "အခြားဘာသာစကားပြောပါသလား"
     case language do
       "en" -> "Do you speak another language ?"
@@ -407,9 +406,9 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp ask_viber_number(user) do
+  def ask_viber_number(language) do
     uni = "ဝယ်သူများမှသင့်ထံသို့ Viber မှတဆင့်ဆက်သွယ်စေလိုပါက သင့်ရဲ့ Viber နံပါတ်ကိုရိုက်ထည့်ပါ။"
-    case user.language do
+    case language do
       "en" -> "If you want people to contact you on Viber please type your Myanmar Viber number now."
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
@@ -423,7 +422,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp welcome_new_user(user) do
+  def welcome_new_user(user) do
     uni = "ကျေးဇူးတင်ပါတယ် #{user.nickname}, သင့်အတွက်ပေါချောင်ကောင်းတွင်စာရင်းသွင်းပြီးပါပြီ။\n သင့်ဖုန်းနံပါတ်မှာ #{user.phone_number}#{show_viber_number(user)} ဖြစ်ပါတယ်။ ကျေးဇူးပြု၍သင့်ရဲ့ပထပဆုံးရောင်းရန်ပစ္စည်းကြော်ငြာကိုပြုလုပ်ပါ။ "
     case user.language do
       "en" -> "Thanks #{user.nickname}, you are now registered on Pawchaungkaung !\nYour phone number is #{user.phone_number}#{show_viber_number(user)}.\nPlease create your first offer !"
@@ -453,7 +452,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   #---------------------- NOTIFICATIONS -----------------------------------------
-  defp tell_offer_accepted(user, offer) do
+  def tell_offer_accepted(user, offer) do
     uni = "မင်္ဂလာပါ #{user.nickname} သင်၏ရောင်းရန်ပစ္စည်းကြော်ငြာကိုတင်လိုက်ပြီဖြစ်ပါသည်။ ၎င်းကို #{LayoutView.format_date(offer.validity_date)} အထိ (၁)လအကြာ ကြော်ငြာတင်ထားမည် ဖြစ်သည်။"
     case user.language do
       "en" -> "Hi #{user.nickname}, your offer is now published ! It will be online for 1 month until #{LayoutView.format_date(offer.validity_date)}."
@@ -479,7 +478,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
   end
 
   #---------------------- CONVERSATIONS -----------------------------------------
-  defp inform_help(user) do
+  def inform_help(user) do
       uni = "ကျွန်တော်/မ တို့သည် #{user.nickname} ကိုကူညီရန်အသင့်ပါ၊"
     case user.language do
       "en" -> "We are ready to help #{user.nickname}"
@@ -507,7 +506,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
         end
     end
   end
-  defp change_language_msg() do
+  def change_language_msg() do
     uni = "ကျေးဇူးပြု၍သင်၏ဘာသာစကားကိုရွေးချယ်ပါ"
     "#{Rabbit.uni2zg(uni)}\n\nPlease choose your language."
   end
@@ -527,7 +526,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp alert_before_phone_update(user) do
+  def alert_before_phone_update(user) do
     uni = "သင့်ကြော်ငြာအားလုံးကိုဖုန်းနံပါတ်အသစ်သို့ရွှေပြောင်းပေးမည်ဖြစ်ပါသည်။ သေချာမှုရှိပြိဆိုလျင်သင့်ဖုန်းနံပါတ်အသစ်ကိုရိုက်ထည့်ပါ။"
     case user.language do
       "en" -> "All your offers will be moved to this new phone number. If you are sure please type your new phone number now."
@@ -543,7 +542,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp confirm_new_phone_number_updated(user) do
+  def confirm_new_phone_number_updated(user) do
     uni = "အဆင်ပြေပါပြီ #{user.nickname},  သင့်ဖုန်းနံပါတ်အသစ်ပြန်ပြင်ပြိးဖြစ်သည်။"
     case user.language do
       "en" -> "Perfect #{user.nickname}, your phone number was updated."
@@ -551,7 +550,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp tell_same_phone_number(user) do
+  def tell_same_phone_number(user) do
     uni = "သင်သိလား သင့်ရဲ့ဖုန်းနံပါတ်က ပေါချောင်ကောင်းရဲ့ #{String.capitalize(user.conversation.bot_provider)} နဲ့ အဆက်အသွယ်ရနေပါပြီ။ :)"
     case user.language do
       "en" -> "You know what #{user.nickname}, your phone number was already linked to this #{String.capitalize(user.conversation.bot_provider)} account :)"
@@ -567,7 +566,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp announce_bot_conflict(conversation, other_user) do
+  def announce_bot_conflict(conversation, other_user) do
     uni = "စိတ်မကောင်းပါဘူး #{conversation.nickname} ဒီဖုန်းနံပါတ်ကိုအခြားသူမှအသုံးပြုပြီးဖြစ်ပါတယ်။ ကျေးဇူးပြု၍ ရှေးဦးစွာအချိတ်အဆက်ဖြုတ်လိုက်ပါ (သို့) ပေါချောင်ကောင်းသို့ဆက်သွယ်ပါ။"
     case conversation.language do
       "en" -> "Sorry #{conversation.nickname}, this phone number is used by another user on #{other_user.conversation.bot_provider}. Please unlink it first or contact us."
@@ -575,7 +574,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp tell_no_active_offer(user) do
+  def tell_no_active_offer(user) do
     uni = "သင့်မှာမည်သည့်ကြော်ငြာမျှမရှိသေးပါ။ ကျေးဇူးပြု၍သင်၏ပထမဆုံးကြော်ငြာကို်တင်လိုက်ပါ။"
     case user.language do
       "en" -> "You don't have any active offer yet. Please create your first offer !"
@@ -583,7 +582,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp tell_nb_active_offers(user, nb_offers) do
+  def tell_nb_active_offers(user, nb_offers) do
     uni = "Ok #{user.nickname}၊ သင့်တွင်လက်ရှိကြော်ငြာ #{nb_offers} ခုရှိပါသည်။"
     case user.language do
       "en" -> "Ok #{user.nickname}, you have #{nb_offers} active offers."
@@ -599,7 +598,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp alert_before_quit_bot(user) do
+  def alert_before_quit_bot(user) do
     uni = "သင့်ရဲ့ ပေါချောင်ကေင်းနှင့် ချိတ်ဆက်ထားမှုကိုပြန်လည်ဖြုတ်ချင်သည်မှာသေခြာပြီလား။ ချိတ်ဆက်ထားမှုကိုဖြုတ်လိုက်ပြီးလျင် ကြော်ငြာအသစ်တင်နိုင်ရန်အတွက် တစ်ဖန်ပြန်လည်စာရင်းသွင်းရမည်ဖြစ်သည်။"
     case user.language do
       "en" -> "Are you sure you want to quit Pawchaungkaung ? If you quit, you will need to register again to create new offer."
@@ -607,7 +606,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp tell_bot_quitted(user) do
+  def tell_bot_quitted(user) do
     uni = "သင့်ရဲ့ #{String.capitalize(user.conversation.bot_provider)} ကြော်ငြာကိုပိတ်လိုက်ပါပြီ။ မကြာခင် ပေါချောင်ကေင်းမှာပြန်ဆုံကြမယ်နော်။"
     case user.language do
       "en" -> "Your #{String.capitalize(user.conversation.bot_provider)} account has been closed.\nHope to see you soon on Pawchaungkaung !"
@@ -615,7 +614,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
       "dz" -> Rabbit.uni2zg(uni)
     end
   end
-  defp tell_not_allowed_to_quit_bot(user, nb_offers) do
+  def tell_not_allowed_to_quit_bot(user, nb_offers) do
     uni = "စိတ်မကောင်းပါဘူး#{user.nickname}, သင့်ထံမှာ ကြော်ငြာ #{nb_offers} ရှိနေသေးသောကြောင့် သင့်ရဲ့ #{String.capitalize(user.conversation.bot_provider)} အချိတ်အဆက်ကိုဖြုတ်၍မရပါ"
     case user.language do
       "en" -> "Sorry #{user.nickname}, we cannot close your #{String.capitalize(user.conversation.bot_provider)} account because you still have #{nb_offers} offers."

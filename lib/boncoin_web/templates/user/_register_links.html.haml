@@ -8,7 +8,7 @@
       .input-group.mt-2
         .col-6.pl-0
           - if Browser.mobile?(@conn) do
-            %a.btn.btn-block.btn-viber-outline{href: "viber://pa?chatURI=pawchaungkaung_en"}
+            %a.btn.btn-block.btn-viber-outline{href: "viber://pa?chatURI=pawchaungkaung_en&context=website_mobile_2"}
               %i.fab.fa-viber
               %span= LayoutView.convert_zawgyi(gettext("Send me notifications by Viber"))
           - else
