@@ -7,9 +7,9 @@ defmodule Boncoin.MembersTest do
   @moduletag :MembersModule
 
   describe "users" do
-    @valid_attrs %{email: "some_email@gmail.com", language: "en", nickname: "some name", phone_number: "09030303030"}
-    @update_attrs %{email: "some_other_email@gmail.com", language: "dz", nickname: "some updated name", phone_number: "09726272625"}
-    @invalid_attrs %{email: nil, language: nil, nickname: nil, password: nil, phone_number: nil}
+    @valid_attrs %{email: "some_email@gmail.com", nickname: "dede", language: "en", phone_number: "09030303030"}
+    @update_attrs %{email: "some_other_email@gmail.com", nickname: "maurice", language: "dz", phone_number: "09726272625"}
+    @invalid_attrs %{email: nil, language: nil, password: nil, phone_number: nil}
 
     test "list_users/0 returns all users" do
       [user_0, user_1, user_2] = insert_list(3, :user)
@@ -29,7 +29,6 @@ defmodule Boncoin.MembersTest do
       assert {:ok, %User{} = user} = Members.create_and_track_user(@valid_attrs, conversation)
       assert user.email == "some_email@gmail.com"
       assert user.language == "en"
-      assert user.nickname == "some name"
       assert user.phone_number == "09030303030"
     end
 
@@ -45,7 +44,6 @@ defmodule Boncoin.MembersTest do
       assert %User{} = user
       assert user.email == "some_other_email@gmail.com"
       assert user.language == "dz"
-      assert user.nickname == "some updated name"
       assert user.phone_number == "09726272625"
     end
 

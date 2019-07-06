@@ -5,7 +5,7 @@ config :boncoin, BoncoinWeb.Endpoint,
   server: true, # Without this line, your app will not start the web server!
   secret_key_base: "${SECRET_KEY_BASE}",
   secret_salt: "${SECRET_SALT}",
-  viber_secret: "${VIBER_SECRET}",
+  # viber_secret: "${VIBER_SECRET}",
   messenger_secret: "${MESSENGER_SECRET}",
   messenger_page_access: "${MESSENGER_PAGE_ACCESS}",
   google_analytics: true,

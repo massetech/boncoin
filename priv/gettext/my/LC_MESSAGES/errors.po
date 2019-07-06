@@ -81,7 +81,7 @@ msgid "must be equal to %{number}"
 msgstr ""
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:78
+#: lib/boncoin/members/user.ex:80
 msgid "Phone number is already taken."
 msgstr "ဤဖုန်းနံပါတ်သည်အခြားသူအသုံးပြုပြီးဖြစ်ပါသည်"
 
@@ -91,7 +91,7 @@ msgid "Please accept the conditions."
 msgstr "ကျေးဇူးပြု၍စည်ကမ်းချက်များကိုလက်ခံပေးပါ"
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:77
+#: lib/boncoin/members/user.ex:79
 msgid "Please check your phone number."
 msgstr "ကျေးဇူးပြု၍သင့်ဖုန်းနံပါတ်ကိုစစ်ဆေးကြည့်ပါ"
 
@@ -106,27 +106,27 @@ msgid "Please post at least one photo."
 msgstr "ကျေးဇူးပြု၍ဓါတ်ပုံအနည်ဆုံးတစ်ပုံတင်ပေးပါ"
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:80
+#: lib/boncoin/members/user.ex:82
 msgid "This email is already used by another user."
 msgstr "ဤ email သည်အခြားသူမှအသုံးပြုပြီးဖြစ်သည်"
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:81
+#: lib/boncoin/members/user.ex:83
 msgid "This email not a proper email."
 msgstr "ဤ email သည်မှန်ကန်မှုမရှိပါ"
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:76
+#: lib/boncoin/members/user.ex:78
 msgid "Please check your nickname."
 msgstr "သင်၏အမည်ကိုစစ်ဆေးကြည့်ပါ"
 
 #, elixir-format
-#: lib/boncoin/contents/announce.ex:72 lib/boncoin/members/user.ex:83
+#: lib/boncoin/contents/announce.ex:72 lib/boncoin/members/user.ex:85
 msgid "Sorry we have a technical problem.."
 msgstr "စိတ်မကောင်းပါဘူး၊ ကျန်ပ်တို့ထံတွင်နည်းပညာပိုင်းဆိုင်ရာမှာအခက်အခဲရှိနေပါသယ်"
 
 #, elixir-format
-#: lib/boncoin/contents/announce.ex:69 lib/boncoin/members/members.ex:157
+#: lib/boncoin/contents/announce.ex:69 lib/boncoin/members/members.ex:176
 msgid "Please open a conversation on Viber or Messenger to create an offer."
 msgstr "သင့်အရောင်းကြောငြာတင်နိုင်ရန်အတွက်ကျေးဇူးပြု၍ Viber (သို့) Messenger ဖြင့်ဆက်သွယ်ပါ"
 
@@ -141,6 +141,6 @@ msgid "Please write a description of your offer (max 200 characters)."
 msgstr "ကျေးဇူးပြု၍သင့်ရောင်ရန်ပစ္စည်း၏ဖေါ်ပြချက်များကိုရေးပေးပါ"
 
 #, elixir-format
-#: lib/boncoin/members/user.ex:79
+#: lib/boncoin/members/user.ex:81
 msgid "Viber phone number is not correct (+95....)"
 msgstr "Viber ဖုမ်းနံပါတ်သည်မှားနေပါသည်"

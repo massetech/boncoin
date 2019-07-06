@@ -13,13 +13,14 @@ defmodule BoncoinWeb.BotTest do
         |> call_bot_algorythm()
       assert msg =~ "Welcome to Pawchaungkaung, please choose your language"
     end
+    @tag :de
     test "with known user", %{conn: conn} do
       user = insert(:user, %{active: false})
-      conversation = insert(:conversation, %{psid: "viber_0", active: false})
+      conversation = insert(:conversation, %{user_id: user.id, psid: "viber_0", active: false})
       user = Members.get_user(user.id)
       %{messages: %{message: msg}} = %{user: user, conversation: conversation, announce: nil, user_msg: nil}
         |> call_bot_algorythm()
-      assert msg =~ "Welcome back to Pawchaungkaung Mr unknown"
+      assert msg =~ "Welcome back to Pawchaungkaung mr_X"
     end
   end
 
@@ -51,7 +52,7 @@ defmodule BoncoinWeb.BotTest do
       user = Members.get_user(user.id)
       %{messages: %{message: msg}} = %{user: user, conversation: conversation, announce: nil, user_msg: "3"}
         |> call_bot_algorythm()
-      assert msg =~ "Mr unknown"
+      assert msg =~ "mr_X"
     end
   end
 
@@ -60,7 +61,7 @@ defmodule BoncoinWeb.BotTest do
       conversation = insert(:conversation, %{scope: "link_phone", psid: "viber_1"})
       %{messages: %{message: msg}} = %{user: nil, conversation: conversation, announce: nil, user_msg: "09020202020"}
         |> call_bot_algorythm()
-      assert msg =~ "Your phone number and Viber account are now linked"
+      assert msg =~ "Your phone number and Messenger account are now linked"
     end
     test "ask phone again", %{conn: conn} do
       conversation = insert(:conversation, %{scope: "link_phone", psid: "viber_2"})
@@ -102,7 +103,7 @@ defmodule BoncoinWeb.BotTest do
       user = Members.get_user(user.id)
       %{messages: %{message: msg}} = %{user: user, conversation: conversation, announce: announce, user_msg: nil}
         |> call_bot_algorythm()
-      assert msg =~ "your offer is now published"
+      assert msg =~ "Your offer an offer title is published and will be online for 1 month"
     end
     test "announce offer refused", %{conn: conn} do
       user = insert(:user)
@@ -111,7 +112,7 @@ defmodule BoncoinWeb.BotTest do
       user = Members.get_user(user.id)
       %{messages: %{message: msg}} = %{user: user, conversation: conversation, announce: announce, user_msg: nil}
         |> call_bot_algorythm()
-      assert msg =~ "we are sorry but your offer was refused because"
+      assert msg =~ "Sorry your offer an offer title was refused. Please create a new offer."
     end
   end
 
@@ -161,7 +162,7 @@ defmodule BoncoinWeb.BotTest do
       user = Members.get_user(user.id)
       %{messages: %{message: msg}} = %{user: user, conversation: conversation, announce: nil, user_msg: user.phone_number}
         |> call_bot_algorythm()
-      assert msg =~ "your phone number was already linked to this Viber account :)"
+      assert msg =~ "your phone number was already linked to this Messenger account :)"
     end
     test "confirm phone number updated", %{conn: conn} do
       user = insert(:user, %{phone_number: "09030303030"})
@@ -255,7 +256,7 @@ defmodule BoncoinWeb.BotTest do
       user = Members.get_user(user.id)
       %{messages: %{message: msg}} = %{user: user, conversation: conversation, announce: nil, user_msg: "1"}
         |> call_bot_algorythm()
-      assert msg =~ "Your Viber account has been closed.\nHope to see you soon on Pawchaungkaung"
+      assert msg =~ "Your Messenger account has been closed.\nHope to see you soon on Pawchaungkaung"
     end
     test "user confirms to quit by wrong entry", %{conn: conn} do
       user = insert(:user)
@@ -263,7 +264,7 @@ defmodule BoncoinWeb.BotTest do
       user = Members.get_user(user.id)
       %{messages: %{message: msg}} = %{user: user, conversation: conversation, announce: nil, user_msg: "other thing"}
         |> call_bot_algorythm()
-      assert msg =~ "Hi Mr unknown !"
+      assert msg =~ "Hi mr_X !"
     end
     test "user confirms to quit but has active offers", %{conn: conn} do
       user = insert(:user)
@@ -294,7 +295,7 @@ defmodule BoncoinWeb.BotTest do
       user = Members.get_user(user.id)
       %{messages: %{message: msg}} = %{user: user, conversation: conversation, announce: nil, user_msg: "whatever anything"}
         |> call_bot_algorythm()
-      assert msg =~ "Hi Mr unknown !"
+      assert msg =~ "Hi mr_X !"
     end
     test "user known in MY", %{conn: conn} do
       user = insert(:user, %{language: "my"})
@@ -302,7 +303,7 @@ defmodule BoncoinWeb.BotTest do
       user = Members.get_user(user.id)
       %{messages: %{message: msg}} = %{user: user, conversation: conversation, announce: nil, user_msg: "whatever anything"}
         |> call_bot_algorythm()
-      assert msg =~ "မင်္ဂလာပါ Mr unknown။"
+      assert msg =~ "မင်္ဂလာပါ mr_X။"
     end
     test "user known in DZ", %{conn: conn} do
       user = insert(:user, %{language: "dz"})
@@ -310,7 +311,7 @@ defmodule BoncoinWeb.BotTest do
       user = Members.get_user(user.id)
       %{messages: %{message: msg}} = %{user: user, conversation: conversation, announce: nil, user_msg: "whatever anything"}
         |> call_bot_algorythm()
-      assert msg =~ "မဂၤလာပါ Mr unknown။"
+      assert msg =~ "မဂၤလာပါ mr_X။"
     end
     test "user unknown", %{conn: conn} do
       %{messages: %{message: msg}} = %{user: nil, conversation: %{scope: "welcome", bot_provider: "viber"}, announce: nil, user_msg: "whatever anything"}

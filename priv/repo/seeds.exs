@@ -11,8 +11,8 @@ Repo.delete_all(Announce)
 Repo.delete_all(User)
 
 Repo.insert! %User{email: "", role: "GUEST", phone_number: "09000000000", language: "en", member_psw: "", nickname: "Guest"}
-Repo.insert! %User{email: "bitocreator@gmail.com", auth_provider: "google", role: "SUPER", phone_number: "09000000001", viber_number: "09876543212", language: "en", member_psw: "fouesnant", nickname: "Thib"}
-Repo.insert! %Conversation{user_id: 2, language: "en", bot_provider: "viber", active: true, psid: "hPAtCbK9yIaDQumAoQ50sQ==", nickname: "Thib"}
+user = Repo.insert! %User{email: "bitocreator@gmail.com", auth_provider: "google", role: "SUPER", phone_number: "09000000001", viber_number: "09876543212", language: "en"}
+Repo.insert! %Conversation{user_id: user.id, language: "en", bot_provider: "messenger", active: true, psid: Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:messenger_user_id], nickname: "Thib"}
 
 Repo.insert! %Division{title_en: "Yangon", title_my: "ရန်ကုံန်", active: true}
 Repo.insert! %Division{title_en: "Dawei", title_my: "ဒာဝေး", active: true}
@@ -54,5 +54,5 @@ for i <- 1..5 do
   announce_params = %{"language" => "en", "category_id" => 1, "township_id" => township_id, "title" => "my sofa nb_#{i}",
     "price" => "120000", "description" => "its a nice sofa dude", "currency" => "Kyats", "conditions" => "true",
     "image_file_1" => picture_1, "image_file_2" => picture_2, "image_file_3" => picture_3}
-  Boncoin.Contents.create_announce(announce_params, 2) # user_id = 2
+  Boncoin.Contents.create_announce(announce_params, user.id)
 end

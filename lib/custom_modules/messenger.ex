@@ -14,7 +14,7 @@ defmodule Boncoin.MessengerApi do
           # |> IO.inspect()
           |> post()
       true -> # Send a GENERIC message
-        %{messaging_type: type, recipient: %{id: psid}, message: %{attachment: build_generic_attachment(offer, msg)}}
+        %{messaging_type: type, recipient: %{id: psid}, message: %{attachment: build_generic_attachment(offer, msg, buttons)}}
           # |> IO.inspect()
           |> post()
     end
@@ -31,6 +31,18 @@ defmodule Boncoin.MessengerApi do
       {:error, msg} ->
         IO.puts("The request was not posted to Messenger (Elixir internal problem)")
         IO.inspect(msg)
+    end
+  end
+
+  def check_online() do
+    IO.puts("Webhook Messenger tested at #{Timex.now()}")
+    resp = HTTPoison.get prepare_profile_url("2366958960041950")
+    case resp do
+      {:ok, _resp} -> "online"
+      {:error, resp} ->
+        IO.puts("Problems on Messenger Webhook not answering")
+        IO.inspect(resp)
+        "offline"
     end
   end
 
@@ -122,7 +134,7 @@ defmodule Boncoin.MessengerApi do
     end
   end
 
-  defp build_generic_attachment(offer, msg) do
+  defp build_generic_attachment(offer, msg, buttons) do
     image_url = List.first(offer.images)
       |> BoncoinWeb.AnnounceView.image_url(:original)
     offer_url = Boncoin.CustomModules.BotDecisions.offer_view_link(offer.id)
@@ -130,19 +142,14 @@ defmodule Boncoin.MessengerApi do
       type: "template",
       payload: %{
         template_type: "generic",
+        # image_aspect_ratio: "square",
         sharable: false,
         elements: [
           %{
             title: offer.title,
             subtitle: msg,
             image_url: image_url,
-            buttons: [
-              %{
-                type: "web_url",
-                url: offer_url,
-                title: "View offer",
-              }
-            ]
+            buttons: Enum.map(buttons, fn button -> build_button(button) end)
           }
         ]
       }

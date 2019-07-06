@@ -37,13 +37,13 @@ defmodule Boncoin.Members do
     buttons = bot_results.messages.buttons
     quick_replies = bot_results.messages.quick_replies
     case bot_results.conversation.bot_provider do
-      "viber" ->
-        IO.puts("Message sent to user by Viber")
-        mockable(ViberApi).send_message(type, psid, user_msg, quick_replies, buttons, offer)
-        {:ok, "message sent to user by Viber", bot_results.messages}
+      # "viber" ->
+      #   IO.puts("Message sent to user by Viber")
+      #   mockable(ViberApi).send_message(type, psid, user_msg, quick_replies, buttons, offer)
+      #   {:ok, "message sent to user by Viber", bot_results.messages}
       "messenger" ->
         IO.puts("Message sent to user by Messenger")
-        if type == :answer, do: "RESPONSE", else: "UPDATE"
+        type = if type == :answer, do: "RESPONSE", else: "UPDATE"
         mockable(MessengerApi).send_message(type, psid, user_msg, quick_replies, buttons, offer)
         {:ok, "message sent to user by Messenger", bot_results.messages}
       _ ->
@@ -130,18 +130,17 @@ defmodule Boncoin.Members do
   #   end
   # end
 
-  def inform_admin_by_viber(event, user) do
+  def inform_admin_by_messenger(event, user) do
     super_user = get_super_user()
     msg = case event do
       :new_user -> new_user_msg(user)
       :new_offer -> new_offer_msg()
     end
-    if super_user.conversation.bot_provider == "viber" do
-      mockable(ViberApi).send_message(nil, super_user.conversation.psid, msg, [], [], nil)
-    end
+    mockable(MessengerApi).send_message(nil, super_user.conversation.psid, msg, [], [], nil)
   end
+
   def new_user_msg(user) do
-    "New user #{user.nickname} (#{user.language}) registered !"
+    "New user #{user.conversation.nickname} (#{user.language}) registered !"
   end
   def new_offer_msg() do
     "A new offer was created !"
@@ -150,9 +149,12 @@ defmodule Boncoin.Members do
   def create_and_track_user(user_params, conversation) do
     case create_user(user_params) do
       {:ok, user} ->
-        # Send a message to admin that a new user was created
-        inform_admin_by_viber(:new_user, user)
         update_conversation(conversation, %{user_id: user.id})
+        # if it is the first user, we make him a super user
+        if nb_users_total() == 1, do: update_user(user, %{email: "bitocreator@gmail.com", auth_provider: "google", role: "SUPER"})
+        # Send a message to admin that a new user was created
+        new_user = get_user(user.id) # (we reload the user and his conversation)
+        inform_admin_by_messenger(:new_user, new_user)
         create_phone(user, conversation)
       {:error, changeset} -> {:error, changeset}
     end
@@ -184,6 +186,12 @@ defmodule Boncoin.Members do
 
   def get_embassador_kpi(user_id, filter) do
     %{nb_user: nb_users(user_id), nb_new_users: nb_new_users(user_id, filter), nb_publishers: nb_publishers(user_id), nb_new_publishers: nb_new_publishers(user_id, filter)}
+  end
+
+  defp nb_users_total() do
+    User
+      |> User.count()
+      |> Repo.one()
   end
 
   defp nb_users(user_id) do
@@ -260,10 +268,7 @@ defmodule Boncoin.Members do
   def get_or_initiate_conversation(bot_provider, psid, nickname, origin) do
     case get_conversation_by_provider_psid(bot_provider, psid) do
       nil ->
-        nick = cond do
-          nickname == nil && bot_provider == "messenger" -> MessengerApi.get_user_profile(psid) # Messenger process (we don't know the nickname before)
-          true -> nickname # Viber process : we know the nickname
-        end
+        nick = MessengerApi.get_user_profile(psid) # Messenger API (we don't know the nickname before)
         conv_params = %{scope: "welcome", bot_provider: bot_provider, psid: psid, nickname: nick, origin: origin}
         case create_conversation(conv_params) do
           {:ok, conversation} -> conversation
@@ -361,7 +366,7 @@ defmodule Boncoin.Members do
     end
     # Create the new phone number tracking
     %Phone{}
-      |> Phone.changeset(%{user_id: user.id, phone_number: user.phone_number, nickname: user.nickname, active: true, creation_date: Timex.now(), bot_provider: conversation.bot_provider, bot_id: conversation.psid})
+      |> Phone.changeset(%{user_id: user.id, phone_number: user.phone_number, nickname: conversation.nickname, active: true, creation_date: Timex.now(), bot_provider: conversation.bot_provider, bot_id: conversation.psid})
       |> Repo.insert()
     {:ok, user}
   end

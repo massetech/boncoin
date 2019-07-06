@@ -1,6 +1,6 @@
 defmodule BoncoinWeb.MainController do
   use BoncoinWeb, :controller
-  alias Boncoin.{ViberApi, Contents}
+  alias Boncoin.{ViberApi, MessengerApi, Contents}
   alias Boncoin.Etag
 
   def welcome(conn, _params) do
@@ -32,9 +32,11 @@ defmodule BoncoinWeb.MainController do
   end
 
   def dashboard(conn, _params) do
-    viber_status = ViberApi.check_online()
+    # viber_status = ViberApi.check_online()
+    messenger_status = MessengerApi.check_online()
     conn
-      |> assign(:viber_status, viber_status)
+      # |> assign(:viber_status, viber_status)
+      |> assign(:messenger_status, messenger_status)
       |> put_view(BoncoinWeb.PublicView)
       |> render("dashboard.html")
   end

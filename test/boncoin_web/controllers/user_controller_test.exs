@@ -3,9 +3,9 @@ defmodule BoncoinWeb.UserControllerTest do
   alias Boncoin.Members
   import Boncoin.Factory
 
-  @create_attrs %{email: "some_email@gmail.com", language: "en", nickname: "some name", phone_number: "09010101010", role: "MEMBER", token: "some token", viber_active: true, bot_provider: "viber", bot_id: "bot_id"}
-  @update_attrs %{email: "another_email@gmail.com", language: "my", nickname: "some updated name", phone_number: "09020202020", role: "ADMIN", token: "some updated token", viber_active: false, bot_provider: "viber", bot_id: "bot_id"}
-  @invalid_attrs %{email: nil, language: nil, nickname: nil, phone_number: nil}
+  @create_attrs %{email: "some_email@gmail.com", language: "en", phone_number: "09010101010", role: "MEMBER", token: "some token", viber_active: true, bot_provider: "viber", bot_id: "bot_id"}
+  @update_attrs %{email: "another_email@gmail.com", language: "my", phone_number: "09020202020", role: "ADMIN", token: "some updated token", viber_active: false, bot_provider: "viber", bot_id: "bot_id"}
+  @invalid_attrs %{email: nil, language: nil, phone_number: nil}
   @moduletag :admin_authenticated
   @moduletag :UserController
   @moduletag :Controller

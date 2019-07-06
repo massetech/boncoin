@@ -570,7 +570,8 @@ defmodule Boncoin.Contents do
           end
         end
         # Send a message to admin that a new announce was posted
-        Members.inform_admin_by_viber(:new_offer, nil)
+        # Members.inform_admin_by_viber(:new_offer, nil)
+        Members.inform_admin_by_messenger(:new_offer, nil)
         {:ok, announce}
       error_offer -> error_offer
     end

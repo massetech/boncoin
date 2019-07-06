@@ -13,7 +13,7 @@
           .col-xs-12.col-sm-6
             %h5= "Sellers"
             %li= "nb users"
-            %li= "nb viber"
+            -# %li= "nb viber"
             %li= "language"
           .col-xs-12.col-sm-6
             %h5= "Visitors"
@@ -70,18 +70,22 @@
           %h6= "environment: #{Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment]}"
         .row
           %h6= "website_url: #{Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:website_url]}"
+        -# .row
+        -#   %h6= "Viber API: #{@conn.assigns.viber_status}"
+        .row
+          %h6= "Messenger API: #{@conn.assigns.messenger_status}"
 
       .card-footer
-        .viber-box.d-flex.justify-content-start.align-items-center
-          = img_tag Routes.static_path(@conn, "/images/viber_icon.png"), class: "icon_viber"
-          - if @conn.assigns.viber_status == "online" do
-            .round.bg-success
-          - else
-            .round.bg-danger
-        - if @conn.assigns.viber_status == "online" do
-          = link "disconnect Viber", to: Routes.viber_path(@conn, :disconnect), class: "btn btn-danger btn-small"
-        - else
-          = link "connect Viber", to: Routes.viber_path(@conn, :connect), class: "btn btn-success btn-small"
+        -# .viber-box.d-flex.justify-content-start.align-items-center
+        -#   = img_tag Routes.static_path(@conn, "/images/viber_icon.png"), class: "icon_viber"
+        -#   - if @conn.assigns.viber_status == "online" do
+        -#     .round.bg-success
+        -#   - else
+        -#     .round.bg-danger
+        -# - if @conn.assigns.viber_status == "online" do
+        -#   = link "disconnect Viber", to: Routes.viber_path(@conn, :disconnect), class: "btn btn-danger btn-small"
+        -# - else
+        -#   = link "connect Viber", to: Routes.viber_path(@conn, :connect), class: "btn btn-success btn-small"
         = link "Download logs", to: Routes.announce_path(@conn, :index), class: "btn btn-info btn-small"
         = link "Download db", to: Routes.announce_path(@conn, :index), class: "btn btn-info btn-small"
 

@@ -51,7 +51,7 @@ defmodule Boncoin.Contents.Announce do
       |> validate_inclusion(:status, ["PENDING", "ONLINE", "REFUSED", "OUTDATED", "CLOSED"])
       |> validate_inclusion(:currency, ["Kyats", "USD"])
       |> validate_inclusion(:sell_mode, ["SELL", "RENT", "GIVE"])
-      |> validate_length(:title, max: 50)
+      |> validate_length(:title, max: 80)
       |> validate_length(:price, max: 50)
       |> validate_length(:description, max: 200)
       |> check_offer_has_one_photo_min(params)
@@ -87,7 +87,7 @@ defmodule Boncoin.Contents.Announce do
     user = Members.get_user(user_id)
     case user.conversation.active do
       true -> changeset
-      false -> add_error(changeset, :bot_active, "this user has no bot active and cant post offer")
+      false -> add_error(changeset, :bot_active, "this user has no bot active and can't post any offer")
     end
   end
   defp refuse_users_without_active_bot(changeset, _) do

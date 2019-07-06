@@ -7,7 +7,7 @@
       .card-body.p-0
         .row
           .col-12.d-flex.justify-content-center.align-items-center.my-2
-            = img_tag Routes.static_path(@conn, "/images/viber_icon.png"), class: "logo"
+            -# = img_tag Routes.static_path(@conn, "/images/viber_icon.png"), class: "logo"
             = img_tag Routes.static_path(@conn, "/images/messenger_icon.png"), class: "logo"
             %i.fas.fa-exchange-alt.text-viber.mx-3.icon-big
             = img_tag Routes.static_path(@conn, "/images/logo_white.png"), class: "logo logo-50"
@@ -19,63 +19,63 @@
   .row
     .col-xs-12.col-sm-8.offset-sm-2.my-3
       -# Register on Messenger
-      -# .card.text-left
-      -#   %a{data-toggle: "collapse", data-target: "#messenger", aria-expanded: "true", aria-controls: "messenger", data-parent: "#bot"}
-      -#     .card-header
-      -#       .d-flex.align-items-center
-      -#         %i.width-40.fab.fa-facebook-messenger.mr-3.text-primary
-      -#         %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to receive notifications by Messenger ?"))
-      -#   %div.collapse{id: "messenger", aria-labelledby: "messenger", data-parent: "#bot"}
-      -#     .card_body.text-center.p-3
-      -#       - if Browser.mobile?(@conn) do
-      -#         %p.text-left.my-3= LayoutView.convert_zawgyi(gettext("Please open a conversation with PawChaungKaung on Messenger."))
-      -#         %a.btn.btn-lg.btn-block.btn-messenger.my-3.disabled{href: "http://m.me/pawchaungkaung?ref=website_mobile"}
-      -#           %span= LayoutView.convert_zawgyi(gettext("Open Messenger on my phone"))
-      -#       - else
-      -#         %p.my-3= LayoutView.convert_zawgyi(gettext("Please scan this QR code on your Messenger."))
-      -#         - if Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment] == :dev do
-      -#           = img_tag "#{img_url_tag(@conn, "FB_QR_code_website_dev.png")}", class: "w-50"
-      -#         - else
-      -#           = img_tag "#{img_url_tag(@conn, "FB_QR_code_website_prod.png")}", class: "w-50"
-      -#         .row
-      -#           .col-xs-12.col-sm-6
-      -#             = img_tag "#{img_url_tag(@conn, "messenger_QR_code_explained_1.png")}", class: "my-3 w-100"
-      -#           .col-xs-12.col-sm-6
-      -#             = img_tag "#{img_url_tag(@conn, "messenger_QR_code_explained_2.png")}", class: "my-3 w-100"
-
-      -# Register on Viber
       .card.text-left
-        %a{data-toggle: "collapse", data-target: "#viber", aria-expanded: "true", aria-controls: "viber", data-parent: "#bot"}
+        %a{data-toggle: "collapse", data-target: "#messenger", aria-expanded: "true", aria-controls: "messenger", data-parent: "#bot"}
           .card-header
             .d-flex.align-items-center
-              %i.width-40.fab.fa-viber.mr-3.text-primary
-              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to receive notifications by Viber ?"))
-        %div.collapse{id: "viber", aria-labelledby: "viber", data-parent: "#bot"}
+              %i.width-40.fab.fa-facebook-messenger.mr-3.text-primary
+              %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to receive notifications by Messenger ?"))
+        %div.collapse{id: "messenger", aria-labelledby: "messenger", data-parent: "#bot"}
           .card_body.text-center.p-3
             - if Browser.mobile?(@conn) do
-              %p.text-left.my-3= LayoutView.convert_zawgyi(gettext("Please open a conversation with PawChaungKaung on Viber."))
-              .d-flex.flex-column
-                -# %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa?chatURI=pawchaungkaung_en&context=website_mobile"}
-                -#   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
-                %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa?chatURI=pawchaungkaung_en&context=website_mobile_1"}
-                  %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
-                -# %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa/info?uri=pawchaungkaung_en&context=website_mobile"}
-                -#   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
-                -# %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa/info?uri=pawchaungkaung_en"}
-                -#   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
-                -# %i.fas.fa-plus.text-center.mt-3.text-primary
-                -# = img_tag "#{img_url_tag(@conn, "viber_msg_btn.png")}", class: "m-auto w-50"
+              %p.text-left.my-3= LayoutView.convert_zawgyi(gettext("Please open a conversation with PawChaungKaung on Messenger."))
+              %a.btn.btn-lg.btn-block.btn-messenger.my-3.disabled{href: "http://m.me/pawchaungkaung?ref=website_mobile"}
+                %span= LayoutView.convert_zawgyi(gettext("Open Messenger on my phone"))
             - else
-              %p.my-3= LayoutView.convert_zawgyi(gettext("Please scan this QR code on your Viber."))
-              -# = img_tag "#{img_url_tag(@conn, "viber_msg_btn.png")}", class: "w-50 my-3"
-              = img_tag Routes.static_path(@conn, "/images/viber_QR_code.png"), class: "w-50 my-3"
-              -# %i.fas.fa-plus.text-center.mt-3.text-primary.w-100
-              -# = img_tag "#{img_url_tag(@conn, "viber_msg_btn.png")}", class: "m-auto w-50"
+              %p.my-3= LayoutView.convert_zawgyi(gettext("Please scan this QR code on your Messenger."))
+              - if Application.get_env(:boncoin, BoncoinWeb.Endpoint)[:environment] == :dev do
+                = img_tag "#{img_url_tag(@conn, "FB_QR_code_website_dev.png")}", class: "w-50"
+              - else
+                = img_tag "#{img_url_tag(@conn, "FB_QR_code_website_prod.png")}", class: "w-50"
               .row
                 .col-xs-12.col-sm-6
-                  = img_tag Routes.static_path(@conn, "/images/viber_QR_code_explained_1.png"), class: "my-3 w-100"
+                  = img_tag "#{img_url_tag(@conn, "messenger_QR_code_explained_1.png")}", class: "my-3 w-100"
                 .col-xs-12.col-sm-6
-                  = img_tag Routes.static_path(@conn, "/images/viber_QR_code_explained_2.png"), class: "my-3 w-100"
+                  = img_tag "#{img_url_tag(@conn, "messenger_QR_code_explained_2.png")}", class: "my-3 w-100"
+
+      -# Register on Viber
+      -# .card.text-left
+      -#   %a{data-toggle: "collapse", data-target: "#viber", aria-expanded: "true", aria-controls: "viber", data-parent: "#bot"}
+      -#     .card-header
+      -#       .d-flex.align-items-center
+      -#         %i.width-40.fab.fa-viber.mr-3.text-primary
+      -#         %h6.card-title.mb-0= LayoutView.convert_zawgyi(gettext("How to receive notifications by Viber ?"))
+      -#   %div.collapse{id: "viber", aria-labelledby: "viber", data-parent: "#bot"}
+      -#     .card_body.text-center.p-3
+      -#       - if Browser.mobile?(@conn) do
+      -#         %p.text-left.my-3= LayoutView.convert_zawgyi(gettext("Please open a conversation with PawChaungKaung on Viber."))
+      -#         .d-flex.flex-column
+      -#           -# %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa?chatURI=pawchaungkaung_en&context=website_mobile"}
+      -#           -#   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
+      -#           %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa?chatURI=pawchaungkaung_en&context=website_mobile_1"}
+      -#             %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
+      -#           -# %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa/info?uri=pawchaungkaung_en&context=website_mobile"}
+      -#           -#   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
+      -#           -# %a.btn.btn-lg.btn-block.btn-viber.my-3{href: "viber://pa/info?uri=pawchaungkaung_en"}
+      -#           -#   %span= LayoutView.convert_zawgyi(gettext("Open Viber on my phone"))
+      -#           -# %i.fas.fa-plus.text-center.mt-3.text-primary
+      -#           -# = img_tag "#{img_url_tag(@conn, "viber_msg_btn.png")}", class: "m-auto w-50"
+      -#       - else
+      -#         %p.my-3= LayoutView.convert_zawgyi(gettext("Please scan this QR code on your Viber."))
+      -#         -# = img_tag "#{img_url_tag(@conn, "viber_msg_btn.png")}", class: "w-50 my-3"
+      -#         = img_tag Routes.static_path(@conn, "/images/viber_QR_code.png"), class: "w-50 my-3"
+      -#         -# %i.fas.fa-plus.text-center.mt-3.text-primary.w-100
+      -#         -# = img_tag "#{img_url_tag(@conn, "viber_msg_btn.png")}", class: "m-auto w-50"
+      -#         .row
+      -#           .col-xs-12.col-sm-6
+      -#             = img_tag Routes.static_path(@conn, "/images/viber_QR_code_explained_1.png"), class: "my-3 w-100"
+      -#           .col-xs-12.col-sm-6
+      -#             = img_tag Routes.static_path(@conn, "/images/viber_QR_code_explained_2.png"), class: "my-3 w-100"
 
       .card.text-left
         %a{data-toggle: "collapse", data-target: "#help_explain", aria-expanded: "true", aria-controls: "help_explain", data-parent: "#bot"}

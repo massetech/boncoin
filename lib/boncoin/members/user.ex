@@ -13,14 +13,13 @@ defmodule Boncoin.Members.User do
     field :uid, :string
     field :auth_provider, :string
     field :email, :string
+    field :nickname, :string
     field :active, :boolean, default: true
     field :language, :string, default: "dz"
     field :other_language, :string
-    field :nickname, :string
     field :member_psw, :string
     field :phone_number, :string
     field :viber_number, :string
-    field :messenger_number, :string
     field :role, :string, default: "MEMBER"
     field :token, :string
     field :token_expiration, :utc_datetime
@@ -33,7 +32,7 @@ defmodule Boncoin.Members.User do
     timestamps()
   end
 
-  @required_fields ~w(uid language nickname phone_number role active)a
+  @required_fields ~w(uid language phone_number role active nickname)a
   @optional_fields ~w(auth_provider email member_psw viber_number other_language embassador first_offer_date)a
 
   @doc false
@@ -49,7 +48,7 @@ defmodule Boncoin.Members.User do
       |> validate_format(:viber_number, myanmar_phone_regex(), message: "This is not a Myanmar Viber phone number")
       # |> convert_viber_number(attrs)
       |> validate_inclusion(:auth_provider, ["google"], message: "Oauth provider not supported")
-      |> validate_length(:nickname, min: 3, max: 30, message: "Nickname length is not good")
+      # |> validate_length(:nickname, min: 3, max: 30, message: "Nickname length is not good")
       |> validate_inclusion(:language, ["dz", "my", "en"], message: "Language not supported")
       |> validate_inclusion(:other_language, ["my", "en", "cn", "jp", "kr"], message: "Language not supported")
       |> validate_inclusion(:role, ["GUEST", "MEMBER", "ADMIN", "PARTNER", "SUPER"], message: "Role not supported")

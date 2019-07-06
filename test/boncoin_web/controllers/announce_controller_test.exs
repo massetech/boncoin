@@ -7,6 +7,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
   import Boncoin.Factory
   import Mockery.Assertions
   use Mockery
+  use ExUnit.Case, async: true
 
   @create_attrs %{conditions: "true", description: "some description", image_file_1: Announce.image_param_example(), image_file_2: "", image_file_3: "", price: "120", title: "some title"}
   @update_attrs %{conditions: "true", description: "some updated description", image_file_1: Announce.image_param_example(), image_file_2: "", image_file_3: "", price: "450", title: "some updated title"}
@@ -28,19 +29,6 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       conn = get conn, announce_path(conn, :index)
       assert html_response(conn, 200) =~ "Offers"
     end
-    test "treats offer : ACCEPTED / ONLINE and send Viber msg", %{conn: conn} do
-      Mockery.History.enable_history()
-      user = insert(:user)
-      insert(:conversation, %{user_id: user.id, psid: "123RENE"})
-      offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
-      conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: true, cause: "ACCEPTED", category_id: offer.category_id})
-      new_offer = Contents.get_announce!(offer.id)
-      # msg = "Hi Mr unknown, your offer an offer title is now published !\nIt will be online for 1 month until #{LayoutView.format_date(new_offer.validity_date)}.\nYou can manage your offer on"
-      assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
-      assert new_offer.status == "ONLINE"
-      assert new_offer.cause == "ACCEPTED"
-      assert_called ViberApi, :send_message, [:update, "123RENE", _msg, _quick_replies, _buttons, _offer], 1
-    end
     test "treats offer : ACCEPTED / ONLINE and send Messenger msg", %{conn: conn} do
       Mockery.History.enable_history()
       user = insert(:user)
@@ -49,76 +37,79 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: true, cause: "ACCEPTED", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
       date = Timex.shift(DateTime.utc_now, months: 1)
-      msg = "Hi Mr unknown, your offer is now published ! It will be online for 1 month until #{date.year}/#{date.month}/#{date.day}."
+      msg = "Your offer an offer title is published and will be online for 1 month."
       assert get_flash(conn, :info) == "Offer treated and message sent to user by Messenger"
       assert new_offer.status == "ONLINE"
       assert new_offer.cause == "ACCEPTED"
-      assert_called MessengerApi, :send_message, [:update, "123RENE2", ^msg, _quick_replies, _buttons, _offer], 1
+      assert_called MessengerApi, :send_message, ["UPDATE", "123RENE2", ^msg, _quick_replies, _buttons, _offer], 1
     end
-    test "treats offer : NOT_ALLOWED / REFUSED and send Viber msg", %{conn: conn} do
+    test "treats offer : NOT_ALLOWED / REFUSED and send Messenger msg", %{conn: conn} do
       Mockery.History.enable_history()
       user = insert(:user)
       insert(:conversation, %{user_id: user.id, psid: "123RENE3"})
       offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "NOT_ALLOWED", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      msg = "Hi Mr unknown, we are sorry but your offer was refused because its content is not allowed.. Please create a new offer."
-      assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
+      # msg = "Hi Mr unknown, we are sorry but your offer was refused because its content is not allowed.. Please create a new offer."
+      msg = "Sorry your offer an offer title was refused. Please create a new offer."
+      assert get_flash(conn, :info) == "Offer treated and message sent to user by Messenger"
       assert new_offer.status == "REFUSED"
       assert new_offer.cause == "NOT_ALLOWED"
-      assert_called ViberApi, :send_message, [:update, "123RENE3", ^msg, _quick_replies, _buttons, _offer], 1
+      assert_called MessengerApi, :send_message, ["UPDATE", "123RENE3", ^msg, _quick_replies, _buttons, _offer], 1
     end
-    test "treats offer : UNCLEAR / REFUSED and send Viber msg", %{conn: conn} do
+    test "treats offer : UNCLEAR / REFUSED and send Messenger msg", %{conn: conn} do
       Mockery.History.enable_history()
       user = insert(:user)
       insert(:conversation, %{user_id: user.id, psid: "123RENE4"})
       offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "UNCLEAR", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      msg = "Hi Mr unknown, we are sorry but your offer was refused because its description is not clear.. Please create a new offer."
-      assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
+      # msg = "Hi Mr unknown, we are sorry but your offer was refused because its description is not clear.. Please create a new offer."
+      msg = "Sorry your offer an offer title was refused. Please create a new offer."
+      assert get_flash(conn, :info) == "Offer treated and message sent to user by Messenger"
       assert new_offer.status == "REFUSED"
       assert new_offer.cause == "UNCLEAR"
-      assert_called ViberApi, :send_message, [:update, "123RENE4", ^msg, _quick_replies, _buttons, _offer], 1
+      assert_called MessengerApi, :send_message, ["UPDATE", "123RENE4", ^msg, _quick_replies, _buttons, _offer], 1
     end
-    test "treats offer : BAD_PHOTOS / REFUSED and send Viber msg", %{conn: conn} do
+    test "treats offer : BAD_PHOTOS / REFUSED and send Messenger msg", %{conn: conn} do
       Mockery.History.enable_history()
       user = insert(:user)
       insert(:conversation, %{user_id: user.id, psid: "123RENE5"})
       offer = insert(:announce, %{user_id: user.id, status: "PENDING"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "BAD_PHOTOS", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      msg = "Hi Mr unknown, we are sorry but your offer was refused because the photos are not good.. Please create a new offer."
-      assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
+      # msg = "Hi Mr unknown, we are sorry but your offer was refused because the photos are not good.. Please create a new offer."
+      msg = "Sorry your offer an offer title was refused. Please create a new offer."
+      assert get_flash(conn, :info) == "Offer treated and message sent to user by Messenger"
       assert new_offer.status == "REFUSED"
       assert new_offer.cause == "BAD_PHOTOS"
-      assert_called ViberApi, :send_message, [:update, "123RENE5", ^msg, _quick_replies, _buttons, _offer], 1
+      assert_called MessengerApi, :send_message, ["UPDATE", "123RENE5", ^msg, _quick_replies, _buttons, _offer], 1
     end
-    test "treats offer : ADMIN_DECISION / CLOSED and send Viber msg", %{conn: conn} do
+    test "treats offer : ADMIN_DECISION / CLOSED and send Messenger msg", %{conn: conn} do
       Mockery.History.enable_history()
       user = insert(:user)
       insert(:conversation, %{user_id: user.id, psid: "123RENE6"})
       offer = insert(:announce, %{user_id: user.id, status: "ONLINE"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "ADMIN_DECISION", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      msg = "Hi Mr unknown, your offer an offer title has been closed following an admin decision."
-      assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
+      msg = "Your offer an offer title has been closed following an admin decision."
+      assert get_flash(conn, :info) == "Offer treated and message sent to user by Messenger"
       assert new_offer.status == "CLOSED"
       assert new_offer.cause == "ADMIN_DECISION"
-      assert_called ViberApi, :send_message, [:update, "123RENE6", ^msg, _quick_replies, _buttons, _offer], 1
+      assert_called MessengerApi, :send_message, ["UPDATE", "123RENE6", ^msg, _quick_replies, _buttons, _offer], 1
     end
-    test "treats offer : TIME_PASSED / CLOSED and send Viber msg", %{conn: conn} do
+    test "treats offer : TIME_PASSED / CLOSED and send Messenger msg", %{conn: conn} do
       Mockery.History.enable_history()
       user = insert(:user)
       insert(:conversation, %{user_id: user.id, psid: "123RENE7"})
       offer = insert(:announce, %{user_id: user.id, status: "ONLINE"})
       conn = get conn, announce_path(conn, :treat, %{announce_id: offer.id, validate: false, cause: "TIME_PASSED", category_id: offer.category_id})
       new_offer = Contents.get_announce!(offer.id)
-      msg = "Hi Mr unknown, your offer an offer title has been closed after its publication time."
-      assert get_flash(conn, :info) == "Offer treated and message sent to user by Viber"
+      msg = "Your offer an offer title has been closed after its publication time."
+      assert get_flash(conn, :info) == "Offer treated and message sent to user by Messenger"
       assert new_offer.status == "CLOSED"
       assert new_offer.cause == "TIME_PASSED"
-      assert_called ViberApi, :send_message, [:update, "123RENE7", ^msg, _quick_replies, _buttons, _offer], 1
+      assert_called MessengerApi, :send_message, ["UPDATE", "123RENE7", ^msg, _quick_replies, _buttons, _offer], 1
     end
     test "deletes chosen announce from dashboard", %{conn: conn} do
       announce = insert(:announce)
@@ -171,7 +162,6 @@ defmodule BoncoinWeb.AnnounceControllerTest do
   end
 
   describe "existing user creates announce" do
-    @tag :dede
     test "redirects to public offers when data is valid", %{conn: conn} do
       user = insert(:user, %{phone_number: "09000000111"})
       insert(:conversation, %{user_id: user.id})
@@ -192,7 +182,7 @@ defmodule BoncoinWeb.AnnounceControllerTest do
       category = insert(:category)
       conn = post conn, user_path(conn, :create_announce), build_offer_params(Map.merge(@create_attrs, %{title: ""}), user_params, township.id, category.id)
       assert html_response(conn, 302) =~ "/offer/new/"
-      assert get_flash(conn, :alert) == "Please put a title to your offer (max 50 characters)."
+      assert get_flash(conn, :alert) == "Please put a title to your offer (max 80 characters)."
     end
 
     test "renders errors when description is empty", %{conn: conn} do

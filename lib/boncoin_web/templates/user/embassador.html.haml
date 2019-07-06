@@ -9,7 +9,7 @@
     .card
       .card-header
         .de
-          = @user.nickname
+          = @user.conversation.nickname
           = img_tag img_url_tag(@conn, "flags/1x1/#{@user.language}.svg"), class: "flag-small ml-3"
           - if @user.other_language != nil do
             = img_tag img_url_tag(@conn, "flags/1x1/#{@user.other_language}.svg"), class: "flag-small ml-1"

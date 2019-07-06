@@ -38,7 +38,7 @@ defmodule BoncoinWeb.Router do
 
   scope "/api", BoncoinWeb do
     pipe_through [:api]
-    post "/viber", ViberController, :callback
+    # post "/viber", ViberController, :callback
     get "/messenger", MessengerController, :callback
     post "/messenger", MessengerController, :incoming_message
     post "/phone", UserController, :check_phone

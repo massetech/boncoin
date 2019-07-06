@@ -39,8 +39,8 @@ defmodule Boncoin.Factory do
   def conversation_factory do
     %Conversation {
       psid: "some psid",
-      scope: nil,
-      bot_provider: "viber",
+      scope: "language",
+      bot_provider: "messenger",
       nickname: "mr_X",
       language: "en",
       active: true
