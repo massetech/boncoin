@@ -229,6 +229,10 @@ defmodule Boncoin.Members do
     user
       |> User.changeset(attrs)
       |> Repo.update()
+      |> case do
+        {:ok, user} -> {:ok, Repo.preload(user, :conversation)}
+        error -> error
+      end
   end
 
   def permission_to_quit_bot(user) do

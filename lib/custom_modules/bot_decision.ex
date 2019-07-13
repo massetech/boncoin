@@ -205,7 +205,8 @@ defmodule Boncoin.CustomModules.BotDecisions do
       user != nil && conversation.active && conversation.scope == "change_nickname" ->
         language = user.language
         case Members.update_user(user, %{nickname: user_msg}) do
-          {:ok, user} -> %{conversation: %{scope: "no_scope", nb_errors: 0}, messages: %{message: confirm_nickname_updated(user), offers: [], quick_replies: [], buttons: [link_visit_website(language), link_help(language)]}}
+          {:ok, user} ->
+            %{conversation: %{scope: "no_scope", nb_errors: 0, nickname: user.nickname}, messages: %{message: confirm_nickname_updated(user), offers: [], quick_replies: [], buttons: [link_visit_website(language), link_help(language)]}}
           {:error, changeset} ->
             IO.puts("Bot problem : user_nickname_update")
             IO.inspect(changeset)
@@ -534,9 +535,10 @@ defmodule Boncoin.CustomModules.BotDecisions do
     end
   end
   defp confirm_nickname_updated(user) do
-    uni = "သင့်ရဲ့အမည်အသစ်ကိုပြောင်းပြီးပါပြီ၊"
+    # We don't use the conversation.nickname since it will be updated after
+    uni = "Ok #{user.nickname} သင့်ရဲ့အမည်အသစ်ကိုပြောင်းပြီးပါပြီ၊"
     case user.language do
-      "en" -> "Ok #{user.conversation.nickname}, we updated your username."
+      "en" -> "Ok #{user.nickname}, we updated your username."
       "my" -> uni
       "dz" -> Rabbit.uni2zg(uni)
     end
@@ -715,7 +717,7 @@ defmodule Boncoin.CustomModules.BotDecisions do
     japanese = "ဂျပန်ဘာသာစကား"
     korean = "ကိုရီးရားဘာသာစကား"
     case language do
-      "en" -> [%{title: "Burmese", link: "my"}, %{title: "Only English", link: "0"}]
+      "en" -> [%{title: "Burmese", link: "my"}, %{title: "Chinese", link: "cn"}, %{title: "Japanese", link: "jp"}, %{title: "Korean", link: "kr"}, %{title: "Only English", link: "0"}]
       "my" -> [%{title: english, link: "en"}, %{title: chinese, link: "cn"}, %{title: japanese, link: "jp"}, %{title: korean, link: "kr"}, %{title: only_burmese, link: "0"}]
       "dz" -> [
         %{title: Rabbit.uni2zg(english), link: "en"}, %{title: Rabbit.uni2zg(chinese), link: "cn"},

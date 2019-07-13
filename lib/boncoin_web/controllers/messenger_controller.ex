@@ -33,10 +33,10 @@ defmodule BoncoinWeb.MessengerController do
 
   # EVENT messaging_postbacks (user opens a new conversation directly from messenger)
   # Also used when user clicks on HELP : we also use the payload in user_msg for this case
-  def incoming_message(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => payload}, "sender" => %{"id" => messenger_id}}]}]} = msg_query) do
-    IO.puts("Messenger user  #{messenger_id} opened a new conversation at #{Timex.now()}, origin= #{payload}")
-    IO.puts("messaging_postbacks, payload: #{payload}")
-    msg = case treat_message(conn, messenger_id, nil, payload) do
+  def incoming_message(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => user_msg}, "sender" => %{"id" => messenger_id}}]}]} = msg_query) do
+    IO.puts("Messenger user  #{messenger_id} opened a new conversation at #{Timex.now()}, origin= #{user_msg}")
+    IO.puts("messaging_postbacks, payload: #{user_msg}")
+    msg = case treat_message(conn, messenger_id, user_msg, user_msg) do
       {:error, _} -> "Messenger error : can't open conversation (messaging_postbacks)"
       {:ok, msg} -> msg
     end
