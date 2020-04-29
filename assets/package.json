@@ -15,7 +15,7 @@
     "bootstrap": "^4.2.1",
     "bootstrap-select": "^1.13.5",
     "clipboard-polyfill": "^2.7.0",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "jquery-touchswipe": "^1.6.19",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
