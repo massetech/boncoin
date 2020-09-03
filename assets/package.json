@@ -13,7 +13,7 @@
   "dependencies": {
     "body-scroll-lock": "^2.6.1",
     "bootstrap": "^4.2.1",
-    "bootstrap-select": "^1.13.5",
+    "bootstrap-select": "^1.13.6",
     "clipboard-polyfill": "^2.7.0",
     "jquery": "^3.3.1",
     "jquery-touchswipe": "^1.6.19",
